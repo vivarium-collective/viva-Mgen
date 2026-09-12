@@ -44,11 +44,11 @@ from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
 from viva_mgen.processes.replication import ReplicationReproductionProcess
-from viva_mgen.composites.cell_cycle import fig4_cell_cycle
+from viva_mgen.composites import build_mgen
 from viva_mgen import viz
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.cell_cycle.fig4_cell_cycle"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig4-cell-cycle"
 INVESTIGATION_SLUG = "mgen"
 
@@ -87,9 +87,10 @@ def _run_population(core):
 def _run_trajectory(core, initial_dnaA=8.0, initial_dntp=20000.0, seed=1,
                     interval=100.0, n_seconds=40000.0):
     """One representative cell through the full composite for a dynamics viz."""
-    doc = fig4_cell_cycle(core, initial_dnaA=initial_dnaA,
-                          initial_dntp=initial_dntp, seed=seed)
+    doc = build_mgen(core, initial_dnaA=initial_dnaA, initial_dntp=initial_dntp, seed=seed)
     doc["replication"]["interval"] = interval
+    for _pk in ("metabolism","mass","transcription","translation","rna_decay","protein_decay"):
+        doc[_pk]["interval"] = n_seconds  # fig4 measures the cell cycle only
     sim = Composite({"state": doc}, core=core)
     sim.run(n_seconds)
     rows = gather_emitter_results(sim)[("emitter",)]

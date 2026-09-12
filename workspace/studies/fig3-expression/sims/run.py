@@ -37,19 +37,21 @@ import numpy as np
 from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
-from viva_mgen.composites.whole_cell import fig3_expression
+from viva_mgen.composites import build_mgen
 from viva_mgen import viz
 from viva_mgen.expression_defaults import DEFAULT_GENES
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.whole_cell.fig3_expression"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig3-expression"
 INVESTIGATION_SLUG = "mgen"
 
 
 def _run(n_seconds=3600.0, dt=1.0, seed=0):
     core = build_core()
-    doc = fig3_expression(core, seed=seed)
+    doc = build_mgen(core, seed=seed)
+    for _pk in ("metabolism","mass","replication"):
+        doc[_pk]["interval"] = n_seconds  # run once; fig3 measures expression only
     # The map[float] store apply accumulates deltas only into keys that already
     # exist; a bare {} drops every synthesized species. Seed the panel gene keys
     # at 0.0 so the stochastic synthesis/decay deltas land and accumulate.

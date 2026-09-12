@@ -42,13 +42,13 @@ import numpy as np
 from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
-from viva_mgen.composites.whole_cell import fig5_energy
+from viva_mgen.composites import build_mgen
 from viva_mgen.processes.transcription import TranscriptionReproductionProcess
 from viva_mgen.processes.translation import TranslationReproductionProcess
 from viva_mgen import viz
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.whole_cell.fig5_energy"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig5-energy"
 INVESTIGATION_SLUG = "mgen"
 
@@ -60,9 +60,11 @@ FIG5D_UNACCOUNTED = 0.44
 
 def _run_metabolism(core, n_seconds=3600.0, dt=60.0):
     """Integrated cell for one hour; time-averaged ATP/GTP production flux."""
-    doc = fig5_energy(core)
+    doc = build_mgen(core)
     doc["metabolism"]["interval"] = dt
     doc["mass"]["interval"] = dt
+    for _pk in ("replication","transcription","translation","rna_decay","protein_decay"):
+        doc[_pk]["interval"] = dt
     # expression stays at 1.0 s (its native stochastic step)
     sim = Composite({"state": doc}, core=core)
     sim.run(n_seconds)

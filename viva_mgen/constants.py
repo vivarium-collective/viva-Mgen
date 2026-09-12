@@ -1,4 +1,4 @@
-"""Fitted constants for viva-mGen, taken verbatim from the Karr et al. 2012
+"""Fitted constants for viva-Mgen, taken verbatim from the Karr et al. 2012
 whole-cell model's ``data/parameters.json`` (states.Mass / states.Time /
 states.Metabolite) and the *M. genitalium* genome.
 

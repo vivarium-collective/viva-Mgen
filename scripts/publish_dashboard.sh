@@ -6,8 +6,8 @@
 set -euo pipefail
 WS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${1:-$WS_ROOT/reports/published/dashboard}"
-BASE_PATH="/viva-mGen/dashboard"
-INTERACTIVE_URL="https://github.com/vivarium-collective/viva-mGen"
+BASE_PATH="/viva-Mgen/dashboard"
+INTERACTIVE_URL="https://github.com/vivarium-collective/viva-Mgen"
 rm -rf "$OUT"
 PYTHONPATH="$WS_ROOT${PYTHONPATH:+:$PYTHONPATH}" \
   vivarium-workbench-publish \

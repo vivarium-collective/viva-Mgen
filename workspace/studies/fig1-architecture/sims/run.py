@@ -36,11 +36,11 @@ import numpy as np
 from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
-from viva_mgen.composites.whole_cell import fig1_architecture
+from viva_mgen.composites import build_mgen
 from viva_mgen import viz
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.whole_cell.fig1_architecture"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig1-architecture"
 INVESTIGATION_SLUG = "mgen"
 
@@ -74,10 +74,11 @@ def _wiring_matrix(doc: dict):
 
 def _run(runtime_s=1200.0, heavy_interval=60.0):
     core = build_core()
-    doc = fig1_architecture(core)
+    doc = build_mgen(core)
     # keep FBA cost reasonable: metabolism + mass on a coarse timestep, expression at 1 s
     doc["metabolism"]["interval"] = heavy_interval
     doc["mass"]["interval"] = heavy_interval
+    doc["replication"]["interval"] = heavy_interval
 
     proc_names, store_names, matrix = _wiring_matrix(doc)
 

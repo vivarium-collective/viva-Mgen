@@ -1,4 +1,4 @@
-"""Knowledge-base loaders for viva-mGen.
+"""Knowledge-base loaders for viva-Mgen.
 
 Two genuine data sources back the reproduction:
 
@@ -59,7 +59,7 @@ def load_metabolic_model(sbml_path: Optional[str] = None):
         import cobra
     except ImportError as exc:  # pragma: no cover - dependency guard
         raise RuntimeError(
-            "viva-mGen metabolism requires cobra: `uv pip install cobra`"
+            "viva-Mgen metabolism requires cobra: `uv pip install cobra`"
         ) from exc
 
     path = Path(sbml_path) if sbml_path else dataset_path("ips189.sbml.xml")

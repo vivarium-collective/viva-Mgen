@@ -6,7 +6,7 @@ status: complete
 phase: Evaluate
 
 question: |
-  Does the viva-mGen replication submodel reproduce Fig 4's central finding —
+  Does the viva-Mgen replication submodel reproduce Fig 4's central finding —
   that M. genitalium's cell-cycle duration is controlled *emergently*, without a
   dedicated genetic regulator, through the coupling of replication initiation and
   a dNTP surplus that it builds up?
@@ -38,7 +38,7 @@ description: |
 
 baseline:
 - name: baseline
-  composite: viva_mgen.composites.cell_cycle.fig4_cell_cycle
+  composite: viva_mgen.composites.mgen.mycoplasma_genitalium
   params: {initial_dnaA: 5, initial_dntp: 0, seed: 0}
 
 variants: []
@@ -46,12 +46,12 @@ variants: []
 simulation_set:
 - name: baseline
   status: ran
-  base_model: viva_mgen.composites.cell_cycle.fig4_cell_cycle
+  base_model: viva_mgen.composites.mgen.mycoplasma_genitalium
   duration_min: 60
   seeds:
   - 0
   condition: >-
-    Canonical viva-mGen fig4-cell-cycle run via sims/run.py (recorded in .pbg/runs.jsonl).
+    Canonical viva-Mgen fig4-cell-cycle run via sims/run.py (recorded in .pbg/runs.jsonl).
   params: {'initial_dnaA': 5, 'initial_dntp': 0, 'seed': 0}
   readouts:
   - r_init_repl
@@ -130,47 +130,22 @@ behavior_tests:
       note: "Karr 2012 Fig 4C — more initial DnaA shortens initiation; achieved r = -0.743."
   requires_simulation: baseline
 
-pipeline_gate:
-  prerequisites:
-  - study: fig1-architecture
-    condition: tests-passed
-  enables: []
-  proceed_condition: |
-    All three Fig 4 single-cell correlations come out clearly negative, showing
-    the emergent, genetically-unregulated buffering of cell-cycle duration is
-    reproduced by the reduced dNTP-coupled mechanism.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig4-cell-cycle/sims/run.py
-  args: []
-  label: "Fig 4 cell cycle: 128-cell population + representative trajectory"
-  default: true
-
-visualizations:
-- name: init-vs-repl
-  chart: viz/init_vs_repl.html
-  render: "python sims/run.py"
-- name: dntp-vs-repl
-  chart: viz/dntp_vs_repl.html
-  render: "python sims/run.py"
-- name: cell-cycle-trajectory
-  chart: viz/cell_cycle_trajectory.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: init-vs-repl
-  url: /workspace/studies/fig4-cell-cycle/viz/init_vs_repl.html
-  description: "Initiation vs replication duration across 128 single cells — inversely correlated (Fig 4E)."
-- name: dntp-vs-repl
-  url: /workspace/studies/fig4-cell-cycle/viz/dntp_vs_repl.html
-  description: "dNTP pool at replication start vs replication duration — higher surplus, faster replication (Fig 4D)."
-- name: cell-cycle-trajectory
-  url: /workspace/studies/fig4-cell-cycle/viz/cell_cycle_trajectory.html
-  description: "One representative cell through the three-phase cycle: replicated fraction, dNTP pool, DnaA complex vs time (Fig 4B)."
+readouts:
+- name: replicated_fraction
+  store_path: stores/replicated_fraction
+  status: available
+- name: dntp_pool
+  store_path: stores/dntp_pool
+  status: available
+- name: dnaA_complex
+  store_path: stores/dnaA_complex
+  status: available
+- name: phase_code
+  store_path: stores/phase_code
+  status: available
 
 conclusion: |
-  viva-mGen reproduces Fig 4's emergent cell-cycle regulation with a reduced but
+  viva-Mgen reproduces Fig 4's emergent cell-cycle regulation with a reduced but
   mechanistically genuine dNTP-buffered replication model. Across 128 single
   cells (all completing), the three signature correlations are clearly negative:
   more birth DnaA shortens initiation (r = -0.743, Fig 4C), a larger starting

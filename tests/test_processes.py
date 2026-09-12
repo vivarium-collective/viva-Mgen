@@ -1,4 +1,4 @@
-"""Unit tests for viva-mGen reproduction processes."""
+"""Unit tests for viva-Mgen reproduction processes."""
 
 import math
 

@@ -6,7 +6,7 @@ status: complete
 phase: Evaluate
 
 question: |
-  Does the reduced-but-genuine viva-mGen cell (FBA metabolism over iPS189
+  Does the reduced-but-genuine viva-Mgen cell (FBA metabolism over iPS189
   driving mass accumulation) reproduce the trained whole-cell model's core
   growth phenotype from Fig 2 — a ~9 h doubling time and a protein-dominant
   dry-mass composition?
@@ -30,7 +30,7 @@ description: |
 
 baseline:
 - name: baseline
-  composite: viva_mgen.composites.whole_cell.fig2_growth
+  composite: viva_mgen.composites.mgen.mycoplasma_genitalium
   params: {}
 
 variants: []
@@ -38,12 +38,12 @@ variants: []
 simulation_set:
 - name: baseline
   status: ran
-  base_model: viva_mgen.composites.whole_cell.fig2_growth
+  base_model: viva_mgen.composites.mgen.mycoplasma_genitalium
   duration_min: 540
   seeds:
   - 0
   condition: >-
-    Canonical viva-mGen fig2-growth run via sims/run.py (recorded in .pbg/runs.jsonl).
+    Canonical viva-Mgen fig2-growth run via sims/run.py (recorded in .pbg/runs.jsonl).
   readouts:
   - doubling_time_h
   - final_mass_ratio
@@ -53,6 +53,15 @@ simulation_set:
   - mass-doubles-in-cycle
   - protein-dominant-composition
 
+- name: baseline-baseline
+  kind: single
+  base_model: viva_mgen.composites.mgen.mycoplasma_genitalium
+  is_baseline: true
+  status: ran
+  metrics:
+  - doubling_time_h
+  - final_mass_ratio
+  - protein_fraction
 expected_behavior:
 - name: doubling-time-near-9h
   en: "The fitted doubling time is ~9 h, matching the measured M. genitalium doubling time (Fig 2A/B)."
@@ -114,43 +123,123 @@ behavior_tests:
     provenance: {kind: experiment, note: "Fitted protein fraction 0.620 (Fig 2C)."}
   requires_simulation: baseline
 
+readouts:
+- name: mass
+  store_path: stores/mass
+  status: available
+- name: growth_fraction
+  store_path: stores/growth_fraction
+  status: available
+- name: growth_rate
+  store_path: stores/growth_rate
+  status: available
+- name: volume
+  store_path: stores/volume
+  status: available
+
+runs:
+- name: viva_mgen.composites.whole_cell.fig2_growth__1789255794__816090
+  status: completed
+  timestamp: 1789255795.9213629
+  emitter:
+    kind: unknown
+  env_id: dbf82c582d7669d9
+  params: '{}'
+  provenance:
+    params:
+      n_steps:
+        value: 120
+        source: resolved
+    params_captured_at: '2026-09-12'
+    params_source: dashboard-runner
+  computed_outcomes:
+    _status: store_unresolved
+- name: viva_mgen.composites.whole_cell.fig2_growth__1789255991__812092
+  status: completed
+  timestamp: 1789255993.0166678
+  emitter:
+    kind: unknown
+  env_id: dbf82c582d7669d9
+  params: '{}'
+  provenance:
+    params:
+      n_steps:
+        value: 120
+        source: resolved
+    params_captured_at: '2026-09-12'
+    params_source: dashboard-runner
+  computed_outcomes:
+    _status: store_unresolved
+- name: viva_mgen.composites.whole_cell.fig2_growth__1789256074__0d82e2
+  status: completed
+  timestamp: 1789256076.2364302
+  emitter:
+    kind: unknown
+  env_id: dbf82c582d7669d9
+  params: '{}'
+  provenance:
+    params:
+      n_steps:
+        value: 120
+        source: resolved
+    params_captured_at: '2026-09-12'
+    params_source: dashboard-runner
+  computed_outcomes:
+    _status: store_unresolved
+- name: viva_mgen.composites.whole_cell.fig2_growth__1789256098__989960
+  status: completed
+  timestamp: 1789256100.757889
+  emitter:
+    kind: unknown
+  env_id: dbf82c582d7669d9
+  params: '{}'
+  computed_outcomes:
+    _status: store_unresolved
+  provenance:
+    params:
+      n_steps:
+        value: 120
+        source: resolved
+    params_captured_at: '2026-09-12'
+    params_source: dashboard-runner
+- name: viva_mgen.composites.whole_cell.fig2_growth__1789256110__21672a
+  status: completed
+  timestamp: 1789256112.927766
+  emitter:
+    kind: unknown
+  env_id: dbf82c582d7669d9
+  params: '{}'
+  computed_outcomes:
+    _status: store_unresolved
+  provenance:
+    params:
+      n_steps:
+        value: 120
+        source: resolved
+    params_captured_at: '2026-09-12'
+    params_source: dashboard-runner
+- name: viva_mgen.composites.whole_cell.fig2_growth__1789256131__d59329
+  status: completed
+  timestamp: 1789256133.749098
+  emitter:
+    kind: unknown
+  env_id: dbf82c582d7669d9
+  params: '{}'
+  computed_outcomes:
+    _status: store_unresolved
+  provenance:
+    params:
+      n_steps:
+        value: 120
+        source: resolved
+    params_captured_at: '2026-09-12'
+    params_source: dashboard-runner
 pipeline_gate:
-  prerequisites:
-  - study: fig1-architecture
-    condition: tests-passed
-  enables:
-  - fig5-energy
-  - fig6-gene-essentiality
-  proceed_condition: |
-    The integrated cell reproduces the 9 h doubling time and protein-dominant
-    composition, establishing the FBA-driven growth backbone the energy and
-    gene-disruption studies build on.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig2-growth/sims/run.py
-  args: []
-  label: "Fig 2 growth: one cell cycle, mass + composition"
-  default: true
-
-visualizations:
-- name: growth-curve
-  chart: viz/growth_curve.html
-  render: "python sims/run.py"
-- name: composition-donut
-  chart: viz/composition_donut.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: growth-curve
-  url: /workspace/studies/fig2-growth/viz/growth_curve.html
-  description: "Total dry mass and its major macromolecule fractions over one ~9 h cell cycle."
-- name: composition-donut
-  url: /workspace/studies/fig2-growth/viz/composition_donut.html
-  description: "Dry-mass composition at division — protein-dominant, matching Fig 2C."
-
-conclusion: |
-  The viva-mGen integrated cell reproduces Fig 2's growth phenotype at full
-  fidelity: fitted doubling time 9.000 h (target ~9), mass doubling 2.000× over
-  the cycle, and protein at 62.0% of dry mass — matching the measured and fitted
-  M. genitalium values.
+  gate_evaluator:
+    result: blocked
+    blocked_by:
+    - doubling-time-near-9h
+    - mass-doubles-in-cycle
+    - protein-dominant-composition
+    evaluated_by: code
+    diverges_from_authored: false

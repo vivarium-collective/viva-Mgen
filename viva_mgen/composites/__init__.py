@@ -1,14 +1,6 @@
-"""viva-mGen composite generators (one per paper figure)."""
+"""viva-Mgen composites: one reusable Mycoplasma genitalium whole-cell composite."""
 
-from . import whole_cell  # noqa: F401
-from . import cell_cycle  # noqa: F401
-from . import genetics  # noqa: F401
+from . import mgen  # noqa: F401  (fires @composite_generator registration)
+from .mgen import mycoplasma_genitalium, build_mgen
 
-from .whole_cell import fig1_architecture, fig2_growth, fig3_expression, fig5_energy
-from .cell_cycle import fig4_cell_cycle
-from .genetics import fig6_gene_essentiality, fig7_kinetic_parameters
-
-__all__ = [
-    "fig1_architecture", "fig2_growth", "fig3_expression", "fig5_energy",
-    "fig4_cell_cycle", "fig6_gene_essentiality", "fig7_kinetic_parameters",
-]
+__all__ = ["mycoplasma_genitalium", "build_mgen"]

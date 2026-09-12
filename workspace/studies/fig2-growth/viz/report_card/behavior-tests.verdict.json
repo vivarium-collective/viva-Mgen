@@ -1,0 +1,68 @@
+{
+  "count_split": {
+    "acceptance_criteria": {
+      "fail": 0,
+      "pass": 0,
+      "total": 0
+    },
+    "committed_rerunnable": 3,
+    "expected_fail": {
+      "behaved": 0,
+      "total": 0
+    },
+    "label": "pins: 0/0; acceptance: 0/0; unclassified: 3",
+    "narrated": 0,
+    "regression_pins": {
+      "fail": 0,
+      "pass": 0,
+      "total": 0
+    },
+    "unclassified": 3
+  },
+  "n_fail": 0,
+  "n_pass": 0,
+  "n_total": 3,
+  "overall": "drift",
+  "schema": "behavior_test_card/v1",
+  "tests": [
+    {
+      "detail": "",
+      "en": "Exponential-fit doubling time within [8.5, 9.5] h of the fitted 9 h.",
+      "expected_fail": false,
+      "gate_class": null,
+      "margin": null,
+      "measured_value": null,
+      "meter": null,
+      "name": "doubling-time-near-9h",
+      "result": "PENDING",
+      "severity": null,
+      "verdict": null
+    },
+    {
+      "detail": "",
+      "en": "Mass ratio over one cell cycle within [1.9, 2.1].",
+      "expected_fail": false,
+      "gate_class": null,
+      "margin": null,
+      "measured_value": null,
+      "meter": null,
+      "name": "mass-doubles-in-cycle",
+      "result": "PENDING",
+      "severity": null,
+      "verdict": null
+    },
+    {
+      "detail": "",
+      "en": "Protein dry-mass fraction within [0.55, 0.68].",
+      "expected_fail": false,
+      "gate_class": null,
+      "margin": null,
+      "measured_value": null,
+      "meter": null,
+      "name": "protein-dominant-composition",
+      "result": "PENDING",
+      "severity": null,
+      "verdict": null
+    }
+  ]
+}

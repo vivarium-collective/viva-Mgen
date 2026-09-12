@@ -1,4 +1,4 @@
-# Contributing to viva-mGen
+# Contributing to viva-Mgen
 
 ## Development setup
 
@@ -11,7 +11,7 @@ uv is required. Install with `brew install uv` or `pip install uv`.
 
 ## What this repo is
 
-viva-mGen is a **clean-room reproduction** (`--reproduce`) of the Karr et al.
+viva-Mgen is a **clean-room reproduction** (`--reproduce`) of the Karr et al.
 2012 *Mycoplasma genitalium* whole-cell model, re-expressed as native
 [process-bigraph](https://github.com/vivarium-collective/process-bigraph)
 Processes. It is **not** the original MATLAB code and does not bridge to it.

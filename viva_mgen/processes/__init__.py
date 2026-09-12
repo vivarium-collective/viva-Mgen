@@ -1,4 +1,4 @@
-"""viva-mGen process submodels (clean-room reproductions of Karr 2012)."""
+"""viva-Mgen process submodels (clean-room reproductions of Karr 2012)."""
 
 from .metabolism import MetabolismFbaReproductionProcess
 from .mass import MassGrowthReproductionProcess

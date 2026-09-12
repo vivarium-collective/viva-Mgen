@@ -31,21 +31,23 @@ import numpy as np
 from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
-from viva_mgen.composites.whole_cell import fig2_growth
+from viva_mgen.composites import build_mgen
 from viva_mgen import viz, constants as Cst
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.whole_cell.fig2_growth"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig2-growth"
 INVESTIGATION_SLUG = "mgen"
 
 
 def _run(n_hours=9.0, dt=300.0):
     core = build_core()
-    doc = fig2_growth(core)
+    doc = build_mgen(core)
     # coarse timestep so a full ~9 h cycle is a few dozen FBA solves, not 32400
     doc["metabolism"]["interval"] = dt
     doc["mass"]["interval"] = dt
+    for _pk in ("transcription","translation","rna_decay","protein_decay","replication"):
+        doc[_pk]["interval"] = dt
     sim = Composite({"state": doc}, core=core)
     sim.run(n_hours * 3600.0)
     rows = gather_emitter_results(sim)[("emitter",)]

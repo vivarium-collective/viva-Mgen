@@ -1,4 +1,4 @@
-"""viva-mGen: a viva-native (process-bigraph) clean-room reproduction of the
+"""viva-Mgen: a viva-native (process-bigraph) clean-room reproduction of the
 Karr et al. 2012 *Mycoplasma genitalium* whole-cell model.
 
 Every process class is a ``*ReproductionProcess`` — a from-scratch Python

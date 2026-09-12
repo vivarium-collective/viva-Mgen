@@ -6,7 +6,7 @@ status: complete
 phase: Evaluate
 
 question: |
-  Does the viva-mGen FBA metabolism submodel reproduce Fig 6A — the
+  Does the viva-Mgen FBA metabolism submodel reproduce Fig 6A — the
   single-gene-disruption essentiality phenotype — for the metabolic genes of
   M. genitalium: does an in-silico single-gene knockout predict which genes are
   essential, matching the reference essentiality calls?
@@ -40,20 +40,20 @@ description: |
 
 baseline:
 - name: baseline
-  composite: viva_mgen.composites.genetics.fig6_gene_essentiality
-  params: {disrupted_gene: "MG_023"}
+  composite: viva_mgen.composites.mgen.mycoplasma_genitalium
+  params: {}
 
 variants: []
 
 simulation_set:
 - name: baseline
   status: ran
-  base_model: viva_mgen.composites.genetics.fig6_gene_essentiality
+  base_model: viva_mgen.composites.mgen.mycoplasma_genitalium
   duration_min: 1
   seeds:
   - 0
   condition: >-
-    Canonical viva-mGen fig6-gene-essentiality run via sims/run.py (recorded in .pbg/runs.jsonl).
+    Canonical viva-Mgen fig6-gene-essentiality run via sims/run.py (recorded in .pbg/runs.jsonl).
   params: {'disrupted_gene': 'MG_023'}
   readouts:
   - essentiality_accuracy
@@ -122,42 +122,16 @@ provenance:
     M. genitalium essentiality data); the iPS189 metabolic reconstruction
     (Suthers et al. 2009) predicts metabolic-gene essentiality at ~87%.
 
-pipeline_gate:
-  prerequisites:
-  - study: fig2-growth
-    condition: tests-passed
-  enables:
-  - fig7-kinetic-parameters
-  proceed_condition: |
-    The FBA metabolism submodel reproduces the Fig 6A essentiality phenotype over
-    the metabolic subset at ~76% accuracy, validating the single-gene-knockout
-    machinery the kinetic-parameter (Fig 7) study builds on.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig6-gene-essentiality/sims/run.py
-  args: []
-  label: "Fig 6A gene essentiality: single-gene-knockout scan + confusion matrix"
-  default: true
-
-visualizations:
-- name: confusion-matrix
-  chart: viz/confusion_matrix.html
-  render: "python sims/run.py"
-- name: accuracy-summary
-  chart: viz/accuracy_summary.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: confusion-matrix
-  url: /workspace/studies/fig6-gene-essentiality/viz/confusion_matrix.html
-  description: "2x2 model-vs-reference essentiality confusion matrix over the 125 metabolic genes (Fig 6A)."
-- name: accuracy-summary
-  url: /workspace/studies/fig6-gene-essentiality/viz/accuracy_summary.html
-  description: "Essentiality prediction performance: accuracy, sensitivity, and specificity as percentages."
+readouts:
+- name: growth_fraction
+  store_path: stores/growth_fraction
+  status: available
+- name: feasible
+  store_path: stores/feasible
+  status: available
 
 conclusion: |
-  viva-mGen reproduces the Fig 6A single-gene-disruption essentiality phenotype
+  viva-Mgen reproduces the Fig 6A single-gene-disruption essentiality phenotype
   over the metabolic subset at HIGH fidelity: across the 125 iPS189 metabolic
   genes with a reference essentiality call, single-gene FBA knockouts recover the
   reference classification with 0.760 accuracy (sensitivity 0.755, specificity

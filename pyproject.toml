@@ -42,8 +42,8 @@ workspace = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/vivarium-collective/viva-mGen"
-Issues = "https://github.com/vivarium-collective/viva-mGen/issues"
+Homepage = "https://github.com/vivarium-collective/viva-Mgen"
+Issues = "https://github.com/vivarium-collective/viva-Mgen/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["viva_mgen"]

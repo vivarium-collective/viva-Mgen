@@ -43,11 +43,11 @@ from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
 from viva_mgen import kb, viz
-from viva_mgen.composites.genetics import fig7_kinetic_parameters
+from viva_mgen.composites import build_mgen
 from viva_mgen.processes.metabolism import MetabolismFbaReproductionProcess
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.genetics.fig7_kinetic_parameters"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig7-kinetic-parameters"
 INVESTIGATION_SLUG = "mgen"
 
@@ -133,7 +133,7 @@ def main() -> int:
         g = sweeps[primary]
 
         # sanity: run the declared composite once at the wild-type bound
-        doc = fig7_kinetic_parameters(core, reaction_id=primary, bound_scale=1.0)
+        doc = build_mgen(core, reaction_bound_scale={primary: 1.0})
         sim = Composite({"state": doc}, core=core)
         sim.run(1.0)
         crows = gather_emitter_results(sim)[("emitter",)]

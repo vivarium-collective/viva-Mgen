@@ -2,7 +2,7 @@ name: Publish read-only dashboard
 
 # Build this workspace into a self-contained static SPA and publish it to the
 # gh-pages branch at dashboard/ (served at
-# https://vivarium-collective.github.io/viva-mGen/dashboard/). A read-only mirror of every
+# https://vivarium-collective.github.io/viva-Mgen/dashboard/). A read-only mirror of every
 # investigation + study on main, browsable with no server.
 #
 # Scaffolded by viva_superpowers.publish_assets.emit(). DEPLOY job

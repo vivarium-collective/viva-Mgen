@@ -1,4 +1,4 @@
-"""Shared interactive-visualization helpers for viva-mGen studies.
+"""Shared interactive-visualization helpers for viva-Mgen studies.
 
 Each helper returns a self-contained, theme-aware HTML page (pinned Plotly 3.x
 CDN) that renders on a transparent surface so the host workbench card's theme

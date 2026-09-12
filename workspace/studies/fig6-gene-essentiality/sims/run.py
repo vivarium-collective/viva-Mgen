@@ -38,11 +38,11 @@ from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
 from viva_mgen import kb, viz
-from viva_mgen.composites.genetics import fig6_gene_essentiality
+from viva_mgen.composites import build_mgen
 from viva_mgen.processes.metabolism import MetabolismFbaReproductionProcess
 from vivarium_workbench.lib.run_log import append_run_event
 
-SPEC_ID = "viva_mgen.composites.genetics.fig6_gene_essentiality"
+SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 STUDY_SLUG = "fig6-gene-essentiality"
 INVESTIGATION_SLUG = "mgen"
 
@@ -79,7 +79,7 @@ def _baseline_composite_run(gene="MG_023"):
     """Run the fig6_gene_essentiality composite once for a representative essential
     gene to record a canonical baseline and confirm growth collapses."""
     core = build_core()
-    doc = fig6_gene_essentiality(core, disrupted_gene=gene)
+    doc = build_mgen(core, disrupted_genes=[gene])
     sim = Composite({"state": doc}, core=core)
     sim.run(1.0)
     rows = gather_emitter_results(sim)[("emitter",)]
@@ -139,7 +139,7 @@ def main() -> int:
         (viz_dir / "accuracy_summary.html").write_text(viz.grouped_bar_html(
             title="Essentiality prediction performance (Fig 6A)",
             categories=["accuracy", "sensitivity", "specificity"],
-            groups={"viva-mGen (% )": [accuracy * 100.0,
+            groups={"viva-Mgen (% )": [accuracy * 100.0,
                                        sensitivity * 100.0,
                                        specificity * 100.0]},
             x_title="metric", y_title="percent"))

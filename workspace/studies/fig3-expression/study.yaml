@@ -6,7 +6,7 @@ status: complete
 phase: Evaluate
 
 question: |
-  Does the reduced viva-mGen expression module (stochastic transcription +
+  Does the reduced viva-Mgen expression module (stochastic transcription +
   translation + RNA/protein decay on a representative gene panel) reproduce the
   qualitative single-cell gene-expression dynamics of Fig 3 / 2G-2H — bursty,
   low-copy mRNA alongside protein that accumulates to much higher, more stable
@@ -42,7 +42,7 @@ description: |
 
 baseline:
 - name: baseline
-  composite: viva_mgen.composites.whole_cell.fig3_expression
+  composite: viva_mgen.composites.mgen.mycoplasma_genitalium
   params: {seed: 0}
 
 variants: []
@@ -50,12 +50,12 @@ variants: []
 simulation_set:
 - name: baseline
   status: ran
-  base_model: viva_mgen.composites.whole_cell.fig3_expression
+  base_model: viva_mgen.composites.mgen.mycoplasma_genitalium
   duration_min: 60
   seeds:
   - 0
   condition: >-
-    Canonical viva-mGen fig3-expression run via sims/run.py (recorded in .pbg/runs.jsonl).
+    Canonical viva-Mgen fig3-expression run via sims/run.py (recorded in .pbg/runs.jsonl).
   params: {'seed': 0}
   readouts:
   - mean_mrna_per_gene
@@ -138,42 +138,16 @@ behavior_tests:
       note: "Over 1 h all representative genes express; achieved 1.000."
   requires_simulation: baseline
 
-pipeline_gate:
-  prerequisites:
-  - study: fig1-architecture
-    condition: tests-passed
-  enables: []
-  proceed_condition: |
-    The expression module reproduces the qualitative Fig 2G/2H decoupling —
-    bursty low-copy mRNA and protein accumulating orders of magnitude higher —
-    on the representative gene panel. Quantitative population statistics (t50)
-    are explicitly out of scope for the reduced panel.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig3-expression/sims/run.py
-  args: []
-  label: "Fig 3 expression: 1 h stochastic transcription/translation/decay"
-  default: true
-
-visualizations:
-- name: expression-timeseries
-  chart: viz/expression_timeseries.html
-  render: "python sims/run.py"
-- name: protein-vs-mrna
-  chart: viz/protein_vs_mrna.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: expression-timeseries
-  url: /workspace/studies/fig3-expression/viz/expression_timeseries.html
-  description: "Total mRNA (bursty, low) and total protein (accumulating) across the panel over 1 h."
-- name: protein-vs-mrna
-  url: /workspace/studies/fig3-expression/viz/protein_vs_mrna.html
-  description: "Per-gene final mRNA vs protein copy number — protein >> mRNA (Fig 2H decoupling)."
+readouts:
+- name: ntp
+  store_path: stores/ntp
+  status: available
+- name: gtp
+  store_path: stores/gtp
+  status: available
 
 conclusion: |
-  The reduced viva-mGen expression module reproduces the qualitative single-cell
+  The reduced viva-Mgen expression module reproduces the qualitative single-cell
   dynamics of Fig 2G/2H: mRNA stays low and bursty (mean ~1.6 copies per gene,
   final total ~9 across the 6-gene panel) while protein accumulates far higher
   (final total ~1750-2000 copies), a protein-to-mRNA ratio of ~200 and all 6
