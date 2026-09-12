@@ -15,23 +15,31 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
+# Core scientific runtime — all on PyPI, so `pip install viva-mgen` works.
+# pyyaml + jsonschema are here (not just the workspace extra) because the
+# workspace linter (scripts/lint-workspace.py, run in CI) needs them.
 dependencies = [
     "bigraph-schema",
     "process-bigraph",
     "numpy",
     "scipy",
     "plotly",
-    "bigraph-viz>=2.0.3",
+    "cobra",
     "pyyaml>=6.0",
     "jsonschema[format-nongpl]>=4.21",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "matplotlib"]
+# The pbg-superpowers workspace/dashboard stack (study runners, publish, gen-readme).
+# Some pieces are installed from source clones during development.
+workspace = [
+    "bigraph-viz>=2.0.3",
     "jinja2>=3.1",
     "pypdf>=4.0",
     "matplotlib",
     "vivarium-workbench",
 ]
-
-[project.optional-dependencies]
-dev = ["pytest", "matplotlib"]
 
 [project.urls]
 Homepage = "https://github.com/vivarium-collective/viva-mGen"
@@ -45,6 +53,3 @@ packages = ["viva_mgen"]
 # resolves them from viva_mgen/datasets/ when repo-root datasets/ is absent.
 [tool.hatch.build.targets.wheel.force-include]
 "datasets" = "viva_mgen/datasets"
-
-[tool.uv.sources]
-vivarium-workbench = { path = "/Users/eranagmon/code/vivarium-workbench", editable = true }
