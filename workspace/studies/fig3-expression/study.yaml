@@ -147,10 +147,10 @@ visualizations:
 
 embed_visualizations:
 - name: expression-timeseries
-  url: /studies/fig3-expression/viz/expression_timeseries.html
+  url: /workspace/studies/fig3-expression/viz/expression_timeseries.html
   description: "Total mRNA (bursty, low) and total protein (accumulating) across the panel over 1 h."
 - name: protein-vs-mrna
-  url: /studies/fig3-expression/viz/protein_vs_mrna.html
+  url: /workspace/studies/fig3-expression/viz/protein_vs_mrna.html
   description: "Per-gene final mRNA vs protein copy number — protein >> mRNA (Fig 2H decoupling)."
 
 conclusion: |

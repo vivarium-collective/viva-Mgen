@@ -36,6 +36,18 @@ class TranslationReproductionProcess(Process):
         GTP consumed this interval (negative delta).
     """
 
+    description = (
+        "Stochastic translation — reduced reproduction of Karr 2012 Translation.\n"
+        "For each gene g, new protein per step is Poisson in the current mRNA copy number\n"
+        "    n_g ~ Poisson(r_g · mRNA_g · Δt)\n"
+        "capped by GTP supply (~2 GTP per peptide bond, ≈ gtp_per_protein per chain). Keeps the "
+        "mRNA-proportional, GTP-limited synthesis of the full ribosome state machine.\n"
+        "Contract — in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). "
+        "out: protein_counts (per-gene protein Δ, additive map), gtp (Δ consumed, negative).\n"
+        "Fidelity: REDUCED — representative panel; drives the Fig 2G/2H mRNA↔protein decoupling "
+        "and the translation share of the Fig 5 energy budget."
+    )
+
     config_schema = {
         "translation_rates": {"_type": "map[float]", "_default": {}},
         "gtp_per_protein": {"_type": "float", "_default": 600.0},  # ~2*avg aa length

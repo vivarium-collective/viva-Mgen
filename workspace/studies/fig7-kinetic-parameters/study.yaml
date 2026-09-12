@@ -150,7 +150,7 @@ visualizations:
 
 embed_visualizations:
 - name: kcat-growth-curve
-  url: /studies/fig7-kinetic-parameters/viz/kcat_growth_curve.html
+  url: /workspace/studies/fig7-kinetic-parameters/viz/kcat_growth_curve.html
   description: >-
     Growth fraction vs flux-bound scale (kcat/Vmax proxy, log x) for the
     leucine-uptake target and two secondary uptake reactions — a monotonic,

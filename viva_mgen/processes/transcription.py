@@ -35,6 +35,19 @@ class TranscriptionReproductionProcess(Process):
         NTP consumed this interval (negative delta), composes with metabolism.
     """
 
+    description = (
+        "Stochastic transcription — reduced reproduction of Karr 2012 Transcription.\n"
+        "For each gene g on the representative panel, new mRNA per step is a Poisson draw\n"
+        "    n_g ~ Poisson(k_g · (RNApol / RNApol_ref) · Δt)\n"
+        "capped by NTP supply (each transcript consumes length_g NTP; PPi released). Keeps the "
+        "essential stochastic single-molecule synthesis mechanism of the full RNA-polymerase "
+        "state machine.\n"
+        "Contract — in: ntp (pool, molecules), rna_pol (available polymerase count). "
+        "out: rna_counts (per-gene mRNA Δ, additive map), ntp (Δ consumed, negative).\n"
+        "Fidelity: REDUCED — a 6-gene representative panel with representative rates, not all "
+        "~480 genes; reproduces the qualitative bursty-mRNA behaviour of Fig 2G."
+    )
+
     config_schema = {
         "synthesis_rates": {"_type": "map[float]", "_default": {}},
         "gene_lengths": {"_type": "map[float]", "_default": {}},

@@ -144,10 +144,10 @@ visualizations:
 
 embed_visualizations:
 - name: wiring-matrix
-  url: /studies/fig1-architecture/viz/wiring_matrix.html
+  url: /workspace/studies/fig1-architecture/viz/wiring_matrix.html
   description: "Process × cell-variable coupling matrix derived from the composite doc — the Fig 1B wiring diagram."
 - name: cell-dashboard
-  url: /studies/fig1-architecture/viz/cell_dashboard.html
+  url: /workspace/studies/fig1-architecture/viz/cell_dashboard.html
   description: "Integrated cell dynamics over 20 min — mass, growth rate, and total mRNA/protein counts sharing one clock."
 
 conclusion: |

@@ -62,6 +62,16 @@ class _PoissonDecay(Process):
 
 class RnaDecayReproductionProcess(_PoissonDecay):
     """Poisson decay of mRNA species (reproduction of Karr 2012 RNADecay)."""
+
+    description = (
+        "Stochastic mRNA decay — reproduction of Karr 2012 RNADecay.\n"
+        "Each species s degrades as a Poisson process at rate ln2 / half-life:\n"
+        "    decayed_s ~ min(n_s, Poisson(n_s · λ_s · Δt))\n"
+        "setting steady-state copy numbers together with transcription.\n"
+        "Contract — in/out: rna_counts (per-gene mRNA; a negative-Δ map).\n"
+        "Fidelity: REDUCED — species-level Poisson decay on the representative panel "
+        "(NMP salvage/water accounting of the original omitted)."
+    )
     _PORT = "rna_counts"
 
     def _default_rates(self):
@@ -79,6 +89,16 @@ class RnaDecayReproductionProcess(_PoissonDecay):
 
 class ProteinDecayReproductionProcess(_PoissonDecay):
     """Poisson decay of protein species (reproduction of Karr 2012 ProteinDecay)."""
+
+    description = (
+        "Stochastic protein decay — reproduction of Karr 2012 ProteinDecay.\n"
+        "Each species s degrades as a Poisson process at rate ln2 / half-life:\n"
+        "    decayed_s ~ min(n_s, Poisson(n_s · λ_s · Δt))\n"
+        "balancing translation to set steady-state protein copy numbers.\n"
+        "Contract — in/out: protein_counts (per-gene protein; a negative-Δ map).\n"
+        "Fidelity: REDUCED — species-level Poisson decay on the representative panel "
+        "(protease/peptidase + ATP/amino-acid accounting of the original omitted)."
+    )
     _PORT = "protein_counts"
 
     def _default_rates(self):

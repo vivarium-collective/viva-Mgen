@@ -123,10 +123,10 @@ visualizations:
 
 embed_visualizations:
 - name: energy-allocation
-  url: /studies/fig5-energy/viz/energy_allocation.html
+  url: /workspace/studies/fig5-energy/viz/energy_allocation.html
   description: "Energy allocation across processes (Fig 5D): translation dominates the modeled expression energy, ahead of transcription, with a representative ~44% unaccounted slice echoing the paper's structure."
 - name: synthesis-rates
-  url: /studies/fig5-energy/viz/synthesis_rates.html
+  url: /workspace/studies/fig5-energy/viz/synthesis_rates.html
   description: "ATP vs GTP synthesis flux (Fig 5A): ATP synthesis far exceeds GTP, both positive."
 
 provenance:

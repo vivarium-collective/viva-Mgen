@@ -44,6 +44,21 @@ class MassGrowthReproductionProcess(Process):
         1.0 once mass has reached twice the initial dry mass, else 0.0.
     """
 
+    description = (
+        "Cell mass & growth accounting — reproduction of Karr 2012 CellMass/CellGeometry.\n"
+        "Integrates the metabolism submodel's calibrated growth into total dry mass by "
+        "exponential growth over each interval:\n"
+        "    Δmass = mass · (exp(μ · growth_fraction · Δt) − 1),   μ = ln2 / T_cycle\n"
+        "with T_cycle = 32400 s (≈ 9 h) the model's fitted cell-cycle length, so unperturbed "
+        "growth (growth_fraction = 1) doubles the cell in ~9 h. Dry mass is partitioned into "
+        "the fitted dry-weight fractions (protein 0.620, DNA 0.169, RNA 0.093, lipid 0.057, …); "
+        "volume follows from wet mass and cell density; division fires at 2× birth mass.\n"
+        "Contract — in: growth_fraction (unit-free growth from metabolism), mass (current dry "
+        "fg). out: mass (additive Δ, fg), mass_fractions (per-component fg snapshot), volume "
+        "(fL snapshot), division ∈ {0,1}.\n"
+        "Fidelity: FULL for the growth/composition phenotype (fitted constants)."
+    )
+
     config_schema = {
         "initial_mass_fg": {"_type": "float", "_default": C.CELL_INITIAL_DRY_WEIGHT_FG},
         "cell_cycle_length_s": {"_type": "float", "_default": C.CELL_CYCLE_LENGTH_S},

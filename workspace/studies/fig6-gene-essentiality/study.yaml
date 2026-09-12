@@ -133,10 +133,10 @@ visualizations:
 
 embed_visualizations:
 - name: confusion-matrix
-  url: /studies/fig6-gene-essentiality/viz/confusion_matrix.html
+  url: /workspace/studies/fig6-gene-essentiality/viz/confusion_matrix.html
   description: "2x2 model-vs-reference essentiality confusion matrix over the 125 metabolic genes (Fig 6A)."
 - name: accuracy-summary
-  url: /studies/fig6-gene-essentiality/viz/accuracy_summary.html
+  url: /workspace/studies/fig6-gene-essentiality/viz/accuracy_summary.html
   description: "Essentiality prediction performance: accuracy, sensitivity, and specificity as percentages."
 
 conclusion: |

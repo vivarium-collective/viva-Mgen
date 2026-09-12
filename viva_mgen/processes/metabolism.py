@@ -58,6 +58,25 @@ class MetabolismFbaReproductionProcess(Process):
         1.0 if the LP was optimal with positive growth, else 0.0.
     """
 
+    description = (
+        "Flux-balance-analysis metabolism — reproduction of the Karr 2012 Metabolism "
+        "submodel.\n"
+        "Each 1 s step it maximizes the iPS189 biomass objective\n"
+        "    max cᵀv   s.t.   S·v = 0,   lb ≤ v ≤ ub\n"
+        "over the published Suthers 2009 M. genitalium reconstruction (351 reactions, "
+        "346 metabolites, 126 genes; solved with COBRA). Gene disruptions (Fig 6) knock "
+        "out the disrupted genes' reactions; a kinetic-parameter change (Fig 7) scales a "
+        "reaction's flux bound as a kcat/Vmax proxy. Both use a reverting model context so "
+        "the cached network is never mutated.\n"
+        "Contract — in: nutrient_scale (carbon-uptake multiplier a sibling can throttle). "
+        "out: growth_rate (biomass flux, raw iPS189 units), growth_fraction "
+        "(growth_rate ÷ wild-type, the calibrated unit-free growth the mass submodel "
+        "integrates), atp_production (ATP-synthase ATPS4r flux), gtp_production "
+        "(NDP-kinase-family flux), feasible ∈ {0,1}.\n"
+        "Fidelity: FULL — the genuine published reconstruction the WCM's metabolism "
+        "submodel was built on."
+    )
+
     config_schema = {
         "sbml_path": {"_type": "string", "_default": ""},
         # gene ids to disrupt (Fig 6); MG_001 / MG001 both accepted

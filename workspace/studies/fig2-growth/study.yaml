@@ -125,10 +125,10 @@ visualizations:
 
 embed_visualizations:
 - name: growth-curve
-  url: /studies/fig2-growth/viz/growth_curve.html
+  url: /workspace/studies/fig2-growth/viz/growth_curve.html
   description: "Total dry mass and its major macromolecule fractions over one ~9 h cell cycle."
 - name: composition-donut
-  url: /studies/fig2-growth/viz/composition_donut.html
+  url: /workspace/studies/fig2-growth/viz/composition_donut.html
   description: "Dry-mass composition at division — protein-dominant, matching Fig 2C."
 
 conclusion: |

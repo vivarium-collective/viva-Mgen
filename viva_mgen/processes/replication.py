@@ -51,6 +51,24 @@ class ReplicationReproductionProcess(Process):
     dntp_at_replication_start : overwrite[float]
     """
 
+    description = (
+        "dNTP-buffered three-phase replication — reduced reproduction of the emergent "
+        "cell-cycle regulation Karr 2012 uncovered (Fig 4).\n"
+        "INITIATION: DnaA accumulates stochastically (Poisson) into the oriC complex while "
+        "dNTPs build up unconsumed; replication begins when DnaA ≥ threshold. REPLICATION: DNA "
+        "polymerase advances min(rate·Δt, dNTP) per step, consuming 1 dNTP/nt while dNTP is "
+        "replenished at the synthesis rate; done at terC.\n"
+        "Because dNTPs accumulate during initiation, a longer initiation builds a larger surplus "
+        "that makes replication FASTER — an emergent inverse initiation↔replication relationship "
+        "that buffers total cell-cycle length (Fig 4C/D/E).\n"
+        "Contract — in: dntp_synthesis_scale (a sibling can couple metabolism→replication). "
+        "out (snapshots): replicated_fraction, dntp_pool, dnaA_complex, phase_code "
+        "(0=init,1=repl,2=done), chromosome_copy, initiation_duration, replication_duration, "
+        "dntp_at_replication_start.\n"
+        "Fidelity: REDUCED mechanism (genuine emergent-regulation dynamics; not the full "
+        "replisome/Okazaki machinery)."
+    )
+
     config_schema = {
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "dnaA_threshold": {"_type": "float", "_default": 30.0},
