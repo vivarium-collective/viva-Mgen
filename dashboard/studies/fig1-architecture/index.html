@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Study: fig1-architecture</title>
-<link rel="stylesheet" href="/viva-mGen/dashboard/assets/style.css">
-<link rel="stylesheet" href="/viva-mGen/dashboard/assets/progress-track.css">
+<link rel="stylesheet" href="/viva-Mgen/dashboard/assets/style.css">
+<link rel="stylesheet" href="/viva-Mgen/dashboard/assets/progress-track.css">
 <!-- Inherit the workbench light/dark theme (this page loads in an iframe;
      same-origin, so it shares the parent's localStorage 'viv.theme'). -->
 <script>(function(){try{var t=localStorage.getItem('viv.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
@@ -58,7 +58,7 @@
             <span class="dot"></span>2&nbsp;·&nbsp;Execution
           </span>
           
-          <span class="status-step gate-step axis-evaluation_status gate-state-not-assessed set" title="Gate 3 · Evidence">
+          <span class="status-step gate-step axis-evaluation_status gate-state-passed-with-conditions set" title="Gate 3 · Evidence">
             <span class="dot"></span>3&nbsp;·&nbsp;Evidence
           </span>
           
@@ -96,13 +96,15 @@
           
         </div>
         
-        <div class="status-detail-row gate-row gate-state-not-assessed">
+        <div class="status-detail-row gate-row gate-state-passed-with-conditions">
           <span class="status-detail-axis">3 · Evidence</span>
           <span class="status-chip gate-state-not-assessed">not set</span>
           
-          <span class="gate-computed-chip gate-state-not-assessed" title="nothing run to evaluate">◆ computed: not_evaluated</span>
+          <span class="gate-computed-chip gate-state-passed-with-conditions" title="nothing run to evaluate + visualization readiness gate (V4)">◆ computed: not_evaluated</span>
           
           
+          
+          <span class="gate-viz-gap-note" style="font-size:0.86em;color:#92400e">visualization gap: no figures</span>
           
         </div>
         
@@ -148,7 +150,7 @@
 
 
 
-<p id="study-question-headline" class="study-question-headline"><span class="q-glyph">Q</span> Does viva-mGen actually reproduce Fig 1&#39;s central architectural claim — that
+<p id="study-question-headline" class="study-question-headline"><span class="q-glyph">Q</span> Does viva-Mgen actually reproduce Fig 1&#39;s central architectural claim — that
 the whole-cell model is a set of independent submodels *integrated* through a
 shared set of cell variables — as a real, runnable composite rather than a
 drawing? Do all six submodels compose, share stores, and run as one integrated
@@ -159,7 +161,7 @@ cell?
   
   <div class="act-cluster" data-act="study">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="study" data-gate-state="not-assessed"></span>
+      <span class="act-gate-dot" data-gate="study" data-gate-state="passed-with-conditions"></span>
       <span class="act-label">The Study</span>
     </div>
     <div class="act-tabs">
@@ -180,7 +182,7 @@ cell?
   </div>
   <div class="act-cluster" data-act="evidence">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="evidence" data-gate-state="not-assessed"></span>
+      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed-with-conditions"></span>
       <span class="act-label">Evidence</span>
     </div>
     <div class="act-tabs">
@@ -564,7 +566,7 @@ cell?
 
     <div class="ctr-block">
       <h2 class="overview-label ctr-h">Claim</h2>
-      <p class="ctr-text">Does viva-mGen actually reproduce Fig 1&#39;s central architectural claim — that
+      <p class="ctr-text">Does viva-Mgen actually reproduce Fig 1&#39;s central architectural claim — that
 the whole-cell model is a set of independent submodels *integrated* through a
 shared set of cell variables — as a real, runnable composite rather than a
 drawing? Do all six submodels compose, share stores, and run as one integrated
@@ -633,19 +635,19 @@ confirm it composes and stays viable.
   <div class="overview-section" id="model-section">
     <h3>Runnable models <span class="muted" style="font-size:0.85em;font-weight:normal">— the composite(s) this study simulates</span></h3>
     
-    <div class="cond-block" data-model-composite="viva_mgen.composites.whole_cell.fig1_architecture" data-model-overrides='{}'>
+    <div class="cond-block" data-model-composite="viva_mgen.composites.mgen.mycoplasma_genitalium" data-model-overrides='{}'>
       <div class="cond-block-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <strong>baseline</strong>
         
-        <code style="font-size:0.82em;color:#374151;background:#f1f5f9;padding:1px 6px;border-radius:3px">viva_mgen.composites.whole_cell.fig1_architecture</code>
+        <code style="font-size:0.82em;color:#374151;background:#f1f5f9;padding:1px 6px;border-radius:3px">viva_mgen.composites.mgen.mycoplasma_genitalium</code>
         <button type="button" class="action-btn" style="font-size:0.8em"
-                onclick="_openCompositeLoom('viva_mgen.composites.whole_cell.fig1_architecture')">🧬 explore &amp; run ↗</button>
+                onclick="_openCompositeLoom('viva_mgen.composites.mgen.mycoplasma_genitalium')">🧬 explore &amp; run ↗</button>
         
       </div>
       
       <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
         <input type="text" class="baseline-composite-input" data-baseline-name="baseline"
-               value="viva_mgen.composites.whole_cell.fig1_architecture" placeholder="pkg.composites.name"
+               value="viva_mgen.composites.mgen.mycoplasma_genitalium" placeholder="pkg.composites.name"
                style="flex:1;min-width:200px;font-family:monospace;font-size:0.82em;padding:3px 6px" />
         <button type="button" class="action-btn baseline-composite-set" style="font-size:0.8em"
                 data-baseline-name="baseline">Set composite</button>
@@ -789,49 +791,9 @@ confirm it composes and stays viable.
 
     
     
-    <div class="viz-actions-row" style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-      <button type="button" class="btn-mini" onclick="window._vivStudyFiguresFromCard(event, 'fig1-architecture')" title="Download this study's visualizations (figure panels + its composite) as a zip">↓ visualizations</button>
-    </div>
-    
 
     <div id="native-gallery-panel" class="figure-mount"><p class="empty-message">Loading figures…</p></div>
 
-    
-    
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-mGen/dashboard/workspace/studies/fig1-architecture/viz/wiring_matrix.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="wiring-matrix"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">Process × cell-variable coupling matrix derived from the composite doc — the Fig 1B wiring diagram.</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">wiring-matrix</span>
-        
-        <a href="/viva-mGen/dashboard/workspace/studies/fig1-architecture/viz/wiring_matrix.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-mGen/dashboard/workspace/studies/fig1-architecture/viz/cell_dashboard.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="cell-dashboard"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">Integrated cell dynamics over 20 min — mass, growth rate, and total mRNA/protein counts sharing one clock.</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">cell-dashboard</span>
-        
-        <a href="/viva-mGen/dashboard/workspace/studies/fig1-architecture/viz/cell_dashboard.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
     
     
 
@@ -914,7 +876,7 @@ confirm it composes and stays viable.
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
         <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "n_processes", "kind": "derived_scalar"}
-pass_if: {"high": 6, "low": 6, "op": "range", "provenance": {"kind": "model", "note": "Reduced viva-mGen cell = six submodels (metabolism, mass, transcription, translation, rna_decay, protein_decay); Fig 1A. Achieved 6."}}</pre>
+pass_if: {"high": 6, "low": 6, "op": "range", "provenance": {"kind": "model", "note": "Reduced viva-Mgen cell = six submodels (metabolism, mass, transcription, translation, rna_decay, protein_decay); Fig 1A. Achieved 6."}}</pre>
       </details>
       
       
@@ -1112,7 +1074,7 @@ pass_if: {"high": 1.1, "low": 0.9, "op": "range", "provenance": {"kind": "model"
     
     <div class="decide-section" style="margin-top:18px">
       <h3 class="overview-label">Conclusion</h3>
-      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>viva-mGen reproduces Fig 1's architecture as a runnable integrated cell, not a
+      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>viva-Mgen reproduces Fig 1's architecture as a runnable integrated cell, not a
 drawing. The composite wires exactly 6 submodels through shared bigraph stores,
 with 3 cell variables coupled across ≥2 submodels (growth_fraction, rna_counts,
 protein_counts) — the integration Fig 1B depicts. Over a 20 min run the cell
@@ -1128,38 +1090,6 @@ expression phenotype.</p>
   </div>
 
   
-  
-  <div class="overview-section"><h2 class="overview-label">Plan &amp; assumptions</h2>
-
-    
-    <div class="overview-section">
-      <h3 class="overview-label">Pipeline gate</h3>
-      <p class="muted" style="margin: 0 0 8px 0;font-size:0.88em">
-        Each study is a model-building gate: it answers <em>"Can we safely build the next layer?"</em>
-      </p>
-      
-      <div style="margin-bottom:6px"><strong>Prerequisites:</strong> <em class="muted">none (root study)</em></div>
-      
-      
-      <div style="margin-bottom:6px"><strong>Enables:</strong>
-        <code>fig2-growth</code> · <code>fig3-expression</code>
-      </div>
-      
-      
-      <div><strong>Proceed when:</strong> <span class="muted">All six submodels compose into one integrated cell that runs and stays
-viable, with the shared cell variables (Fig 1B wiring) in place. This
-integrated backbone is the substrate the growth (fig2) and expression (fig3)
-studies foreground.
-</span></div>
-      
-    </div>
-    
-
-    
-
-    
-
-  </div>
   
 
   
@@ -1195,8 +1125,8 @@ studies foreground.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-mGen", basePath: "/viva-mGen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-mGen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-mGen", "repo_url": "https://github.com/vivarium-collective/viva-mGen", "commit": "ebf4ad0395317a343b481d3e26b05a7a973d78d1", "commit_url": "https://github.com/vivarium-collective/viva-mGen/commit/ebf4ad0395317a343b481d3e26b05a7a973d78d1", "branch": "main", "generated_at": "2026-09-12 23:26 UTC"} };</script>
-<script src="/viva-mGen/dashboard/assets/data-source.js"></script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "e33a89b4b6f7772268736bf25c16e5b02d0028b9", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/e33a89b4b6f7772268736bf25c16e5b02d0028b9", "branch": "main", "generated_at": "2026-09-12 23:47 UTC"} };</script>
+<script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig1-architecture";
 window._study = null;  // populated by _bootstrapStudy() in study-detail.js
@@ -1309,8 +1239,8 @@ function _seedFollowupProposal(parent, proposalId) {
 window._seedFollowupStudy = _seedFollowupStudy;
 window._seedFollowupProposal = _seedFollowupProposal;
 </script>
-<script src="/viva-mGen/dashboard/assets/configure-run.js"></script>
-<script src="/viva-mGen/dashboard/assets/sim-table.js"></script>
+<script src="/viva-Mgen/dashboard/assets/configure-run.js"></script>
+<script src="/viva-Mgen/dashboard/assets/sim-table.js"></script>
 <!-- composite-card.js: shared composite-card renderer (extracted from
      walkthrough.js, study-spine-reorg Task 6) — the Model tab uses
      _renderCompositeCardFull to show the SAME rich card the Modules/
@@ -1320,9 +1250,9 @@ window._seedFollowupProposal = _seedFollowupProposal;
      which this iframe does NOT load). composite-card.js's _pcardToggleSec needs
      it to MOUNT a composite's loom — without it, opening a composite from a
      Model card stays stuck on "Resolving composite…". -->
-<script src="/viva-mGen/dashboard/assets/loom-embed.js"></script>
-<script src="/viva-mGen/dashboard/assets/composite-card.js"></script>
-<script src="/viva-mGen/dashboard/assets/study-detail.js"></script>
+<script src="/viva-Mgen/dashboard/assets/loom-embed.js"></script>
+<script src="/viva-Mgen/dashboard/assets/composite-card.js"></script>
+<script src="/viva-Mgen/dashboard/assets/study-detail.js"></script>
 <script>
 // Re-assert the refresh-aware seed handlers AFTER study-detail.js (which
 // defines its own navigate-away _seedFollowupStudy). The embedded

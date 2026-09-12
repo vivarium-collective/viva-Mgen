@@ -1,7 +1,7 @@
 {
   "mode": "snapshot",
   "smsApiBase": "",
-  "repo": "https://github.com/vivarium-collective/viva-mGen",
-  "commit": "ebf4ad0395317a343b481d3e26b05a7a973d78d1",
+  "repo": "https://github.com/vivarium-collective/viva-Mgen",
+  "commit": "e33a89b4b6f7772268736bf25c16e5b02d0028b9",
   "generated_from_ref": "main"
 }

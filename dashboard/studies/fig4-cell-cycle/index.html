@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Study: fig4-cell-cycle</title>
-<link rel="stylesheet" href="/viva-mGen/dashboard/assets/style.css">
-<link rel="stylesheet" href="/viva-mGen/dashboard/assets/progress-track.css">
+<link rel="stylesheet" href="/viva-Mgen/dashboard/assets/style.css">
+<link rel="stylesheet" href="/viva-Mgen/dashboard/assets/progress-track.css">
 <!-- Inherit the workbench light/dark theme (this page loads in an iframe;
      same-origin, so it shares the parent's localStorage 'viv.theme'). -->
 <script>(function(){try{var t=localStorage.getItem('viv.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
@@ -58,7 +58,7 @@
             <span class="dot"></span>2&nbsp;·&nbsp;Execution
           </span>
           
-          <span class="status-step gate-step axis-evaluation_status gate-state-not-assessed set" title="Gate 3 · Evidence">
+          <span class="status-step gate-step axis-evaluation_status gate-state-passed-with-conditions set" title="Gate 3 · Evidence">
             <span class="dot"></span>3&nbsp;·&nbsp;Evidence
           </span>
           
@@ -96,13 +96,15 @@
           
         </div>
         
-        <div class="status-detail-row gate-row gate-state-not-assessed">
+        <div class="status-detail-row gate-row gate-state-passed-with-conditions">
           <span class="status-detail-axis">3 · Evidence</span>
           <span class="status-chip gate-state-not-assessed">not set</span>
           
-          <span class="gate-computed-chip gate-state-not-assessed" title="nothing run to evaluate">◆ computed: not_evaluated</span>
+          <span class="gate-computed-chip gate-state-passed-with-conditions" title="nothing run to evaluate + visualization readiness gate (V4)">◆ computed: not_evaluated</span>
           
           
+          
+          <span class="gate-viz-gap-note" style="font-size:0.86em;color:#92400e">visualization gap: no figures</span>
           
         </div>
         
@@ -148,7 +150,7 @@
 
 
 
-<p id="study-question-headline" class="study-question-headline"><span class="q-glyph">Q</span> Does the viva-mGen replication submodel reproduce Fig 4&#39;s central finding —
+<p id="study-question-headline" class="study-question-headline"><span class="q-glyph">Q</span> Does the viva-Mgen replication submodel reproduce Fig 4&#39;s central finding —
 that M. genitalium&#39;s cell-cycle duration is controlled *emergently*, without a
 dedicated genetic regulator, through the coupling of replication initiation and
 a dNTP surplus that it builds up?
@@ -158,7 +160,7 @@ a dNTP surplus that it builds up?
   
   <div class="act-cluster" data-act="study">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="study" data-gate-state="not-assessed"></span>
+      <span class="act-gate-dot" data-gate="study" data-gate-state="passed-with-conditions"></span>
       <span class="act-label">The Study</span>
     </div>
     <div class="act-tabs">
@@ -179,7 +181,7 @@ a dNTP surplus that it builds up?
   </div>
   <div class="act-cluster" data-act="evidence">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="evidence" data-gate-state="not-assessed"></span>
+      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed-with-conditions"></span>
       <span class="act-label">Evidence</span>
     </div>
     <div class="act-tabs">
@@ -563,7 +565,7 @@ a dNTP surplus that it builds up?
 
     <div class="ctr-block">
       <h2 class="overview-label ctr-h">Claim</h2>
-      <p class="ctr-text">Does the viva-mGen replication submodel reproduce Fig 4&#39;s central finding —
+      <p class="ctr-text">Does the viva-Mgen replication submodel reproduce Fig 4&#39;s central finding —
 that M. genitalium&#39;s cell-cycle duration is controlled *emergently*, without a
 dedicated genetic regulator, through the coupling of replication initiation and
 a dNTP surplus that it builds up?
@@ -631,19 +633,19 @@ dynamics trajectory through the fig4_cell_cycle composite.
   <div class="overview-section" id="model-section">
     <h3>Runnable models <span class="muted" style="font-size:0.85em;font-weight:normal">— the composite(s) this study simulates</span></h3>
     
-    <div class="cond-block" data-model-composite="viva_mgen.composites.cell_cycle.fig4_cell_cycle" data-model-overrides='{"initial_dnaA": 5, "initial_dntp": 0, "seed": 0}'>
+    <div class="cond-block" data-model-composite="viva_mgen.composites.mgen.mycoplasma_genitalium" data-model-overrides='{"initial_dnaA": 5, "initial_dntp": 0, "seed": 0}'>
       <div class="cond-block-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <strong>baseline</strong>
         
-        <code style="font-size:0.82em;color:#374151;background:#f1f5f9;padding:1px 6px;border-radius:3px">viva_mgen.composites.cell_cycle.fig4_cell_cycle</code>
+        <code style="font-size:0.82em;color:#374151;background:#f1f5f9;padding:1px 6px;border-radius:3px">viva_mgen.composites.mgen.mycoplasma_genitalium</code>
         <button type="button" class="action-btn" style="font-size:0.8em"
-                onclick="_openCompositeLoom('viva_mgen.composites.cell_cycle.fig4_cell_cycle')">🧬 explore &amp; run ↗</button>
+                onclick="_openCompositeLoom('viva_mgen.composites.mgen.mycoplasma_genitalium')">🧬 explore &amp; run ↗</button>
         
       </div>
       
       <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
         <input type="text" class="baseline-composite-input" data-baseline-name="baseline"
-               value="viva_mgen.composites.cell_cycle.fig4_cell_cycle" placeholder="pkg.composites.name"
+               value="viva_mgen.composites.mgen.mycoplasma_genitalium" placeholder="pkg.composites.name"
                style="flex:1;min-width:200px;font-family:monospace;font-size:0.82em;padding:3px 6px" />
         <button type="button" class="action-btn baseline-composite-set" style="font-size:0.8em"
                 data-baseline-name="baseline">Set composite</button>
@@ -787,66 +789,9 @@ dynamics trajectory through the fig4_cell_cycle composite.
 
     
     
-    <div class="viz-actions-row" style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-      <button type="button" class="btn-mini" onclick="window._vivStudyFiguresFromCard(event, 'fig4-cell-cycle')" title="Download this study's visualizations (figure panels + its composite) as a zip">↓ visualizations</button>
-    </div>
-    
 
     <div id="native-gallery-panel" class="figure-mount"><p class="empty-message">Loading figures…</p></div>
 
-    
-    
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-mGen/dashboard/workspace/studies/fig4-cell-cycle/viz/init_vs_repl.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="init-vs-repl"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">Initiation vs replication duration across 128 single cells — inversely correlated (Fig 4E).</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">init-vs-repl</span>
-        
-        <a href="/viva-mGen/dashboard/workspace/studies/fig4-cell-cycle/viz/init_vs_repl.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-mGen/dashboard/workspace/studies/fig4-cell-cycle/viz/dntp_vs_repl.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="dntp-vs-repl"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">dNTP pool at replication start vs replication duration — higher surplus, faster replication (Fig 4D).</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">dntp-vs-repl</span>
-        
-        <a href="/viva-mGen/dashboard/workspace/studies/fig4-cell-cycle/viz/dntp_vs_repl.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-mGen/dashboard/workspace/studies/fig4-cell-cycle/viz/cell_cycle_trajectory.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="cell-cycle-trajectory"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">One representative cell through the three-phase cycle: replicated fraction, dNTP pool, DnaA complex vs time (Fig 4B).</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">cell-cycle-trajectory</span>
-        
-        <a href="/viva-mGen/dashboard/workspace/studies/fig4-cell-cycle/viz/cell_cycle_trajectory.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
     
     
 
@@ -1127,7 +1072,7 @@ pass_if: {"high": -0.4, "low": -1.0, "op": "range", "provenance": {"kind": "mode
     
     <div class="decide-section" style="margin-top:18px">
       <h3 class="overview-label">Conclusion</h3>
-      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>viva-mGen reproduces Fig 4's emergent cell-cycle regulation with a reduced but
+      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>viva-Mgen reproduces Fig 4's emergent cell-cycle regulation with a reduced but
 mechanistically genuine dNTP-buffered replication model. Across 128 single
 cells (all completing), the three signature correlations are clearly negative:
 more birth DnaA shortens initiation (r = -0.743, Fig 4C), a larger starting
@@ -1143,35 +1088,6 @@ regulator.</p>
   </div>
 
   
-  
-  <div class="overview-section"><h2 class="overview-label">Plan &amp; assumptions</h2>
-
-    
-    <div class="overview-section">
-      <h3 class="overview-label">Pipeline gate</h3>
-      <p class="muted" style="margin: 0 0 8px 0;font-size:0.88em">
-        Each study is a model-building gate: it answers <em>"Can we safely build the next layer?"</em>
-      </p>
-      
-      <div style="margin-bottom:6px"><strong>Prerequisites:</strong>
-        <code>{&#39;study&#39;: &#39;fig1-architecture&#39;, &#39;condition&#39;: &#39;tests-passed&#39;}</code>
-      </div>
-      
-      
-      
-      <div><strong>Proceed when:</strong> <span class="muted">All three Fig 4 single-cell correlations come out clearly negative, showing
-the emergent, genetically-unregulated buffering of cell-cycle duration is
-reproduced by the reduced dNTP-coupled mechanism.
-</span></div>
-      
-    </div>
-    
-
-    
-
-    
-
-  </div>
   
 
   
@@ -1207,8 +1123,8 @@ reproduced by the reduced dNTP-coupled mechanism.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-mGen", basePath: "/viva-mGen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-mGen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-mGen", "repo_url": "https://github.com/vivarium-collective/viva-mGen", "commit": "ebf4ad0395317a343b481d3e26b05a7a973d78d1", "commit_url": "https://github.com/vivarium-collective/viva-mGen/commit/ebf4ad0395317a343b481d3e26b05a7a973d78d1", "branch": "main", "generated_at": "2026-09-12 23:26 UTC"} };</script>
-<script src="/viva-mGen/dashboard/assets/data-source.js"></script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "e33a89b4b6f7772268736bf25c16e5b02d0028b9", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/e33a89b4b6f7772268736bf25c16e5b02d0028b9", "branch": "main", "generated_at": "2026-09-12 23:47 UTC"} };</script>
+<script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig4-cell-cycle";
 window._study = null;  // populated by _bootstrapStudy() in study-detail.js
@@ -1321,8 +1237,8 @@ function _seedFollowupProposal(parent, proposalId) {
 window._seedFollowupStudy = _seedFollowupStudy;
 window._seedFollowupProposal = _seedFollowupProposal;
 </script>
-<script src="/viva-mGen/dashboard/assets/configure-run.js"></script>
-<script src="/viva-mGen/dashboard/assets/sim-table.js"></script>
+<script src="/viva-Mgen/dashboard/assets/configure-run.js"></script>
+<script src="/viva-Mgen/dashboard/assets/sim-table.js"></script>
 <!-- composite-card.js: shared composite-card renderer (extracted from
      walkthrough.js, study-spine-reorg Task 6) — the Model tab uses
      _renderCompositeCardFull to show the SAME rich card the Modules/
@@ -1332,9 +1248,9 @@ window._seedFollowupProposal = _seedFollowupProposal;
      which this iframe does NOT load). composite-card.js's _pcardToggleSec needs
      it to MOUNT a composite's loom — without it, opening a composite from a
      Model card stays stuck on "Resolving composite…". -->
-<script src="/viva-mGen/dashboard/assets/loom-embed.js"></script>
-<script src="/viva-mGen/dashboard/assets/composite-card.js"></script>
-<script src="/viva-mGen/dashboard/assets/study-detail.js"></script>
+<script src="/viva-Mgen/dashboard/assets/loom-embed.js"></script>
+<script src="/viva-Mgen/dashboard/assets/composite-card.js"></script>
+<script src="/viva-Mgen/dashboard/assets/study-detail.js"></script>
 <script>
 // Re-assert the refresh-aware seed handlers AFTER study-detail.js (which
 // defines its own navigate-away _seedFollowupStudy). The embedded

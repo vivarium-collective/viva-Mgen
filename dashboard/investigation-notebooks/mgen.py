@@ -17,7 +17,7 @@ if _os.environ.get("PYTHONUTF8") != "1":
     _os.execv(_sys.executable, [_sys.executable, *_sys.argv])
 
 
-# # viva-mGen: reproducing the Karr 2012 M. genitalium whole-cell model, one study per figure
+# # viva-Mgen: reproducing the Karr 2012 M. genitalium whole-cell model, one study per figure
 #
 # _Investigation `mgen` — coder reproduction notebook._
 #
@@ -69,8 +69,8 @@ if _env and Path(_env).is_dir():
     REPO = Path(_env)
 if REPO is None:
     REPO = _find_repo_root(Path.cwd().resolve())
-if REPO is None and Path('/home/runner/work/viva-mGen/viva-mGen').is_dir():
-    REPO = Path('/home/runner/work/viva-mGen/viva-mGen')
+if REPO is None and Path('/home/runner/work/viva-Mgen/viva-Mgen').is_dir():
+    REPO = Path('/home/runner/work/viva-Mgen/viva-Mgen')
 if REPO is None:
     REPO = Path.cwd()
 sys.path.insert(0, str(REPO))
@@ -159,7 +159,7 @@ def _render_one(address, config, runs_db, study_yaml):
 
 # ## Study: Fig 1 — Whole-cell integration: six submodels wired through shared cell variables (`fig1-architecture`)
 #
-# **Question.** Does viva-mGen actually reproduce Fig 1's central architectural claim — that
+# **Question.** Does viva-Mgen actually reproduce Fig 1's central architectural claim — that
 # the whole-cell model is a set of independent submodels *integrated* through a
 # shared set of cell variables — as a real, runnable composite rather than a
 # drawing? Do all six submodels compose, share stores, and run as one integrated
@@ -182,15 +182,15 @@ def _render_one(address, config, runs_db, study_yaml):
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig1_architecture` | 0 | — |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | — |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.whole_cell.fig1_architecture`** — `spec_viva_mgen_composites_whole_cell_fig1_architecture` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.whole_cell.fig1_architecture` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -204,41 +204,19 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **wiring-matrix**
-
-def _save_viz(study, slug, html):
-    d = REPO / 'reports/notebooks/figures' / study
-    d.mkdir(parents=True, exist_ok=True)
-    out = d / (slug + '.html')
-    out.write_text(html, encoding='utf-8')
-    print('  wrote', out)
-
-
-# wiring-matrix
-_save_viz('fig1-architecture', 'wiring-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **cell-dashboard**
-
-# cell-dashboard
-_save_viz('fig1-architecture', 'cell-dashboard', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | architecture-integrates-six-submodels | kind=derived_scalar field=n_processes | op range low 6 high 6 provenance {'kind': 'model', 'note': 'Reduced viva-mGen cell = six submodels (metabolism, mass, transcription, translation, rna_decay, protein_decay); Fig 1A. Achieved 6.'} |
+# | architecture-integrates-six-submodels | kind=derived_scalar field=n_processes | op range low 6 high 6 provenance {'kind': 'model', 'note': 'Reduced viva-Mgen cell = six submodels (metabolism, mass, transcription, translation, rna_decay, protein_decay); Fig 1A. Achieved 6.'} |
 # | submodels-are-coupled | kind=derived_scalar field=n_stores_coupled | op range low 2 high 100 provenance {'kind': 'theory', 'note': 'Integration = communication through shared cell variables (Fig 1B). 3 stores coupled (growth_fraction, rna_counts, protein_counts). Achieved 3.'} |
 # | cell-is-viable | kind=derived_scalar field=growth_fraction_final | op range low 0.9 high 1.1 provenance {'kind': 'model', 'note': 'Unperturbed integrated cell holds feasible FBA growth (growth_fraction ≈ 1). Achieved 1.000.'} |
 
 # ## Study: Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition (`fig2-growth`)
 #
-# **Question.** Does the reduced-but-genuine viva-mGen cell (FBA metabolism over iPS189
+# **Question.** Does the reduced-but-genuine viva-Mgen cell (FBA metabolism over iPS189
 # driving mass accumulation) reproduce the trained whole-cell model's core
 # growth phenotype from Fig 2 — a ~9 h doubling time and a protein-dominant
 # dry-mass composition?
@@ -256,7 +234,12 @@ _save_viz('fig1-architecture', 'cell-dashboard', _render_one('', {}, RUNS_DB, ST
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 0 | — |
+# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
+# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
+# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
+# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
+# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
+# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
@@ -276,21 +259,41 @@ STUDY_DIR = REPO / 'workspace/studies' / STUDY
 STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
-print("No recorded runs for this study; nothing to reproduce.")
+# Runtime knobs — edit freely. STEPS = number of composite steps;
+# INTERVAL = global dt filling ${interval} placeholders (a per-process
+# interval pinned in the edit cell above takes precedence).
+STEPS_baseline = 120
+INTERVAL_baseline = 0.1
+STEPS_baseline = 120
+INTERVAL_baseline = 0.1
+STEPS_baseline = 120
+INTERVAL_baseline = 0.1
+STEPS_baseline = 120
+INTERVAL_baseline = 0.1
+STEPS_baseline = 120
+INTERVAL_baseline = 0.1
+STEPS_baseline = 120
+INTERVAL_baseline = 0.1
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **growth-curve**
-
-# growth-curve
-_save_viz('fig2-growth', 'growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **composition-donut**
-
-# composition-donut
-_save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY_YAML))
+if RERUN:
+    with quiet():  # the sim prints per-step progress; keep it out of the notebook
+        # Generic process-bigraph protocol (no workspace runner detected):
+        from viva_superpowers.composite_spec import build_composite_from_spec
+        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
+        comp.run(STEPS_baseline)  # writes the composite's declared emitter
+        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
+        comp.run(STEPS_baseline)  # writes the composite's declared emitter
+        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
+        comp.run(STEPS_baseline)  # writes the composite's declared emitter
+        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
+        comp.run(STEPS_baseline)  # writes the composite's declared emitter
+        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
+        comp.run(STEPS_baseline)  # writes the composite's declared emitter
+        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
+        comp.run(STEPS_baseline)  # writes the composite's declared emitter
+    print(f'ran 6 simulation(s) -> {RUNS_DB}')
+else:
+    print("RERUN=False — rendering committed", RUNS_DB)
 
 # ### Acceptance criteria
 #
@@ -304,7 +307,7 @@ _save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY
 
 # ## Study: Fig 3 (2G/2H) — Single-cell expression: bursty mRNA vs accumulating protein (`fig3-expression`)
 #
-# **Question.** Does the reduced viva-mGen expression module (stochastic transcription +
+# **Question.** Does the reduced viva-Mgen expression module (stochastic transcription +
 # translation + RNA/protein decay on a representative gene panel) reproduce the
 # qualitative single-cell gene-expression dynamics of Fig 3 / 2G-2H — bursty,
 # low-copy mRNA alongside protein that accumulates to much higher, more stable
@@ -325,15 +328,15 @@ _save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig3_expression` | 0 | seed=0 |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | seed=0 |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.whole_cell.fig3_expression`** — `spec_viva_mgen_composites_whole_cell_fig3_expression` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.whole_cell.fig3_expression` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -347,20 +350,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **expression-timeseries**
-
-# expression-timeseries
-_save_viz('fig3-expression', 'expression-timeseries', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **protein-vs-mrna**
-
-# protein-vs-mrna
-_save_viz('fig3-expression', 'protein-vs-mrna', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -373,7 +362,7 @@ _save_viz('fig3-expression', 'protein-vs-mrna', _render_one('', {}, RUNS_DB, STU
 
 # ## Study: Fig 4 — Emergent, unregulated control of cell-cycle duration (`fig4-cell-cycle`)
 #
-# **Question.** Does the viva-mGen replication submodel reproduce Fig 4's central finding —
+# **Question.** Does the viva-Mgen replication submodel reproduce Fig 4's central finding —
 # that M. genitalium's cell-cycle duration is controlled *emergently*, without a
 # dedicated genetic regulator, through the coupling of replication initiation and
 # a dNTP surplus that it builds up?
@@ -394,15 +383,15 @@ _save_viz('fig3-expression', 'protein-vs-mrna', _render_one('', {}, RUNS_DB, STU
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.cell_cycle.fig4_cell_cycle` | 0 | initial_dnaA=5, initial_dntp=0, seed=0 |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | initial_dnaA=5, initial_dntp=0, seed=0 |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.cell_cycle.fig4_cell_cycle`** — `spec_viva_mgen_composites_cell_cycle_fig4_cell_cycle` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.cell_cycle.fig4_cell_cycle` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -416,25 +405,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **init-vs-repl**
-
-# init-vs-repl
-_save_viz('fig4-cell-cycle', 'init-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **dntp-vs-repl**
-
-# dntp-vs-repl
-_save_viz('fig4-cell-cycle', 'dntp-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **cell-cycle-trajectory**
-
-# cell-cycle-trajectory
-_save_viz('fig4-cell-cycle', 'cell-cycle-trajectory', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -447,7 +417,7 @@ _save_viz('fig4-cell-cycle', 'cell-cycle-trajectory', _render_one('', {}, RUNS_D
 
 # ## Study: Fig 5 — Global distribution of cellular energy: ATP > GTP synthesis and a translation-dominated budget (`fig5-energy`)
 #
-# **Question.** Does the reduced viva-mGen cell reproduce Fig 5's global energy picture — that
+# **Question.** Does the reduced viva-Mgen cell reproduce Fig 5's global energy picture — that
 # ATP and GTP are the dominant synthesized carriers with ATP > GTP (Fig 5A), and
 # that the cellular energy budget is dominated by translation, ahead of
 # transcription (Fig 5D)?
@@ -469,15 +439,15 @@ _save_viz('fig4-cell-cycle', 'cell-cycle-trajectory', _render_one('', {}, RUNS_D
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig5_energy` | 0 | — |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | — |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.whole_cell.fig5_energy`** — `spec_viva_mgen_composites_whole_cell_fig5_energy` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.whole_cell.fig5_energy` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -491,20 +461,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **energy-allocation**
-
-# energy-allocation
-_save_viz('fig5-energy', 'energy-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **synthesis-rates**
-
-# synthesis-rates
-_save_viz('fig5-energy', 'synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -516,7 +472,7 @@ _save_viz('fig5-energy', 'synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_Y
 
 # ## Study: Fig 6A — Single-gene-disruption essentiality: model vs experiment (`fig6-gene-essentiality`)
 #
-# **Question.** Does the viva-mGen FBA metabolism submodel reproduce Fig 6A — the
+# **Question.** Does the viva-Mgen FBA metabolism submodel reproduce Fig 6A — the
 # single-gene-disruption essentiality phenotype — for the metabolic genes of
 # M. genitalium: does an in-silico single-gene knockout predict which genes are
 # essential, matching the reference essentiality calls?
@@ -538,15 +494,15 @@ _save_viz('fig5-energy', 'synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_Y
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.genetics.fig6_gene_essentiality` | 0 | disrupted_gene=MG_023 |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | — |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.genetics.fig6_gene_essentiality`** — `spec_viva_mgen_composites_genetics_fig6_gene_essentiality` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.genetics.fig6_gene_essentiality` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -560,20 +516,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **confusion-matrix**
-
-# confusion-matrix
-_save_viz('fig6-gene-essentiality', 'confusion-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **accuracy-summary**
-
-# accuracy-summary
-_save_viz('fig6-gene-essentiality', 'accuracy-summary', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -585,7 +527,7 @@ _save_viz('fig6-gene-essentiality', 'accuracy-summary', _render_one('', {}, RUNS
 
 # ## Study: Fig 7E-G — Kinetic parameters: growth depends sigmoidally on an enzyme's kcat (Vmax proxy) (`fig7-kinetic-parameters`)
 #
-# **Question.** Does the reduced-but-genuine viva-mGen cell reproduce Fig 7E-G's central
+# **Question.** Does the reduced-but-genuine viva-Mgen cell reproduce Fig 7E-G's central
 # quantitative claim — that predicted growth rate depends on an enzyme's kinetic
 # parameter (kcat/Vmax), producing a SIGMOIDAL growth-vs-kcat curve that rises
 # from near-zero at low activity and saturates at the wild-type rate once the
@@ -608,15 +550,15 @@ _save_viz('fig6-gene-essentiality', 'accuracy-summary', _render_one('', {}, RUNS
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.genetics.fig7_kinetic_parameters` | 0 | reaction_id=EX_leu_DASH_L_e, bound_scale=1.0 |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | — |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.genetics.fig7_kinetic_parameters`** — `spec_viva_mgen_composites_genetics_fig7_kinetic_parameters` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.genetics.fig7_kinetic_parameters` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -629,15 +571,6 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
-
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **kcat-growth-curve**
-
-# kcat-growth-curve
-_save_viz('fig7-kinetic-parameters', 'kcat-growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
