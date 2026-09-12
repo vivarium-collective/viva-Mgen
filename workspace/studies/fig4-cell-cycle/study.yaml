@@ -43,6 +43,25 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.cell_cycle.fig4_cell_cycle
+  duration_min: 60
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig4-cell-cycle run via sims/run.py (recorded in .pbg/runs.jsonl).
+  params: {'initial_dnaA': 5, 'initial_dntp': 0, 'seed': 0}
+  readouts:
+  - r_init_repl
+  - r_dntp_repl
+  - r_dnaA_init
+  applies_tests:
+  - initiation-replication-inversely-correlated
+  - dntp-controls-replication-duration
+  - more-dnaa-shortens-initiation
+
 expected_behavior:
 - name: initiation-replication-inversely-correlated
   en: "Across single cells, initiation and replication durations are inversely correlated (Fig 4E)."

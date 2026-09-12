@@ -45,6 +45,22 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.whole_cell.fig5_energy
+  duration_min: 60
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig5-energy run via sims/run.py (recorded in .pbg/runs.jsonl).
+  readouts:
+  - atp_to_gtp_ratio
+  - translation_share
+  applies_tests:
+  - atp-exceeds-gtp-synthesis
+  - translation-dominates-energy
+
 expected_behavior:
 - name: atp-exceeds-gtp-synthesis
   en: "ATP synthesis flux exceeds GTP synthesis flux (ATP > GTP > 0), matching Fig 5A."

@@ -45,6 +45,24 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.whole_cell.fig1_architecture
+  duration_min: 20
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig1-architecture run via sims/run.py (recorded in .pbg/runs.jsonl).
+  readouts:
+  - n_processes
+  - n_stores_coupled
+  - growth_fraction_final
+  applies_tests:
+  - architecture-integrates-six-submodels
+  - submodels-are-coupled
+  - cell-is-viable
+
 expected_behavior:
 - name: architecture-integrates-six-submodels
   en: "The integrated cell is composed of exactly six submodels (Fig 1A)."

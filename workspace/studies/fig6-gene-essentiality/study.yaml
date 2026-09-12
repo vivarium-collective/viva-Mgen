@@ -45,6 +45,23 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.genetics.fig6_gene_essentiality
+  duration_min: 1
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig6-gene-essentiality run via sims/run.py (recorded in .pbg/runs.jsonl).
+  params: {'disrupted_gene': 'MG_023'}
+  readouts:
+  - essentiality_accuracy
+  - sensitivity
+  applies_tests:
+  - essentiality-accuracy-high
+  - essential-genes-detected
+
 expected_behavior:
 - name: essentiality-accuracy-high
   en: "Model-vs-reference essentiality accuracy over the metabolic subset is high (~0.76), in the neighborhood of the paper's whole-cell (79%) and iPS189 metabolic (87%) accuracy."

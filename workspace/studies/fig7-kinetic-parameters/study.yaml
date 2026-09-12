@@ -49,6 +49,25 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.genetics.fig7_kinetic_parameters
+  duration_min: 1
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig7-kinetic-parameters run via sims/run.py (recorded in .pbg/runs.jsonl).
+  params: {'reaction_id': 'EX_leu_DASH_L_e', 'bound_scale': 1.0}
+  readouts:
+  - growth_is_monotonic_in_kcat
+  - growth_saturates
+  - dynamic_range
+  applies_tests:
+  - growth-monotonic-in-kcat
+  - growth-saturates-at-high-kcat
+  - kcat-has-dynamic-range
+
 expected_behavior:
 - name: growth-monotonic-in-kcat
   en: "Growth rate increases monotonically with the enzyme's kcat proxy (Fig 7E)."

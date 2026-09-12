@@ -47,6 +47,25 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.whole_cell.fig3_expression
+  duration_min: 60
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig3-expression run via sims/run.py (recorded in .pbg/runs.jsonl).
+  params: {'seed': 0}
+  readouts:
+  - mean_mrna_per_gene
+  - protein_to_mrna_ratio
+  - fraction_genes_expressed
+  applies_tests:
+  - mrna-is-bursty-low-copy
+  - protein-exceeds-mrna
+  - genes-become-expressed
+
 expected_behavior:
 - name: mrna-is-bursty-low-copy
   en: "mRNA stays low-copy and bursty — time-averaged mRNA per gene is order 0-2 copies (Fig 2G)."

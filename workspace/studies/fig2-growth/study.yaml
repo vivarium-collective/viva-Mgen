@@ -35,6 +35,24 @@ baseline:
 
 variants: []
 
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.whole_cell.fig2_growth
+  duration_min: 540
+  seeds:
+  - 0
+  condition: >-
+    Canonical viva-mGen fig2-growth run via sims/run.py (recorded in .pbg/runs.jsonl).
+  readouts:
+  - doubling_time_h
+  - final_mass_ratio
+  - protein_fraction
+  applies_tests:
+  - doubling-time-near-9h
+  - mass-doubles-in-cycle
+  - protein-dominant-composition
+
 expected_behavior:
 - name: doubling-time-near-9h
   en: "The fitted doubling time is ~9 h, matching the measured M. genitalium doubling time (Fig 2A/B)."
