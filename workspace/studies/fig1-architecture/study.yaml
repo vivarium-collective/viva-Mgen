@@ -145,6 +145,40 @@ readouts:
   store_path: stores/growth_rate
   status: available
 
+pipeline_gate:
+  prerequisites: []
+  enables:
+  - fig2-growth
+  - fig3-expression
+  proceed_condition: |
+    All six submodels compose into one integrated cell that runs and stays
+    viable, with the shared cell variables (Fig 1B wiring) in place. This
+    integrated backbone is the substrate the growth (fig2) and expression (fig3)
+    studies foreground.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig1-architecture/sims/run.py
+  args: []
+  label: "Fig 1 architecture: integrated cell + wiring matrix, 20 min"
+  default: true
+
+visualizations:
+- name: wiring-matrix
+  chart: viz/wiring_matrix.html
+  render: "python sims/run.py"
+- name: cell-dashboard
+  chart: viz/cell_dashboard.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: wiring-matrix
+  url: /workspace/studies/fig1-architecture/viz/wiring_matrix.html
+  description: "Process × cell-variable coupling matrix derived from the composite doc — the Fig 1B wiring diagram."
+- name: cell-dashboard
+  url: /workspace/studies/fig1-architecture/viz/cell_dashboard.html
+  description: "Integrated cell dynamics over 20 min — mass, growth rate, and total mRNA/protein counts sharing one clock."
+
 conclusion: |
   viva-Mgen reproduces Fig 1's architecture as a runnable integrated cell, not a
   drawing. The composite wires exactly 6 submodels through shared bigraph stores,

@@ -124,6 +124,47 @@ readouts:
   store_path: stores/growth_rate
   status: available
 
+pipeline_gate:
+  prerequisites:
+  - study: fig2-growth
+    condition: tests-passed
+  enables: []
+  proceed_condition: |
+    The integrated cell reproduces the Fig 5 energy picture — ATP > GTP synthesis
+    and a translation-dominated expression budget — at reduced fidelity.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig5-energy/sims/run.py
+  args: []
+  label: "Fig 5 energy: one hour, ATP/GTP synthesis + expression energy budget"
+  default: true
+
+visualizations:
+- name: energy-allocation
+  chart: viz/energy_allocation.html
+  render: "python sims/run.py"
+- name: synthesis-rates
+  chart: viz/synthesis_rates.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: energy-allocation
+  url: /workspace/studies/fig5-energy/viz/energy_allocation.html
+  description: "Energy allocation across processes (Fig 5D): translation dominates the modeled expression energy, ahead of transcription, with a representative ~44% unaccounted slice echoing the paper's structure."
+- name: synthesis-rates
+  url: /workspace/studies/fig5-energy/viz/synthesis_rates.html
+  description: "ATP vs GTP synthesis flux (Fig 5A): ATP synthesis far exceeds GTP, both positive."
+
+provenance:
+  kind: experiment/model
+  note: >-
+    Karr et al. 2012 Fig 5A (ATP/GTP dominate the synthesized energy carriers,
+    ATP > GTP) and Fig 5D (energy budget dominated by translation ~29%, then
+    tRNA-aminoacylation ~15%, then transcription ~7%, with ~44% unaccounted).
+    Reduced reproduction: only ATP/GTP carriers and only the transcription/
+    translation expression processes are modeled.
+
 conclusion: |
   The viva-Mgen cell reproduces Fig 5's qualitative energy picture at reduced
   fidelity. Fig 5A: ATP synthesis flux (0.813) exceeds GTP (0.202) by 4.03×, both

@@ -144,6 +144,45 @@ readouts:
   store_path: stores/phase_code
   status: available
 
+pipeline_gate:
+  prerequisites:
+  - study: fig1-architecture
+    condition: tests-passed
+  enables: []
+  proceed_condition: |
+    All three Fig 4 single-cell correlations come out clearly negative, showing
+    the emergent, genetically-unregulated buffering of cell-cycle duration is
+    reproduced by the reduced dNTP-coupled mechanism.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig4-cell-cycle/sims/run.py
+  args: []
+  label: "Fig 4 cell cycle: 128-cell population + representative trajectory"
+  default: true
+
+visualizations:
+- name: init-vs-repl
+  chart: viz/init_vs_repl.html
+  render: "python sims/run.py"
+- name: dntp-vs-repl
+  chart: viz/dntp_vs_repl.html
+  render: "python sims/run.py"
+- name: cell-cycle-trajectory
+  chart: viz/cell_cycle_trajectory.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: init-vs-repl
+  url: /workspace/studies/fig4-cell-cycle/viz/init_vs_repl.html
+  description: "Initiation vs replication duration across 128 single cells — inversely correlated (Fig 4E)."
+- name: dntp-vs-repl
+  url: /workspace/studies/fig4-cell-cycle/viz/dntp_vs_repl.html
+  description: "dNTP pool at replication start vs replication duration — higher surplus, faster replication (Fig 4D)."
+- name: cell-cycle-trajectory
+  url: /workspace/studies/fig4-cell-cycle/viz/cell_cycle_trajectory.html
+  description: "One representative cell through the three-phase cycle: replicated fraction, dNTP pool, DnaA complex vs time (Fig 4B)."
+
 conclusion: |
   viva-Mgen reproduces Fig 4's emergent cell-cycle regulation with a reduced but
   mechanistically genuine dNTP-buffered replication model. Across 128 single
