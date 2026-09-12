@@ -1,0 +1,48 @@
+{
+  "mass_fractions": {
+    "cellInitialDryWeight": 3.93e-15,
+    "cellInitialMassVariation": 0.05,
+    "dryWeightFractionCarbohydrate": 0.00516418150588235,
+    "dryWeightFractionDNA": 0.1688,
+    "dryWeightFractionIon": 0.00980392156862745,
+    "dryWeightFractionLipid": 0.0568059965647059,
+    "dryWeightFractionNucleotide": 0.01833748,
+    "dryWeightFractionPolyamine": 0.01323529411764706,
+    "dryWeightFractionProtein": 0.619701780705882,
+    "dryWeightFractionRNA": 0.0929552671058823,
+    "dryWeightFractionVitamin": 0.01519607843137255,
+    "fractionWetWeight": 0.7,
+    "initialBiomassConcentration": 0.003,
+    "initialFractionAAsInMonomers": 0.99,
+    "initialFractionNTPsInRNAs": 1.0,
+    "timeAveragedCellWeight": 1.4427
+  },
+  "time": {
+    "cellCycleLength": 32400.0,
+    "cytokinesisDuration": 3869.0,
+    "replicationDuration": 15571.0,
+    "replicationInitiationDuration": 12960.0
+  },
+  "metabolite": {
+    "meanNDPConcentration": 0.5,
+    "meanNMPConcentration": 0.2,
+    "meanNTPConcentration": 5.0
+  },
+  "rna": {
+    "geneExpressionRobustness": 1.0,
+    "minTRnaCnt": 7.0,
+    "weightFractionMRNA": 0.2,
+    "weightFractionRRNA16S": 0.166481,
+    "weightFractionRRNA23S": 0.334408,
+    "weightFractionRRNA5S": 0.01311,
+    "weightFractionSRNA": 0.024,
+    "weightFractionTRNA": 0.262
+  },
+  "metabolism": {
+    "exchangeRateUpperBound_carbon": 12.0,
+    "exchangeRateUpperBound_noncarbon": 20.0,
+    "growthAssociatedMaintenance": 59.81,
+    "macromoleculeStateInitializationGrowthFactor": 1.0,
+    "nonGrowthAssociatedMaintenance": 8.39
+  }
+}

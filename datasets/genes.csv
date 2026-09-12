@@ -1,0 +1,526 @@
+gene_id,symbol,name,essential_ref,associated_reactions
+MG_001,dnaN,"DNA polymerase III, beta subunit",Y,"DNA_polymerization_dATP_repair, DNA_polymerization_dCTP_repair, DNA_polymerization_dGTP_repair, DNA_polymerization_dTTP_repair, dRiboseP_lyase"
+MG_002,,DnaJ domain protein,N,
+MG_003,gyrB,"DNA gyrase, B subunit",Y,ATPHs_DNASupercoiling_gyrase
+MG_004,gyrA,"DNA gyrase, A subunit",Y,ATPHs_DNASupercoiling_gyrase
+MG_005,serS,seryl-tRNA synthetase,Y,"MG475_Aminoacylation, MG487_Aminoacylation, MG506_Aminoacylation, MG507_Aminoacylation"
+MG_006,tmk,thymidylate kinase,Y,Tmk
+MG_007,holB,"DNA polymerase III delta prime subunit, putative",Y,
+MG_008,"mnmE, thdF, trmE",tRNA modification GTPase TrmE,Y,"MG501_MODIFICATION_003, MG502_MODIFICATION_002, MG513_MODIFICATION_002"
+MG_009,"tatD, mttC, ychF",deoxyribonuclease,N,"TatD_dAMP, TatD_dCMP, TatD_dGMP, TatD_dTMP"
+MG_010,dnaE,DNA primase-related protein,N,
+MG_011,,,N,
+MG_012,rimK,alpha-L-glutamate ligase,N,MG_166_MONOMER_MODIFICATION_001
+MG_013,folD,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,Y,"FolD1, FolD2, FTHFS"
+MG471,,"tRNA-ALA (GCA, GCC, GCG, GCT)",Y,
+MG472,,"tRNA-ILE (ATC, ATT)",Y,
+MG_014,mdlB,"multidrug ABC transporter, ATP-binding/permease protein",Y,TX_MdlB_doxorubicin
+MG_015,"mdlB, lmrA","multidrug ABC transporter, ATP-binding/permease protein",Y,TX_MdlB_doxorubicin
+MG_018,hepA2,SNF2 family helicase putative,N,
+MG_019,dnaJ,chaperone protein DnaJ,Y,
+MG_020,"pepP, pip",proline iminopeptidase,Y,
+MG_021,metG,methionyl-tRNA synthetase,Y,"MG485_Aminoacylation, MG488_Aminoacylation"
+MG_022,rpoE,"DNA-directed RNA polymerase, delta subunit",Y,"RnaPolymerization_ATP, RnaPolymerization_CTP, RnaPolymerization_GTP, RnaPolymerization_UTP"
+MG_023,fba,"fructose-1,6-bisphosphate aldolase, class II",Y,Fba
+MG_024,"ychF, engD, gtp1",GTP-binding protein YchF,N,
+MG_025,trsB,Beta-glycosyl transferase,Y,
+MG_026,efp,translation elongation factor P,Y,
+MG_027,nusB,transcription termination/antitermination protein NusB,Y,
+MG_028,,,Y,
+MG_029,,DJ-1/PfpI family protein,Y,
+MG_030,upp,uracil phosphoribosyltransferase,Y,Upp
+MG_031,polC,"DNA polymerase III, alpha subunit, Gram-positive type",Y,"DNAPolymerization_dATP, DNAPolymerization_dCTP, DNAPolymerization_dGTP, DNAPolymerization_dTTP"
+MG_032,,,N,
+MG_033,glpF,glycerol uptake facilitator,N,TX_GLUP
+MG_034,tdk,thymidine kinase,Y,"Tdk1, Tdk2"
+MG_035,hisS,histidyl-tRNA synthetase,Y,MG518_Aminoacylation
+MG_036,aspS,aspartyl-tRNA synthetase,Y,MG489_Aminoacylation
+MG_037,pncB,nicotinate phosphoribosyltransferase,Y,PncB
+MG_038,glpK,glycerol kinase,Y,GlpK
+MG_039,gpsA,"FAD-dependent glycerol-3-phosphate dehydrogenase, putative",N,GpsA
+MG_040,,"Monosaccharide (riboside/galactoside) ABC transporter, substrate binding protein",N,TX_RIBUP
+MG_041,ptsH,"PTS system, HPr",Y,"TX_FRUPTS, TX_GLCPTS"
+MG_042,potA,"spermidine/putrescine (polyamine) ABC transporter, ATP-binding protein, putative",Y,"TX_SPMDUP1, TX_SPRDUP2"
+MG_043,potB,"spermidine/putrescine (polyamine) ABC transporter, permease protein, putative",Y,"TX_SPMDUP1, TX_SPRDUP2"
+MG_044,potC,"spermidine/putrescine (polyamine) ABC transporter, permease protein, putative",Y,"TX_SPMDUP1, TX_SPRDUP2"
+MG_045,potD,"spermidine/putrescine (polyamine) ABC transporter, spermidine/putrescine binding protein, putative",Y,"TX_SPMDUP1, TX_SPRDUP2"
+MG_046,gcp,metalloendopeptidase,Y,
+MG_047,metK,S-adenosylmethionine synthetase,Y,MetK
+MG_048,ffh,signal recognition particle protein,Y,ATPHs_ProteinTranslocation_SRP
+MG_049,deoD,purine nucleoside phosphorylase,N,"DeoD1, DeoD2, DeoD3, DeoD4, DeoD5, DeoD6, DeoD8"
+MG_050,deoC,deoxyribose-phosphate aldolase,Y,DeoC
+MG_051,pdp,pyrimidine-nucleoside phosphorylase,N,"Pdp1, Pdp2"
+MG_052,cdd,cytidine deaminase,Y,"Cdd1, Cdd2"
+MG_053,pgm,"phosphoglucomutase/phosphomannomutase, putative",Y,"CpsG, FruK2, Pgm"
+MG_054,nusG,"transcription antitermination protein NusG, putative",Y,
+MG_055,secE,"preprotein translocase, SecE subunit",Y,
+MG_473,rpmG-2,ribosomal protein L33 type 2,Y,
+MG_474,,,Y,
+MG_056,yraL,tetrapyrrole (corrin/porphyrin) methylase protein,N,
+MG_057,,small primase-like protein,Y,
+MG_058,prs,ribose-phosphate pyrophosphokinase,Y,PrsA
+MG_059,smpB,SsrA-binding protein,Y,
+MG_060,rfbV,glycosyl transferase,Y,
+MG_061,uhpT,Mycoplasma MFS transporter,N,"TX_UHPT1, TX_UHPT2, TX_UHPT3"
+MG475,,"tRNA-SER (AGC, AGT)",Y,
+MG_062,fruA,"PTS system, fructose-specific IIABC component",N,TX_FRUPTS
+MG_063,fruK,"1-phosphofructokinase, putative",N,FruK1
+MG_064,,"ABC transporter, permease protein, putative",Y,
+MG_065,,"ABC transporter, ATP-binding protein",Y,
+MG_066,tkt,transketolase,N,"Tkt1, Tkt2"
+MG_067,,"lipoprotein, putative",N,
+MG_068,,"lipoprotein, putative",Y,
+MG_069,ptsG,"PTS system, glucose-specific IIABC component",Y,TX_GLCPTS
+MG_070,rpsB,ribosomal protein S2,Y,
+MG_071,"mgtA, pacL","ATPase, P-type (transporting), HAD superfamily, subfamily IC",Y,"TX_MGTA_CA, TX_MGTA_CU, TX_MGTA_FE2, TX_MGTA_FE3, TX_MGTA_MG, TX_MGTA_MN, TX_MGTA_MOBD, TX_MGTA_ZN"
+MG_072,secA,"preprotein translocase, SecA subunit",Y,ATPHs_ProteinTranslocation_SecA
+MG_073,uvrB,"excinuclease ABC, B subunit",Y,NER_DNAIncision
+MG_074,,,Y,
+MG_075,,116 kDa surface antigen,Y,
+MG_076,,,Y,
+MG_077,oppB,"oligopeptide ABC transporter, permease protein",Y,"TX_OppB_Ala, TX_OppB_Arg, TX_OppB_Asn, TX_OppB_Asp, TX_OppB_Cys, TX_OppB_Gln, TX_OppB_Glu, TX_OppB_Gly, TX_OppB_His, TX_OppB_Ile, TX_OppB_Leu, TX_OppB_Lys, TX_OppB_Met, TX_OppB_Phe, TX_OppB_Pro, TX_OppB_Ser, TX_OppB_Thr, TX_OppB_Trp, TX_OppB_Tyr, TX_OppB_Val"
+MG_078,oppC,"oligopeptide ABC transporter, permease protein",Y,"TX_OppB_Ala, TX_OppB_Arg, TX_OppB_Asn, TX_OppB_Asp, TX_OppB_Cys, TX_OppB_Gln, TX_OppB_Glu, TX_OppB_Gly, TX_OppB_His, TX_OppB_Ile, TX_OppB_Leu, TX_OppB_Lys, TX_OppB_Met, TX_OppB_Phe, TX_OppB_Pro, TX_OppB_Ser, TX_OppB_Thr, TX_OppB_Trp, TX_OppB_Tyr, TX_OppB_Val"
+MG_079,oppD,"oligopeptide ABC transporter, ATP-binding protein",Y,"TX_OppB_Ala, TX_OppB_Arg, TX_OppB_Asn, TX_OppB_Asp, TX_OppB_Cys, TX_OppB_Gln, TX_OppB_Glu, TX_OppB_Gly, TX_OppB_His, TX_OppB_Ile, TX_OppB_Leu, TX_OppB_Lys, TX_OppB_Met, TX_OppB_Phe, TX_OppB_Pro, TX_OppB_Ser, TX_OppB_Thr, TX_OppB_Trp, TX_OppB_Tyr, TX_OppB_Val"
+MG_080,oppF,"oligopeptide ABC transporter, ATP-binding protein",Y,"TX_OppB_Ala, TX_OppB_Arg, TX_OppB_Asn, TX_OppB_Asp, TX_OppB_Cys, TX_OppB_Gln, TX_OppB_Glu, TX_OppB_Gly, TX_OppB_His, TX_OppB_Ile, TX_OppB_Leu, TX_OppB_Lys, TX_OppB_Met, TX_OppB_Phe, TX_OppB_Pro, TX_OppB_Ser, TX_OppB_Thr, TX_OppB_Trp, TX_OppB_Tyr, TX_OppB_Val"
+MG_081,rplK,ribosomal protein L11,Y,
+MG_082,rplA,ribosomal protein L1,Y,
+MG_083,pth,peptidyl-tRNA hydrolase,Y,"PeptidylTRNAHs_ALA, PeptidylTRNAHs_ARG, PeptidylTRNAHs_ASN, PeptidylTRNAHs_ASP, PeptidylTRNAHs_CYS, PeptidylTRNAHs_FMET, PeptidylTRNAHs_GLN, PeptidylTRNAHs_GLU, PeptidylTRNAHs_GLY, PeptidylTRNAHs_HIS, PeptidylTRNAHs_ILE, PeptidylTRNAHs_LEU, PeptidylTRNAHs_LYS, PeptidylTRNAHs_MET, PeptidylTRNAHs_PHE, PeptidylTRNAHs_PRO, PeptidylTRNAHs_SER, PeptidylTRNAHs_THR, PeptidylTRNAHs_TRP, PeptidylTRNAHs_TYR, PeptidylTRNAHs_VAL"
+MG_084,tilS,tRNA(Ile)-lysidine synthetase,Y,MG486_MODIFICATION_002
+MG_085,hprK,HPr(Ser) kinase/phosphatase,Y,
+MG_086,"lgt, gerF",prolipoprotein diacylglyceryl transferase,Y,ProLipoproteinDiacylglycerylTransferase
+MG_087,rpsL,ribosomal protein S12,Y,
+MG_088,rpsG,ribosomal protein S7,Y,
+MG_089,fusA,translation elongation factor G,Y,
+MG_090,rpsF,ribosomal protein S6,Y,
+MG_091,,single-strand binding protein family,Y,
+MG_092,rpsR,ribosomal protein S18,Y,
+MG_093,rplI,ribosomal protein L9,Y,
+MG_094,dnaB,replicative DNA helicase,Y,ATPHs_DNAReplication_Helicase
+MG_095,,"lipoprotein, putative",Y,
+MG_096,,,N,
+MG_097,ung,"uracil-DNA glycosylase, putative",Y,"Ung_ho5URA, Ung_URA"
+MG_098,,"glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase, C subunit",Y,MG502_Amidotransferase
+MG_099,gatA,"glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase, A subunit",Y,MG502_Amidotransferase
+MG_100,gatB,"glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase, B subunit",Y,MG502_Amidotransferase
+MG_101,gntR,Uncharacterized HTH-type transcriptional regulator,Y,
+MG_102,trxB,thioredoxin-disulfide reductase,Y,TrxB
+MG_103,,,N,
+MG_476,secG,"preprotein translocase, SecG subunit",Y,
+MG_104,rnr,ribonuclease R,Y,"RNACleavage_RNAseR_AMP, RNACleavage_RNAseR_CMP, RNACleavage_RNAseR_GMP, RNACleavage_RNAseR_UMP"
+MG_105,disA,putative DNA integrity scanning protein,Y,diadenylate_cyclase
+MG_106,def,peptide deformylase,Y,Deformylation
+MG_107,gmk,guanylate kinase,Y,"Dgk1, Gmk1, Gmk2, Gmk3, Gmk4"
+MG_108,ptc1,"Ser/Thr protein phosphatase 2C, putative",Y,
+MG_109,prkC,"serine/threonine protein kinase, putative",Y,"MG_070_MONOMER_MODIFICATION_001, MG_070_MONOMER_MODIFICATION_002, MG_070_MONOMER_MODIFICATION_003, MG_070_MONOMER_MODIFICATION_004, MG_070_MONOMER_MODIFICATION_005, MG_217_MONOMER_MODIFICATION_001, MG_273_MONOMER_MODIFICATION_001, MG_274_MONOMER_MODIFICATION_001, MG_282_MONOMER_MODIFICATION_001, MG_305_MONOMER_MODIFICATION_001, MG_305_MONOMER_MODIFICATION_002, MG_317_MONOMER_MODIFICATION_001, MG_317_MONOMER_MODIFICATION_002, MG_317_MONOMER_MODIFICATION_003, MG_317_MONOMER_MODIFICATION_004, MG_317_MONOMER_MODIFICATION_005, MG_328_MONOMER_MODIFICATION_001, MG_342_MONOMER_MODIFICATION_001, MG_377_MONOMER_MODIFICATION_001, MG_377_MONOMER_MODIFICATION_002, MG_377_MONOMER_MODIFICATION_003, MG_377_MONOMER_MODIFICATION_004, MG_377_MONOMER_MODIFICATION_005, MG_377_MONOMER_MODIFICATION_006, MG_377_MONOMER_MODIFICATION_007, MG_377_MONOMER_MODIFICATION_008, MG_377_MONOMER_MODIFICATION_009, MG_377_MONOMER_MODIFICATION_010, MG_377_MONOMER_MODIFICATION_011, MG_392_MONOMER_MODIFICATION_001, MG_392_MONOMER_MODIFICATION_002, MG_401_MONOMER_MODIFICATION_001, MG_401_MONOMER_MODIFICATION_002, MG_401_MONOMER_MODIFICATION_003, MG_401_MONOMER_MODIFICATION_004, MG_401_MONOMER_MODIFICATION_005, MG_401_MONOMER_MODIFICATION_006, MG_401_MONOMER_MODIFICATION_007, MG_401_MONOMER_MODIFICATION_008, MG_401_MONOMER_MODIFICATION_009, MG_407_MONOMER_MODIFICATION_001, MG_407_MONOMER_MODIFICATION_002, MG_407_MONOMER_MODIFICATION_003, MG_427_MONOMER_MODIFICATION_001, MG_427_MONOMER_MODIFICATION_002, MG_438_MONOMER_MODIFICATION_001, MG_438_MONOMER_MODIFICATION_002, MG_438_MONOMER_MODIFICATION_003, MG_438_MONOMER_MODIFICATION_004, MG_438_MONOMER_MODIFICATION_005, MG_438_MONOMER_MODIFICATION_006, MG_438_MONOMER_MODIFICATION_007, MG_438_MONOMER_MODIFICATION_008, MG_438_MONOMER_MODIFICATION_009, MG_451_MONOMER_MODIFICATION_001, MG_451_MONOMER_MODIFICATION_002, MG_451_MONOMER_MODIFICATION_003, MG_460_MONOMER_MODIFICATION_001, MG_460_MONOMER_MODIFICATION_002, MG_460_MONOMER_MODIFICATION_003, MG_491_MONOMER_MODIFICATION_001"
+MG_110,"rsgA, yjeQ",ribosome small subunit-dependent GTPase A,N,"RNACleavage_RsgA_AMP, RNACleavage_RsgA_CMP, RNACleavage_RsgA_GMP, RNACleavage_RsgA_UMP"
+MG_111,pgi,glucose-6-phosphate isomerase,Y,Pgi
+MG_112,rpe,ribulose-phosphate 3-epimerase,N,Rpe
+MG_113,asnS,asparaginyl-tRNA synthetase,Y,MG514_Aminoacylation
+MG_114,pgsA,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase,N,"PgsA1, PgsA2, PgsA3"
+MG_115,cinA,competence/damage-inducible protein CinA domain protein,N,
+MG_116,,,N,
+MG_117,,,Y,
+MG_118,galE,UDP-glucose 4-epimerase,Y,GalE
+MG_119,rbsA,"Monosaccharide (riboside/galactoside) ABC transporter, ATP-binding protein",Y,TX_RIBUP
+MG_120,rbsB,"Monosaccharide (riboside/galactoside) ABC transporter, permease protein",Y,TX_RIBUP
+MG_121,rbsC,"Monosaccharide (riboside/galactoside) ABC transporter, permease protein",N,TX_RIBUP
+MG_122,topA,DNA topoisomerase I,Y,ATPHs_DNASupercoiling_topoisomeraseI
+MG_123,,arginine deaminasse,Y,Adi
+MG_124,trx,thioredoxin,Y,
+MG_125,,"Cof-like hydrolase, putative",Y,
+MG_126,trpS,tryptophanyl-tRNA synthetase,Y,"MG496_Aminoacylation, MG504_Aminoacylation"
+MG_127,"spx, yjbD",Spx subfamily protein,Y,
+MG_128,nadK,"inorganic polyphosphate/ATP-NAD kinase, probable",Y,NadK
+MG_129,,Putative phosphotransferase enzyme glucose-specific IIB component,Y,
+MG_130,cpdB,,Y,"CpdB1, CpdB2, CpdB3, CpdB4"
+MG_131,,hypothetical protein,N,
+MG_132,hinT,purine nucleoside phosphoramidase,Y,
+MG_133,,"membrane protein, putative",Y,
+MG_134,,,N,
+MG_135,,"membrane protein, putative",Y,
+MG_136,lysS,lysyl-tRNA synthetase,Y,"MG501_Aminoacylation, MG509_Aminoacylation"
+MG_137,glf,UDP-galactopyranose mutase,Y,Glf
+MG_138,"lepA, EF4",Translation elongation factor 4,N,
+MG_139,"rnjA, ykqC",ribonuclease J,Y,"RNACleavage_RNAseJ_AMP, RNACleavage_RNAseJ_CMP, RNACleavage_RNAseJ_GMP, RNACleavage_RNAseJ_UMP"
+MGrrnA16S,rrsA,16S ribosomal rRNA,Y,
+MGrrnA23S,rrlA,23S ribosomal rRNA,Y,
+MGrrnA5S,rrfA,5S ribosomal rRNA,Y,
+MG_140,,putative ATP-dependent helicase,N,
+MG_141,nusA,transcription termination factor NusA,Y,
+MG_477,,,Y,
+MG_142,infB,translation initiation factor IF-2,Y,
+MG_143,rbfA,ribosome-binding factor A,Y,GTPHs_RibosomeAssembly_RbfA
+MG_144,,,Y,
+MG_145,ribF,riboflavin biosynthesis protein RibF,Y,"RibF1, RibF2"
+MG_146,,UPF0053 protein,Y,
+MG_147,,"membrane protein, putative",Y,
+MG_148,,,Y,
+MG_149,,"lipoprotein, putative",N,
+MG_478,,,N,
+MG_150,rpsJ,ribosomal protein S10,Y,
+MG_151,rplC,ribosomal protein L3,Y,
+MG_152,rplD,ribosomal protein L4/L1 family,Y,
+MG_153,rplW,ribosomal protein L23,Y,
+MG_154,rplB,ribosomal protein L2,Y,
+MG_155,rpsS,ribosomal protein S19,Y,
+MG_156,rplV,ribosomal protein L22,Y,
+MG_157,rpsC,ribosomal protein S3,Y,
+MG_158,rplP,ribosomal protein L16,Y,
+MG_159,rpmC,ribosomal protein L29,Y,
+MG_160,rpsQ,ribosomal protein S17,Y,
+MG_161,rplN,ribosomal protein L14,Y,
+MG_162,rplX,ribosomal protein L24,Y,
+MG_163,rplE,ribosomal protein L5,Y,
+MG_164,rpsN,ribosomal protein S14,Y,
+MG_165,rpsH,ribosomal protein S8,Y,
+MG_166,rplF,ribosomal protein L6,Y,
+MG_167,rplR,ribosomal protein L18,Y,
+MG_168,rpsE,ribosomal protein S5,Y,
+MG_169,rplO,ribosomal protein L15,Y,
+MG_170,secY,"preprotein translocase, SecY subunit",Y,
+MG_171,adk,adenylate kinase,Y,"Adk1, Adk2, Adk3, Adk4, Dak1"
+MG_172,map,"methionine aminopeptidase, type I",Y,NTerminalMethionineClevage
+MG_173,infA,translation initiation factor IF-1,Y,
+MG_174,rpmJ,ribosomal protein L36,Y,
+MG_175,rpsM,ribosomal protein S13,Y,
+MG_176,rpsK,,Y,
+MG_177,rpoA,"DNA-directed RNA polymerase, alpha subunit",Y,"RnaPolymerization_ATP, RnaPolymerization_CTP, RnaPolymerization_GTP, RnaPolymerization_UTP"
+MG_178,rplQ,ribosomal protein L17,Y,
+MG_179,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",Y,TX_Cbi_Co
+MG_180,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",Y,TX_Cbi_Co
+MG_181,cbiQ,"metal ion (cobalt) ABC transporter, permease protein",Y,TX_Cbi_Co
+MG_182,"truA, hisT",tRNA pseudouridine synthase A,Y,"MG471_MODIFICATION_002, MG483_MODIFICATION_001, MG486_MODIFICATION_003, MG488_MODIFICATION_002, MG495_MODIFICATION_001, MG500_MODIFICATION_001, MG501_MODIFICATION_004, MG502_MODIFICATION_003, MG503_MODIFICATION_001, MG504_MODIFICATION_002, MG508_MODIFICATION_002, MG509_MODIFICATION_002, MG510_MODIFICATION_002, MG512_MODIFICATION_002, MG518_MODIFICATION_001"
+MG_183,pepF,oligoendopeptidase F,N,
+MG_184,MunI,adenine-specific DNA modification methylase,Y,DNA_RM_MunI_Methylation
+MG_185,,"lipoprotein, putative",N,
+MG_186,,"Oligosaccharide or polyol ABC transporter, substrate binding protein",Y,"TX_GL, TX_GL3P"
+MG_187,,"Oligosaccharide or polyol ABC transporter, ATP-binding protein",Y,"TX_GL, TX_GL3P"
+MG_188,,"Oligosaccharide or polyol ABC transporter, permease protein",Y,"TX_GL, TX_GL3P"
+MG_189,,"Oligosaccharide or polyol ABC transporter, permease protein",Y,"TX_GL, TX_GL3P"
+MG_190,"mgpA, recJ",phosphoesterase,Y,"DNAProcessiveCleavage_dAMP, DNAProcessiveCleavage_dCMP, DNAProcessiveCleavage_dGMP, DNAProcessiveCleavage_dTMP"
+MG_191,"mgpB, MgPa, P1, p140",MgPa adhesin,Y,
+MG_192,"mgpC, p110, p40, p90, pre-B/C",P110 protein,Y,
+MG_194,pheS,"phenylalanyl-tRNA synthetase, alpha subunit",Y,MG490_Aminoacylation
+MG_195,pheT,"phenylalanyl-tRNA synthetase, beta subunit",Y,MG490_Aminoacylation
+MG_196,infC,translation initiation factor IF-3,Y,
+MG_197,rpmI,ribosomal protein L35,Y,
+MG_198,rplT,ribosomal protein L20,Y,
+MG_199,rnhC,"ribonuclease HIII, putative, frameshift",Y,
+MG_200,,DnaJ domain protein,Y,
+MG_201,grpE,co-chaperone GrpE,Y,
+MG_202,,,Y,
+MG479,,"tRNA-THR (ACC, ACT)",Y,
+MG_203,parE,"DNA topoisomerase IV, B subunit",Y,ATPHs_DNASupercoiling_topoisomeraseIV
+MG_204,parC,"DNA topoisomerase IV, A subunit",Y,ATPHs_DNASupercoiling_topoisomeraseIV
+MG_205,hrcA,"heat-inducible transcription repressor HrcA, putative",Y,
+MG_206,uvrC,"excinuclease ABC, C subunit",Y,NER_DNAIncision
+MG_207,,Ser/Thr protein phosphatase 2A,N,
+MG_208,,glycoprotease,Y,
+MG_209,"yceC, rluA, rluC","23S rRNA pseudouridine synthase; U955, U2504, U2580",Y,"MGrrnA23S_MODIFICATION_005, MGrrnA23S_MODIFICATION_007"
+MG_210,lspA,"prolipoprotein signal peptidase, signal peptidase II",N,
+MG_480,,,Y,
+MG_481,rpsU,30S ribosomal protein S21,Y,
+MG_211,,,Y,
+MG_482,acpS,holo-(acyl-carrier-protein) synthase,Y,AcpS
+MG_212,plsC,"1-acyl-sn-glycerol-3-phosphate acyltransferase, putative",Y,"PlsC1, PlsC2, PlsC3, PlsC4, PlsC5, PlsC6, PlsC7"
+MG_213,scpA,segregation and condensation protein A,N,
+MG_214,scpB,segregation and condensation protein B,N,
+MG_215,pfk,6-phosphofructokinase,Y,"PfkA1, PfkA2, PfkA3, PfkA4, PfkA5"
+MG_216,pyk,pyruvate kinase,Y,"Pyk_ADP, Pyk_CDP, Pyk_DADP, Pyk_DCDP, Pyk_DGDP, Pyk_DTDP, Pyk_DUDP, Pyk_GDP, Pyk_IDP, Pyk_TDP, Pyk_UDP"
+MG483,,"tRNA-CYS (TGC, TGT)",Y,
+MG484,,"tRNA-PRO (CCA, CCC, CCG, CCT)",Y,
+MG485,,tRNA-MET (ATG),Y,
+MG486,,tRNA-ILE (ATA),Y,
+MG487,,tRNA-SER (TCA),Y,
+MG488,,"tRNA-FMET (YATA, ATC, ATG, ATT, TTA, TTG, GTG)",Y,
+MG489,,"tRNA-ASP (GAC, GAT)",Y,
+MG490,,"tRNA-PHE (TTC, TTT)",Y,
+MG_217,p65,P65 adhesin,Y,
+MG_218,hmw2,high molecular weight cytadherence accessory protein 2,Y,"MG_312_TerminalOrganelleAssembly_01, MG_312_TerminalOrganelleAssembly_02"
+MG_491,,,Y,
+MG_219,,,Y,
+MG_220,,,N,
+MG492,,"tRNA-ARG (CGC, CGT)",Y,
+MG_221,mraZ,mraZ protein,Y,GTPHs_ChromosomeSegregation_MraZ
+MG_222,mraW,S-adenosyl-methyltransferase MraW,Y,
+MG_223,,,Y,
+MG_224,ftsZ,cell division protein FtsZ,Y,
+MG_225,potE2,amino acid-polyamine-organocation (APC) permease,N,"TX_AROP21, TX_AROP22, TX_AROP23"
+MG_226,"potE1, aroP",amino acid-polyamine-organocation (APC) permease,N,"TX_AROP11, TX_AROP12, TX_AROP13"
+MG_227,thyA,thymidylate synthase,N,ThyA
+MG_228,dhfR,dihydrofolate reductase,Y,"DhfR1, MetF"
+MG_229,nrdF,"ribonucleoside-diphosphate reductase, beta chain",Y,"NrdEF_ADP, NrdEF_CDP, NrdEF_GDP, NrdEF_UDP"
+MG_230,nrdI,ribonucleotide reductase stimulatory protein,Y,NrdEF_maintenance
+MG_231,nrdE,"ribonucleoside-diphosphate reductase, alpha chain",Y,"NrdEF_ADP, NrdEF_CDP, NrdEF_GDP, NrdEF_UDP"
+MG_232,rplU,ribosomal protein L21,Y,
+MG_233,,,Y,
+MG_234,rpmA,ribosomal protein L27,Y,
+MG_235,nfo,apurinic endonuclease,Y,"AP_endonuclease, deoxyribosephosphodiesterase"
+MG_236,fur,ferric uptake repressor,Y,
+MG_237,,,N,
+MG_238,tig,trigger factor,N,
+MG_239,lon,ATP-dependent protease La,Y,"ProteinDegradation_Lon_ALA, ProteinDegradation_Lon_ARG, ProteinDegradation_Lon_ASN, ProteinDegradation_Lon_ASP, ProteinDegradation_Lon_CYS, ProteinDegradation_Lon_GLN, ProteinDegradation_Lon_GLU, ProteinDegradation_Lon_GLY, ProteinDegradation_Lon_HIS, ProteinDegradation_Lon_ILE, ProteinDegradation_Lon_LEU, ProteinDegradation_Lon_LYS, ProteinDegradation_Lon_MET, ProteinDegradation_Lon_PHE, ProteinDegradation_Lon_PRO, ProteinDegradation_Lon_SER, ProteinDegradation_Lon_THR, ProteinDegradation_Lon_TRP, ProteinDegradation_Lon_TYR, ProteinDegradation_Lon_VAL"
+MG_240,nadR,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,Y,"NADR1, NADR2"
+MG_241,,,Y,
+MG_242,,,Y,
+MG_243,,"conserved hypothetical protein, authentic frameshift",Y,
+MG_244,"pcrA, uvrD, recB",3-5' helicase,N,NER_DNAExcision
+MG_245,,"5-formyltetrahydrofolate cyclo-ligase, putative",Y,FthC
+MG_246,,Ser/Thr protein phosphatase 2A,Y,
+MG_247,,"membrane protein, putative",Y,
+MG_248,,,N,
+MG_249,rpoD,RNA polymerase sigma factor RpoD,Y,
+MG_250,dnaG,DNA primase,Y,"DNAPrimerPolymerization_ATP, DNAPrimerPolymerization_CTP, DNAPrimerPolymerization_GTP, DNAPrimerPolymerization_UTP"
+MG_251,glyS,glycyl-tRNA synthetase,Y,"MG493_Aminoacylation, MG499_Aminoacylation"
+MG_252,"rlmB, yjfH",23S rRNA methyltransferase; G2251,N,MGrrnA23S_MODIFICATION_004
+MG_253,cysS,cysteinyl-tRNA synthetase,Y,MG483_Aminoacylation
+MG_254,ligA,"DNA ligase, NAD-dependent",Y,"DNALigation, DNA_ligation_repair"
+MG493,,"tRNA-GLY (GGC, GGT)",Y,
+MG_255,,,N,
+MG_494,,,N,
+MG495,,tRNA-ARG (AGG),Y,
+MG496,,tRNA-TRP (TGG),Y,
+MG_256,,,N,
+MG_257,rpmE,ribosomal protein L31,Y,
+MG_258,prfA,peptide chain release factor 1,Y,
+MG_259,hemG,modification methylase,Y,HemG
+MG_260,,"lipoprotein, putative",N,
+MG497,,"tRNA-ARG (CGA, CGG)",Y,
+MG_261,polC-2,"DNA polymerase III, alpha subunit",Y,"DNAPolymerization_dATP, DNAPolymerization_dCTP, DNAPolymerization_dGTP, DNAPolymerization_dTTP"
+MG_262,polA,"polI-like 5'-3' exonuclease, putative",Y,"HR_DNAResection_dAMP, HR_DNAResection_dCMP, HR_DNAResection_dGMP, HR_DNAResection_dTMP"
+MG_498,"mutM, fpg",formamidopyrimidine-DNA glycosylase,N,"AP_lyase, MutM_FAPyAD, MutM_FAPyGN, MutM_oxo8AD, MutM_oxo8GN"
+MG_263,,Cof-like hydrolase,Y,
+MG_264,coaE,dephospho-CoA kinase,N,CoaE
+MG_265,ybiV,sugar phosphatase,Y,"YbiV_deoxyG6P, YbiV_F6P, YbiV_G6P, YbiV_GL2P, YbiV_MAN6P, YbiV_R5P, YbiV_SBT6P, YbiV_SNGLYP"
+MG_266,leuS,leucyl-tRNA synthetase,Y,"MG500_Aminoacylation, MG508_Aminoacylation, MG519_Aminoacylation, MG520_Aminoacylation"
+MG_267,,,Y,
+MG_268,,,N,
+MG_0001,"ffs, 4.5S RNA, scRNA","scRNA, signal recognition particle 4.5S RNA, MCS1",Y,
+MG_269,,,N,
+MG_270,lplA,"lipoyltransferase/lipoate-protein ligase, putative",Y,"LplA, MG_272_MONOMER_MODIFICATION_001"
+MG_271,lpdA,dihydrolipoamide dehydrogenase,N,AceE
+MG_272,pdhC,dihydrolipoamide acetyltransferase,Y,AceE
+MG_0002,,MG170 RNA,Y,
+MG_273,pdhB,"pyruvate dehydrogenase component E1, beta subunit",Y,AceE
+MG_274,pdhA,"pyruvate dehydrogenase component E1, alpha subunit",Y,AceE
+MG_275,nox,NADH oxidase,Y,NOX
+MG_276,apt,adenine phosphoribosyltransferase,Y,Apt
+MG_277,secDF,Protein-export membrane protein secDF,Y,
+MG_278,"relA, spoT",GTP diphosphokinase,Y,"RelA1, RelA2"
+MG_279,,,N,
+MG_280,htrII,sensory rhodopsin II transducer motif,N,
+MG_281,,,N,
+MG499,,"tRNA-GLY (GGA, GGG)",Y,
+MG500,,tRNA-LEU (TTA),Y,
+MG501,,tRNA-LYS (AAA),Y,
+MG502,,"tRNA-GLN (CAA, CAG)",Y,
+MG503,,"tRNA-TYR (TAC, TAT)",Y,
+MG_282,greA,transcription elongation factor GreA,Y,
+MG_283,proS,prolyl-tRNA synthetase,Y,MG484_Aminoacylation
+MG_284,,,N,
+MG_285,,,N,
+MG_286,,,N,
+MG_287,acpP,acyl carrier protein,Y,
+MG504,,tRNA-TRP (TGA),Y,
+MG_288,,protein L,N,
+MG_289,phnD,"phosphonate ABC transporter, substrate binding protein (P37), putative",N,TX_PHNT
+MG_290,phnC,"phosphonate ABC transporter, ATP-binding protein, putative",N,TX_PHNT
+MG_291,phnE,"phosphonate ABC transporter, permease protein (P69), putative",N,TX_PHNT
+MG_505,,putative holliday junction resolvase,Y,
+MG_292,alaS,alanyl-tRNA synthetase,Y,"MG471_Aminoacylation, MG_0004_Aminoacylation"
+MG_293,glpQ,glycerophosphoryl diester phosphodiesterase,N,"GlpQ1, GlpQ2, GlpQ3, GlpQ4, GlpQ5"
+MG_294,yihN,major facilitator superfamily (MFS) protein,N,
+MG_295,"mnmA, asuE, trmU",tRNA U34 sulfurtransferase,Y,"MG501_MODIFICATION_002, MG502_MODIFICATION_001, MG513_MODIFICATION_001"
+MG_296,,,Y,
+MG_297,ftsY,signal recognition particle receptor,Y,
+MG_298,smc,chromosome segregation protein SMC,N,
+MG_299,pta,phosphate acetyltransferase,Y,Pta
+MG_300,pgk,phosphoglycerate kinase,Y,"Pgk1, Pgk2, Pgk3, Pgk4, Pgk5"
+MG_301,gap,"glyceraldehyde-3-phosphate dehydrogenase, type I",Y,GapA
+MG_302,cbiQ,"metal ion (cobalt) ABC transporter, permease protein, putative",Y,TX_Cbi_Ni
+MG_303,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",Y,TX_Cbi_Ni
+MG_304,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",Y,TX_Cbi_Ni
+MG_305,dnaK,chaperone,Y,
+MG_306,,"membrane protein, putative",Y,
+MG_307,,"lipoprotein, putative",Y,
+MG_308,,ATP-dependent RNA helicase,Y,
+MG_309,,"lipoprotein, putative",Y,
+MG_310,,"hydrolase, Putative esterase/lipase 1",Y,"LIPASE_DIBUTYRIN_MG310, LIPASE_METHYL_OCDCEA_MG310, LIPASE_MONOBUTYRIN_MG310, LIPASE_TRIBUTYRIN_MG310, LIPASE_TRILAURIN_MG310, LIPASE_TRIMYRISTIN_MG310, LIPASE_TRIOLEIN_MG310, LIPASE_TRIPALMITIN_MG310, LIPASE_TRISTEARIN_MG310, LIPASE_TRI_HDCEA_IN_MG310, LIPASE_TRI_TTDCEA_IN_MG310, LIPASE_TWEEN80_MG310"
+MG_311,rpsD,ribosomal protein S4,Y,
+MG_312,hmw1,high molecular weight cytadherence accessory protein 1,Y,"MG_191_TerminalOrganelleAssembly_01, MG_218_TerminalOrganelleAssembly_01, MG_218_TerminalOrganelleAssembly_02, MG_317_TerminalOrganelleAssembly_01, MG_386_TerminalOrganelleAssembly_01"
+MG_313,,"membrane protein, putative",Y,
+MG_314,,,Y,
+MG_315,holA,"DNA polymerase III, delta subunit, putative",N,
+MG_316,comEC,DNA internalization-related competence protein ComEC/Rec2,N,"TX_ComEC_dApdAp, TX_ComEC_dCpdCp, TX_ComEC_dGpdGp, TX_ComEC_dTpdTp"
+MG_317,"hmw3, p69",high molecular weight cytadherence accessory protein 3,Y,MG_318_TerminalOrganelleAssembly_01
+MG_318,"p32, p30",P32 adhesin,Y,MG_217_TerminalOrganelleAssembly_01
+MG_319,,,Y,
+MG_320,,"membrane protein, putative",Y,
+MG506,,"tRNA-SER (TCC, TCT)",Y,
+MG507,,tRNA-SER (TCG),Y,
+MG_321,oppA,"oligopeptide ABC transporter, substrate binding protein",Y,"TX_OppB_Ala, TX_OppB_Arg, TX_OppB_Asn, TX_OppB_Asp, TX_OppB_Cys, TX_OppB_Gln, TX_OppB_Glu, TX_OppB_Gly, TX_OppB_His, TX_OppB_Ile, TX_OppB_Leu, TX_OppB_Lys, TX_OppB_Met, TX_OppB_Phe, TX_OppB_Pro, TX_OppB_Ser, TX_OppB_Thr, TX_OppB_Trp, TX_OppB_Tyr, TX_OppB_Val"
+MG508,,"tRNA-LEU (CTA, CTG)",Y,
+MG509,,tRNA-LYS (AAG),Y,
+MG510,,tRNA-THR (ACA),Y,
+MG511,,"tRNA-VAL (GTA, GTC, GTG, GTT)",Y,
+MG512,,tRNA-THR (ACG),Y,
+MG513,,"tRNA-GLU (GAA, GAG)",Y,
+MG514,,"tRNA-ASN (AAC, AAT)",Y,
+MG_322,trkH,potassium uptake protein,Y,"TX_NAUP2, TX_TRK"
+MG_323,trkA,potassium uptake protein,Y,"TX_NAUP2, TX_TRK"
+MG_0003,rpnB,"Rnase P RNA, MCS5, M1 RNA",Y,
+MG_0004,ssrA,"transfer-messenger RNA, tmRNA, MCS6, 10Sa RNA",Y,
+MG_515,,,Y,
+MG_324,"yihN, pepP",aminopeptidase,Y,
+MG_325,rpmG,ribosomal protein L33,Y,
+MG_326,,degV family protein,Y,
+MG_327,,"hydrolase, Putative esterase/lipase 2",Y,"LIPASE_DIBUTYRIN_MG327, LIPASE_METHYL_OCDCEA_MG327, LIPASE_MONOBUTYRIN_MG327, LIPASE_TRIBUTYRIN_MG327, LIPASE_TRILAURIN_MG327, LIPASE_TRIMYRISTIN_MG327, LIPASE_TRIOLEIN_MG327, LIPASE_TRIPALMITIN_MG327, LIPASE_TRISTEARIN_MG327, LIPASE_TRI_HDCEA_IN_MG327, LIPASE_TRI_TTDCEA_IN_MG327, LIPASE_TWEEN80_MG327"
+MG_328,,coiled coil putative structural protein involved in cytoskeleton,N,
+MG_329,"engA, yfgK, yphC",GTP-binding protein engA,Y,GTPHs_RibosomeAssembly_EngA
+MG_330,cmk,cytidylate kinase,Y,"CmkA1, CmkA2"
+MG_331,,,Y,
+MG_332,yebC,,Y,
+MG_333,azoR,"FMN-dependent NADH-azoreductase, putative",Y,AzoR
+MG_334,valS,valyl-tRNA synthetase,Y,MG511_Aminoacylation
+MG_335,"engB, yihA, ysxC","GTP-binding protein engB, putative",Y,GTPHs_RibosomeAssembly_EngB
+MG_516,,,Y,
+MG_517,,"glycosyl transferase, group 2 family protein",Y,"glycosyltransferase_Ceramide16_GalCer16, glycosyltransferase_Ceramide16_GlcCer16, glycosyltransferase_DAG160_GalDAG160, glycosyltransferase_DAG160_GlcDAG160, glycosyltransferase_DAG161_GalDAG161, glycosyltransferase_DAG161_GlcDAG161, glycosyltransferase_DAG181_GalDAG181, glycosyltransferase_DAG181_GlcDAG181, glycosyltransferase_GalCer16_GalGalCer16, glycosyltransferase_GalCer16_GlcGalCer16, glycosyltransferase_GalDAG160_GalGalDAG160, glycosyltransferase_GalDAG160_GlcGalDAG160, glycosyltransferase_GalDAG161_GalGalDAG161, glycosyltransferase_GalDAG161_GlcGalDAG161, glycosyltransferase_GalDAG181_GalGalDAG181, glycosyltransferase_GalDAG181_GlcGalDAG181, glycosyltransferase_GalGalDAG160_GalGalGalDAG160, glycosyltransferase_GalGalDAG160_GlcGalGalDAG160, glycosyltransferase_GalGalDAG161_GalGalGalDAG161, glycosyltransferase_GalGalDAG161_GlcGalGalDAG161, glycosyltransferase_GalGalDAG181_GalGalGalDAG181, glycosyltransferase_GalGalDAG181_GlcGalGalDAG181, glycosyltransferase_GalGlcCer16_GalGalGlcCer16, glycosyltransferase_GalGlcDAG160_GalGalGlcDAG160, glycosyltransferase_GalGlcDAG160_GlcGalGlcDAG160, glycosyltransferase_GalGlcDAG161_GalGalGlcDAG161, glycosyltransferase_GalGlcDAG161_GlcGalGlcDAG161, glycosyltransferase_GalGlcDAG181_GalGalGlcDAG181, glycosyltransferase_GalGlcDAG181_GlcGalGlcDAG181, glycosyltransferase_GlcCer16_GalGlcCer16, glycosyltransferase_GlcDAG160_GalGlcDAG160, glycosyltransferase_GlcDAG160_GlcGlcDAG160, glycosyltransferase_GlcDAG161_GalGlcDAG161, glycosyltransferase_GlcDAG161_GlcGlcDAG161, glycosyltransferase_GlcDAG181_GalGlcDAG181, glycosyltransferase_GlcDAG181_GlcGlcDAG181, glycosyltransferase_GlcGlcDAG160_GlcGlcGlcDAG160, glycosyltransferase_GlcGlcDAG161_GlcGlcGlcDAG161, glycosyltransferase_GlcGlcDAG181_GlcGlcGlcDAG181, glycosyltransferase_PG160_DAG160, glycosyltransferase_PG161_DAG161, glycosyltransferase_PG181_DAG181"
+MG_336,"csdA, nifS",cysteine desulfurase,Y,CsdA
+MG_337,,,Y,
+MG_338,,"lipoprotein, putative",Y,
+MG_339,recA,"recombination protein, strand exchange",N,HR_strandExchange
+MG_340,rpoC,"DNA-directed RNA polymerase, beta subunit",Y,"RnaPolymerization_ATP, RnaPolymerization_CTP, RnaPolymerization_GTP, RnaPolymerization_UTP"
+MG_341,rpoB,"DNA-directed RNA polymerase, beta subunit",Y,"RnaPolymerization_ATP, RnaPolymerization_CTP, RnaPolymerization_GTP, RnaPolymerization_UTP"
+MG_342,fre,NADPH-dependent FMN reductase domain protein,Y,"Fre1, Fre3, Fre5, Fre6"
+MG_343,,,N,
+MG_344,,"hydrolase, Putative esterase/lipase 3",Y,"LIPASE_DIBUTYRIN_MG344, LIPASE_METHYL_OCDCEA_MG344, LIPASE_MONOBUTYRIN_MG344, LIPASE_TRIBUTYRIN_MG344, LIPASE_TRILAURIN_MG344, LIPASE_TRIMYRISTIN_MG344, LIPASE_TRIOLEIN_MG344, LIPASE_TRIPALMITIN_MG344, LIPASE_TRISTEARIN_MG344, LIPASE_TRI_HDCEA_IN_MG344, LIPASE_TRI_TTDCEA_IN_MG344, LIPASE_TWEEN80_MG344"
+MG_345,ileS,isoleucyl-tRNA synthetase,Y,"MG472_Aminoacylation, MG486_Aminoacylation"
+MG_346,yibK,23S rRNA methyltransferase; U2552,N,MGrrnA23S_MODIFICATION_006
+MG_347,"trmI, trmB",tRNA (guanine-N(7)-)-methyltransferase,Y,"MG471_MODIFICATION_001, MG472_MODIFICATION_001, MG484_MODIFICATION_002, MG485_MODIFICATION_001, MG486_MODIFICATION_001, MG488_MODIFICATION_001, MG490_MODIFICATION_001, MG492_MODIFICATION_001, MG497_MODIFICATION_001, MG501_MODIFICATION_001, MG504_MODIFICATION_001, MG509_MODIFICATION_001, MG510_MODIFICATION_001, MG511_MODIFICATION_001, MG512_MODIFICATION_001, MG514_MODIFICATION_001, MG519_MODIFICATION_002, MG523_MODIFICATION_001"
+MG518,,"tRNA-HIS (CAC, CAT)",Y,
+MG_348,,"lipoprotein, putative",Y,
+MG519,,"tRNA-LEU (CTC, CTT)",Y,
+MG_349,dnaB,Replication initiation/membrane attachment protein,Y,
+MG_350,,,Y,
+MG520,,tRNA-LEU (TTG),Y,
+MG_521,,"membrane protein, putative",Y,
+MG_351,ppa,inorganic pyrophosphatase,Y,Ppa
+MG_352,"recU, ruvC",Holliday junction endonuclease,N,HR_junctionResolution
+MG_353,,"DNA-binding protein HU, putative",Y,
+MG_354,,,Y,
+MG_355,clpB,"ATP-dependent Clp protease, ATPase subunit",N,
+MG_356,,"choline/ethanolamine kinase, putative",Y,CholK
+MG_357,ackA,acetate kinase,Y,AckA
+MG_358,ruvA,Holliday junction DNA helicase,N,HR_junctionMigration
+MG_359,ruvB,Holliday junction DNA helicase RuvB,N,HR_junctionMigration
+MG_360,"dinB, umuC",ImpB/MucB/SamB family protein,N,
+MG_361,rplJ,ribosomal protein L10,Y,
+MG_362,rplL,ribosomal protein L7/L12,Y,
+MG_363,rpmF,ribosomal protein L32,Y,
+MG_522,rpsT,ribosomal protein S20,Y,
+MG_364,mob13,Replication initiation/membrane attachment protein,Y,
+MG_365,fmt,methionyl-tRNA formyltransferase,Y,MG488_Formyltransferase
+MG_366,,,Y,
+MG_367,rnc,ribonuclease III,N,"RNACleavage_RNAseIII_AMP, RNACleavage_RNAseIII_CMP, RNACleavage_RNAseIII_GMP, RNACleavage_RNAseIII_UMP"
+MG_368,plsX,fatty acid/phospholipid synthesis protein PlsX,Y,"PlsX1, PlsX2, PlsX3, PlsX4, PlsX5, PlsX6, PlsX7"
+MG_369,dhaK,DAK2 phosphatase domain protein,Y,DhaK
+MG_370,"yfiI, rluA, rluD","23S rRNA pseudouridine synthase; U1911, U1915, U1917",N,"MGrrnA23S_MODIFICATION_002, MGrrnA23S_MODIFICATION_003"
+MG_371,,DHH family protein,Y,
+MG_372,"thiL, thiI",thiamine biosynthesis/tRNA modification protein ThiI,Y,"MG471_MODIFICATION_003, MG472_MODIFICATION_002, MG475_MODIFICATION_001, MG479_MODIFICATION_001, MG483_MODIFICATION_002, MG484_MODIFICATION_003, MG485_MODIFICATION_002, MG486_MODIFICATION_004, MG487_MODIFICATION_002, MG488_MODIFICATION_003, MG489_MODIFICATION_001, MG490_MODIFICATION_002, MG492_MODIFICATION_002, MG493_MODIFICATION_001, MG495_MODIFICATION_002, MG496_MODIFICATION_001, MG497_MODIFICATION_002, MG499_MODIFICATION_001, MG500_MODIFICATION_002, MG501_MODIFICATION_005, MG502_MODIFICATION_004, MG503_MODIFICATION_002, MG504_MODIFICATION_003, MG506_MODIFICATION_001, MG507_MODIFICATION_001, MG508_MODIFICATION_003, MG509_MODIFICATION_003, MG510_MODIFICATION_003, MG511_MODIFICATION_002, MG512_MODIFICATION_003, MG513_MODIFICATION_003, MG514_MODIFICATION_002, MG518_MODIFICATION_002, MG519_MODIFICATION_003, MG520_MODIFICATION_001, MG523_MODIFICATION_002, ThiL"
+MG_373,,,Y,
+MG_374,,,Y,
+MG_375,thrS,threonyl-tRNA synthetase,Y,"MG479_Aminoacylation, MG510_Aminoacylation, MG512_Aminoacylation"
+MG_376,,,Y,
+MG_377,,,Y,
+MG_378,argS,arginyl-tRNA synthetase,Y,"MG492_Aminoacylation, MG495_Aminoacylation, MG497_Aminoacylation, MG523_Aminoacylation"
+MG_379,gidA,tRNA uridine 5-carboxymethylaminomethyl modification enzyme GidA,Y,"MG501_MODIFICATION_003, MG502_MODIFICATION_002, MG513_MODIFICATION_002"
+MG_380,"gidB, rsmG",methyltransferase GidB,N,MGrrnA16S_MODIFICATION_001
+MG_381,,,Y,
+MG523,,tRNA-ARG (AGA),Y,
+MG_382,udk,uridine kinase,Y,"Udk1, Udk2"
+MG_383,nadE,"NH(3)-dependent NAD+ synthetase, putative",Y,NadE
+MG_384,"obg, cgtA, obgE, yhbZ",GTPase1 Obg,Y,"GTPHs_ChromosomeSegregation_Era, GTPHs_RibosomeAssembly_Obg"
+MG_524,,,Y,
+MG_385,ugpQ,glycerophosphoryl diester phosphodiesterase family protein,N,"MG385r1, MG385r2, MG385r3, MG385r4, MG385r5"
+MG_386,p200,P200 protein,Y,
+MG_387,era,GTP-binding protein Era,Y,"GTPHs_ChromosomeSegregation_Obg, GTPHs_RibosomeAssembly_Era"
+MG_388,,Putative metalloprotease,Y,
+MG_389,,,Y,
+MG_390,"sunT, lagD","toxin ABC transporter, ATP-binding/permease protein",N,TX_SunT_nisin
+MG_391,pepA,cytosol aminopeptidase,Y,
+MG_392,"groEL, groL",chaperonin,Y,
+MG_393,"groES, groS","chaperonin, 10 kDa",Y,
+MG_394,glyA,serine hydroxymethyltransferase,Y,"GlyA3, GlyA4"
+MG_395,,"lipoprotein, putative",Y,
+MG_396,rpiB,ribose 5-phosphate isomerase B,Y,RpiB
+MG_397,,,N,
+MG_398,atpC,"ATP synthase F1, epsilon subunit",N,AtpA
+MG_399,atpD,"ATP synthase F1, beta subunit",Y,AtpA
+MG_400,atpG,"ATP synthase F1, gamma subunit",Y,AtpA
+MG_401,atpA,"ATP synthase F1, alpha subunit",Y,AtpA
+MG_402,atpH,"ATP synthase F1, delta subunit",Y,AtpA
+MG_403,atpF,"ATP synthase F0, B subunit",Y,AtpA
+MG_404,atpE,"ATP synthase F0, C subunit",Y,AtpA
+MG_405,atpB,"ATP synthase F0, A subunit",Y,AtpA
+MG_406,,,Y,
+MG_407,eno,enolase,Y,Eno
+MG_408,msrA,methionine-S-sulfoxide reductase,N,MsrA
+MG_409,phoU,"phosphate transport system regulatory protein PhoU, putative",Y,
+MG_410,pstB,"phosphate ABC transporter, ATP-binding protein",N,TX_PIUP1
+MG_411,ptsAC,"phosphate ABC transporter, permease protein PstA",N,TX_PIUP1
+MG_412,,"phosphate ABC transporter, substrate-binding protein",N,TX_PIUP1
+MG_414,,,N,
+MG_525,,,N,
+MG_417,rpsI,ribosomal protein S9,Y,
+MG_418,rplM,ribosomal protein L13,Y,
+MG_419,dnaX,"DNA polymerase III, subunit gamma and tau",Y,
+MG_421,uvrA,"excinuclease ABC, A subunit",Y,NER_DNAIncision
+MG_422,,,Y,
+MG_423,,metallo-beta-lactamase superfamily protein,Y,
+MG_424,rpsO,ribosomal protein S15,Y,
+MG_425,deaD,ATP-dependent RNA helicase,Y,"RNACleavage_DeaD_AMP, RNACleavage_DeaD_CMP, RNACleavage_DeaD_GMP, RNACleavage_DeaD_UMP"
+MG_426,rpmB,ribosomal protein L28,Y,
+MG_427,osmC,osmotically inducible peroxidase,Y,
+MG_428,"gerE, luxR","LuxR bacterial regulatory protein, putative",N,
+MG_429,ptsI,"PTS system, E1",Y,"TX_FRUPTS, TX_GLCPTS"
+MG_430,gpmI,"2,3-bisphosphoglycerate-independent phosphoglycerate mutase",Y,GpmA
+MG_431,tpiA,triosephosphate isomerase,Y,TpiA
+MG_432,,"membrane protein, putative",Y,
+MG_433,tsf,translation elongation factor Ts,Y,
+MG_434,pyrH,uridylate kinase,Y,CmkB3
+MG_435,frr,ribosome recycling factor,Y,
+MG_437,cdsA,phosphatidate cytidylyltransferase,N,"CdsA1, CdsA2, CdsA3, CdsA4, CdsA5, CdsA6, CdsA7"
+MG_438,"ecoD, hsdS",type I restriction modification DNA specificity domain protein,N,"DNA_RM_EcoD_Methylation, DNA_RM_EcoD_Restriction"
+MG_439,,"lipoprotein, putative",Y,
+MG_440,,"lipoprotein, putative",Y,
+MG_441,,,Y,
+MG_442,"rbgA, ylqF",ribosomal biogenesis GTPase,Y,GTPHs_RibosomeAssembly_RbgA
+MG_443,,"membrane protein, putative",Y,
+MG_444,rplS,ribosomal protein L19,Y,
+MG_445,trmD,tRNA (guanine-N1)-methyltransferase,Y,"MG484_MODIFICATION_001, MG487_MODIFICATION_001, MG508_MODIFICATION_001, MG519_MODIFICATION_001"
+MG_446,rpsP,ribosomal protein S16,Y,
+MG_447,norM,multidrug efflux pump,N,"TX_NormM_acriflavine, TX_NormM_benzalkonium, TX_NormM_berberine, TX_NormM_ciprofloxacin, TX_NormM_crystalViolet, TX_NormM_doxorubicin, TX_NormM_enoxacin, TX_NormM_ethidium, TX_NormM_lomefloxacin, TX_NormM_norfloxacin, TX_NormM_novobiocin, TX_NormM_proflavine, TX_NormM_rhodamine6G, TX_NormM_tetraphenylphosphonium"
+MG_448,msrB,methionine-R-sulfoxide reductase,Y,MsrB
+MG_449,,"conserved hypothetical protein, authentic frameshift",N,
+MG_450,,degV family protein,Y,
+MG_451,tuf,translation elongation factor Tu,Y,
+MG_452,,"membrane protein, putative",N,
+MG_453,galU,UTP-glucose-1-phosphate uridylyltransferase,Y,GalU1
+MG_454,ohr,thiol-dependent peroxidase,N,
+MG_455,tyrS,tyrosyl-tRNA synthetase,Y,MG503_Aminoacylation
+MG_456,,,N,
+MG_457,ftsH,ATP-dependent metalloprotease FtsH,Y,"ProteinDegradation_FtsH_ALA, ProteinDegradation_FtsH_ARG, ProteinDegradation_FtsH_ASN, ProteinDegradation_FtsH_ASP, ProteinDegradation_FtsH_CYS, ProteinDegradation_FtsH_GLN, ProteinDegradation_FtsH_GLU, ProteinDegradation_FtsH_GLY, ProteinDegradation_FtsH_HIS, ProteinDegradation_FtsH_ILE, ProteinDegradation_FtsH_LEU, ProteinDegradation_FtsH_LYS, ProteinDegradation_FtsH_MET, ProteinDegradation_FtsH_PHE, ProteinDegradation_FtsH_PRO, ProteinDegradation_FtsH_SER, ProteinDegradation_FtsH_THR, ProteinDegradation_FtsH_TRP, ProteinDegradation_FtsH_TYR, ProteinDegradation_FtsH_VAL"
+MG_458,hpt,hypoxanthine phosphoribosyltransferase,Y,"Hpt1, Hpt2"
+MG_459,,"putative 2-C-methyl-D-erythritol-2,4-cyclodiphosphate synthase",Y,
+MG_460,ldh,L-lactate dehydrogenase/malate dehydrogenase,N,"LdhA, Mdh"
+MG_461,,HD domain protein,Y,
+MG_462,gltX,glutamyl-tRNA synthetase,Y,"MG502_Aminoacylation, MG513_Aminoacylation"
+MG_463,"ksgA, rsmA",dimethyladenosine transferase,N,"MGrrnA16S_MODIFICATION_003, MGrrnA16S_MODIFICATION_004, MGrrnA16S_MODIFICATION_005, MGrrnA16S_MODIFICATION_006"
+MG_464,yidC,inner-membrane protein insertion factor,Y,
+MG_465,rnpA,ribonuclease P protein component,Y,"RNACleavage_RNAseP_AMP, RNACleavage_RNAseP_CMP, RNACleavage_RNAseP_GMP, RNACleavage_RNAseP_UMP"
+MG_466,rpL34,ribosomal protein L34,Y,
+MG_467,,"salivaricin A ABC transporter, ATP-binding protein",Y,TX_SalX_nisin
+MG_468,,"salivaricin A ABC transporter, permease protein",Y,TX_SalX_nisin
+MG_526,,"salivaricin A ABC transporter, ATP-binding protein",Y,TX_SalX_nisin
+MG_469,dnaA,chromosomal replication initiator protein DnaA,Y,
+MG_470,"soj, parA",CobQ/CobB/MinD/ParA nucleotide binding domain,Y,GTPHs_ChromosomeSegregation_CobQ

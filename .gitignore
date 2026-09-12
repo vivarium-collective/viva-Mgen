@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+*.pyc
+.pytest_cache/
+output/
+*.nc
+.idea/
+reports/published/
+# .pbg runtime state, but keep vendored schemas for CI lint
+.pbg/*
+!.pbg/schemas/
+
+
+# Added by pbg-superpowers in-place scaffolder
+!.pbg/hpc.env.example
+investigations/*/runs.db
+investigations/*/viz/
+investigations/*/.run.lock
+workspace/reports/assets/*
+!workspace/reports/assets/.keep
+.superpowers/brainstorm/
