@@ -1,0 +1,168 @@
+schema_version: 2
+name: mgen
+title: "viva-mGen: reproducing the Karr 2012 M. genitalium whole-cell model, one study per figure"
+created: '2026-09-12'
+status: running
+
+question: |
+  Can the core cellular processes of the Karr et al. 2012 Mycoplasma genitalium
+  whole-cell model be re-expressed as native process-bigraph Processes —
+  composed through shared cell-variable stores — and reproduce the central
+  quantitative results of each figure of the paper?
+
+hypothesis: |
+  A reduced-but-genuine set of viva-native submodels — FBA metabolism over the
+  published iPS189 reconstruction, calibrated mass/growth, stochastic
+  transcription/translation/decay, and a dNTP-buffered replication process —
+  wired together as one process-bigraph composite is sufficient to recapitulate
+  the paper's headline phenotypes: a ~9 h doubling time and protein-dominant
+  composition (Fig 2), decoupled mRNA/protein expression (Fig 2G/3), the
+  emergent inverse initiation↔replication cell-cycle control (Fig 4), an
+  ATP/GTP-dominated energy budget led by translation (Fig 5), and metabolic
+  gene-essentiality prediction near the published accuracy (Fig 6), plus a
+  sigmoidal growth-vs-kinetic-parameter response (Fig 7).
+
+description: |
+  Seven studies, one per figure of Karr et al. 2012, all built on the same
+  viva-native reproduction of the whole-cell model (package viva_mgen). The
+  metabolic engine is the real published Suthers 2009 iPS189 reconstruction
+  (351 reactions, 126 genes) solved with cobra; mass, cell-cycle, and
+  composition constants are taken verbatim from the original model's fitted
+  parameters. Fidelity is honest and per-study: Fig 2 (growth/composition) and
+  Fig 6 (metabolic-gene essentiality) are full-fidelity; Fig 4 is a genuine but
+  reduced mechanism; Fig 1/3/5/7 are representative/reduced. Each study has a
+  real expected_behavior/behavior_tests pair, a canonical sims/run.py that
+  drives the composite and renders an interactive visualization, and a run
+  recorded in the workspace .pbg/runs.jsonl. See each study's own fidelity note
+  and caveats. This is NOT the full 28-submodel model (chromosome occupancy,
+  128-cell population distributions, and the 3,011-strain deletion scan are out
+  of scope) — it is a reduced-but-genuine core, faithful where it claims to be.
+
+studies:
+- fig1-architecture
+- fig2-growth
+- fig3-expression
+- fig4-cell-cycle
+- fig5-energy
+- fig6-gene-essentiality
+- fig7-kinetic-parameters
+
+executive:
+  what_is_this: |
+    A showcase investigation that reproduces the landmark Karr 2012 whole-cell
+    model of M. genitalium as native process-bigraph processes, with one study
+    for each of the paper's seven figures. It demonstrates that the model's
+    central results — 9 h doubling, protein-dominant composition, decoupled
+    gene expression, emergent cell-cycle regulation, ATP/GTP energy allocation,
+    and metabolic gene essentiality — are recoverable from a compact, genuinely
+    mechanistic reimplementation, without the original's MATLAB code, MySQL
+    knowledge base, or cluster-scale simulation.
+  verdict: |
+    All seven studies are authored, lint-clean, and executable, each with a real
+    @composite_generator baseline, a sims/run.py canonical runner, an interactive
+    visualization, and a completed run recorded in .pbg/runs.jsonl. Standalone
+    execution reproduces the paper's results at the stated fidelity: doubling
+    time 9.00 h / mass ×2.00 / protein 62.0% (fig2, full); mRNA↔protein
+    decoupling with a protein:mRNA ratio ~180 (fig3, reduced); inverse
+    initiation↔replication control r=-0.93 and dNTP↔replication r=-0.95 across
+    128 cells (fig4, reduced mechanism); ATP:GTP synthesis ratio 4.03 with
+    translation taking ~97% of the modeled expression-energy budget (fig5,
+    reduced); metabolic gene-essentiality accuracy 76.0% over 125 genes with a
+    confusion matrix [[80,26],[4,15]] vs the paper's 79% / iPS189's 87% (fig6,
+    full for metabolic genes); and the six submodels integrate through shared
+    stores into one viable cell (fig1). The PASS/FAIL verdicts here come from
+    each runner's own printed checks against the study's expected_behavior, not
+    (yet) from the dashboard's Tests-tab evaluator.
+  verdict_status: in-progress
+  verdict_detail: |
+    Done: all 7 studies authored + run + visualized, runs in .pbg/runs.jsonl,
+    read-only workbench published. Not done: driving the recorded runs through
+    the dashboard's Tests-tab evaluator (the verdicts above are the runner
+    scripts' own checks); expanding the reduced studies toward full fidelity
+    (full gene set for expression/t50, chromosome occupancy for Fig 3,
+    128-cell populations for Fig 2B/5, the full 3,011-strain deletion scan).
+  decisions_needed: []
+
+scientific_argument:
+  main_claim: |
+    The core quantitative results of the Karr 2012 whole-cell model are
+    reproducible by a reduced-but-genuine, fully viva-native reimplementation:
+    real FBA over iPS189 plus calibrated mass/growth reproduce the growth,
+    composition, energy, and essentiality figures at full or near-full fidelity,
+    and compact mechanistic submodels reproduce the emergent cell-cycle-control
+    and expression-decoupling phenomena qualitatively.
+  evidence_for:
+  - "fig2 (FULL): FBA-driven growth calibrated to the fitted cell cycle gives a
+    doubling time of 9.00 h, mass doubling of 2.00× per cycle, and a
+    protein-dominant dry-mass composition of 62.0% — matching Fig 2A/B/C."
+  - "fig6 (FULL, metabolic subset): in-silico single-gene FBA knockouts over the
+    125 iPS189 metabolic genes classify essentiality at 76.0% accuracy
+    (sensitivity 0.755, specificity 0.789; confusion matrix [[80,26],[4,15]]),
+    in the neighborhood of the paper's 79% whole-cell and iPS189's 87% metabolic
+    accuracy (Fig 6A)."
+  - "fig4 (reduced mechanism): across 128 single cells, replication-initiation and
+    replication durations are inversely correlated (r=-0.930), dNTP-at-start vs
+    replication duration r=-0.951, and initial DnaA vs initiation duration
+    r=-0.743 — reproducing the emergent, genetically-unregulated cell-cycle
+    control of Fig 4C/D/E via genuine dNTP-surplus buffering."
+  - "fig5 (reduced): ATP and GTP dominate energy synthesis (ATP:GTP flux ratio
+    4.03), and translation takes ~96.8% of the modeled transcription+translation
+    energy budget — reproducing the translation-led ordering of Fig 5A/5D."
+  - "fig3 (reduced): stochastic expression on the representative gene panel yields
+    bursty low-copy mRNA (~1.7 mean copies/gene) and much higher, stabler protein
+    (protein:mRNA ~180), reproducing the mRNA/protein decoupling of Fig 2G/2H."
+  - "fig1 (representative): the six submodels (metabolism, mass, transcription,
+    translation, RNA decay, protein decay) integrate through shared cell-variable
+    stores into a single viable, growing cell — the process-bigraph analog of the
+    paper's Fig 1 integration diagram."
+  - "fig7 (reduced): predicted growth depends on a metabolic reaction's flux
+    bound (a kcat/Vmax proxy) with a monotonic, saturating (sigmoidal) response —
+    reproducing the growth-vs-kinetic-parameter relationship of Fig 7E–G. (See
+    the fig7 study for the target reaction and dynamic range.)"
+  evidence_against:
+  - "This is a reduced core, not the full 28-submodel model: chromosome-level
+    DNA–protein interactions and occupancy (the actual subject of Fig 3),
+    128-cell population distributions (Fig 2B, 4A, 5B), and the full 3,011-strain
+    single-gene deletion scan (Fig 6/7) are not reproduced."
+  - "Gene essentiality is assessed only for the ~125 metabolic genes iPS189
+    covers, not all 525 genes; the paper's whole-cell essentiality spans
+    non-metabolic genes this reproduction does not model."
+  - "Expression uses a 6-gene representative panel with representative rates, so
+    the quantitative Fig 3C timing (t50 ≈ 18 min over all genes) is out of
+    scope; only the qualitative bursty-mRNA / accumulating-protein decoupling is
+    reproduced."
+  - "Fig 7's kinetic parameter is a flux-bound proxy for kcat, not explicit
+    enzyme kinetics; the specific lpdA/deoD/thyA genetics of the paper are not
+    individually modeled."
+  key_figures: []
+  caveats:
+  - "Behavior-test verdicts are the runner scripts' own printed checks against
+    each study's expected_behavior; they have not yet been driven through the
+    dashboard's Tests-tab evaluator."
+  - "The metabolic growth flux is calibrated (via growth_fraction) so unperturbed
+    growth doubles the cell in the fitted 9 h; the FBA sets the RELATIVE growth
+    that gene disruptions and kinetic changes then modulate."
+
+acceptance_criteria:
+- study: fig1-architecture
+  behavior: architecture-integrates-six-submodels
+- study: fig1-architecture
+  behavior: cell-is-viable
+- study: fig2-growth
+  behavior: doubling-time-near-9h
+- study: fig2-growth
+  behavior: mass-doubles-in-cycle
+- study: fig2-growth
+  behavior: protein-dominant-composition
+- study: fig3-expression
+  behavior: protein-exceeds-mrna
+- study: fig4-cell-cycle
+  behavior: initiation-replication-inversely-correlated
+- study: fig4-cell-cycle
+  behavior: dntp-controls-replication-duration
+- study: fig5-energy
+  behavior: translation-dominates-energy
+- study: fig6-gene-essentiality
+  behavior: essentiality-accuracy-high
+- study: fig7-kinetic-parameters
+  behavior: growth-monotonic-in-kcat

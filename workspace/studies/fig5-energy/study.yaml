@@ -1,0 +1,151 @@
+schema_version: 4
+name: fig5-energy
+title: "Fig 5 — Global distribution of cellular energy: ATP > GTP synthesis and a translation-dominated budget"
+created: '2026-09-12'
+status: complete
+phase: Evaluate
+
+question: |
+  Does the reduced viva-mGen cell reproduce Fig 5's global energy picture — that
+  ATP and GTP are the dominant synthesized carriers with ATP > GTP (Fig 5A), and
+  that the cellular energy budget is dominated by translation, ahead of
+  transcription (Fig 5D)?
+hypothesis: |
+  FBA over iPS189 should carry far more flux through ATP synthase (ATPS4r) than
+  through the GTP-producing kinases, giving ATP > GTP > 0. And because each
+  peptide bond costs ~2 GTP and translation events vastly outnumber transcription
+  events (mRNA accumulates and each transcript is translated many times over),
+  the modeled expression energy should be overwhelmingly translation, matching
+  the ordering translation >> transcription in Fig 5D.
+objective: |
+  Run the fig5_energy composite for one hour (metabolism/mass at 60 s,
+  expression at 1 s) to time-average ATP/GTP production, then step the
+  transcription and translation processes directly for one hour to tally their
+  NTP/GTP consumption, and compute the modeled energy shares and the ATP:GTP
+  synthesis ratio.
+description: |
+  REDUCED FIDELITY. Of the energy carriers only ATP and GTP are modeled — NAD,
+  FAD and NADP are not — and the process energy shares are computed only from the
+  two reduced expression processes actually wired in the composite: transcription
+  (NTP) and translation (GTP). tRNA-aminoacylation, the ~15% second slice of the
+  paper's budget, is not a separate process here. The study therefore reproduces
+  the QUALITATIVE Fig 5 findings — the ATP > GTP synthesis ordering (Fig 5A) and
+  the translation-dominated expression budget (Fig 5D) — but NOT the exact
+  29% / 15% / 7% / 44% split. Achieved (committed production run): ATP:GTP
+  synthesis ratio 4.03 (ATP flux 0.813 vs GTP flux 0.202, iPS189 units), and of
+  the modeled expression energy translation is 96.8% vs transcription 3.2%
+  (9.83M GTP vs 0.32M NTP over the hour). The Fig 5D donut additionally shows a
+  representative ~44% "unaccounted" slice to echo the paper's structure; it is a
+  fixed illustrative value, not a measured quantity of this reduced model.
+
+baseline:
+- name: baseline
+  composite: viva_mgen.composites.whole_cell.fig5_energy
+  params: {}
+
+variants: []
+
+expected_behavior:
+- name: atp-exceeds-gtp-synthesis
+  en: "ATP synthesis flux exceeds GTP synthesis flux (ATP > GTP > 0), matching Fig 5A."
+  observable: atp_to_gtp_ratio
+  condition: atp_to_gtp_ratio > 1.0
+  rationale: >-
+    FBA over iPS189 carries far more flux through ATP synthase (ATPS4r) than
+    through the GTP-producing kinases. Achieved 4.03.
+  measure: {kind: derived_scalar, field: atp_to_gtp_ratio}
+  expect: {op: range, low: 2.0, high: 8.0}
+- name: translation-dominates-energy
+  en: "Translation dominates the modeled expression energy budget, ahead of transcription (Fig 5D ordering)."
+  observable: translation_share
+  condition: translation_share > transcription_share
+  rationale: >-
+    Each peptide bond costs ~2 GTP and translation events far outnumber
+    transcription events, so translation carries the bulk of expression energy.
+    Achieved 0.968 (translation) vs 0.032 (transcription).
+  measure: {kind: derived_scalar, field: translation_share}
+  expect: {op: range, low: 0.5, high: 1.0}
+
+behavior_tests:
+- name: atp-exceeds-gtp-synthesis
+  classification: primary
+  description: "ATP:GTP synthesis flux ratio within [2.0, 8.0] (ATP > GTP > 0)."
+  measure: {kind: derived_scalar, field: atp_to_gtp_ratio}
+  pass_if:
+    op: range
+    low: 2.0
+    high: 8.0
+    provenance:
+      kind: model
+      note: >-
+        Fig 5A shows ATP and GTP as the dominant synthesized carriers with
+        ATP > GTP; iPS189 FBA gives ratio 4.03 (ATP 0.813 vs GTP 0.202).
+  requires_simulation: baseline
+- name: translation-dominates-energy
+  classification: primary
+  description: "Translation's share of modeled expression energy within [0.5, 1.0]."
+  measure: {kind: derived_scalar, field: translation_share}
+  pass_if:
+    op: range
+    low: 0.5
+    high: 1.0
+    provenance:
+      kind: model
+      note: >-
+        Fig 5D's budget is translation-dominated (~29%, ahead of transcription
+        ~7%); the reduced model reproduces the ordering with translation at
+        0.968 of the modeled expression energy.
+  requires_simulation: baseline
+
+pipeline_gate:
+  prerequisites:
+  - study: fig2-growth
+    condition: tests-passed
+  enables: []
+  proceed_condition: |
+    The integrated cell reproduces the Fig 5 energy picture — ATP > GTP synthesis
+    and a translation-dominated expression budget — at reduced fidelity.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig5-energy/sims/run.py
+  args: []
+  label: "Fig 5 energy: one hour, ATP/GTP synthesis + expression energy budget"
+  default: true
+
+visualizations:
+- name: energy-allocation
+  chart: viz/energy_allocation.html
+  render: "python sims/run.py"
+- name: synthesis-rates
+  chart: viz/synthesis_rates.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: energy-allocation
+  url: /studies/fig5-energy/viz/energy_allocation.html
+  description: "Energy allocation across processes (Fig 5D): translation dominates the modeled expression energy, ahead of transcription, with a representative ~44% unaccounted slice echoing the paper's structure."
+- name: synthesis-rates
+  url: /studies/fig5-energy/viz/synthesis_rates.html
+  description: "ATP vs GTP synthesis flux (Fig 5A): ATP synthesis far exceeds GTP, both positive."
+
+provenance:
+  kind: experiment/model
+  note: >-
+    Karr et al. 2012 Fig 5A (ATP/GTP dominate the synthesized energy carriers,
+    ATP > GTP) and Fig 5D (energy budget dominated by translation ~29%, then
+    tRNA-aminoacylation ~15%, then transcription ~7%, with ~44% unaccounted).
+    Reduced reproduction: only ATP/GTP carriers and only the transcription/
+    translation expression processes are modeled.
+
+conclusion: |
+  The viva-mGen cell reproduces Fig 5's qualitative energy picture at reduced
+  fidelity. Fig 5A: ATP synthesis flux (0.813) exceeds GTP (0.202) by 4.03×, both
+  positive — ATP and GTP are the dominant synthesized carriers. Fig 5D: of the
+  modeled expression energy, translation takes 96.8% (9.83M GTP/h) versus
+  transcription's 3.2% (0.32M NTP/h), reproducing the translation >> transcription
+  ordering. Caveat: only ATP/GTP among carriers are modeled and only transcription/
+  translation contribute to the tallied budget — NAD/FAD/NADP and tRNA-aminoacylation
+  are absent — so the reduced shares (96.8/3.2 of modeled energy) diverge from the
+  paper's exact 29/15/7/44 whole-cell split. The Fig 5D donut's ~44% "unaccounted"
+  slice is a fixed representative value shown only to echo the paper's structure.

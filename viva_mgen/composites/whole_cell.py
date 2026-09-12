@@ -9,8 +9,15 @@ from __future__ import annotations
 
 from process_bigraph.composite_generator import composite_generator
 
+from ..expression_defaults import DEFAULT_GENES
+
 
 def _base_stores():
+    # NOTE: rna_counts / protein_counts are pre-seeded with the panel gene keys
+    # at 0.0. A bigraph `map[float]` store accumulates deltas only into keys that
+    # already exist, so a bare {} would silently drop every newly-synthesized
+    # species. Pre-seeding the keys lets the stochastic synthesis/decay deltas
+    # land and accumulate.
     return {
         "nutrient_scale": 1.0,
         "growth_fraction": 1.0,
@@ -25,8 +32,8 @@ def _base_stores():
         "ntp": 1e8,
         "gtp": 1e8,
         "rna_pol": 100.0,
-        "rna_counts": {},
-        "protein_counts": {},
+        "rna_counts": {g: 0.0 for g in DEFAULT_GENES},
+        "protein_counts": {g: 0.0 for g in DEFAULT_GENES},
     }
 
 

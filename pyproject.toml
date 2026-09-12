@@ -40,5 +40,11 @@ Issues = "https://github.com/vivarium-collective/viva-mGen/issues"
 [tool.hatch.build.targets.wheel]
 packages = ["viva_mgen"]
 
+# Ship the datasets (iPS189 SBML, gene list, fitted constants) inside the wheel
+# so `pip install viva-mgen` works without the repo checkout. viva_mgen.kb
+# resolves them from viva_mgen/datasets/ when repo-root datasets/ is absent.
+[tool.hatch.build.targets.wheel.force-include]
+"datasets" = "viva_mgen/datasets"
+
 [tool.uv.sources]
 vivarium-workbench = { path = "/Users/eranagmon/code/vivarium-workbench", editable = true }

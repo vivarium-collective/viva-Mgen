@@ -1,0 +1,138 @@
+schema_version: 4
+name: fig2-growth
+title: "Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition"
+created: '2026-09-12'
+status: complete
+phase: Evaluate
+
+question: |
+  Does the reduced-but-genuine viva-mGen cell (FBA metabolism over iPS189
+  driving mass accumulation) reproduce the trained whole-cell model's core
+  growth phenotype from Fig 2 — a ~9 h doubling time and a protein-dominant
+  dry-mass composition?
+hypothesis: |
+  With growth calibrated to the model's fitted cell-cycle length (32400 s) and
+  the fitted dry-mass fractions from parameters.json, the integrated cell should
+  double its mass in ~9 h and show ~62% protein by dry mass, matching Fig 2A/B
+  (doubling time) and Fig 2C (composition).
+objective: |
+  Run the fig2_growth composite (metabolism + mass) for one cell cycle, fit the
+  exponential growth rate to recover the doubling time, confirm mass doubles over
+  the cycle, and read out the dry-mass composition at division.
+description: |
+  FULL FIDELITY for the growth/composition phenotype. Metabolism is real FBA on
+  the published Suthers 2009 iPS189 reconstruction; mass integration uses the
+  Karr 2012 fitted cell-cycle length and dry-weight fractions. The metabolism
+  growth flux is calibrated so unperturbed growth (growth_fraction = 1.0) doubles
+  the cell in the fitted 9 h — the same doubling time measured for M. genitalium
+  and reproduced in Fig 2A/B. Achieved (committed production run): doubling time
+  9.000 h, mass ratio 2.000 over the cycle, protein fraction 0.620 of dry mass.
+
+baseline:
+- name: baseline
+  composite: viva_mgen.composites.whole_cell.fig2_growth
+  params: {}
+
+variants: []
+
+expected_behavior:
+- name: doubling-time-near-9h
+  en: "The fitted doubling time is ~9 h, matching the measured M. genitalium doubling time (Fig 2A/B)."
+  observable: doubling_time_h
+  condition: 8.5 <= doubling_time_h <= 9.5
+  rationale: >-
+    Growth is calibrated to the model's fitted cell-cycle length (32400 s = 9 h);
+    the exponential-fit doubling time should recover it. Achieved 9.000 h.
+  measure: {kind: derived_scalar, field: doubling_time_h}
+  expect: {op: range, low: 8.5, high: 9.5}
+- name: mass-doubles-in-cycle
+  en: "Total dry mass doubles over one cell cycle (Fig 2B/2D)."
+  observable: final_mass_ratio
+  condition: 1.9 <= final_mass_ratio <= 2.1
+  rationale: >-
+    A newborn cell grows to twice its birth mass before division. Achieved 2.000.
+  measure: {kind: derived_scalar, field: final_mass_ratio}
+  expect: {op: range, low: 1.9, high: 2.1}
+- name: protein-dominant-composition
+  en: "Protein is the dominant dry-mass component (~62%), consistent with Fig 2C."
+  observable: protein_fraction
+  condition: 0.55 <= protein_fraction <= 0.68
+  rationale: >-
+    Fitted dry-weight fraction of protein is 0.620. Achieved 0.620.
+  measure: {kind: derived_scalar, field: protein_fraction}
+  expect: {op: range, low: 0.55, high: 0.68}
+
+behavior_tests:
+- name: doubling-time-near-9h
+  classification: primary
+  description: "Exponential-fit doubling time within [8.5, 9.5] h of the fitted 9 h."
+  measure: {kind: derived_scalar, field: doubling_time_h}
+  pass_if:
+    op: range
+    low: 8.5
+    high: 9.5
+    provenance:
+      kind: experiment
+      note: "M. genitalium doubling time τ ≈ 9 h (Karr 2012 Fig 2A/B); achieved 9.000 h."
+  requires_simulation: baseline
+- name: mass-doubles-in-cycle
+  classification: primary
+  description: "Mass ratio over one cell cycle within [1.9, 2.1]."
+  measure: {kind: derived_scalar, field: final_mass_ratio}
+  pass_if:
+    op: range
+    low: 1.9
+    high: 2.1
+    provenance: {kind: theory, note: "A cell doubles its mass per cycle; achieved 2.000."}
+  requires_simulation: baseline
+- name: protein-dominant-composition
+  classification: primary
+  description: "Protein dry-mass fraction within [0.55, 0.68]."
+  measure: {kind: derived_scalar, field: protein_fraction}
+  pass_if:
+    op: range
+    low: 0.55
+    high: 0.68
+    provenance: {kind: experiment, note: "Fitted protein fraction 0.620 (Fig 2C)."}
+  requires_simulation: baseline
+
+pipeline_gate:
+  prerequisites:
+  - study: fig1-architecture
+    condition: tests-passed
+  enables:
+  - fig5-energy
+  - fig6-gene-essentiality
+  proceed_condition: |
+    The integrated cell reproduces the 9 h doubling time and protein-dominant
+    composition, establishing the FBA-driven growth backbone the energy and
+    gene-disruption studies build on.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig2-growth/sims/run.py
+  args: []
+  label: "Fig 2 growth: one cell cycle, mass + composition"
+  default: true
+
+visualizations:
+- name: growth-curve
+  chart: viz/growth_curve.html
+  render: "python sims/run.py"
+- name: composition-donut
+  chart: viz/composition_donut.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: growth-curve
+  url: /studies/fig2-growth/viz/growth_curve.html
+  description: "Total dry mass and its major macromolecule fractions over one ~9 h cell cycle."
+- name: composition-donut
+  url: /studies/fig2-growth/viz/composition_donut.html
+  description: "Dry-mass composition at division — protein-dominant, matching Fig 2C."
+
+conclusion: |
+  The viva-mGen integrated cell reproduces Fig 2's growth phenotype at full
+  fidelity: fitted doubling time 9.000 h (target ~9), mass doubling 2.000× over
+  the cycle, and protein at 62.0% of dry mass — matching the measured and fitted
+  M. genitalium values.
