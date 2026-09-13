@@ -312,30 +312,20 @@ _save_viz('fig2-growth', 'fig2-combined', _render_one('', {}, RUNS_DB, STUDY_YAM
 # fig2-a-growth
 _save_viz('fig2-growth', 'fig2-a-growth', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig2-b-doubling**
+# **fig2-b-composition**
 
-# fig2-b-doubling
-_save_viz('fig2-growth', 'fig2-b-doubling', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig2-b-composition
+_save_viz('fig2-growth', 'fig2-b-composition', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig2-c-composition**
+# **fig2-c-composition-donut**
 
-# fig2-c-composition
-_save_viz('fig2-growth', 'fig2-c-composition', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig2-c-composition-donut
+_save_viz('fig2-growth', 'fig2-c-composition-donut', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # **fig2-d-dynamics**
 
 # fig2-d-dynamics
 _save_viz('fig2-growth', 'fig2-d-dynamics', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **fig2-e-fluxes**
-
-# fig2-e-fluxes
-_save_viz('fig2-growth', 'fig2-e-fluxes', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **fig2-f-metabolites**
-
-# fig2-f-metabolites
-_save_viz('fig2-growth', 'fig2-f-metabolites', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # **fig2-g-expression**
 
@@ -346,16 +336,6 @@ _save_viz('fig2-growth', 'fig2-g-expression', _render_one('', {}, RUNS_DB, STUDY
 
 # fig2-h-mrna-protein
 _save_viz('fig2-growth', 'fig2-h-mrna-protein', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **growth-curve**
-
-# growth-curve
-_save_viz('fig2-growth', 'growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **composition-donut**
-
-# composition-donut
-_save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -620,40 +600,25 @@ print("No recorded runs for this study; nothing to reproduce.")
 # fig5-combined
 _save_viz('fig5-energy', 'fig5-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig5-a-synthesis-rates**
+# **fig5-a-synthesis**
 
-# fig5-a-synthesis-rates
-_save_viz('fig5-energy', 'fig5-a-synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig5-a-synthesis
+_save_viz('fig5-energy', 'fig5-a-synthesis', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig5-b-ntp-vs-cellcycle**
+# **fig5-b-population**
 
-# fig5-b-ntp-vs-cellcycle
-_save_viz('fig5-energy', 'fig5-b-ntp-vs-cellcycle', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig5-b-population
+_save_viz('fig5-energy', 'fig5-b-population', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig5-c-atp-gtp-usage**
+# **fig5-c-by-process**
 
-# fig5-c-atp-gtp-usage
-_save_viz('fig5-energy', 'fig5-c-atp-gtp-usage', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig5-c-by-process
+_save_viz('fig5-energy', 'fig5-c-by-process', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig5-d-energy-allocation**
+# **fig5-d-allocation**
 
-# fig5-d-energy-allocation
-_save_viz('fig5-energy', 'fig5-d-energy-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **fig5-ratio-atp-gtp**
-
-# fig5-ratio-atp-gtp
-_save_viz('fig5-energy', 'fig5-ratio-atp-gtp', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **energy-allocation**
-
-# energy-allocation
-_save_viz('fig5-energy', 'energy-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **synthesis-rates**
-
-# synthesis-rates
-_save_viz('fig5-energy', 'synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig5-d-allocation
+_save_viz('fig5-energy', 'fig5-d-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
