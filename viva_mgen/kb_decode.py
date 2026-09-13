@@ -159,6 +159,53 @@ def load_genome(mat_path: Path) -> str:
     return best
 
 
+_COMPLEMENT = str.maketrans("ACGT", "TGCA")
+
+# standard genetic code (DNA codons → 1-letter amino acid; * = stop)
+_CODON_TABLE = {
+    "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L", "CTT": "L", "CTC": "L",
+    "CTA": "L", "CTG": "L", "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+    "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V", "TCT": "S", "TCC": "S",
+    "TCA": "S", "TCG": "S", "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+    "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T", "GCT": "A", "GCC": "A",
+    "GCA": "A", "GCG": "A", "TAT": "Y", "TAC": "Y", "TAA": "*", "TAG": "*",
+    "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q", "AAT": "N", "AAC": "N",
+    "AAA": "K", "AAG": "K", "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+    "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",  # M. genitalium: TGA = Trp
+    "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R", "AGT": "S", "AGC": "S",
+    "AGA": "R", "AGG": "R", "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+}
+
+
+def gene_dna(gene: dict, genome: str) -> str:
+    """The sense-strand DNA sequence of a gene, from the genome + coordinates
+    (reverse-complemented for the reverse strand)."""
+    s, e, d = gene.get("start"), gene.get("end"), gene.get("direction")
+    if not s or not e or e < s:
+        return ""
+    seq = genome[s - 1:e]                       # 1-based inclusive
+    if d is not None and d < 0:
+        seq = seq.translate(_COMPLEMENT)[::-1]
+    return seq
+
+
+def rna_base_composition(dna: str) -> dict:
+    """RNA nucleotide counts (A/C/G/U) for a transcript from its sense DNA."""
+    u = dna.upper()
+    return {"A": u.count("A"), "C": u.count("C"), "G": u.count("G"), "U": u.count("T")}
+
+
+def aa_composition(dna: str) -> dict:
+    """Amino-acid counts for a protein by translating its CDS (M. genitalium
+    code, TGA=Trp); stops excluded."""
+    comp: dict = {}
+    for i in range(0, len(dna) - 2, 3):
+        aa = _CODON_TABLE.get(dna[i:i + 3].upper())
+        if aa and aa != "*":
+            comp[aa] = comp.get(aa, 0) + 1
+    return comp
+
+
 def decode_genes(mat_path: Path) -> list:
     """Decode the 525 ``Gene`` objects → a list of dicts with the genuine KB values:
     ``gene_id, symbol, name, rna_type, start, end, length, direction, half_life_min,
