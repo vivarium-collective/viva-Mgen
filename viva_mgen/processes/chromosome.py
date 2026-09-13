@@ -113,6 +113,9 @@ class ChromosomeDynamicsReproductionProcess(Process):
         # SMC coating (and the RNA-pol↔SMC collisions it causes) builds over the
         # first ~20 min — matching the paper's gradual exploration + >30k collisions.
         "struct_bind_tau_s": {"_type": "float", "_default": 1200.0},
+        # bins an RNA pol elongates across before release (longer span → the
+        # polymerases sweep more of the genome per pass → 90%% coverage sooner).
+        "rna_gene_span_bins": {"_type": "integer", "_default": 20},
         "seed": {"_type": "integer", "_default": 0},
     }
 
@@ -225,7 +228,7 @@ class ChromosomeDynamicsReproductionProcess(Process):
         avail = int(min(state.get("rna_polymerase", cfg["n_rna_pol"]), cfg["n_rna_pol"]))
         while len(self.rna_pols) < avail:
             start = int(self._rng.choice(nb, p=self._init_weight / self._init_weight.sum()))
-            length = int(self._rng.integers(1, 6))  # gene spans a few bins
+            length = int(self._rng.integers(1, max(2, int(cfg["rna_gene_span_bins"]))))  # gene spans a few bins
             self.rna_pols.append([start, min(nb - 1, start + length)])
         still = []
         for pol in self.rna_pols:
