@@ -232,21 +232,19 @@ visualizations:
 embed_visualizations:
 - name: fig4-combined
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_combined.html
-  description: Figure 4 reproduced — emergent cell-cycle-duration regulation, all subpanels (a–e) as in
-    Karr 2012.
+  description: Figure 4 reproduced — emergent cell-cycle-duration regulation, panels a–e as in Karr 2012.
 - name: fig4-a-phase-durations
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_a_phase_durations.html
-  description: 'Fig 4A: initiation/replication/cytokinesis/total cell-cycle duration distributions (~9
-    h cycle).'
+  description: 'Fig 4A: overlaid histograms of initiation/replication/cytokinesis/total cell-cycle durations.'
 - name: fig4-b-single-cell-dynamics
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_b_single_cell_dynamics.html
-  description: 'Fig 4B: single-cell DnaA, chromosome copy, and dNTP dynamics with phase shading.'
+  description: 'Fig 4B: selected-cell DnaA, chromosome copy, and dNTP over time with phase-shaded background.'
 - name: fig4-c-dnaA-vs-init
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_c_dnaA_vs_init.html
-  description: 'Fig 4C: initial DnaA vs initiation duration (negative).'
+  description: 'Fig 4C: initial DnaA count vs replication-initiation duration.'
 - name: fig4-d-dntp-vs-repl
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_d_dntp_vs_repl.html
-  description: 'Fig 4D: dNTP surplus at replication start vs replication duration (negative).'
+  description: 'Fig 4D: dNTP vs replication duration — at cell-cycle start and at replication start.'
 - name: fig4-e-init-vs-repl
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_e_init_vs_repl.html
   description: 'Fig 4E: emergent inverse initiation↔replication duration relationship.'
