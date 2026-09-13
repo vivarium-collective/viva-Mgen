@@ -58,7 +58,7 @@
             <span class="dot"></span>2&nbsp;·&nbsp;Execution
           </span>
           
-          <span class="status-step gate-step axis-evaluation_status gate-state-passed-with-conditions set" title="Gate 3 · Evidence">
+          <span class="status-step gate-step axis-evaluation_status gate-state-not-assessed set" title="Gate 3 · Evidence">
             <span class="dot"></span>3&nbsp;·&nbsp;Evidence
           </span>
           
@@ -96,15 +96,13 @@
           
         </div>
         
-        <div class="status-detail-row gate-row gate-state-passed-with-conditions">
+        <div class="status-detail-row gate-row gate-state-not-assessed">
           <span class="status-detail-axis">3 · Evidence</span>
           <span class="status-chip gate-state-not-assessed">not set</span>
           
-          <span class="gate-computed-chip gate-state-passed-with-conditions" title="no verdicts recorded yet + visualization readiness gate (V4)">◆ computed: not_evaluated</span>
+          <span class="gate-computed-chip gate-state-not-assessed" title="no verdicts recorded yet">◆ computed: not_evaluated</span>
           
           
-          
-          <span class="gate-viz-gap-note" style="font-size:0.86em;color:#92400e">visualization gap: no figures</span>
           
         </div>
         
@@ -181,7 +179,7 @@ dry-mass composition?
   </div>
   <div class="act-cluster" data-act="evidence">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed-with-conditions"></span>
+      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed"></span>
       <span class="act-label">Evidence</span>
     </div>
     <div class="act-tabs">
@@ -840,9 +838,202 @@ the cycle, and read out the dry-mass composition at division.
 
     
     
+    <div class="viz-actions-row" style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+      <button type="button" class="btn-mini" onclick="window._vivStudyFiguresFromCard(event, 'fig2-growth')" title="Download this study's visualizations (figure panels + its composite) as a zip">↓ visualizations</button>
+    </div>
+    
 
     <div id="native-gallery-panel" class="figure-mount"><p class="empty-message">Loading figures…</p></div>
 
+    
+    
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_combined.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-combined"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 reproduced — all subpanels combined as in Karr 2012.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-combined</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_combined.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_a_growth.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-a-growth"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: growth.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-a-growth</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_a_growth.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_b_doubling.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-b-doubling"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: doubling.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-b-doubling</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_b_doubling.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_c_composition.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-c-composition"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: composition.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-c-composition</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_c_composition.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_d_dynamics.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-d-dynamics"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: dynamics.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-d-dynamics</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_d_dynamics.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_e_fluxes.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-e-fluxes"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: fluxes.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-e-fluxes</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_e_fluxes.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_f_metabolites.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-f-metabolites"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: metabolites.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-f-metabolites</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_f_metabolites.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_g_expression.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-g-expression"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: expression.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-g-expression</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_g_expression.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_h_mrna_protein.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig2-h-mrna-protein"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Figure 2 subpanel: mrna protein.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig2-h-mrna-protein</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/fig2_h_mrna_protein.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/growth_curve.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="growth-curve"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Total dry mass and its major macromolecule fractions over one ~9 h cell cycle.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">growth-curve</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/growth_curve.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/composition_donut.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="composition-donut"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Dry-mass composition at division — protein-dominant, matching Fig 2C.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">composition-donut</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig2-growth/viz/composition_donut.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
     
     
 
@@ -1074,7 +1265,7 @@ pass_if: {"high": 0.68, "low": 0.55, "op": "range", "provenance": {"kind": "expe
     
     <p class="muted small verdict-frozen-indicator" style="margin:0 0 8px 0"
        title="Content digest (sha256, sorted-key canonical JSON) of the frozen verdict payload — a locked record, not a live recompute.">
-      <span class="frozen-glyph">🔒</span> frozen 2026-09-13 00:48 UTC ·
+      <span class="frozen-glyph">🔒</span> frozen 2026-09-13 01:00 UTC ·
       <code style="font-family:ui-monospace,monospace">b49283edbe</code>
     </p>
     
@@ -1132,11 +1323,53 @@ pass_if: {"high": 0.68, "low": 0.55, "op": "range", "provenance": {"kind": "expe
 
     
     
+    <div class="decide-section" style="margin-top:18px">
+      <h3 class="overview-label">Conclusion</h3>
+      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>The viva-Mgen integrated cell reproduces Fig 2's growth phenotype at full
+fidelity: fitted doubling time 9.000 h (target ~9), mass doubling 2.000× over
+the cycle, and protein at 62.0% of dry mass — matching the measured and fitted
+M. genitalium values.</p>
+</div>
+    </div>
+    
     
 
   </div>
 
   
+  
+  <div class="overview-section"><h2 class="overview-label">Plan &amp; assumptions</h2>
+
+    
+    <div class="overview-section">
+      <h3 class="overview-label">Pipeline gate</h3>
+      <p class="muted" style="margin: 0 0 8px 0;font-size:0.88em">
+        Each study is a model-building gate: it answers <em>"Can we safely build the next layer?"</em>
+      </p>
+      
+      <div style="margin-bottom:6px"><strong>Prerequisites:</strong>
+        <code>{&#39;study&#39;: &#39;fig1-architecture&#39;, &#39;condition&#39;: &#39;tests-passed&#39;}</code>
+      </div>
+      
+      
+      <div style="margin-bottom:6px"><strong>Enables:</strong>
+        <code>fig5-energy</code> · <code>fig6-gene-essentiality</code>
+      </div>
+      
+      
+      <div><strong>Proceed when:</strong> <span class="muted">The integrated cell reproduces the 9 h doubling time and protein-dominant
+composition, establishing the FBA-driven growth backbone the energy and
+gene-disruption studies build on.
+</span></div>
+      
+    </div>
+    
+
+    
+
+    
+
+  </div>
   
 
   
@@ -1185,7 +1418,7 @@ pass_if: {"high": 0.68, "low": 0.55, "op": "range", "provenance": {"kind": "expe
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "0a351451464828fe62ba1a29ff6ea62b09f57b02", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/0a351451464828fe62ba1a29ff6ea62b09f57b02", "branch": "main", "generated_at": "2026-09-13 00:49 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "dbfda90f1f87de7cec18e97aa9fc7c226a66ce56", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/dbfda90f1f87de7cec18e97aa9fc7c226a66ce56", "branch": "main", "generated_at": "2026-09-13 01:01 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig2-growth";

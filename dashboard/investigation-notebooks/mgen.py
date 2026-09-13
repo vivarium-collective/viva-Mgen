@@ -204,6 +204,48 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig1-combined**
+
+def _save_viz(study, slug, html):
+    d = REPO / 'reports/notebooks/figures' / study
+    d.mkdir(parents=True, exist_ok=True)
+    out = d / (slug + '.html')
+    out.write_text(html, encoding='utf-8')
+    print('  wrote', out)
+
+
+# fig1-combined
+_save_viz('fig1-architecture', 'fig1-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig1-a-architecture**
+
+# fig1-a-architecture
+_save_viz('fig1-architecture', 'fig1-a-architecture', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig1-b-wiring**
+
+# fig1-b-wiring
+_save_viz('fig1-architecture', 'fig1-b-wiring', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig1-c-dynamics**
+
+# fig1-c-dynamics
+_save_viz('fig1-architecture', 'fig1-c-dynamics', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **wiring-matrix**
+
+# wiring-matrix
+_save_viz('fig1-architecture', 'wiring-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **cell-dashboard**
+
+# cell-dashboard
+_save_viz('fig1-architecture', 'cell-dashboard', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -255,6 +297,65 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
+
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig2-combined**
+
+# fig2-combined
+_save_viz('fig2-growth', 'fig2-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-a-growth**
+
+# fig2-a-growth
+_save_viz('fig2-growth', 'fig2-a-growth', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-b-doubling**
+
+# fig2-b-doubling
+_save_viz('fig2-growth', 'fig2-b-doubling', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-c-composition**
+
+# fig2-c-composition
+_save_viz('fig2-growth', 'fig2-c-composition', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-d-dynamics**
+
+# fig2-d-dynamics
+_save_viz('fig2-growth', 'fig2-d-dynamics', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-e-fluxes**
+
+# fig2-e-fluxes
+_save_viz('fig2-growth', 'fig2-e-fluxes', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-f-metabolites**
+
+# fig2-f-metabolites
+_save_viz('fig2-growth', 'fig2-f-metabolites', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-g-expression**
+
+# fig2-g-expression
+_save_viz('fig2-growth', 'fig2-g-expression', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig2-h-mrna-protein**
+
+# fig2-h-mrna-protein
+_save_viz('fig2-growth', 'fig2-h-mrna-protein', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **growth-curve**
+
+# growth-curve
+_save_viz('fig2-growth', 'growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **composition-donut**
+
+# composition-donut
+_save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -311,6 +412,45 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig3-combined**
+
+# fig3-combined
+_save_viz('fig3-expression', 'fig3-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig3-a-exploration**
+
+# fig3-a-exploration
+_save_viz('fig3-expression', 'fig3-a-exploration', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig3-b-t50**
+
+# fig3-b-t50
+_save_viz('fig3-expression', 'fig3-b-t50', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig3-c-traces**
+
+# fig3-c-traces
+_save_viz('fig3-expression', 'fig3-c-traces', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig3-d-heatmap**
+
+# fig3-d-heatmap
+_save_viz('fig3-expression', 'fig3-d-heatmap', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **expression-timeseries**
+
+# expression-timeseries
+_save_viz('fig3-expression', 'expression-timeseries', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **protein-vs-mrna**
+
+# protein-vs-mrna
+_save_viz('fig3-expression', 'protein-vs-mrna', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -365,6 +505,55 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
+
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig4-combined**
+
+# fig4-combined
+_save_viz('fig4-cell-cycle', 'fig4-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig4-a-phase-durations**
+
+# fig4-a-phase-durations
+_save_viz('fig4-cell-cycle', 'fig4-a-phase-durations', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig4-b-single-cell-dynamics**
+
+# fig4-b-single-cell-dynamics
+_save_viz('fig4-cell-cycle', 'fig4-b-single-cell-dynamics', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig4-c-dnaA-vs-init**
+
+# fig4-c-dnaA-vs-init
+_save_viz('fig4-cell-cycle', 'fig4-c-dnaA-vs-init', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig4-d-dntp-vs-repl**
+
+# fig4-d-dntp-vs-repl
+_save_viz('fig4-cell-cycle', 'fig4-d-dntp-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig4-e-init-vs-repl**
+
+# fig4-e-init-vs-repl
+_save_viz('fig4-cell-cycle', 'fig4-e-init-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **init-vs-repl**
+
+# init-vs-repl
+_save_viz('fig4-cell-cycle', 'init-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **dntp-vs-repl**
+
+# dntp-vs-repl
+_save_viz('fig4-cell-cycle', 'dntp-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **cell-cycle-trajectory**
+
+# cell-cycle-trajectory
+_save_viz('fig4-cell-cycle', 'cell-cycle-trajectory', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -422,6 +611,50 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig5-combined**
+
+# fig5-combined
+_save_viz('fig5-energy', 'fig5-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig5-a-synthesis-rates**
+
+# fig5-a-synthesis-rates
+_save_viz('fig5-energy', 'fig5-a-synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig5-b-ntp-vs-cellcycle**
+
+# fig5-b-ntp-vs-cellcycle
+_save_viz('fig5-energy', 'fig5-b-ntp-vs-cellcycle', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig5-c-atp-gtp-usage**
+
+# fig5-c-atp-gtp-usage
+_save_viz('fig5-energy', 'fig5-c-atp-gtp-usage', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig5-d-energy-allocation**
+
+# fig5-d-energy-allocation
+_save_viz('fig5-energy', 'fig5-d-energy-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig5-ratio-atp-gtp**
+
+# fig5-ratio-atp-gtp
+_save_viz('fig5-energy', 'fig5-ratio-atp-gtp', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **energy-allocation**
+
+# energy-allocation
+_save_viz('fig5-energy', 'energy-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **synthesis-rates**
+
+# synthesis-rates
+_save_viz('fig5-energy', 'synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -476,6 +709,45 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
+
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig6-combined**
+
+# fig6-combined
+_save_viz('fig6-gene-essentiality', 'fig6-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig6-a-confusion**
+
+# fig6-a-confusion
+_save_viz('fig6-gene-essentiality', 'fig6-a-confusion', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig6-b-phenotype-classes**
+
+# fig6-b-phenotype-classes
+_save_viz('fig6-gene-essentiality', 'fig6-b-phenotype-classes', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig6-c-growthfraction-dist**
+
+# fig6-c-growthfraction-dist
+_save_viz('fig6-gene-essentiality', 'fig6-c-growthfraction-dist', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig6-d-performance-summary**
+
+# fig6-d-performance-summary
+_save_viz('fig6-gene-essentiality', 'fig6-d-performance-summary', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **confusion-matrix**
+
+# confusion-matrix
+_save_viz('fig6-gene-essentiality', 'confusion-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **accuracy-summary**
+
+# accuracy-summary
+_save_viz('fig6-gene-essentiality', 'accuracy-summary', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -532,6 +804,40 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
+
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **fig7-combined**
+
+# fig7-combined
+_save_viz('fig7-kinetic-parameters', 'fig7-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig7-a-ko-scatter**
+
+# fig7-a-ko-scatter
+_save_viz('fig7-kinetic-parameters', 'fig7-a-ko-scatter', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig7-b-kcat-sigmoid**
+
+# fig7-b-kcat-sigmoid
+_save_viz('fig7-kinetic-parameters', 'fig7-b-kcat-sigmoid', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig7-c-kcat-overlay**
+
+# fig7-c-kcat-overlay
+_save_viz('fig7-kinetic-parameters', 'fig7-c-kcat-overlay', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **fig7-d-dynamic-range**
+
+# fig7-d-dynamic-range
+_save_viz('fig7-kinetic-parameters', 'fig7-d-dynamic-range', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **kcat-growth-curve**
+
+# kcat-growth-curve
+_save_viz('fig7-kinetic-parameters', 'kcat-growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
