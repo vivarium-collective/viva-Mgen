@@ -4,7 +4,7 @@ title: "viva-Mgen: reproducing the Karr 2012 M. genitalium whole-cell model, one
 created: '2026-09-12'
 status: running
 runtime:
-  default_emitter: parquet
+  default_emitter: xarray
 
 question: |
   Can the core cellular processes of the Karr et al. 2012 Mycoplasma genitalium
