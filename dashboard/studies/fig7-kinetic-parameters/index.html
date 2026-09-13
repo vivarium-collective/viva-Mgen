@@ -585,7 +585,7 @@ dynamic range.
       
       <div class="ctr-meta">
         <div class="ctr-meta-row"><span class="ctr-meta-k">Model</span> <code>baseline</code></div>
-        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">Growth is non-decreasing across the increasing kcat-proxy sweep (flag == 1.0).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Growth at the top of the sweep is within 3% of the sweep maximum (flag == 1.0).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">max minus min growth_fraction over the 0.01–10x sweep exceeds 0.3.</span></div>
+        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">Growth is non-decreasing across the increasing kcat-proxy sweep.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Growth recovers the wild-type rate at high kcat (saturates at ~1).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Growth is a sigmoidal (low plateau -&gt; rise -&gt; high plateau) function of kcat.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Growth spans near-0 to ~1 across the kcat sweep (wide dynamic range).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">At high kcat, growth equals the wild-type rate.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">At very low kcat, growth is severely reduced.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Half-maximal growth is reached well below the WT kcat.</span></div>
       </div>
       
     </div>
@@ -984,14 +984,14 @@ dynamic range.
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">Growth is non-decreasing across the increasing kcat-proxy sweep (flag == 1.0).</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Growth is non-decreasing across the increasing kcat-proxy sweep.</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
         <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_is_monotonic_in_kcat", "kind": "derived_scalar"}
-pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "theory", "note": "Relaxing a rate-limiting Vmax cannot decrease FBA growth; the kcat\u2192growth curve is monotonic (Karr 2012 Fig 7E). Achieved 1.0."}}</pre>
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "theory", "note": "Fig 7E: relaxing a rate-limiting Vmax cannot decrease FBA growth."}}</pre>
       </details>
       
       
@@ -1006,10 +1006,10 @@ pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "theory
     
     
     
-    <li class="expected-behavior-item" id="bt-growth-saturates-at-high-kcat"
+    <li class="expected-behavior-item" id="bt-growth-saturates-at-wt"
         data-test-kind="behavioral"
         
-        data-pytest-node="growth-saturates-at-high-kcat"
+        data-pytest-node="growth-saturates-at-wt"
         data-classification="primary"
         data-result="pending"
         style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
@@ -1018,19 +1018,19 @@ pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "theory
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
         <span class="classification-pill classification-primary">primary</span>
-        <strong style="font-size: 0.9em;">growth-saturates-at-high-kcat</strong>
+        <strong style="font-size: 0.9em;">growth-saturates-at-wt</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">Growth at the top of the sweep is within 3% of the sweep maximum (flag == 1.0).</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Growth recovers the wild-type rate at high kcat (saturates at ~1).</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
-        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_saturates", "kind": "derived_scalar"}
-pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "theory", "note": "Past the point where the enzyme stops limiting flux, growth plateaus at the wild-type rate (Karr 2012 Fig 7E-G). Achieved 1.0."}}</pre>
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_saturates_at_wt", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 7E: the predicted-growth-vs-kcat curve saturates at the wild-type growth rate."}}</pre>
       </details>
       
       
@@ -1045,31 +1045,187 @@ pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "theory
     
     
     
-    <li class="expected-behavior-item" id="bt-kcat-has-dynamic-range"
+    <li class="expected-behavior-item" id="bt-growth-sigmoidal-in-kcat"
         data-test-kind="behavioral"
         
-        data-pytest-node="kcat-has-dynamic-range"
-        data-classification="secondary"
+        data-pytest-node="growth-sigmoidal-in-kcat"
+        data-classification="primary"
         data-result="pending"
-        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
       
         
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
-        <span class="classification-pill classification-secondary">secondary</span>
-        <strong style="font-size: 0.9em;">kcat-has-dynamic-range</strong>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">growth-sigmoidal-in-kcat</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">max minus min growth_fraction over the 0.01–10x sweep exceeds 0.3.</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Growth is a sigmoidal (low plateau -&gt; rise -&gt; high plateau) function of kcat.</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
-        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "dynamic_range", "kind": "derived_scalar"}
-pass_if: {"high": 1.05, "low": 0.3, "op": "range", "provenance": {"kind": "model", "note": "EX_leu_DASH_L_e is genuinely growth-limiting; sweeping its bound moves growth from 0.136 to 1.000. Achieved dynamic_range 0.864."}}</pre>
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_is_sigmoidal", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 7E: growth depends sigmoidally on the enzyme kcat."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-growth-dynamic-range"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="growth-dynamic-range"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">growth-dynamic-range</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Growth spans near-0 to ~1 across the kcat sweep (wide dynamic range).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_dynamic_range", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 0.7, "op": "range", "provenance": {"kind": "model", "note": "Fig 7E: reducing kcat drives growth from the WT rate down toward non-growing."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-growth-at-max-kcat-near-wt"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="growth-at-max-kcat-near-wt"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">growth-at-max-kcat-near-wt</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">At high kcat, growth equals the wild-type rate.</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_at_max_kcat", "kind": "derived_scalar"}
+pass_if: {"high": 1.05, "low": 0.95, "op": "range", "provenance": {"kind": "model", "note": "Fig 7E: high kcat -\u003e WT growth (enzyme no longer limiting)."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-growth-at-min-kcat-low"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="growth-at-min-kcat-low"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">growth-at-min-kcat-low</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">At very low kcat, growth is severely reduced.</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_at_min_kcat", "kind": "derived_scalar"}
+pass_if: {"high": 0.3, "low": 0.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 7E: at low kcat the enzyme is strongly rate-limiting; ~5% throughput reaches WT (nox/lpdA)."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-kcat-half-max-below-wt"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="kcat-half-max-below-wt"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">kcat-half-max-below-wt</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Half-maximal growth is reached well below the WT kcat.</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "kcat_half_max", "kind": "derived_scalar"}
+pass_if: {"high": 0.5, "low": 0.001, "op": "range", "provenance": {"kind": "model", "note": "Fig 7E: growth is half-maximal at a small fraction of WT kcat, then saturates."}}</pre>
       </details>
       
       
@@ -1286,7 +1442,7 @@ mechanism the paper uses to reconcile model and experiment.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "9d67f40b38e2ea171310275a204e055f81b11ef0", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/9d67f40b38e2ea171310275a204e055f81b11ef0", "branch": "main", "generated_at": "2026-09-13 06:13 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "03fe26f412b69f326264e75f2c5bafb72d1e6f1b", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/03fe26f412b69f326264e75f2c5bafb72d1e6f1b", "branch": "main", "generated_at": "2026-09-13 14:24 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig7-kinetic-parameters";

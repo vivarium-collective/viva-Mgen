@@ -242,9 +242,13 @@ _save_viz('fig1-architecture', 'fig1-c-dynamics', _render_one('', {}, RUNS_DB, S
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | architecture-integrates-six-submodels | kind=derived_scalar field=n_processes | op range low 6 high 6 provenance {'kind': 'model', 'note': 'Reduced viva-Mgen cell = six submodels (metabolism, mass, transcription, translation, rna_decay, protein_decay); Fig 1A. Achieved 6.'} |
-# | submodels-are-coupled | kind=derived_scalar field=n_stores_coupled | op range low 2 high 100 provenance {'kind': 'theory', 'note': 'Integration = communication through shared cell variables (Fig 1B). 3 stores coupled (growth_fraction, rna_counts, protein_counts). Achieved 3.'} |
-# | cell-is-viable | kind=derived_scalar field=growth_fraction_final | op range low 0.9 high 1.1 provenance {'kind': 'model', 'note': 'Unperturbed integrated cell holds feasible FBA growth (growth_fraction ≈ 1). Achieved 1.000.'} |
+# | integrates-28-submodels | kind=derived_scalar field=n_processes | op range low 28 high 40 provenance {'kind': 'model', 'note': 'Karr 2012 integrates 28 cellular-process submodels (Fig 1A); the viva-Mgen composite wires 30. Test that the integrated cell is composed of ≥28 submodels.'} |
+# | shared-variable-integration | kind=derived_scalar field=n_stores_coupled | op range low 10 high 90 provenance {'kind': 'model', 'note': 'Karr 2012 integrates the 28 submodels through ~16 shared cell-variable states each 1 s step (Fig 1B). Test that ≥10 cell variables are coupled across ≥2 processes (real integration, not independent modules).'} |
+# | cell-mass-doubles | kind=derived_scalar field=mass_fold_change | op range low 1.8 high 2.2 provenance {'kind': 'experiment', 'note': 'A dividing cell doubles its mass over one cell cycle (Karr 2012 Fig 2B, τ≈9 h). Test mass fold-change ≈2 over the integrated 9 h run.'} |
+# | replication-completes | kind=derived_scalar field=replicated_fraction_final | op range low 0.95 high 1.0 provenance {'kind': 'model', 'note': 'The single chromosome is fully replicated once per cycle (Karr 2012 Fig 4B, chromosome copy 1→2). Test replicated_fraction reaches ~1 in the integrated run.'} |
+# | cell-divides | kind=derived_scalar field=divides | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'The whole-cell model terminates each simulation at cell division, when the septum diameter reaches 0 (Karr 2012; cytokinesis ~1.08 h). Test that the integrated cell divides.'} |
+# | mrna-produced | kind=derived_scalar field=mrna_species_produced | op range low 1 high 1000 provenance {'kind': 'model', 'note': 'Gene expression is active in the running cell (Karr 2012 Fig 2G). Test that ≥1 mRNA species is produced by the integrated composite.'} |
+# | protein-produced | kind=derived_scalar field=protein_species_produced | op range low 1 high 1000 provenance {'kind': 'model', 'note': 'Translation is active in the running cell (Karr 2012 Fig 2G/2H). Test that ≥1 protein species is produced by the integrated composite.'} |
 
 # ## Study: Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition (`fig2-growth`)
 #
@@ -333,9 +337,13 @@ _save_viz('fig2-growth', 'fig2-h-mrna-protein', _render_one('', {}, RUNS_DB, STU
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | doubling-time-near-9h | kind=derived_scalar field=doubling_time_h | op range low 8.5 high 9.5 provenance {'kind': 'experiment', 'note': 'M. genitalium doubling time τ ≈ 9 h (Karr 2012 Fig 2A/B); achieved 9.000 h.'} |
-# | mass-doubles-in-cycle | kind=derived_scalar field=final_mass_ratio | op range low 1.9 high 2.1 provenance {'kind': 'theory', 'note': 'A cell doubles its mass per cycle; achieved 2.000.'} |
-# | protein-dominant-composition | kind=derived_scalar field=protein_fraction | op range low 0.55 high 0.68 provenance {'kind': 'experiment', 'note': 'Fitted protein fraction 0.620 (Fig 2C).'} |
+# | doubling-time-near-9h | kind=derived_scalar field=doubling_time_h | op range low 8.3 high 9.5 provenance {'kind': 'experiment', 'note': 'M. genitalium doubling time τ ≈ 9.0 h measured (Fig 2A); the simulated median is 8.9 h (Fig 2B). Test the exponential-fit doubling time falls in [8.3, 9.5] h.'} |
+# | mass-doubles-over-cycle | kind=derived_scalar field=final_mass_ratio | op range low 1.8 high 2.2 provenance {'kind': 'model', 'note': 'A cell doubles its mass between birth and division (Karr 2012 Fig 2B). Test mass fold-change ≈2 over the 9 h cycle.'} |
+# | protein-dominant-composition | kind=derived_scalar field=protein_fraction | op range low 0.62 high 0.75 provenance {'kind': 'experiment', 'note': 'Dry-mass composition is protein-dominant: protein ≈62–75% (Karr 2012 Fig 2C vs Morowitz 1962). Test the protein dry-mass fraction is in [0.62, 0.75].'} |
+# | rna-fraction-small | kind=derived_scalar field=rna_fraction | op range low 0.05 high 0.15 provenance {'kind': 'experiment', 'note': 'RNA is ≈9% of dry mass (Karr 2012 Fig 2C / Morowitz 1962). Test the RNA dry-mass fraction is in [0.05, 0.15].'} |
+# | dna-doubles-in-s-phase | kind=derived_scalar field=dna_fold_change | op range low 1.8 high 2.2 provenance {'kind': 'model', 'note': 'Single-cell DNA content steps from 1× to 2× during S-phase (Karr 2012 Fig 2D). Test DNA fold-change ≈2 over the cycle.'} |
+# | mrna-low-copy-bursty | kind=derived_scalar field=mean_mrna_per_gene | op range low 0.0 high 2.5 provenance {'kind': 'experiment', 'note': 'mRNA is present at low, discrete copy numbers (0–2 per gene) due to short half-lives and bursty synthesis (Karr 2012 Fig 2G). Test mean mRNA per gene ≤2.5.'} |
+# | mrna-protein-decoupled | kind=derived_scalar field=mrna_protein_abs_corr | op range low 0.0 high 0.4 provenance {'kind': 'experiment', 'note': 'Single-cell mRNA (transient, bursty) and protein (cumulative, long-lived) copy numbers are decoupled — no correlation across a population (Karr 2012 Fig 2H). Test |Pearson r| < 0.4.'} |
 
 # ## Study: Fig 3 — Chromosome DNA-protein interactions (viva-Mgen) (`fig3-expression`)
 #
@@ -427,9 +435,15 @@ _save_viz('fig3-expression', 'fig3-f-collisions-vs-density', _render_one('', {},
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | mrna-is-bursty-low-copy | kind=derived_scalar field=mean_mrna_per_gene | op range low 0.0 high 5.0 provenance {'kind': 'experiment', 'note': 'Single-cell mRNA is low-copy and bursty (Karr 2012 Fig 2G); reduced panel achieved mean_mrna_per_gene ~1.6. Representative rates, not KB-fitted.'} |
-# | protein-exceeds-mrna | kind=derived_scalar field=protein_to_mrna_ratio | op range low 5.0 high 1.0e9 provenance {'kind': 'experiment', 'note': 'mRNA and protein copy-number distributions are decoupled, protein far higher (Karr 2012 Fig 2H); achieved ratio ~200 (varies run to run).'} |
-# | genes-become-expressed | kind=derived_scalar field=fraction_genes_expressed | op range low 0.9 high 1.0 provenance {'kind': 'model', 'note': 'Over 1 h all representative genes express; achieved 1.000.'} |
+# | chromosome-50pct-bound-by-6min | kind=derived_scalar field=pct_explored_at_6min | op range low 40 high 65 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3B: 50% of the chromosome is bound by ≥1 protein within the first 6 min.'} |
+# | chromosome-90pct-bound-by-20min | kind=derived_scalar field=pct_explored_at_20min | op range low 80 high 100 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3B: 90% of the chromosome bound within 20 min.'} |
+# | rnap-binds-90pct-within-49min | kind=derived_scalar field=rnap_90pct_time_min | op range low 0 high 49 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3B: RNA polymerase binds 90% of the chromosome within the first 49 min.'} |
+# | rna-expression-t50-18min | kind=derived_scalar field=rna_t50_min | op range low 10 high 30 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3C: RNA-expression t50 = 18 min.'} |
+# | rna-expression-90pct-by-143min | kind=derived_scalar field=rna_t90_min | op range low 60 high 200 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3C: 90% of genes expressed within the first 143 min.'} |
+# | collisions-per-cycle-gt-30000 | kind=derived_scalar field=n_collisions_per_cycle | op range low 30000 high 1000000000.0 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3F: >30,000 collisions per cell (~0.93 displacements/s).'} |
+# | collisions-mostly-by-rnap | kind=derived_scalar field=frac_collisions_by_rnap | op range low 0.7 high 1.0 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3F: collisions caused mostly by RNA polymerase (84%) and DNA pol (8%).'} |
+# | collisions-displace-smc | kind=derived_scalar field=frac_collisions_displacing_smc | op range low 0.5 high 0.85 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3F: displaced proteins are mostly SMC (70%) and SSB (6%).'} |
+# | collisions-density-positive | kind=derived_scalar field=collisions_density_pearson_r | op range low 0.2 high 1.0 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 3F: collisions vs DNA-bound protein density are positively correlated.'} |
 
 # ## Study: Fig 4 — Emergent, unregulated control of cell-cycle duration (`fig4-cell-cycle`)
 #
@@ -516,9 +530,15 @@ _save_viz('fig4-cell-cycle', 'fig4-e-init-vs-repl', _render_one('', {}, RUNS_DB,
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | initiation-replication-inversely-correlated | kind=derived_scalar field=r_init_repl | op range low -1.0 high -0.7 provenance {'kind': 'model', 'note': 'Karr 2012 Fig 4E — inverse initiation↔replication duration control; achieved r = -0.930.'} |
-# | dntp-controls-replication-duration | kind=derived_scalar field=r_dntp_repl | op range low -1.0 high -0.7 provenance {'kind': 'model', 'note': 'Karr 2012 Fig 4D — higher starting dNTP shortens replication; achieved r = -0.951.'} |
-# | more-dnaa-shortens-initiation | kind=derived_scalar field=r_dnaA_init | op range low -1.0 high -0.4 provenance {'kind': 'model', 'note': 'Karr 2012 Fig 4C — more initial DnaA shortens initiation; achieved r = -0.743.'} |
+# | cell-cycle-duration-9h | kind=derived_scalar field=cell_cycle_h | op range low 8.5 high 9.5 provenance {'kind': 'experiment', 'note': 'Karr 2012: 9.0 h cell cycle (median in-silico doubling 8.9 h; Fig 2B/4A).'} |
+# | initiation-duration-3.6h | kind=derived_scalar field=init_dur_h | op range low 3.0 high 4.2 provenance {'kind': 'model', 'note': 'Karr 2012 Time state: replicationInitiationDuration = 12960 s ≈ 3.6 h.'} |
+# | replication-duration-4.33h | kind=derived_scalar field=repl_dur_h | op range low 3.8 high 4.9 provenance {'kind': 'model', 'note': 'Karr 2012 Time state: replicationDuration = 15571 s ≈ 4.33 h.'} |
+# | cytokinesis-duration-1.08h | kind=derived_scalar field=cyto_dur_h | op range low 0.9 high 1.3 provenance {'kind': 'model', 'note': 'Karr 2012 Time state: cytokinesisDuration = 3869 s ≈ 1.08 h.'} |
+# | replication-duration-variable | kind=derived_scalar field=cv_repl_pct | op range low 25 high 55 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 4A: replication-duration CV = 38.5% across 128 cells.'} |
+# | total-cycle-less-variable-than-phases | kind=derived_scalar field=total_cv_below_phase_cvs | op range low 1.0 high 1.0 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 4A: cycle CV 9.4% < initiation 64.3% and replication 38.5% — emergent buffering.'} |
+# | initiation-replication-inversely-correlated | kind=derived_scalar field=r_init_repl | op range low -1.0 high -0.7 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 4E: longer initiation → shorter replication (dNTP-surplus buffering).'} |
+# | more-dnaa-shortens-initiation | kind=derived_scalar field=r_dnaA_init | op range low -1.0 high -0.35 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 4C: initial DnaA vs initiation duration, R² ≈ 0.49 (r ≈ -0.7).'} |
+# | dntp-controls-replication-duration | kind=derived_scalar field=r_dntp_repl | op range low -1.0 high -0.7 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 4D: higher dNTP at replication start → shorter replication.'} |
 
 # ## Study: Fig 5 — Global distribution of cellular energy: ATP > GTP synthesis and a translation-dominated budget (`fig5-energy`)
 #
@@ -601,8 +621,13 @@ _save_viz('fig5-energy', 'fig5-d-allocation', _render_one('', {}, RUNS_DB, STUDY
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | atp-exceeds-gtp-synthesis | kind=derived_scalar field=atp_to_gtp_ratio | op range low 2.0 high 8.0 provenance {'kind': 'model', 'note': 'Fig 5A shows ATP and GTP as the dominant synthesized carriers with ATP > GTP; iPS189 FBA gives ratio 4.03 (ATP 0.813 vs GTP 0.202).'} |
-# | translation-dominates-energy | kind=derived_scalar field=translation_share | op range low 0.5 high 1.0 provenance {'kind': 'model', 'note': "Fig 5D's budget is translation-dominated (~29%, ahead of transcription ~7%); the reduced model reproduces the ordering with translation at 0.968 of the modeled expression energy."} |
+# | atp-exceeds-gtp-synthesis | kind=derived_scalar field=atp_to_gtp_ratio | op range low 2.0 high 8.0 provenance {'kind': 'model', 'note': 'Fig 5A: ATP and GTP are the dominant synthesized carriers with ATP > GTP; iPS189 FBA gives ~4.0.'} |
+# | atp-gtp-dominate-redox | kind=derived_scalar field=atp_gtp_to_redox_ratio | op range low 1000.0 high 1000000000000.0 provenance {'kind': 'experiment', 'note': 'Fig 5A: ATP/GTP synthesis is >1000x that of NAD(H)/NADP(H)/FAD(H2). (Our reduced FBA measures GROSS carrier turnover, where redox recycling is large — expected to fall short until net-synthesis accounting is added.)'} |
+# | translation-largest-energy-consumer | kind=derived_scalar field=translation_energy_share | op range low 0.2 high 0.4 provenance {'kind': 'experiment', 'note': 'Fig 5D: Translation = 29.0% of average ATP+GTP usage.'} |
+# | aminoacylation-energy-share | kind=derived_scalar field=aminoacylation_energy_share | op range low 0.1 high 0.22 provenance {'kind': 'experiment', 'note': 'Fig 5D: tRNA aminoacylation = 15.1% of ATP+GTP usage.'} |
+# | transcription-energy-share | kind=derived_scalar field=transcription_energy_share | op range low 0.04 high 0.12 provenance {'kind': 'experiment', 'note': 'Fig 5D: Transcription = 7.1% of ATP+GTP usage. (Reduced-panel transcription accounting currently under-counts NTP relative to translation.)'} |
+# | unaccounted-energy-gap | kind=derived_scalar field=unaccounted_share | op range low 0.35 high 0.5 provenance {'kind': 'model', 'note': 'Fig 5D: 44.3% of experimentally-observed energy production is unaccounted for by the model — a genuine reported discrepancy.'} |
+# | ntp-use-invariant-across-cells | kind=derived_scalar field=ntp_use_cv_across_cells | op range low 0.0 high 0.15 provenance {'kind': 'model', 'note': 'Fig 5B: total ATP/GTP use is nearly invariant across cells except the very slowest — metabolism (not expression) sets cycle length.'} |
 
 # ## Study: Fig 6A — Single-gene-disruption essentiality: model vs experiment (`fig6-gene-essentiality`)
 #
@@ -689,14 +714,26 @@ _save_viz('fig6-gene-essentiality', 'confusion-matrix', _render_one('', {}, RUNS
 # accuracy-summary
 _save_viz('fig6-gene-essentiality', 'accuracy-summary', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
+# **fig6-b-pathologies**
+
+# fig6-b-pathologies
+_save_viz('fig6-gene-essentiality', 'fig6-b-pathologies', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | essentiality-accuracy-high | kind=derived_scalar field=essentiality_accuracy | op range low 0.7 high 1.0 provenance {'kind': 'experiment', 'note': 'Gene-essentiality accuracy: 79% overall for the Karr 2012 whole-cell model (Fig 6A; Glass et al. 2006 essentiality data), ~87% for the iPS189 metabolic model (Suthers et al. 2009). Achieved 0.760 over 125 metabolic genes with a reference call.'} |
-# | essential-genes-detected | kind=derived_scalar field=sensitivity | op range low 0.7 high 1.0 provenance {'kind': 'experiment', 'note': 'Reference-essential genes should collapse growth on single knockout. Achieved sensitivity 0.755 (80 of 106 reference-essential genes detected).'} |
+# | essentiality-accuracy | kind=derived_scalar field=essentiality_accuracy | op range low 0.78 high 1.0 provenance {'kind': 'experiment', 'note': 'Fig 6A: 79% accuracy (316/401 correct) vs Glass et al. 2006, p<1e-7. (Metabolic-subset FBA currently reaches ~76%.)'} |
+# | essentiality-sensitivity | kind=derived_scalar field=sensitivity | op range low 0.75 high 1.0 provenance {'kind': 'experiment', 'note': 'Fig 6A confusion table (Glass 2006): sensitivity ~0.79.'} |
+# | essentiality-specificity | kind=derived_scalar field=specificity | op range low 0.65 high 1.0 provenance {'kind': 'experiment', 'note': 'Fig 6A confusion table (Glass 2006): specificity ~0.77.'} |
+# | growth-distribution-bimodal | kind=derived_scalar field=growth_distribution_bimodal | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 6/S2: single-gene-KO growth is bimodal — genes are essential (growth~0) or non-essential (growth~1), few intermediate.'} |
+# | pathology-metabolic-non-growing | kind=derived_scalar field=pathology_metabolic_non_growing | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 6B: metabolic-gene disruptions are the most debilitating — non-growing.'} |
+# | pathology-rna-ko-stops-rna | kind=derived_scalar field=pathology_rna_ko_stops_rna | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 6B: RNA-synthesis disruptions (rpoE) fail to accumulate RNA (and cascade to protein).'} |
+# | pathology-protein-ko-stops-protein | kind=derived_scalar field=pathology_protein_ko_stops_protein | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 6B: protein-synthesis disruptions (asnS) fail to accumulate protein.'} |
+# | pathology-dna-ko-non-replicative | kind=derived_scalar field=pathology_dna_ko_non_replicative | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 6B: DNA-synthesis disruptions (dnaN) never double their DNA.'} |
+# | pathology-cytokinesis-ko-non-fissive | kind=derived_scalar field=pathology_cytokinesis_ko_non_fissive | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 6B: cytokinesis disruptions (parC) never close the septum / divide.'} |
 
 # ## Study: Fig 7E-G — Kinetic parameters: growth depends sigmoidally on an enzyme's kcat (Vmax proxy) (`fig7-kinetic-parameters`)
 #
@@ -785,6 +822,10 @@ _save_viz('fig7-kinetic-parameters', 'kcat-growth-curve', _render_one('', {}, RU
 #
 # | test | measures | passes if |
 # | --- | --- | --- |
-# | growth-monotonic-in-kcat | kind=derived_scalar field=growth_is_monotonic_in_kcat | op range low 1.0 high 1.0 provenance {'kind': 'theory', 'note': 'Relaxing a rate-limiting Vmax cannot decrease FBA growth; the kcat→growth curve is monotonic (Karr 2012 Fig 7E). Achieved 1.0.'} |
-# | growth-saturates-at-high-kcat | kind=derived_scalar field=growth_saturates | op range low 1.0 high 1.0 provenance {'kind': 'theory', 'note': 'Past the point where the enzyme stops limiting flux, growth plateaus at the wild-type rate (Karr 2012 Fig 7E-G). Achieved 1.0.'} |
-# | kcat-has-dynamic-range | kind=derived_scalar field=dynamic_range | op range low 0.3 high 1.05 provenance {'kind': 'model', 'note': 'EX_leu_DASH_L_e is genuinely growth-limiting; sweeping its bound moves growth from 0.136 to 1.000. Achieved dynamic_range 0.864.'} |
+# | growth-monotonic-in-kcat | kind=derived_scalar field=growth_is_monotonic_in_kcat | op range low 1.0 high 1.0 provenance {'kind': 'theory', 'note': 'Fig 7E: relaxing a rate-limiting Vmax cannot decrease FBA growth.'} |
+# | growth-saturates-at-wt | kind=derived_scalar field=growth_saturates_at_wt | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 7E: the predicted-growth-vs-kcat curve saturates at the wild-type growth rate.'} |
+# | growth-sigmoidal-in-kcat | kind=derived_scalar field=growth_is_sigmoidal | op range low 1.0 high 1.0 provenance {'kind': 'model', 'note': 'Fig 7E: growth depends sigmoidally on the enzyme kcat.'} |
+# | growth-dynamic-range | kind=derived_scalar field=growth_dynamic_range | op range low 0.7 high 1.0 provenance {'kind': 'model', 'note': 'Fig 7E: reducing kcat drives growth from the WT rate down toward non-growing.'} |
+# | growth-at-max-kcat-near-wt | kind=derived_scalar field=growth_at_max_kcat | op range low 0.95 high 1.05 provenance {'kind': 'model', 'note': 'Fig 7E: high kcat -> WT growth (enzyme no longer limiting).'} |
+# | growth-at-min-kcat-low | kind=derived_scalar field=growth_at_min_kcat | op range low 0.0 high 0.3 provenance {'kind': 'model', 'note': 'Fig 7E: at low kcat the enzyme is strongly rate-limiting; ~5% throughput reaches WT (nox/lpdA).'} |
+# | kcat-half-max-below-wt | kind=derived_scalar field=kcat_half_max | op range low 0.001 high 0.5 provenance {'kind': 'model', 'note': 'Fig 7E: growth is half-maximal at a small fraction of WT kcat, then saturates.'} |

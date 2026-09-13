@@ -583,7 +583,7 @@ confirm it composes and stays viable.
       
       <div class="ctr-meta">
         <div class="ctr-meta-row"><span class="ctr-meta-k">Model</span> <code>baseline</code></div>
-        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">Composite wires exactly six submodel processes.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">At least two cell variables are shared across ≥2 submodels.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">growth_fraction ≈ 1 at end of the 20 min run.</span></div>
+        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">The whole cell integrates ≥28 cellular-process submodels (Fig 1A).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Submodels are integrated through shared cell variables — many stores are read/written by ≥2 processes (Fig 1B).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">The integrated cell grows and mass doubles over the 9 h cycle.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Chromosome replication runs to completion over the cycle (replicated fraction → 1).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">The integrated cell divides — the septum pinches shut by the end of the cycle (Fig 4B).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Transcription produces mRNA in the integrated cell (&gt;0 species).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Translation produces protein in the integrated cell (&gt;0 species).</span></div>
       </div>
       
     </div>
@@ -931,10 +931,10 @@ confirm it composes and stays viable.
     
     
     
-    <li class="expected-behavior-item" id="bt-architecture-integrates-six-submodels"
+    <li class="expected-behavior-item" id="bt-integrates-28-submodels"
         data-test-kind="behavioral"
         
-        data-pytest-node="architecture-integrates-six-submodels"
+        data-pytest-node="integrates-28-submodels"
         data-classification="primary"
         data-result="pending"
         style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
@@ -943,19 +943,19 @@ confirm it composes and stays viable.
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
         <span class="classification-pill classification-primary">primary</span>
-        <strong style="font-size: 0.9em;">architecture-integrates-six-submodels</strong>
+        <strong style="font-size: 0.9em;">integrates-28-submodels</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">Composite wires exactly six submodel processes.</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">The whole cell integrates ≥28 cellular-process submodels (Fig 1A).</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
         <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "n_processes", "kind": "derived_scalar"}
-pass_if: {"high": 6, "low": 6, "op": "range", "provenance": {"kind": "model", "note": "Reduced viva-Mgen cell = six submodels (metabolism, mass, transcription, translation, rna_decay, protein_decay); Fig 1A. Achieved 6."}}</pre>
+pass_if: {"high": 40, "low": 28, "op": "range", "provenance": {"kind": "model", "note": "Karr 2012 integrates 28 cellular-process submodels (Fig 1A); the viva-Mgen composite wires 30. Test that the integrated cell is composed of \u226528 submodels."}}</pre>
       </details>
       
       
@@ -970,10 +970,10 @@ pass_if: {"high": 6, "low": 6, "op": "range", "provenance": {"kind": "model", "n
     
     
     
-    <li class="expected-behavior-item" id="bt-submodels-are-coupled"
+    <li class="expected-behavior-item" id="bt-shared-variable-integration"
         data-test-kind="behavioral"
         
-        data-pytest-node="submodels-are-coupled"
+        data-pytest-node="shared-variable-integration"
         data-classification="primary"
         data-result="pending"
         style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
@@ -982,19 +982,19 @@ pass_if: {"high": 6, "low": 6, "op": "range", "provenance": {"kind": "model", "n
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
         <span class="classification-pill classification-primary">primary</span>
-        <strong style="font-size: 0.9em;">submodels-are-coupled</strong>
+        <strong style="font-size: 0.9em;">shared-variable-integration</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">At least two cell variables are shared across ≥2 submodels.</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Submodels are integrated through shared cell variables — many stores are read/written by ≥2 processes (Fig 1B).</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
         <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "n_stores_coupled", "kind": "derived_scalar"}
-pass_if: {"high": 100, "low": 2, "op": "range", "provenance": {"kind": "theory", "note": "Integration = communication through shared cell variables (Fig 1B). 3 stores coupled (growth_fraction, rna_counts, protein_counts). Achieved 3."}}</pre>
+pass_if: {"high": 90, "low": 10, "op": "range", "provenance": {"kind": "model", "note": "Karr 2012 integrates the 28 submodels through ~16 shared cell-variable states each 1 s step (Fig 1B). Test that \u226510 cell variables are coupled across \u22652 processes (real integration, not independent modules)."}}</pre>
       </details>
       
       
@@ -1009,10 +1009,10 @@ pass_if: {"high": 100, "low": 2, "op": "range", "provenance": {"kind": "theory",
     
     
     
-    <li class="expected-behavior-item" id="bt-cell-is-viable"
+    <li class="expected-behavior-item" id="bt-cell-mass-doubles"
         data-test-kind="behavioral"
         
-        data-pytest-node="cell-is-viable"
+        data-pytest-node="cell-mass-doubles"
         data-classification="primary"
         data-result="pending"
         style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
@@ -1021,19 +1021,175 @@ pass_if: {"high": 100, "low": 2, "op": "range", "provenance": {"kind": "theory",
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
         <span class="classification-pill classification-primary">primary</span>
-        <strong style="font-size: 0.9em;">cell-is-viable</strong>
+        <strong style="font-size: 0.9em;">cell-mass-doubles</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">growth_fraction ≈ 1 at end of the 20 min run.</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">The integrated cell grows and mass doubles over the 9 h cycle.</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
-        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_fraction_final", "kind": "derived_scalar"}
-pass_if: {"high": 1.1, "low": 0.9, "op": "range", "provenance": {"kind": "model", "note": "Unperturbed integrated cell holds feasible FBA growth (growth_fraction \u2248 1). Achieved 1.000."}}</pre>
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "mass_fold_change", "kind": "derived_scalar"}
+pass_if: {"high": 2.2, "low": 1.8, "op": "range", "provenance": {"kind": "experiment", "note": "A dividing cell doubles its mass over one cell cycle (Karr 2012 Fig 2B, \u03c4\u22489 h). Test mass fold-change \u22482 over the integrated 9 h run."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-replication-completes"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="replication-completes"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">replication-completes</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Chromosome replication runs to completion over the cycle (replicated fraction → 1).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "replicated_fraction_final", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 0.95, "op": "range", "provenance": {"kind": "model", "note": "The single chromosome is fully replicated once per cycle (Karr 2012 Fig 4B, chromosome copy 1\u21922). Test replicated_fraction reaches ~1 in the integrated run."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-cell-divides"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="cell-divides"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">cell-divides</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">The integrated cell divides — the septum pinches shut by the end of the cycle (Fig 4B).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "divides", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "The whole-cell model terminates each simulation at cell division, when the septum diameter reaches 0 (Karr 2012; cytokinesis ~1.08 h). Test that the integrated cell divides."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-mrna-produced"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="mrna-produced"
+        data-classification="secondary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-secondary">secondary</span>
+        <strong style="font-size: 0.9em;">mrna-produced</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Transcription produces mRNA in the integrated cell (&gt;0 species).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "mrna_species_produced", "kind": "derived_scalar"}
+pass_if: {"high": 1000, "low": 1, "op": "range", "provenance": {"kind": "model", "note": "Gene expression is active in the running cell (Karr 2012 Fig 2G). Test that \u22651 mRNA species is produced by the integrated composite."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-protein-produced"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="protein-produced"
+        data-classification="secondary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-secondary">secondary</span>
+        <strong style="font-size: 0.9em;">protein-produced</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Translation produces protein in the integrated cell (&gt;0 species).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "protein_species_produced", "kind": "derived_scalar"}
+pass_if: {"high": 1000, "low": 1, "op": "range", "provenance": {"kind": "model", "note": "Translation is active in the running cell (Karr 2012 Fig 2G/2H). Test that \u22651 protein species is produced by the integrated composite."}}</pre>
       </details>
       
       
@@ -1249,7 +1405,7 @@ studies foreground.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "9d67f40b38e2ea171310275a204e055f81b11ef0", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/9d67f40b38e2ea171310275a204e055f81b11ef0", "branch": "main", "generated_at": "2026-09-13 06:13 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "03fe26f412b69f326264e75f2c5bafb72d1e6f1b", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/03fe26f412b69f326264e75f2c5bafb72d1e6f1b", "branch": "main", "generated_at": "2026-09-13 14:24 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig1-architecture";

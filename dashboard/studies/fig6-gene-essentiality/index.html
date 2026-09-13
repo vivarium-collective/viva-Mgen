@@ -583,7 +583,7 @@ the fig6_gene_essentiality composite once for a representative essential gene
       
       <div class="ctr-meta">
         <div class="ctr-meta-row"><span class="ctr-meta-k">Model</span> <code>baseline</code></div>
-        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">Model-vs-reference essentiality accuracy over the metabolic subset within [0.70, 1.0].</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Sensitivity (fraction of reference-essential metabolic genes called essential) within [0.70, 1.0].</span></div>
+        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">Model-vs-experiment single-gene essentiality accuracy &gt;= ~79%.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Sensitivity (true-essential recall) in the paper&#39;s range (~0.79).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Specificity (true-nonessential recall) in the paper&#39;s range (~0.77).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">KO growth-fraction distribution is bimodal (essential~0 / viable~1).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">A metabolic disruption is non-growing (Fig 6B, trmK column).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">An RNA-synthesis disruption stops RNA accumulation (Fig 6B, rpoE).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">A protein-synthesis disruption stops protein accumulation (Fig 6B, asnS).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">A DNA-synthesis disruption is non-replicative — DNA never doubles (Fig 6B, dnaN).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">A cytokinesis disruption is non-fissive — septum never closes (Fig 6B, parC).</span></div>
       </div>
       
     </div>
@@ -824,6 +824,23 @@ the fig6_gene_essentiality composite once for a representative essential gene
     </div>
     
     <div class="figure-card embed-viz-card">
+      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig6-gene-essentiality/viz/fig6b_pathologies.html"
+              class="figure-media-frame figure-media-frame--embed"
+              loading="lazy" title="fig6-b-pathologies"
+              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
+              ></iframe>
+      
+      <p class="figure-desc muted">Fig 6B: molecular pathologies — Growth/Protein/RNA/DNA/Septum dynamics for WT + a representative disruption of each essential class; red = differs from WT.</p>
+      
+      <div class="figure-caption-row">
+        <span class="figure-source-chip">embed</span>
+        <span class="figure-title">fig6-b-pathologies</span>
+        
+        <a href="/viva-Mgen/dashboard/workspace/studies/fig6-gene-essentiality/viz/fig6b_pathologies.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
+      </div>
+    </div>
+    
+    <div class="figure-card embed-viz-card">
       <iframe src="/viva-Mgen/dashboard/workspace/studies/fig6-gene-essentiality/viz/fig6_a_confusion.html"
               class="figure-media-frame figure-media-frame--embed"
               loading="lazy" title="fig6-a-confusion"
@@ -982,10 +999,10 @@ the fig6_gene_essentiality composite once for a representative essential gene
     
     
     
-    <li class="expected-behavior-item" id="bt-essentiality-accuracy-high"
+    <li class="expected-behavior-item" id="bt-essentiality-accuracy"
         data-test-kind="behavioral"
         
-        data-pytest-node="essentiality-accuracy-high"
+        data-pytest-node="essentiality-accuracy"
         data-classification="primary"
         data-result="pending"
         style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
@@ -994,19 +1011,19 @@ the fig6_gene_essentiality composite once for a representative essential gene
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
         <span class="classification-pill classification-primary">primary</span>
-        <strong style="font-size: 0.9em;">essentiality-accuracy-high</strong>
+        <strong style="font-size: 0.9em;">essentiality-accuracy</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">Model-vs-reference essentiality accuracy over the metabolic subset within [0.70, 1.0].</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Model-vs-experiment single-gene essentiality accuracy &gt;= ~79%.</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
         <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "essentiality_accuracy", "kind": "derived_scalar"}
-pass_if: {"high": 1.0, "low": 0.7, "op": "range", "provenance": {"kind": "experiment", "note": "Gene-essentiality accuracy: 79% overall for the Karr 2012 whole-cell model (Fig 6A; Glass et al. 2006 essentiality data), ~87% for the iPS189 metabolic model (Suthers et al. 2009). Achieved 0.760 over 125 metabolic genes with a reference call."}}</pre>
+pass_if: {"high": 1.0, "low": 0.78, "op": "range", "provenance": {"kind": "experiment", "note": "Fig 6A: 79% accuracy (316/401 correct) vs Glass et al. 2006, p\u003c1e-7. (Metabolic-subset FBA currently reaches ~76%.)"}}</pre>
       </details>
       
       
@@ -1021,10 +1038,10 @@ pass_if: {"high": 1.0, "low": 0.7, "op": "range", "provenance": {"kind": "experi
     
     
     
-    <li class="expected-behavior-item" id="bt-essential-genes-detected"
+    <li class="expected-behavior-item" id="bt-essentiality-sensitivity"
         data-test-kind="behavioral"
         
-        data-pytest-node="essential-genes-detected"
+        data-pytest-node="essentiality-sensitivity"
         data-classification="primary"
         data-result="pending"
         style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
@@ -1033,19 +1050,292 @@ pass_if: {"high": 1.0, "low": 0.7, "op": "range", "provenance": {"kind": "experi
       <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
         <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
         <span class="classification-pill classification-primary">primary</span>
-        <strong style="font-size: 0.9em;">essential-genes-detected</strong>
+        <strong style="font-size: 0.9em;">essentiality-sensitivity</strong>
         
         <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
         
       </div>
-      <div style="margin-top: 6px; font-size: 0.95em;">Sensitivity (fraction of reference-essential metabolic genes called essential) within [0.70, 1.0].</div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Sensitivity (true-essential recall) in the paper&#39;s range (~0.79).</div>
       
       
       <details style="margin-top: 6px; font-size: 0.82em;">
         <summary class="muted" style="cursor: pointer;">Assertion</summary>
         
         <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "sensitivity", "kind": "derived_scalar"}
-pass_if: {"high": 1.0, "low": 0.7, "op": "range", "provenance": {"kind": "experiment", "note": "Reference-essential genes should collapse growth on single knockout. Achieved sensitivity 0.755 (80 of 106 reference-essential genes detected)."}}</pre>
+pass_if: {"high": 1.0, "low": 0.75, "op": "range", "provenance": {"kind": "experiment", "note": "Fig 6A confusion table (Glass 2006): sensitivity ~0.79."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-essentiality-specificity"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="essentiality-specificity"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">essentiality-specificity</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Specificity (true-nonessential recall) in the paper&#39;s range (~0.77).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "specificity", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 0.65, "op": "range", "provenance": {"kind": "experiment", "note": "Fig 6A confusion table (Glass 2006): specificity ~0.77."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-growth-distribution-bimodal"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="growth-distribution-bimodal"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">growth-distribution-bimodal</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">KO growth-fraction distribution is bimodal (essential~0 / viable~1).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "growth_distribution_bimodal", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 6/S2: single-gene-KO growth is bimodal \u2014 genes are essential (growth~0) or non-essential (growth~1), few intermediate."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-pathology-metabolic-non-growing"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="pathology-metabolic-non-growing"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">pathology-metabolic-non-growing</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">A metabolic disruption is non-growing (Fig 6B, trmK column).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "pathology_metabolic_non_growing", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 6B: metabolic-gene disruptions are the most debilitating \u2014 non-growing."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-pathology-rna-ko-stops-rna"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="pathology-rna-ko-stops-rna"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">pathology-rna-ko-stops-rna</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">An RNA-synthesis disruption stops RNA accumulation (Fig 6B, rpoE).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "pathology_rna_ko_stops_rna", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 6B: RNA-synthesis disruptions (rpoE) fail to accumulate RNA (and cascade to protein)."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-pathology-protein-ko-stops-protein"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="pathology-protein-ko-stops-protein"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">pathology-protein-ko-stops-protein</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">A protein-synthesis disruption stops protein accumulation (Fig 6B, asnS).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "pathology_protein_ko_stops_protein", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 6B: protein-synthesis disruptions (asnS) fail to accumulate protein."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-pathology-dna-ko-non-replicative"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="pathology-dna-ko-non-replicative"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">pathology-dna-ko-non-replicative</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">A DNA-synthesis disruption is non-replicative — DNA never doubles (Fig 6B, dnaN).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "pathology_dna_ko_non_replicative", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 6B: DNA-synthesis disruptions (dnaN) never double their DNA."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-pathology-cytokinesis-ko-non-fissive"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="pathology-cytokinesis-ko-non-fissive"
+        data-classification="primary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #10b981; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-primary">primary</span>
+        <strong style="font-size: 0.9em;">pathology-cytokinesis-ko-non-fissive</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">A cytokinesis disruption is non-fissive — septum never closes (Fig 6B, parC).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "pathology_cytokinesis_ko_non_fissive", "kind": "derived_scalar"}
+pass_if: {"high": 1.0, "low": 1.0, "op": "range", "provenance": {"kind": "model", "note": "Fig 6B: cytokinesis disruptions (parC) never close the septum / divide."}}</pre>
       </details>
       
       
@@ -1263,7 +1553,7 @@ machinery the kinetic-parameter (Fig 7) study builds on.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "9d67f40b38e2ea171310275a204e055f81b11ef0", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/9d67f40b38e2ea171310275a204e055f81b11ef0", "branch": "main", "generated_at": "2026-09-13 06:13 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "03fe26f412b69f326264e75f2c5bafb72d1e6f1b", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/03fe26f412b69f326264e75f2c5bafb72d1e6f1b", "branch": "main", "generated_at": "2026-09-13 14:24 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig6-gene-essentiality";
