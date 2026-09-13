@@ -261,3 +261,42 @@ def mycoplasma_genitalium(core=None, *, nutrient_scale=1.0, initial_dnaA=0.0,
                           initial_dntp=0.0, seed=0):
     return build_mgen(core, nutrient_scale=nutrient_scale, initial_dnaA=initial_dnaA,
                       initial_dntp=initial_dntp, seed=seed)
+
+
+def build_parca(core=None, *, seed=0, interval=1.0):
+    """The parameter-calculator (ParCa) composite: runs the Karr FitConstants
+    reproduction and emits its fitted-parameter summary + metabolic-feasibility
+    closure. It is the study that PRECEDES the figure studies, which consume the
+    per-gene parameters it computes (viva_mgen.parca)."""
+    if core is None:
+        from ..core import build_core
+        core = build_core()
+    from ..processes.parameter_calculator import ParameterCalculatorReproductionProcess as _PC
+    proc = _PC(config={"seed": seed}, core=core)
+    ports = list(proc.outputs())
+    doc = {
+        "parameter_calculator": {
+            "_type": "process",
+            "address": f"local:{_PC.__module__}.{_PC.__name__}",
+            "config": {"seed": seed}, "interval": interval,
+            "inputs": {}, "outputs": {p: ["parca", p] for p in ports},
+        },
+        "parca": {p: 0.0 for p in ports},
+        "emitter": {"_type": "step", "address": "local:RAMEmitter",
+                    "config": {"emit": {"parca": {p: "float" for p in ports}}},
+                    "inputs": {"parca": ["parca"]}},
+    }
+    return doc
+
+
+@composite_generator(
+    name="mycoplasma_parca",
+    description="Parameter calculator (ParCa) — the native reproduction of Karr 2012 FitConstants. Computes the per-gene expression/decay/synthesis panel from the real observed knowledge-base data, fits it under the RNA-mass / DnaA-FtsZ-held / net-supercoiling constraints, and verifies the expression↔metabolism feasibility closure. The upstream study whose fitted parameters the seven figure studies consume.",
+    parameters={"seed": {"type": "integer", "default": 0, "description": "Stochastic seed"}},
+    emitters=[{"address": "local:ParquetEmitter",
+               "paths": ["parca/n_genes", "parca/median_mrna_synthesis_rate",
+                         "parca/mrna_halflife_min_mean", "parca/closed_loop_feasible",
+                         "parca/nmp_supply_flux", "parca/aa_supply_flux"]}],
+)
+def mycoplasma_parca(core=None, *, seed=0):
+    return build_parca(core, seed=seed)
