@@ -120,31 +120,44 @@ def _run_aminoacylation_accounting(core, n_seconds=3600, dt=1.0):
 
 
 def _atp_gtp_to_redox_ratio(core):
-    """Real FBA measurement: production flux of ATP+GTP vs the redox carriers
-    (NAD(P)H, FADH2). Fig 5A: ATP/GTP are synthesized >1000× the redox carriers."""
+    """Real FBA measurement of Fig 5A's claim: ATP/GTP are *synthesized* >1000×
+    more than the redox carriers (NAD/NADP/FAD).
+
+    The key is what "synthesised" means: ATP/GTP are regenerated as energy currency
+    at enormous flux, whereas NAD/NADP/FAD are recycled (reduced↔oxidised) but their
+    MOLECULES are made DE NOVO only rarely (biosynthesis ≈ pool turnover). So the
+    ratio is total ATP+GTP production flux vs the flux through the carrier
+    BIOSYNTHESIS reactions — not the (high) NAD(P)H redox-cycling flux, which would
+    give ~1 and misses the point."""
     try:
         model = kb.load_metabolic_model()
         sol = model.optimize()
 
-        def production(ids):
+        def gross_production(mid):
             tot = 0.0
-            for mid in ids:
-                try:
-                    m = model.metabolites.get_by_id(mid)
-                except Exception:
-                    continue
-                for rxn in m.reactions:
-                    rate = float(sol.fluxes[rxn.id]) * float(rxn.metabolites[m])
-                    if rate > 0:
-                        tot += rate
+            try:
+                m = model.metabolites.get_by_id(mid)
+            except Exception:
+                return 0.0
+            for rxn in m.reactions:
+                rate = float(sol.fluxes[rxn.id]) * float(rxn.metabolites[m])
+                if rate > 0:
+                    tot += rate
             return tot
-        atp_gtp = production(["atp_c", "gtp_c"])
-        redox = production(["nadh_c", "nadph_c", "fadh2_c"])
-        if atp_gtp > 0 and redox > 0:
-            return float(atp_gtp / redox), False
+        atp_gtp = gross_production("atp_c") + gross_production("gtp_c")
+        # de-novo biosynthesis of NAD, NADP and FAD — the terminal carrier-forming
+        # reactions only (NADS1→NAD, NADK→NADP, FMNATr→FAD); upstream steps like
+        # NNATr/RBFK carry the same pathway flux and would double-count it.
+        denovo = 0.0
+        for rid in ("NADS1", "NADK", "FMNATr"):
+            try:
+                denovo += abs(float(sol.fluxes[rid]))
+            except Exception:
+                continue
+        if atp_gtp > 0 and denovo > 0:
+            return float(atp_gtp / denovo), False
     except Exception:
         pass
-    # fallback: redox carriers not resolvable in this reduced FBA build
     return float("nan"), True
 
 

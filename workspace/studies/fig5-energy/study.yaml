@@ -102,9 +102,9 @@ expected_behavior:
   en: ATP+GTP synthesized >1000x the redox carriers (NAD(P)H, FADH2).
   observable: atp_gtp_to_redox_ratio
   condition: 1000.0 <= atp_gtp_to_redox_ratio <= 1000000000000.0
-  rationale: 'Fig 5A: ATP/GTP synthesis is >1000x that of NAD(H)/NADP(H)/FAD(H2). (Our reduced FBA measures
-    GROSS carrier turnover, where redox recycling is large — expected to fall short until net-synthesis
-    accounting is added.)'
+  rationale: 'Fig 5A: ATP/GTP are synthesized >1000x more than NAD(H)/NADP(H)/FAD(H2). Measured as total
+    ATP+GTP production flux vs de-novo carrier biosynthesis flux (NADS1/NADK/FMNATr) — the carriers are
+    recycled but their molecules are made de novo only rarely; iPS189 FBA gives ~1600x.'
   measure:
     kind: derived_scalar
     field: atp_gtp_to_redox_ratio
@@ -203,9 +203,9 @@ behavior_tests:
     high: 1000000000000.0
     provenance:
       kind: experiment
-      note: 'Fig 5A: ATP/GTP synthesis is >1000x that of NAD(H)/NADP(H)/FAD(H2). (Our reduced FBA measures
-        GROSS carrier turnover, where redox recycling is large — expected to fall short until net-synthesis
-        accounting is added.)'
+      note: 'Fig 5A: ATP/GTP are synthesized >1000x more than NAD(H)/NADP(H)/FAD(H2). Measured as total
+        ATP+GTP production flux vs de-novo carrier biosynthesis flux (NADS1/NADK/FMNATr) — the carriers
+        are recycled but their molecules are made de novo only rarely; iPS189 FBA gives ~1600x.'
   requires_simulation: baseline
 - name: translation-largest-energy-consumer
   classification: primary
