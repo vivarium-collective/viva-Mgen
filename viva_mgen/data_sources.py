@@ -35,6 +35,12 @@ _FILES = [
      "and consumed via viva_mgen.kb.load_karr_parameters()."),
     ("ips189-network", "datasets/ips189.sbml.xml", "knowledge-base"),
     ("gene-list", "datasets/genes.csv", "knowledge-base"),
+    ("observed-gene-expression", "datasets/karr_gene_expression.csv", "knowledge-base",
+     "Observed per-gene expression (Weiner et al. 2003 M. pneumoniae transcription "
+     "profiles at 32/37/43 C, mapped onto the 525 M. genitalium genes) — the "
+     "experimentally observed input the Karr 2012 parameter fit targets. Decoded "
+     "directly from the knowledge-base MCOS .mat (see scripts/extract_kb_expression.py); "
+     "row order matches genes.csv."),
     ("karr-2012-supplement", "workspace/references/papers/Karr2012_supplementary_information.pdf", "reference"),
 ]
 
@@ -47,6 +53,14 @@ _REFERENCES = [
      "Karr JR, Sanghvi JC, Macklin DN, et al. A whole-cell computational model "
      "predicts phenotype from genotype. Cell 150(2):389-401 (2012). "
      "doi:10.1016/j.cell.2012.05.044 — the model this workspace reproduces."),
+    ("weiner-2003-expression",
+     "https://pmc.ncbi.nlm.nih.gov/articles/PMC275481/",
+     "reference",
+     "Weiner J III, Zimmerman C-U, Göhlmann HWH, Herrmann R. Transcription "
+     "profiles of the bacterium Mycoplasma pneumoniae grown at different "
+     "temperatures. Nucleic Acids Res 31(21):6306-20 (2003). doi:10.1093/nar/gkg841 "
+     "— the source microarray transcription profiles behind the observed gene "
+     "expression (see the observed-gene-expression dataset)."),
 ]
 
 

@@ -1,0 +1,526 @@
+gene_id,symbol,name,expression_32C,expression_37C,expression_43C,expression_mean
+MG_001,dnaN,"DNA polymerase III, beta subunit",2.98349,2.0548,3.11018,2.71616
+MG_002,,DnaJ domain protein,1.29325,1.1479,1.8302,1.42378
+MG_003,gyrB,"DNA gyrase, B subunit",1.96428,1.29325,1.96428,1.7406
+MG_004,gyrA,"DNA gyrase, A subunit",1.96428,1.96428,1.96428,1.96428
+MG_005,serS,seryl-tRNA synthetase,0.851454,0.825878,0.634196,0.770509
+MG_006,tmk,thymidylate kinase,1.29325,1.29325,1.29325,1.29325
+MG_007,holB,"DNA polymerase III delta prime subunit, putative",0.560583,1.09278,0.812816,0.82206
+MG_008,"mnmE, thdF, trmE",tRNA modification GTPase TrmE,0.851454,0.851454,0.851454,0.851454
+MG_009,"tatD, mttC, ychF",deoxyribonuclease,0.560583,0.560583,0.369079,0.496748
+MG_010,dnaE,DNA primase-related protein,0.242995,0.369079,0.242995,0.285023
+MG_011,,,1.29325,1.29325,1.29325,1.29325
+MG_012,rimK,alpha-L-glutamate ligase,0.560583,0.560583,0.560583,0.560583
+MG_013,folD,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,0.242995,0.242995,0.159984,0.215325
+MG471,,"tRNA-ALA (GCA, GCC, GCG, GCT)",2416.93,2385.08,2486.8,2429.6
+MG472,,"tRNA-ILE (ATC, ATT)",1004.5,991.262,1033.54,1009.77
+MG_014,mdlB,"multidrug ABC transporter, ATP-binding/permease protein",0.560583,0.851454,0.851454,0.754497
+MG_015,"mdlB, lmrA","multidrug ABC transporter, ATP-binding/permease protein",0.851454,0.851454,1.29325,0.998719
+MG_018,hepA2,SNF2 family helicase putative,0.560583,0.560583,0.851454,0.65754
+MG_019,dnaJ,chaperone protein DnaJ,1.96428,1.29325,1.96428,1.7406
+MG_020,"pepP, pip",proline iminopeptidase,1.29325,1.29325,1.29325,1.29325
+MG_021,metG,methionyl-tRNA synthetase,0.851454,0.851454,0.851454,0.851454
+MG_022,rpoE,"DNA-directed RNA polymerase, delta subunit",5.89708,5.77572,4.31691,5.3299
+MG_023,fba,"fructose-1,6-bisphosphate aldolase, class II",1.29325,1.29325,0.851454,1.14598
+MG_024,"ychF, engD, gtp1",GTP-binding protein YchF,0.560583,0.777007,0.49005,0.609213
+MG_025,trsB,Beta-glycosyl transferase,0.560583,0.560583,0.560583,0.560583
+MG_026,efp,translation elongation factor P,1.96428,1.29325,1.96428,1.7406
+MG_027,nusB,transcription termination/antitermination protein NusB,1.29325,1.39088,1.7593,1.48114
+MG_028,,,0.560583,0.560583,0.851454,0.65754
+MG_029,,DJ-1/PfpI family protein,1.29325,1.96428,1.96428,1.7406
+MG_030,upp,uracil phosphoribosyltransferase,0.851454,1.29325,0.851454,0.998719
+MG_031,polC,"DNA polymerase III, alpha subunit, Gram-positive type",0.369079,0.560583,0.369079,0.432914
+MG_032,,,0.560583,0.560583,0.560583,0.560583
+MG_033,glpF,glycerol uptake facilitator,0.851454,0.560583,0.851454,0.754497
+MG_034,tdk,thymidine kinase,2.98349,1.96428,1.96428,2.30402
+MG_035,hisS,histidyl-tRNA synthetase,1.96428,1.96428,1.96428,1.96428
+MG_036,aspS,aspartyl-tRNA synthetase,0.851454,0.560583,0.851454,0.754497
+MG_037,pncB,nicotinate phosphoribosyltransferase,0.851454,0.851454,0.851454,0.851454
+MG_038,glpK,glycerol kinase,1.29325,0.851454,0.851454,0.998719
+MG_039,gpsA,"FAD-dependent glycerol-3-phosphate dehydrogenase, putative",1.29325,1.29325,0.851454,1.14598
+MG_040,,"Monosaccharide (riboside/galactoside) ABC transporter, substrate binding protein",1.29325,1.29325,1.29325,1.29325
+MG_041,ptsH,"PTS system, HPr",5.77572,8.45614,6.1475,6.79312
+MG_042,potA,"spermidine/putrescine (polyamine) ABC transporter, ATP-binding protein, putative",0.851454,0.851454,0.560583,0.754497
+MG_043,potB,"spermidine/putrescine (polyamine) ABC transporter, permease protein, putative",0.851454,0.851454,0.851454,0.851454
+MG_044,potC,"spermidine/putrescine (polyamine) ABC transporter, permease protein, putative",0.851454,1.57352,0.96929,1.13142
+MG_045,potD,"spermidine/putrescine (polyamine) ABC transporter, spermidine/putrescine binding protein, putative",0.560583,0.851454,0.560583,0.65754
+MG_046,gcp,metalloendopeptidase,0.560583,0.851454,0.851454,0.754497
+MG_047,metK,S-adenosylmethionine synthetase,1.29325,1.29325,1.29325,1.29325
+MG_048,ffh,signal recognition particle protein,1.96428,1.96428,2.98349,2.30402
+MG_049,deoD,purine nucleoside phosphorylase,1.29325,1.29325,1.29325,1.29325
+MG_050,deoC,deoxyribose-phosphate aldolase,1.96428,1.96428,1.96428,1.96428
+MG_051,pdp,pyrimidine-nucleoside phosphorylase,1.96428,1.96428,1.96428,1.96428
+MG_052,cdd,cytidine deaminase,1.96428,2.14652,3.50642,2.53907
+MG_053,pgm,"phosphoglucomutase/phosphomannomutase, putative",0.851454,0.874179,1.18181,0.969148
+MG_054,nusG,"transcription antitermination protein NusG, putative",1.29325,1.29325,1.29325,1.29325
+MG_055,secE,"preprotein translocase, SecE subunit",1.29325,0.851454,0.851454,0.998719
+MG_473,rpmG-2,ribosomal protein L33 type 2,0.889837,1.19419,1.36735,1.15046
+MG_474,,,0.851454,1.29325,1.29325,1.14598
+MG_056,yraL,tetrapyrrole (corrin/porphyrin) methylase protein,0.560583,0.560583,0.560583,0.560583
+MG_057,,small primase-like protein,0.851454,0.851454,0.851454,0.851454
+MG_058,prs,ribose-phosphate pyrophosphokinase,1.29325,0.851454,0.851454,0.998719
+MG_059,smpB,SsrA-binding protein,0.851454,0.560583,0.560583,0.65754
+MG_060,rfbV,glycosyl transferase,0.560583,0.560583,0.560583,0.560583
+MG_061,uhpT,Mycoplasma MFS transporter,0.851454,0.851454,0.851454,0.851454
+MG475,,"tRNA-SER (AGC, AGT)",397.966,392.721,409.47,400.052
+MG_062,fruA,"PTS system, fructose-specific IIABC component",2.98349,1.96428,1.96428,2.30402
+MG_063,fruK,"1-phosphofructokinase, putative",1.96428,1.29325,1.29325,1.51693
+MG_064,,"ABC transporter, permease protein, putative",1.96428,1.29325,1.29325,1.51693
+MG_065,,"ABC transporter, ATP-binding protein",1.96428,1.29325,1.29325,1.51693
+MG_066,tkt,transketolase,2.98349,1.29325,1.29325,1.85666
+MG_067,,"lipoprotein, putative",2.98349,1.96428,1.96428,2.30402
+MG_068,,"lipoprotein, putative",2.42083,1.4357,1.4357,1.76408
+MG_069,ptsG,"PTS system, glucose-specific IIABC component",1.29325,1.29325,0.851454,1.14598
+MG_070,rpsB,ribosomal protein S2,2.98349,2.98349,2.98349,2.98349
+MG_071,"mgtA, pacL","ATPase, P-type (transporting), HAD superfamily, subfamily IC",0.560583,0.560583,0.851454,0.65754
+MG_072,secA,"preprotein translocase, SecA subunit",0.560583,0.851454,0.851454,0.754497
+MG_073,uvrB,"excinuclease ABC, B subunit",0.851454,1.04754,0.792235,0.897076
+MG_074,,,2.98349,2.98349,2.98349,2.98349
+MG_075,,116 kDa surface antigen,1.29325,1.06511,0.548666,0.969009
+MG_076,,,0.851454,0.560583,0.851454,0.754497
+MG_077,oppB,"oligopeptide ABC transporter, permease protein",0.560583,0.560583,0.560583,0.560583
+MG_078,oppC,"oligopeptide ABC transporter, permease protein",0.851454,0.851454,1.29325,0.998719
+MG_079,oppD,"oligopeptide ABC transporter, ATP-binding protein",0.560583,0.560583,0.851454,0.65754
+MG_080,oppF,"oligopeptide ABC transporter, ATP-binding protein",0.560583,0.587638,1.08749,0.745237
+MG_081,rplK,ribosomal protein L11,2.98349,2.98349,3.41054,3.12584
+MG_082,rplA,ribosomal protein L1,0.851454,0.629815,0.898132,0.793134
+MG_083,pth,peptidyl-tRNA hydrolase,0.851454,0.560583,0.560583,0.65754
+MG_084,tilS,tRNA(Ile)-lysidine synthetase,0.560583,0.369079,0.369079,0.432914
+MG_085,hprK,HPr(Ser) kinase/phosphatase,0.369079,0.242995,0.369079,0.327051
+MG_086,"lgt, gerF",prolipoprotein diacylglyceryl transferase,0.369079,0.242995,0.369079,0.327051
+MG_087,rpsL,ribosomal protein S12,1.96428,1.29325,1.96428,1.7406
+MG_088,rpsG,ribosomal protein S7,0.560583,0.560583,0.560583,0.560583
+MG_089,fusA,translation elongation factor G,0.560583,0.369079,0.560583,0.496748
+MG_090,rpsF,ribosomal protein S6,1.29325,1.96428,1.96428,1.7406
+MG_091,,single-strand binding protein family,1.29325,1.29325,1.96428,1.51693
+MG_092,rpsR,ribosomal protein S18,1.29325,1.29325,1.96428,1.51693
+MG_093,rplI,ribosomal protein L9,0.851454,1.29325,1.29325,1.14598
+MG_094,dnaB,replicative DNA helicase,0.369079,0.369079,0.369079,0.369079
+MG_095,,"lipoprotein, putative",1.29325,1.29325,1.29325,1.29325
+MG_096,,,0.560583,0.560583,0.369079,0.496748
+MG_097,ung,"uracil-DNA glycosylase, putative",0.851454,0.851454,0.851454,0.851454
+MG_098,,"glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase, C subunit",0.560583,0.560583,0.560583,0.560583
+MG_099,gatA,"glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase, A subunit",0.560583,0.369079,0.369079,0.432914
+MG_100,gatB,"glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase, B subunit",0.369079,0.369079,0.242995,0.327051
+MG_101,gntR,Uncharacterized HTH-type transcriptional regulator,1.29325,0.851454,0.851454,0.998719
+MG_102,trxB,thioredoxin-disulfide reductase,1.96428,1.29325,1.29325,1.51693
+MG_103,,,0.560583,0.369079,0.369079,0.432914
+MG_476,secG,"preprotein translocase, SecG subunit",1.0064,0.720365,0.720365,0.81571
+MG_104,rnr,ribonuclease R,1.29325,1.29325,1.29325,1.29325
+MG_105,disA,putative DNA integrity scanning protein,0.560583,0.369079,0.369079,0.432914
+MG_106,def,peptide deformylase,2.98349,1.78386,2.28469,2.35068
+MG_107,gmk,guanylate kinase,1.96428,1.29325,1.29325,1.51693
+MG_108,ptc1,"Ser/Thr protein phosphatase 2C, putative",1.96428,1.29325,1.96428,1.7406
+MG_109,prkC,"serine/threonine protein kinase, putative",0.851454,0.560583,0.851454,0.754497
+MG_110,"rsgA, yjeQ",ribosome small subunit-dependent GTPase A,0.369079,0.483974,0.850274,0.567776
+MG_111,pgi,glucose-6-phosphate isomerase,0.851454,0.455019,0.627201,0.644558
+MG_112,rpe,ribulose-phosphate 3-epimerase,0.369079,0.242995,0.369079,0.327051
+MG_113,asnS,asparaginyl-tRNA synthetase,1.29325,0.851454,1.29325,1.14598
+MG_114,pgsA,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase,0.851454,0.560583,0.560583,0.65754
+MG_115,cinA,competence/damage-inducible protein CinA domain protein,1.0064,0.841285,0.948684,0.932123
+MG_116,,,0.560583,0.560583,0.560583,0.560583
+MG_117,,,1.29325,1.54114,1.10114,1.31184
+MG_118,galE,UDP-glucose 4-epimerase,0.560583,0.560583,0.369079,0.496748
+MG_119,rbsA,"Monosaccharide (riboside/galactoside) ABC transporter, ATP-binding protein",2.98349,2.98349,2.98349,2.98349
+MG_120,rbsB,"Monosaccharide (riboside/galactoside) ABC transporter, permease protein",0.851454,0.851454,0.851454,0.851454
+MG_121,rbsC,"Monosaccharide (riboside/galactoside) ABC transporter, permease protein",1.96428,1.96428,1.96428,1.96428
+MG_122,topA,DNA topoisomerase I,1.29325,1.29325,1.29325,1.29325
+MG_123,,arginine deaminasse,0.369079,0.369079,0.369079,0.369079
+MG_124,trx,thioredoxin,1.96428,1.96428,1.29325,1.7406
+MG_125,,"Cof-like hydrolase, putative",1.29325,1.74715,1.29235,1.44425
+MG_126,trpS,tryptophanyl-tRNA synthetase,0.851454,1.29325,1.29325,1.14598
+MG_127,"spx, yjbD",Spx subfamily protein,1.96428,1.47019,2.12432,1.85293
+MG_128,nadK,"inorganic polyphosphate/ATP-NAD kinase, probable",0.851454,0.681129,0.912565,0.815049
+MG_129,,Putative phosphotransferase enzyme glucose-specific IIB component,0.851454,0.744839,1.08598,0.894091
+MG_130,cpdB,,1.29325,0.851454,1.29325,1.14598
+MG_131,,hypothetical protein,0,0,0,0
+MG_132,hinT,purine nucleoside phosphoramidase,1.29325,1.29325,1.29325,1.29325
+MG_133,,"membrane protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_134,,,0.851454,0.851454,0.851454,0.851454
+MG_135,,"membrane protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_136,lysS,lysyl-tRNA synthetase,0.851454,0.851454,0.851454,0.851454
+MG_137,glf,UDP-galactopyranose mutase,0.560583,0.560583,0.851454,0.65754
+MG_138,"lepA, EF4",Translation elongation factor 4,0.560583,0.560583,0.560583,0.560583
+MG_139,"rnjA, ykqC",ribonuclease J,0.560583,0.560583,0.560583,0.560583
+MGrrnA16S,rrsA,16S ribosomal rRNA,2920.72,2882.23,3005.15,2936.03
+MGrrnA23S,rrlA,23S ribosomal rRNA,2932.45,2893.81,3017.22,2947.83
+MGrrnA5S,rrfA,5S ribosomal rRNA,2947.49,2908.65,3032.69,2962.94
+MG_140,,putative ATP-dependent helicase,1.29325,0.851454,0.851454,0.998719
+MG_141,nusA,transcription termination factor NusA,0.369079,0.743291,0.421908,0.511426
+MG_477,,,0.851454,0.844011,0.787369,0.827611
+MG_142,infB,translation initiation factor IF-2,0.560583,0.560583,0.560583,0.560583
+MG_143,rbfA,ribosome-binding factor A,1.96428,1.96428,1.96428,1.96428
+MG_144,,,1.29325,1.96428,1.29325,1.51693
+MG_145,ribF,riboflavin biosynthesis protein RibF,0.560583,0.560583,0.369079,0.496748
+MG_146,,UPF0053 protein,0.851454,0.560583,0.560583,0.65754
+MG_147,,"membrane protein, putative",0.560583,0.581963,0.802737,0.648428
+MG_148,,,1.29325,0.86814,1.36888,1.17676
+MG_149,,"lipoprotein, putative",0.851454,0.851454,1.29325,0.998719
+MG_478,,,0.851454,0.560583,0.560583,0.65754
+MG_150,rpsJ,ribosomal protein S10,0.242995,0.454704,0.760489,0.486063
+MG_151,rplC,ribosomal protein L3,0.560583,1.1704,2.13613,1.28904
+MG_152,rplD,ribosomal protein L4/L1 family,0.369079,0.651122,1.13839,0.71953
+MG_153,rplW,ribosomal protein L23,0.242995,0.560583,0.851454,0.551677
+MG_154,rplB,ribosomal protein L2,0.242995,0.899378,1.7593,0.967224
+MG_155,rpsS,ribosomal protein S19,1.29325,2.98349,3.75809,2.67828
+MG_156,rplV,ribosomal protein L22,0.851454,1.41421,2.41999,1.56188
+MG_157,rpsC,ribosomal protein S3,0.369079,0.859161,1.37078,0.86634
+MG_158,rplP,ribosomal protein L16,0.560583,0.628942,1.0403,0.743275
+MG_159,rpmC,ribosomal protein L29,0.369079,0.505226,0.780787,0.551697
+MG_160,rpsQ,ribosomal protein S17,1.29325,1.96428,2.98349,2.08034
+MG_161,rplN,ribosomal protein L14,0.851454,1.96428,1.96428,1.59334
+MG_162,rplX,ribosomal protein L24,0.851454,1.29325,1.96428,1.36966
+MG_163,rplE,ribosomal protein L5,0.560583,0.851454,1.29325,0.901762
+MG_164,rpsN,ribosomal protein S14,1.29325,1.29325,1.29325,1.29325
+MG_165,rpsH,ribosomal protein S8,0.851454,0.560583,0.851454,0.754497
+MG_166,rplF,ribosomal protein L6,0.560583,0.851454,0.851454,0.754497
+MG_167,rplR,ribosomal protein L18,1.96428,3.18215,2.98349,2.70997
+MG_168,rpsE,ribosomal protein S5,0.851454,1.29325,0.851454,0.998719
+MG_169,rplO,ribosomal protein L15,0.560583,0.851454,0.851454,0.754497
+MG_170,secY,"preprotein translocase, SecY subunit",0.560583,0.851454,0.851454,0.754497
+MG_171,adk,adenylate kinase,0.851454,0.851454,1.29325,0.998719
+MG_172,map,"methionine aminopeptidase, type I",0.560583,1.29325,1.96428,1.2727
+MG_173,infA,translation initiation factor IF-1,0.851454,1.29325,1.96428,1.36966
+MG_174,rpmJ,ribosomal protein L36,2.98349,1.96428,2.98349,2.64375
+MG_175,rpsM,ribosomal protein S13,0.851454,0.851454,0.851454,0.851454
+MG_176,rpsK,,0.851454,0.851454,1.29325,0.998719
+MG_177,rpoA,"DNA-directed RNA polymerase, alpha subunit",1.29325,1.96428,1.96428,1.7406
+MG_178,rplQ,ribosomal protein L17,0.851454,1.29325,1.29325,1.14598
+MG_179,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",0.851454,1.29325,1.29325,1.14598
+MG_180,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",1.29325,1.29325,1.29325,1.29325
+MG_181,cbiQ,"metal ion (cobalt) ABC transporter, permease protein",0.851454,0.851454,0.851454,0.851454
+MG_182,"truA, hisT",tRNA pseudouridine synthase A,0.369079,0.369079,0.369079,0.369079
+MG_183,pepF,oligoendopeptidase F,0.560583,0.560583,0.851454,0.65754
+MG_184,MunI,adenine-specific DNA modification methylase,0.242995,0.262429,0.403041,0.302822
+MG_185,,"lipoprotein, putative",1.29325,1.09733,1.91853,1.43637
+MG_186,,"Oligosaccharide or polyol ABC transporter, substrate binding protein",0.851454,0.851454,0.851454,0.851454
+MG_187,,"Oligosaccharide or polyol ABC transporter, ATP-binding protein",0.369079,0.560583,0.369079,0.432914
+MG_188,,"Oligosaccharide or polyol ABC transporter, permease protein",0.560583,0.851454,0.560583,0.65754
+MG_189,,"Oligosaccharide or polyol ABC transporter, permease protein",0.851454,1.29325,0.851454,0.998719
+MG_190,"mgpA, recJ",phosphoesterase,1.29325,0.851454,0.851454,0.998719
+MG_191,"mgpB, MgPa, P1, p140",MgPa adhesin,1.29325,1.29325,1.29325,1.29325
+MG_192,"mgpC, p110, p40, p90, pre-B/C",P110 protein,1.29325,1.29325,1.29325,1.29325
+MG_194,pheS,"phenylalanyl-tRNA synthetase, alpha subunit",1.96428,1.96428,1.96428,1.96428
+MG_195,pheT,"phenylalanyl-tRNA synthetase, beta subunit",0.560583,0.560583,0.560583,0.560583
+MG_196,infC,translation initiation factor IF-3,1.96428,1.96428,1.96428,1.96428
+MG_197,rpmI,ribosomal protein L35,0.851454,1.29325,1.29325,1.14598
+MG_198,rplT,ribosomal protein L20,1.96428,2.98349,1.96428,2.30402
+MG_199,rnhC,"ribonuclease HIII, putative, frameshift",1.29325,0.851454,0.851454,0.998719
+MG_200,,DnaJ domain protein,0.851454,0.851454,0.851454,0.851454
+MG_201,grpE,co-chaperone GrpE,1.29325,1.29325,1.29325,1.29325
+MG_202,,,1.29325,1.29325,1.29325,1.29325
+MG479,,"tRNA-THR (ACC, ACT)",542.549,535.399,558.233,545.394
+MG_203,parE,"DNA topoisomerase IV, B subunit",0.851454,1.29325,1.29325,1.14598
+MG_204,parC,"DNA topoisomerase IV, A subunit",0.560583,0.560583,0.851454,0.65754
+MG_205,hrcA,"heat-inducible transcription repressor HrcA, putative",0.851454,0.560583,0.560583,0.65754
+MG_206,uvrC,"excinuclease ABC, C subunit",1.29325,1.29325,1.29325,1.29325
+MG_207,,Ser/Thr protein phosphatase 2A,2.98349,3.27161,2.98349,3.07953
+MG_208,,glycoprotease,0.851454,0.851454,0.851454,0.851454
+MG_209,"yceC, rluA, rluC","23S rRNA pseudouridine synthase; U955, U2504, U2580",0.369079,0.369079,0.159984,0.299381
+MG_210,lspA,"prolipoprotein signal peptidase, signal peptidase II",0.851454,0.560583,0.560583,0.65754
+MG_480,,,1.96428,1.29325,1.29325,1.51693
+MG_481,rpsU,30S ribosomal protein S21,1.02765,1.16082,1.37021,1.18623
+MG_211,,,0.851454,0.560583,0.560583,0.65754
+MG_482,acpS,holo-(acyl-carrier-protein) synthase,1.96428,1.96428,1.96428,1.96428
+MG_212,plsC,"1-acyl-sn-glycerol-3-phosphate acyltransferase, putative",0.560583,0.369079,0.369079,0.432914
+MG_213,scpA,segregation and condensation protein A,0.851454,0.851454,0.851454,0.851454
+MG_214,scpB,segregation and condensation protein B,0.851454,0.560583,0.560583,0.65754
+MG_215,pfk,6-phosphofructokinase,3.78423,2.98349,2.98349,3.2504
+MG_216,pyk,pyruvate kinase,4.11246,3.20428,2.98349,3.43341
+MG483,,"tRNA-CYS (TGC, TGT)",38.3397,37.8344,39.448,38.5407
+MG484,,"tRNA-PRO (CCA, CCC, CCG, CCT)",1337.29,1319.67,1375.95,1344.3
+MG485,,tRNA-MET (ATG),299.561,295.613,308.22,301.131
+MG486,,tRNA-ILE (ATA),1004.5,991.262,1033.54,1009.77
+MG487,,tRNA-SER (TCA),397.966,392.721,409.47,400.052
+MG488,,"tRNA-FMET (YATA, ATC, ATG, ATT, TTA, TTG, GTG)",299.561,295.613,308.22,301.131
+MG489,,"tRNA-ASP (GAC, GAT)",1942.54,1916.95,1998.7,1952.73
+MG490,,"tRNA-PHE (TTC, TTT)",1282.08,1265.18,1319.14,1288.8
+MG_217,p65,P65 adhesin,1.29325,1.29325,1.96428,1.51693
+MG_218,hmw2,high molecular weight cytadherence accessory protein 2,1.96428,1.96428,1.96428,1.96428
+MG_491,,,1.96428,1.96428,1.96428,1.96428
+MG_219,,,1.70882,1.70882,1.96428,1.79397
+MG_220,,,0.560583,0.560583,0.560583,0.560583
+MG492,,"tRNA-ARG (CGC, CGT)",269.144,265.598,276.925,270.556
+MG_221,mraZ,mraZ protein,2.98349,1.96428,2.98349,2.64375
+MG_222,mraW,S-adenosyl-methyltransferase MraW,2.98349,1.89474,2.94241,2.60688
+MG_223,,,1.96428,1.96428,1.96428,1.96428
+MG_224,ftsZ,cell division protein FtsZ,1.96428,1.29325,1.96428,1.7406
+MG_225,potE2,amino acid-polyamine-organocation (APC) permease,0.851454,0.851454,1.29325,0.998719
+MG_226,"potE1, aroP",amino acid-polyamine-organocation (APC) permease,0.560583,0.851454,0.851454,0.754497
+MG_227,thyA,thymidylate synthase,1.96428,1.96428,1.96428,1.96428
+MG_228,dhfR,dihydrofolate reductase,1.96428,1.96428,1.29325,1.7406
+MG_229,nrdF,"ribonucleoside-diphosphate reductase, beta chain",1.96428,1.29325,1.29325,1.51693
+MG_230,nrdI,ribonucleotide reductase stimulatory protein,1.96428,1.96428,1.96428,1.96428
+MG_231,nrdE,"ribonucleoside-diphosphate reductase, alpha chain",1.96428,1.96428,1.96428,1.96428
+MG_232,rplU,ribosomal protein L21,0.851454,1.29325,0.851454,0.998719
+MG_233,,,1.29325,1.29325,1.29325,1.29325
+MG_234,rpmA,ribosomal protein L27,1.29325,1.96428,1.29325,1.51693
+MG_235,nfo,apurinic endonuclease,0.560583,0.851454,0.851454,0.754497
+MG_236,fur,ferric uptake repressor,1.29325,1.96428,1.96428,1.7406
+MG_237,,,0.242995,0.560583,0.369079,0.390886
+MG_238,tig,trigger factor,4.05584,2.98349,3.86375,3.63436
+MG_239,lon,ATP-dependent protease La,1.96428,1.15029,2.50012,1.87156
+MG_240,nadR,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,0.851454,0.851454,0.560583,0.754497
+MG_241,,,0.242995,0.369079,0.242995,0.285023
+MG_242,,,0.242995,0.369079,0.369079,0.327051
+MG_243,,"conserved hypothetical protein, authentic frameshift",0.369079,0.369079,0.369079,0.369079
+MG_244,"pcrA, uvrD, recB",3-5' helicase,0.242995,0.369079,0.369079,0.327051
+MG_245,,"5-formyltetrahydrofolate cyclo-ligase, putative",0.851454,0.560583,0.560583,0.65754
+MG_246,,Ser/Thr protein phosphatase 2A,0.369079,0.369079,0.369079,0.369079
+MG_247,,"membrane protein, putative",0.560583,0.75891,1.16716,0.828884
+MG_248,,,0.369079,0.560583,0.851454,0.593705
+MG_249,rpoD,RNA polymerase sigma factor RpoD,0.851454,1.42306,2.46741,1.58064
+MG_250,dnaG,DNA primase,0.369079,0.369079,0.242995,0.327051
+MG_251,glyS,glycyl-tRNA synthetase,0.560583,0.560583,0.560583,0.560583
+MG_252,"rlmB, yjfH",23S rRNA methyltransferase; G2251,0.560583,0.851454,0.560583,0.65754
+MG_253,cysS,cysteinyl-tRNA synthetase,0.242995,0.560583,0.242995,0.348858
+MG_254,ligA,"DNA ligase, NAD-dependent",0.369079,0.560583,0.560583,0.496748
+MG493,,"tRNA-GLY (GGC, GGT)",1092.42,1078.03,1124,1098.15
+MG_255,,,1.29325,1.29325,1.29325,1.29325
+MG_494,,,0.973101,0.972591,1.00471,0.983467
+MG495,,tRNA-ARG (AGG),269.144,265.598,276.925,270.556
+MG496,,tRNA-TRP (TGG),19.1698,18.9172,19.724,19.2703
+MG_256,,,0.851454,0.851454,0.560583,0.754497
+MG_257,rpmE,ribosomal protein L31,0.560583,0.560583,0.369079,0.496748
+MG_258,prfA,peptide chain release factor 1,0.560583,0.851454,0.851454,0.754497
+MG_259,hemG,modification methylase,0.369079,0.369079,0.369079,0.369079
+MG_260,,"lipoprotein, putative",0.851454,0.851454,0.851454,0.851454
+MG497,,"tRNA-ARG (CGA, CGG)",269.144,265.598,276.925,270.556
+MG_261,polC-2,"DNA polymerase III, alpha subunit",0.851454,0.851454,0.851454,0.851454
+MG_262,polA,"polI-like 5'-3' exonuclease, putative",0.851454,0.560583,0.560583,0.65754
+MG_498,"mutM, fpg",formamidopyrimidine-DNA glycosylase,0.851454,0.851454,0.851454,0.851454
+MG_263,,Cof-like hydrolase,0.851454,1.29325,0.851454,0.998719
+MG_264,coaE,dephospho-CoA kinase,0.851454,0.851454,0.851454,0.851454
+MG_265,ybiV,sugar phosphatase,0.560583,0.560583,0.560583,0.560583
+MG_266,leuS,leucyl-tRNA synthetase,0.851454,0.851454,0.851454,0.851454
+MG_267,,,1.96428,1.29325,1.96428,1.7406
+MG_268,,,3.86375,2.98349,2.98349,3.27691
+MG_0001,"ffs, 4.5S RNA, scRNA","scRNA, signal recognition particle 4.5S RNA, MCS1",736.872,727.162,758.172,740.735
+MG_269,,,1.29325,1.96428,1.29325,1.51693
+MG_270,lplA,"lipoyltransferase/lipoate-protein ligase, putative",0.851454,0.851454,0.560583,0.754497
+MG_271,lpdA,dihydrolipoamide dehydrogenase,0.851454,0.851454,0.560583,0.754497
+MG_272,pdhC,dihydrolipoamide acetyltransferase,1.29325,0.851454,0.851454,0.998719
+MG_0002,,MG170 RNA,442.124,436.297,454.904,444.442
+MG_273,pdhB,"pyruvate dehydrogenase component E1, beta subunit",4.22807,3.78423,3.36359,3.79196
+MG_274,pdhA,"pyruvate dehydrogenase component E1, alpha subunit",2.98349,2.98349,1.96428,2.64375
+MG_275,nox,NADH oxidase,2.98349,2.98349,1.96428,2.64375
+MG_276,apt,adenine phosphoribosyltransferase,0.851454,0.851454,0.560583,0.754497
+MG_277,secDF,Protein-export membrane protein secDF,2.98349,1.96428,1.96428,2.30402
+MG_278,"relA, spoT",GTP diphosphokinase,0.560583,0.369079,0.560583,0.496748
+MG_279,,,1.29325,0.851454,1.29325,1.14598
+MG_280,htrII,sensory rhodopsin II transducer motif,2.98349,1.96428,1.96428,2.30402
+MG_281,,,2.98349,1.96428,2.98349,2.64375
+MG499,,"tRNA-GLY (GGA, GGG)",1092.42,1078.03,1124,1098.15
+MG500,,tRNA-LEU (TTA),674.778,665.886,694.284,678.316
+MG501,,tRNA-LYS (AAA),1447.19,1428.12,1489.03,1454.78
+MG502,,"tRNA-GLN (CAA, CAG)",1691.55,1669.26,1740.44,1700.42
+MG503,,"tRNA-TYR (TAC, TAT)",1064.31,1050.28,1095.08,1069.89
+MG_282,greA,transcription elongation factor GreA,2.98349,2.98349,2.98349,2.98349
+MG_283,proS,prolyl-tRNA synthetase,0.851454,0.851454,0.851454,0.851454
+MG_284,,,1.29325,1.29325,0.851454,1.14598
+MG_285,,,1.29325,1.29325,0.851454,1.14598
+MG_286,,,0.851454,0.851454,0.560583,0.754497
+MG_287,acpP,acyl carrier protein,1.29325,1.29325,1.29325,1.29325
+MG504,,tRNA-TRP (TGA),19.1698,18.9172,19.724,19.2703
+MG_288,,protein L,0,0,0,0
+MG_289,phnD,"phosphonate ABC transporter, substrate binding protein (P37), putative",0.851454,0.560583,0.851454,0.754497
+MG_290,phnC,"phosphonate ABC transporter, ATP-binding protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_291,phnE,"phosphonate ABC transporter, permease protein (P69), putative",0.369079,0.242995,0.369079,0.327051
+MG_505,,putative holliday junction resolvase,1.29325,1.29325,1.29325,1.29325
+MG_292,alaS,alanyl-tRNA synthetase,0.832928,0.88813,0.895613,0.872224
+MG_293,glpQ,glycerophosphoryl diester phosphodiesterase,1.96428,2.60088,2.05196,2.20571
+MG_294,yihN,major facilitator superfamily (MFS) protein,0.851454,0.560583,0.560583,0.65754
+MG_295,"mnmA, asuE, trmU",tRNA U34 sulfurtransferase,1.29325,1.29325,0.851454,1.14598
+MG_296,,,0.851454,0.851454,0.851454,0.851454
+MG_297,ftsY,signal recognition particle receptor,0.851454,0.560583,0.851454,0.754497
+MG_298,smc,chromosome segregation protein SMC,0.851454,1.29325,0.851454,0.998719
+MG_299,pta,phosphate acetyltransferase,1.29325,1.29325,1.29325,1.29325
+MG_300,pgk,phosphoglycerate kinase,1.96428,1.29325,1.29325,1.51693
+MG_301,gap,"glyceraldehyde-3-phosphate dehydrogenase, type I",2.98349,1.29325,1.96428,2.08034
+MG_302,cbiQ,"metal ion (cobalt) ABC transporter, permease protein, putative",0.560583,0.560583,0.369079,0.496748
+MG_303,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",2.98349,2.98349,2.98349,2.98349
+MG_304,cbiO,"metal ion (cobalt) ABC transporter, ATP-binding protein, putative",0.242995,0.560583,0.369079,0.390886
+MG_305,dnaK,chaperone,1.96428,1.59438,3.11882,2.22583
+MG_306,,"membrane protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_307,,"lipoprotein, putative",0.851454,0.851454,0.560583,0.754497
+MG_308,,ATP-dependent RNA helicase,0.851454,0.851454,0.851454,0.851454
+MG_309,,"lipoprotein, putative",1.29325,0.851454,0.851454,0.998719
+MG_310,,"hydrolase, Putative esterase/lipase 1",1.96428,1.96428,1.96428,1.96428
+MG_311,rpsD,ribosomal protein S4,0.851454,0.851454,0.851454,0.851454
+MG_312,hmw1,high molecular weight cytadherence accessory protein 1,1.96428,2.98349,1.96428,2.30402
+MG_313,,"membrane protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_314,,,0.560583,0.851454,0.851454,0.754497
+MG_315,holA,"DNA polymerase III, delta subunit, putative",0.851454,0.560583,0.560583,0.65754
+MG_316,comEC,DNA internalization-related competence protein ComEC/Rec2,0.560583,0.560583,0.369079,0.496748
+MG_317,"hmw3, p69",high molecular weight cytadherence accessory protein 3,1.29325,1.29325,1.29325,1.29325
+MG_318,"p32, p30",P32 adhesin,1.29325,1.96428,1.29325,1.51693
+MG_319,,,2.98349,2.98349,2.98349,2.98349
+MG_320,,"membrane protein, putative",1.29325,1.74231,1.2466,1.42739
+MG506,,"tRNA-SER (TCC, TCT)",397.966,392.721,409.47,400.052
+MG507,,tRNA-SER (TCG),397.966,392.721,409.47,400.052
+MG_321,oppA,"oligopeptide ABC transporter, substrate binding protein",0.560583,1.29325,1.29325,1.04903
+MG508,,"tRNA-LEU (CTA, CTG)",674.778,665.886,694.284,678.316
+MG509,,tRNA-LYS (AAG),1447.19,1428.12,1489.03,1454.78
+MG510,,tRNA-THR (ACA),542.549,535.399,558.233,545.394
+MG511,,"tRNA-VAL (GTA, GTC, GTG, GTT)",2115.33,2087.45,2176.48,2126.42
+MG512,,tRNA-THR (ACG),542.549,535.399,558.233,545.394
+MG513,,"tRNA-GLU (GAA, GAG)",1691.55,1669.26,1740.44,1700.42
+MG514,,"tRNA-ASN (AAC, AAT)",1942.54,1916.95,1998.7,1952.73
+MG_322,trkH,potassium uptake protein,0.242995,0.369079,0.242995,0.285023
+MG_323,trkA,potassium uptake protein,0.851454,0.851454,0.851454,0.851454
+MG_0003,rpnB,"Rnase P RNA, MCS5, M1 RNA",442.124,436.297,454.904,444.442
+MG_0004,ssrA,"transfer-messenger RNA, tmRNA, MCS6, 10Sa RNA",147.374,145.432,151.635,148.147
+MG_515,,,0.851454,0.851454,0.851454,0.851454
+MG_324,"yihN, pepP",aminopeptidase,0.851454,0.851454,0.851454,0.851454
+MG_325,rpmG,ribosomal protein L33,3.83706,2.98349,2.98349,3.26801
+MG_326,,degV family protein,0.851454,0.851454,0.560583,0.754497
+MG_327,,"hydrolase, Putative esterase/lipase 2",0.560583,0.560583,0.560583,0.560583
+MG_328,,coiled coil putative structural protein involved in cytoskeleton,1.29325,1.96428,1.96428,1.7406
+MG_329,"engA, yfgK, yphC",GTP-binding protein engA,0.560583,0.851454,1.29325,0.901762
+MG_330,cmk,cytidylate kinase,1.29325,1.96428,2.98349,2.08034
+MG_331,,,0.369079,0.560583,0.560583,0.496748
+MG_332,yebC,,0.851454,0.851454,0.851454,0.851454
+MG_333,azoR,"FMN-dependent NADH-azoreductase, putative",0.851454,0.851454,0.560583,0.754497
+MG_334,valS,valyl-tRNA synthetase,0.369079,0.367547,0.852635,0.529754
+MG_335,"engB, yihA, ysxC","GTP-binding protein engB, putative",0.369079,0.333094,1.03958,0.580584
+MG_516,,,0.788274,0.872084,1.01553,0.891963
+MG_517,,"glycosyl transferase, group 2 family protein",0.242995,0.242995,0.242995,0.242995
+MG_336,"csdA, nifS",cysteine desulfurase,0.851454,0.851454,0.851454,0.851454
+MG_337,,,0.851454,0.851454,1.29325,0.998719
+MG_338,,"lipoprotein, putative",0.851454,0.851454,0.851454,0.851454
+MG_339,recA,"recombination protein, strand exchange",0.851454,0.560583,0.851454,0.754497
+MG_340,rpoC,"DNA-directed RNA polymerase, beta subunit",1.96428,2.98349,2.98349,2.64375
+MG_341,rpoB,"DNA-directed RNA polymerase, beta subunit",0.851454,1.29325,1.29325,1.14598
+MG_342,fre,NADPH-dependent FMN reductase domain protein,1.96428,1.29325,1.29325,1.51693
+MG_343,,,2.98349,2.98349,2.98349,2.98349
+MG_344,,"hydrolase, Putative esterase/lipase 3",0.369079,0.242995,0.369079,0.327051
+MG_345,ileS,isoleucyl-tRNA synthetase,0.851454,0.560583,0.851454,0.754497
+MG_346,yibK,23S rRNA methyltransferase; U2552,0.851454,0.560583,0.560583,0.65754
+MG_347,"trmI, trmB",tRNA (guanine-N(7)-)-methyltransferase,0.369079,0.369079,0.242995,0.327051
+MG518,,"tRNA-HIS (CAC, CAT)",488.703,482.263,502.83,491.265
+MG_348,,"lipoprotein, putative",1.96428,1.29325,1.96428,1.7406
+MG519,,"tRNA-LEU (CTC, CTT)",674.778,665.886,694.284,678.316
+MG_349,dnaB,Replication initiation/membrane attachment protein,0.560583,0.369079,0.560583,0.496748
+MG_350,,,0.560583,0.560583,0.560583,0.560583
+MG520,,tRNA-LEU (TTG),674.778,665.886,694.284,678.316
+MG_521,,"membrane protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_351,ppa,inorganic pyrophosphatase,0.851454,0.851454,0.851454,0.851454
+MG_352,"recU, ruvC",Holliday junction endonuclease,0.851454,0.851454,0.851454,0.851454
+MG_353,,"DNA-binding protein HU, putative",0.560583,0.851454,0.851454,0.754497
+MG_354,,,1.29325,0.851454,1.29325,1.14598
+MG_355,clpB,"ATP-dependent Clp protease, ATPase subunit",2.98349,1.69937,6.95958,3.88081
+MG_356,,"choline/ethanolamine kinase, putative",1.96428,1.29325,1.29325,1.51693
+MG_357,ackA,acetate kinase,1.29325,0.851454,1.29325,1.14598
+MG_358,ruvA,Holliday junction DNA helicase,0.369079,0.369079,0.369079,0.369079
+MG_359,ruvB,Holliday junction DNA helicase RuvB,0.560583,0.369079,0.560583,0.496748
+MG_360,"dinB, umuC",ImpB/MucB/SamB family protein,0.851454,0.560583,0.851454,0.754497
+MG_361,rplJ,ribosomal protein L10,0.560583,0.560583,0.560583,0.560583
+MG_362,rplL,ribosomal protein L7/L12,0.851454,0.851454,0.851454,0.851454
+MG_363,rpmF,ribosomal protein L32,0.560583,0.560583,0.560583,0.560583
+MG_522,rpsT,ribosomal protein S20,1.29325,0.96929,1.49381,1.25212
+MG_364,mob13,Replication initiation/membrane attachment protein,1.29325,1.29325,1.29325,1.29325
+MG_365,fmt,methionyl-tRNA formyltransferase,0.560583,0.369079,0.560583,0.496748
+MG_366,,,0.369079,0.369079,0.560583,0.432914
+MG_367,rnc,ribonuclease III,0.851454,0.851454,0.851454,0.851454
+MG_368,plsX,fatty acid/phospholipid synthesis protein PlsX,1.29325,1.29325,1.29325,1.29325
+MG_369,dhaK,DAK2 phosphatase domain protein,0.560583,0.369079,0.369079,0.432914
+MG_370,"yfiI, rluA, rluD","23S rRNA pseudouridine synthase; U1911, U1915, U1917",0.369079,0.369079,0.369079,0.369079
+MG_371,,DHH family protein,1.29325,1.29325,1.29325,1.29325
+MG_372,"thiL, thiI",thiamine biosynthesis/tRNA modification protein ThiI,0.851454,0.851454,0.851454,0.851454
+MG_373,,,0.560583,0.560583,0.560583,0.560583
+MG_374,,,0.369079,0.560583,0.560583,0.496748
+MG_375,thrS,threonyl-tRNA synthetase,0.560583,0.851454,0.560583,0.65754
+MG_376,,,1.29325,1.29325,1.96428,1.51693
+MG_377,,,1.96428,1.96428,1.96428,1.96428
+MG_378,argS,arginyl-tRNA synthetase,0.369079,0.560583,0.560583,0.496748
+MG_379,gidA,tRNA uridine 5-carboxymethylaminomethyl modification enzyme GidA,0.851454,1.11188,1.43993,1.13442
+MG_380,"gidB, rsmG",methyltransferase GidB,0.851454,0.851454,0.851454,0.851454
+MG_381,,,0.560583,0.560583,0.851454,0.65754
+MG523,,tRNA-ARG (AGA),269.144,265.598,276.925,270.556
+MG_382,udk,uridine kinase,0.560583,0.560583,0.369079,0.496748
+MG_383,nadE,"NH(3)-dependent NAD+ synthetase, putative",0.369079,0.851454,0.560583,0.593705
+MG_384,"obg, cgtA, obgE, yhbZ",GTPase1 Obg,0.851454,0.851454,0.851454,0.851454
+MG_524,,,0.851454,0.560583,0.560583,0.65754
+MG_385,ugpQ,glycerophosphoryl diester phosphodiesterase family protein,1.29325,1.29325,0.851454,1.14598
+MG_386,p200,P200 protein,1.29325,1.29325,1.29325,1.29325
+MG_387,era,GTP-binding protein Era,0.369079,0.242995,0.242995,0.285023
+MG_388,,Putative metalloprotease,0.369079,0.159984,0.242995,0.257353
+MG_389,,,0.851454,0.369079,0.851454,0.690662
+MG_390,"sunT, lagD","toxin ABC transporter, ATP-binding/permease protein",0.369079,0.242995,0.369079,0.327051
+MG_391,pepA,cytosol aminopeptidase,1.96428,1.56157,2.33918,1.95501
+MG_392,"groEL, groL",chaperonin,2.98349,2.98349,3.81055,3.25918
+MG_393,"groES, groS","chaperonin, 10 kDa",4.08405,3.02723,4.58207,3.89778
+MG_394,glyA,serine hydroxymethyltransferase,1.29325,1.29325,1.29325,1.29325
+MG_395,,"lipoprotein, putative",1.29325,1.29325,1.29325,1.29325
+MG_396,rpiB,ribose 5-phosphate isomerase B,1.96428,1.96428,1.96428,1.96428
+MG_397,,,1.96428,2.98349,1.96428,2.30402
+MG_398,atpC,"ATP synthase F1, epsilon subunit",0.560583,0.560583,0.560583,0.560583
+MG_399,atpD,"ATP synthase F1, beta subunit",1.96428,1.96428,1.96428,1.96428
+MG_400,atpG,"ATP synthase F1, gamma subunit",1.96428,2.98349,1.96428,2.30402
+MG_401,atpA,"ATP synthase F1, alpha subunit",2.98349,3.55537,2.98349,3.17412
+MG_402,atpH,"ATP synthase F1, delta subunit",1.96428,2.98349,1.96428,2.30402
+MG_403,atpF,"ATP synthase F0, B subunit",1.29325,1.29325,1.29325,1.29325
+MG_404,atpE,"ATP synthase F0, C subunit",1.96428,2.98349,1.96428,2.30402
+MG_405,atpB,"ATP synthase F0, A subunit",0.851454,1.29325,1.29325,1.14598
+MG_406,,,1.72309,2.07314,1.75266,1.84963
+MG_407,eno,enolase,3.75809,2.98349,2.98349,3.24169
+MG_408,msrA,methionine-S-sulfoxide reductase,1.96428,1.96428,2.98349,2.30402
+MG_409,phoU,"phosphate transport system regulatory protein PhoU, putative",0.851454,0.851454,0.851454,0.851454
+MG_410,pstB,"phosphate ABC transporter, ATP-binding protein",0.851454,0.560583,0.242995,0.551677
+MG_411,ptsAC,"phosphate ABC transporter, permease protein PstA",0.560583,0.560583,0.560583,0.560583
+MG_412,,"phosphate ABC transporter, substrate-binding protein",1.29325,0.851454,1.29325,1.14598
+MG_414,,,0.369079,0.242995,0.159984,0.257353
+MG_525,,,0.973101,0.972591,1.00471,0.983467
+MG_417,rpsI,ribosomal protein S9,1.29325,1.29325,1.29325,1.29325
+MG_418,rplM,ribosomal protein L13,1.96428,0.851454,1.29325,1.36966
+MG_419,dnaX,"DNA polymerase III, subunit gamma and tau",1.29325,1.29325,0.851454,1.14598
+MG_421,uvrA,"excinuclease ABC, A subunit",0.369079,0.560583,0.560583,0.496748
+MG_422,,,0.560583,0.369079,0.369079,0.432914
+MG_423,,metallo-beta-lactamase superfamily protein,0.851454,0.797745,1.35473,1.00131
+MG_424,rpsO,ribosomal protein S15,2.98349,2.98349,2.98349,2.98349
+MG_425,deaD,ATP-dependent RNA helicase,0.369079,0.369079,0.369079,0.369079
+MG_426,rpmB,ribosomal protein L28,3.94493,4.85678,5.09824,4.63332
+MG_427,osmC,osmotically inducible peroxidase,1.29325,1.96428,1.29325,1.51693
+MG_428,"gerE, luxR","LuxR bacterial regulatory protein, putative",0.560583,0.560583,0.560583,0.560583
+MG_429,ptsI,"PTS system, E1",0.851454,0.851454,0.560583,0.754497
+MG_430,gpmI,"2,3-bisphosphoglycerate-independent phosphoglycerate mutase",0.851454,1.29325,1.29325,1.14598
+MG_431,tpiA,triosephosphate isomerase,1.29325,1.29325,1.29325,1.29325
+MG_432,,"membrane protein, putative",0.560583,0.851454,0.851454,0.754497
+MG_433,tsf,translation elongation factor Ts,1.29325,1.96428,1.29325,1.51693
+MG_434,pyrH,uridylate kinase,0.560583,0.851454,0.560583,0.65754
+MG_435,frr,ribosome recycling factor,1.29325,1.47325,1.87774,1.54808
+MG_437,cdsA,phosphatidate cytidylyltransferase,0.560583,0.560583,0.851454,0.65754
+MG_438,"ecoD, hsdS",type I restriction modification DNA specificity domain protein,1.29325,1.29325,1.29325,1.29325
+MG_439,,"lipoprotein, putative",1.29325,1.29325,1.29325,1.29325
+MG_440,,"lipoprotein, putative",0.560583,0.560583,0.560583,0.560583
+MG_441,,,0.851454,0.560583,0.560583,0.65754
+MG_442,"rbgA, ylqF",ribosomal biogenesis GTPase,0.560583,0.369079,0.560583,0.496748
+MG_443,,"membrane protein, putative",0.560583,0.851454,0.851454,0.754497
+MG_444,rplS,ribosomal protein L19,0.851454,1.29325,1.29325,1.14598
+MG_445,trmD,tRNA (guanine-N1)-methyltransferase,1.96428,1.96428,1.96428,1.96428
+MG_446,rpsP,ribosomal protein S16,1.29325,1.29325,1.29325,1.29325
+MG_447,norM,multidrug efflux pump,0.560583,0.369079,0.369079,0.432914
+MG_448,msrB,methionine-R-sulfoxide reductase,1.29325,0.851454,1.29325,1.14598
+MG_449,,"conserved hypothetical protein, authentic frameshift",0,0,0,0
+MG_450,,degV family protein,0.851454,0.560583,0.560583,0.65754
+MG_451,tuf,translation elongation factor Tu,4.89056,4.34694,4.16986,4.46912
+MG_452,,"membrane protein, putative",0.851454,0.851454,0.560583,0.754497
+MG_453,galU,UTP-glucose-1-phosphate uridylyltransferase,1.29325,1.7593,1.089,1.38052
+MG_454,ohr,thiol-dependent peroxidase,2.98349,1.96428,1.96428,2.30402
+MG_455,tyrS,tyrosyl-tRNA synthetase,1.29325,1.96428,1.29325,1.51693
+MG_456,,,1.29325,1.29325,1.29325,1.29325
+MG_457,ftsH,ATP-dependent metalloprotease FtsH,0.851454,0.851454,1.29325,0.998719
+MG_458,hpt,hypoxanthine phosphoribosyltransferase,1.96428,1.96428,1.29325,1.7406
+MG_459,,"putative 2-C-methyl-D-erythritol-2,4-cyclodiphosphate synthase",1.96428,1.96428,1.29325,1.7406
+MG_460,ldh,L-lactate dehydrogenase/malate dehydrogenase,2.98349,1.96428,1.96428,2.30402
+MG_461,,HD domain protein,0.851454,1.29325,0.851454,0.998719
+MG_462,gltX,glutamyl-tRNA synthetase,2.98349,2.98349,2.98349,2.98349
+MG_463,"ksgA, rsmA",dimethyladenosine transferase,1.96428,1.29325,1.29325,1.51693
+MG_464,yidC,inner-membrane protein insertion factor,0.560583,0.851454,0.851454,0.754497
+MG_465,rnpA,ribonuclease P protein component,1.29325,1.96428,1.96428,1.7406
+MG_466,rpL34,ribosomal protein L34,1.29325,1.96428,1.96428,1.7406
+MG_467,,"salivaricin A ABC transporter, ATP-binding protein",0.851454,0.560583,0.560583,0.65754
+MG_468,,"salivaricin A ABC transporter, permease protein",0.851454,0.560583,0.560583,0.65754
+MG_526,,"salivaricin A ABC transporter, ATP-binding protein",2.98349,3.49914,2.19923,2.89395
+MG_469,dnaA,chromosomal replication initiator protein DnaA,0.851454,0.560583,0.851454,0.754497
+MG_470,"soj, parA",CobQ/CobB/MinD/ParA nucleotide binding domain,3.65533,3.70635,3.86375,3.74181
