@@ -367,7 +367,7 @@ _save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY
 # | mass-doubles-in-cycle | kind=derived_scalar field=final_mass_ratio | op range low 1.9 high 2.1 provenance {'kind': 'theory', 'note': 'A cell doubles its mass per cycle; achieved 2.000.'} |
 # | protein-dominant-composition | kind=derived_scalar field=protein_fraction | op range low 0.55 high 0.68 provenance {'kind': 'experiment', 'note': 'Fitted protein fraction 0.620 (Fig 2C).'} |
 
-# ## Study: Fig 3 (2G/2H) — Single-cell expression: bursty mRNA vs accumulating protein (`fig3-expression`)
+# ## Study: Fig 3 — Chromosome DNA-protein interactions (viva-Mgen) (`fig3-expression`)
 #
 # **Question.** Does the reduced viva-Mgen expression module (stochastic transcription +
 # translation + RNA/protein decay on a representative gene panel) reproduce the
@@ -421,35 +421,35 @@ print("No recorded runs for this study; nothing to reproduce.")
 # fig3-combined
 _save_viz('fig3-expression', 'fig3-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig3-a-exploration**
+# **fig3-a-occupancy**
 
-# fig3-a-exploration
-_save_viz('fig3-expression', 'fig3-a-exploration', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig3-a-occupancy
+_save_viz('fig3-expression', 'fig3-a-occupancy', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig3-b-t50**
+# **fig3-b-explored**
 
-# fig3-b-t50
-_save_viz('fig3-expression', 'fig3-b-t50', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig3-b-explored
+_save_viz('fig3-expression', 'fig3-b-explored', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig3-c-traces**
+# **fig3-c-rna-expressed**
 
-# fig3-c-traces
-_save_viz('fig3-expression', 'fig3-c-traces', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig3-c-rna-expressed
+_save_viz('fig3-expression', 'fig3-c-rna-expressed', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **fig3-d-heatmap**
+# **fig3-d-polymerase-traces**
 
-# fig3-d-heatmap
-_save_viz('fig3-expression', 'fig3-d-heatmap', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig3-d-polymerase-traces
+_save_viz('fig3-expression', 'fig3-d-polymerase-traces', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **expression-timeseries**
+# **fig3-e-collision-matrix**
 
-# expression-timeseries
-_save_viz('fig3-expression', 'expression-timeseries', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig3-e-collision-matrix
+_save_viz('fig3-expression', 'fig3-e-collision-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **protein-vs-mrna**
+# **fig3-f-collisions-vs-density**
 
-# protein-vs-mrna
-_save_viz('fig3-expression', 'protein-vs-mrna', _render_one('', {}, RUNS_DB, STUDY_YAML))
+# fig3-f-collisions-vs-density
+_save_viz('fig3-expression', 'fig3-f-collisions-vs-density', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
