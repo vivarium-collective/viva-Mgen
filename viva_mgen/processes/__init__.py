@@ -20,7 +20,7 @@ from .translation import TranslationReproductionProcess
 from .decay import RnaDecayReproductionProcess, ProteinDecayReproductionProcess
 from .replication import ReplicationReproductionProcess
 # migrated submodels (one module per category)
-from . import dna, rna, protein, cytokinesis
+from . import dna, rna, protein, cytokinesis, chromosome
 
 _CORE_MODS = None
 
@@ -30,7 +30,7 @@ def all_process_classes() -> dict:
     across the process submodules (core + migrated)."""
     from . import metabolism, mass, transcription, translation, decay, replication
     mods = [metabolism, mass, transcription, translation, decay, replication,
-            dna, rna, protein, cytokinesis]
+            dna, rna, protein, cytokinesis, chromosome]
     out = {}
     for mod in mods:
         for name, obj in inspect.getmembers(mod, inspect.isclass):

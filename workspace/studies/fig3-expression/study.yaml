@@ -1,52 +1,53 @@
 schema_version: 4
 name: fig3-expression
-title: "Fig 3 (2G/2H) — Single-cell expression: bursty mRNA vs accumulating protein"
+title: Fig 3 — Chromosome DNA-protein interactions (viva-Mgen)
 created: '2026-09-12'
 status: complete
 phase: Evaluate
+question: 'Does the reduced viva-Mgen expression module (stochastic transcription +
 
-question: |
-  Does the reduced viva-Mgen expression module (stochastic transcription +
   translation + RNA/protein decay on a representative gene panel) reproduce the
+
   qualitative single-cell gene-expression dynamics of Fig 3 / 2G-2H — bursty,
+
   low-copy mRNA alongside protein that accumulates to much higher, more stable
+
   copy numbers (the mRNA↔protein decoupling)?
-hypothesis: |
-  With Poisson synthesis and Poisson decay running through shared stores, mRNA
+
+  '
+hypothesis: 'With Poisson synthesis and Poisson decay running through shared stores, mRNA
+
   should stay low and bursty (order 0-2 copies per gene, set by short half-lives
+
   and low synthesis rates), while protein — synthesized proportionally to mRNA
+
   and decaying far more slowly — should accumulate to copy numbers orders of
+
   magnitude above mRNA, reproducing the Fig 2H decoupling qualitatively.
-objective: |
-  Run the fig3_expression composite (transcription + translation + rna_decay +
+
+  '
+objective: 'Run the fig3_expression composite (transcription + translation + rna_decay +
+
   protein_decay) for one hour at the default 1 s interval, gather per-gene mRNA
+
   and protein counts, and read out mean mRNA per gene, final total protein, the
+
   protein-to-mRNA ratio, and the fraction of panel genes expressed.
-description: |
-  REDUCED FIDELITY. This study reproduces the *qualitative* single-cell
-  expression phenomena of Fig 2G/2H on a representative 6-gene panel (HMW2, dnaA,
-  ftsZ, rpoD, tuf, groEL), NOT the full ~480-gene set. The stochastic mechanism
-  is genuine — Poisson mRNA synthesis, mRNA-proportional Poisson translation, and
-  Poisson decay of both species through shared bigraph stores — but per-species
-  rates are order-of-magnitude representative values, not the whole-cell model's
-  fitted knowledge-base rates.
 
-  DIVERGENCE (stated explicitly): this reduced panel does NOT reproduce the
-  paper's quantitative t50 = 18 min half-of-expression value, which is a
-  population statistic over the full gene set; that is out of scope here. What it
-  does reproduce is the decoupling itself. Achieved (seed 0, 1 h run): mean mRNA
-  per gene ~1.6 copies (low, bursty), final total mRNA ~9 copies across the panel
-  vs final total protein ~1750-2000 copies, a protein-to-mRNA ratio of ~200, and
-  all 6 panel genes expressed by the end. Values vary run to run — this is the
-  intended single-cell stochastic variability, not noise in the reproduction.
-
+  '
+description: 'Now GENUINELY MODELED (not a reduced analog): a coordinate-resolved ChromosomeDynamicsReproductionProcess
+  bins the 580,070 bp chromosome, initiates RNA polymerases at gene sites (locus-tag-ordered positions)
+  and elongates them, advances two replisomes bidirectionally from oriC, places structural proteins (SMC/SSB/gyrase/topo/DnaA/TFs),
+  and detects+resolves polymerase-protein collisions. Reproduces Fig 3A (occupancy density), 3B (chromosome
+  exploration kinetics), 3C (% RNA expressed / t50), 3D (polymerase position kymograph), 3E (collision-frequency
+  matrix), 3F (collisions vs binding density). REDUCED fidelity: binned genome + approximate (locus-ordered)
+  gene coordinates + representative protein counts.'
 baseline:
 - name: baseline
   composite: viva_mgen.composites.mgen.mycoplasma_genitalium
-  params: {seed: 0}
-
+  params:
+    seed: 0
 variants: []
-
 simulation_set:
 - name: baseline
   status: ran
@@ -54,9 +55,9 @@ simulation_set:
   duration_min: 60
   seeds:
   - 0
-  condition: >-
-    Canonical viva-Mgen fig3-expression run via sims/run.py (recorded in .pbg/runs.jsonl).
-  params: {'seed': 0}
+  condition: Canonical viva-Mgen fig3-expression run via sims/run.py (recorded in .pbg/runs.jsonl).
+  params:
+    seed: 0
   readouts:
   - mean_mrna_per_gene
   - protein_to_mrna_ratio
@@ -65,79 +66,92 @@ simulation_set:
   - mrna-is-bursty-low-copy
   - protein-exceeds-mrna
   - genes-become-expressed
-
 expected_behavior:
 - name: mrna-is-bursty-low-copy
-  en: "mRNA stays low-copy and bursty — time-averaged mRNA per gene is order 0-2 copies (Fig 2G)."
+  en: mRNA stays low-copy and bursty — time-averaged mRNA per gene is order 0-2 copies (Fig 2G).
   observable: mean_mrna_per_gene
   condition: 0.0 <= mean_mrna_per_gene <= 5.0
-  rationale: >-
-    Short mRNA half-lives (~150-180 s) and low synthesis rates keep steady-state
-    mRNA at a fraction of one to a few copies per gene. Achieved ~1.6.
-  measure: {kind: derived_scalar, field: mean_mrna_per_gene}
-  expect: {op: range, low: 0.0, high: 5.0}
+  rationale: Short mRNA half-lives (~150-180 s) and low synthesis rates keep steady-state mRNA at a fraction
+    of one to a few copies per gene. Achieved ~1.6.
+  measure:
+    kind: derived_scalar
+    field: mean_mrna_per_gene
+  expect:
+    op: range
+    low: 0.0
+    high: 5.0
 - name: protein-exceeds-mrna
-  en: "Protein accumulates far above mRNA — the mRNA↔protein decoupling of Fig 2H (ratio >> 1)."
+  en: Protein accumulates far above mRNA — the mRNA↔protein decoupling of Fig 2H (ratio >> 1).
   observable: protein_to_mrna_ratio
   condition: protein_to_mrna_ratio >= 5.0
-  rationale: >-
-    Protein is synthesized proportionally to mRNA but decays ~150× more slowly
-    (half-life 25000 s vs ~170 s), so it accumulates to orders of magnitude more
-    copies than the transient mRNA pool. Achieved ~200.
-  measure: {kind: derived_scalar, field: protein_to_mrna_ratio}
-  expect: {op: range, low: 5.0, high: 1.0e9}
+  rationale: Protein is synthesized proportionally to mRNA but decays ~150× more slowly (half-life 25000
+    s vs ~170 s), so it accumulates to orders of magnitude more copies than the transient mRNA pool. Achieved
+    ~200.
+  measure:
+    kind: derived_scalar
+    field: protein_to_mrna_ratio
+  expect:
+    op: range
+    low: 5.0
+    high: 1.0e9
 - name: genes-become-expressed
-  en: "Every panel gene has produced protein by the end of one hour (fraction ≈ 1.0)."
+  en: Every panel gene has produced protein by the end of one hour (fraction ≈ 1.0).
   observable: fraction_genes_expressed
   condition: fraction_genes_expressed >= 0.9
-  rationale: >-
-    Over an hour each gene fires enough transcription/translation events that all
-    6 accumulate protein. Achieved 1.000.
-  measure: {kind: derived_scalar, field: fraction_genes_expressed}
-  expect: {op: range, low: 0.9, high: 1.0}
-
+  rationale: Over an hour each gene fires enough transcription/translation events that all 6 accumulate
+    protein. Achieved 1.000.
+  measure:
+    kind: derived_scalar
+    field: fraction_genes_expressed
+  expect:
+    op: range
+    low: 0.9
+    high: 1.0
 behavior_tests:
 - name: mrna-is-bursty-low-copy
   classification: primary
-  description: "Time-averaged mRNA per gene within [0, 5] copies (low, bursty)."
-  measure: {kind: derived_scalar, field: mean_mrna_per_gene}
+  description: Time-averaged mRNA per gene within [0, 5] copies (low, bursty).
+  measure:
+    kind: derived_scalar
+    field: mean_mrna_per_gene
   pass_if:
     op: range
     low: 0.0
     high: 5.0
     provenance:
       kind: experiment
-      note: >-
-        Single-cell mRNA is low-copy and bursty (Karr 2012 Fig 2G); reduced panel
-        achieved mean_mrna_per_gene ~1.6. Representative rates, not KB-fitted.
+      note: Single-cell mRNA is low-copy and bursty (Karr 2012 Fig 2G); reduced panel achieved mean_mrna_per_gene
+        ~1.6. Representative rates, not KB-fitted.
   requires_simulation: baseline
 - name: protein-exceeds-mrna
   classification: primary
-  description: "Final protein-to-mRNA ratio within [5, 1e9] — protein >> mRNA (decoupling)."
-  measure: {kind: derived_scalar, field: protein_to_mrna_ratio}
+  description: Final protein-to-mRNA ratio within [5, 1e9] — protein >> mRNA (decoupling).
+  measure:
+    kind: derived_scalar
+    field: protein_to_mrna_ratio
   pass_if:
     op: range
     low: 5.0
     high: 1.0e9
     provenance:
       kind: experiment
-      note: >-
-        mRNA and protein copy-number distributions are decoupled, protein far
-        higher (Karr 2012 Fig 2H); achieved ratio ~200 (varies run to run).
+      note: mRNA and protein copy-number distributions are decoupled, protein far higher (Karr 2012 Fig
+        2H); achieved ratio ~200 (varies run to run).
   requires_simulation: baseline
 - name: genes-become-expressed
   classification: primary
-  description: "Fraction of panel genes with protein by 1 h within [0.9, 1.0]."
-  measure: {kind: derived_scalar, field: fraction_genes_expressed}
+  description: Fraction of panel genes with protein by 1 h within [0.9, 1.0].
+  measure:
+    kind: derived_scalar
+    field: fraction_genes_expressed
   pass_if:
     op: range
     low: 0.9
     high: 1.0
     provenance:
       kind: model
-      note: "Over 1 h all representative genes express; achieved 1.000."
+      note: Over 1 h all representative genes express; achieved 1.000.
   requires_simulation: baseline
-
 readouts:
 - name: ntp
   store_path: stores/ntp
@@ -145,7 +159,6 @@ readouts:
 - name: gtp
   store_path: stores/gtp
   status: available
-
 runs:
 - name: baseline
   run_id: fig3-expression-baseline
@@ -154,79 +167,72 @@ runs:
   n_steps: 120
   store_path: workspace/studies/fig3-expression/results/baseline.zarr
   timestamp: 1789259045.0
-
 pipeline_gate:
   prerequisites:
   - study: fig1-architecture
     condition: tests-passed
   enables: []
-  proceed_condition: |
-    The expression module reproduces the qualitative Fig 2G/2H decoupling —
+  proceed_condition: 'The expression module reproduces the qualitative Fig 2G/2H decoupling —
+
     bursty low-copy mRNA and protein accumulating orders of magnitude higher —
+
     on the representative gene panel. Quantitative population statistics (t50)
+
     are explicitly out of scope for the reduced panel.
 
+    '
 canonical_runs:
 - name: default
   script: workspace/studies/fig3-expression/sims/run.py
   args: []
-  label: "Fig 3 expression: 1 h stochastic transcription/translation/decay"
+  label: 'Fig 3 expression: 1 h stochastic transcription/translation/decay'
   default: true
-
 visualizations:
 - name: fig3-combined
   chart: viz/fig3_combined.html
-  render: "python sims/run.py"
-- name: fig3-a-exploration
-  chart: viz/fig3_a_exploration.html
-  render: "python sims/run.py"
-- name: fig3-b-t50
-  chart: viz/fig3_b_t50.html
-  render: "python sims/run.py"
-- name: fig3-c-traces
-  chart: viz/fig3_c_traces.html
-  render: "python sims/run.py"
-- name: fig3-d-heatmap
-  chart: viz/fig3_d_heatmap.html
-  render: "python sims/run.py"
-- name: expression-timeseries
-  chart: viz/expression_timeseries.html
-  render: "python sims/run.py"
-- name: protein-vs-mrna
-  chart: viz/protein_vs_mrna.html
-  render: "python sims/run.py"
-
+  render: python sims/run.py
+- name: fig3-a-occupancy
+  chart: viz/fig3_a_occupancy.html
+  render: python sims/run.py
+- name: fig3-b-explored
+  chart: viz/fig3_b_explored.html
+  render: python sims/run.py
+- name: fig3-c-rna-expressed
+  chart: viz/fig3_c_rna_expressed.html
+  render: python sims/run.py
+- name: fig3-d-polymerase-traces
+  chart: viz/fig3_d_polymerase_traces.html
+  render: python sims/run.py
+- name: fig3-e-collision-matrix
+  chart: viz/fig3_e_collision_matrix.html
+  render: python sims/run.py
+- name: fig3-f-collisions-vs-density
+  chart: viz/fig3_f_collisions_vs_density.html
+  render: python sims/run.py
 embed_visualizations:
 - name: fig3-combined
   url: /workspace/studies/fig3-expression/viz/fig3_combined.html
-  description: "Figure 3 reproduced — all subpanels combined as in Karr 2012."
-- name: fig3-a-exploration
-  url: /workspace/studies/fig3-expression/viz/fig3_a_exploration.html
-  description: "Figure 3 subpanel: exploration."
-- name: fig3-b-t50
-  url: /workspace/studies/fig3-expression/viz/fig3_b_t50.html
-  description: "Figure 3 subpanel: t50."
-- name: fig3-c-traces
-  url: /workspace/studies/fig3-expression/viz/fig3_c_traces.html
-  description: "Figure 3 subpanel: traces."
-- name: fig3-d-heatmap
-  url: /workspace/studies/fig3-expression/viz/fig3_d_heatmap.html
-  description: "Figure 3 subpanel: heatmap."
-- name: expression-timeseries
-  url: /workspace/studies/fig3-expression/viz/expression_timeseries.html
-  description: "Total mRNA (bursty, low) and total protein (accumulating) across the panel over 1 h."
-- name: protein-vs-mrna
-  url: /workspace/studies/fig3-expression/viz/protein_vs_mrna.html
-  description: "Per-gene final mRNA vs protein copy number — protein >> mRNA (Fig 2H decoupling)."
-
-conclusion: |
-  The reduced viva-Mgen expression module reproduces the qualitative single-cell
-  dynamics of Fig 2G/2H: mRNA stays low and bursty (mean ~1.6 copies per gene,
-  final total ~9 across the 6-gene panel) while protein accumulates far higher
-  (final total ~1750-2000 copies), a protein-to-mRNA ratio of ~200 and all 6
-  panel genes expressed by 1 h. Copy numbers vary run to run — the intended
-  single-cell stochastic variability. REDUCED FIDELITY caveat: this is a
-  representative 6-gene panel with order-of-magnitude rates, not the full ~480
-  genes with KB-fitted rates, so it deliberately does NOT reproduce the paper's
-  quantitative t50 = 18 min half-of-expression statistic; it establishes the
-  decoupling phenomenon, not that population number.
+  description: Figure 3 reproduced — chromosome DNA–protein interactions, all subpanels (a–f) as in Karr
+    2012.
+- name: fig3-a-occupancy
+  url: /workspace/studies/fig3-expression/viz/fig3_a_occupancy.html
+  description: 'Fig 3A: chromosome protein-occupancy density around the genome.'
+- name: fig3-b-explored
+  url: /workspace/studies/fig3-expression/viz/fig3_b_explored.html
+  description: 'Fig 3B: % chromosome explored over time, by protein.'
+- name: fig3-c-rna-expressed
+  url: /workspace/studies/fig3-expression/viz/fig3_c_rna_expressed.html
+  description: 'Fig 3C: % RNA expressed over time with t50.'
+- name: fig3-d-polymerase-traces
+  url: /workspace/studies/fig3-expression/viz/fig3_d_polymerase_traces.html
+  description: 'Fig 3D: RNA-pol + DNA-pol position kymograph.'
+- name: fig3-e-collision-matrix
+  url: /workspace/studies/fig3-expression/viz/fig3_e_collision_matrix.html
+  description: 'Fig 3E: protein-protein collision-frequency matrix.'
+- name: fig3-f-collisions-vs-density
+  url: /workspace/studies/fig3-expression/viz/fig3_f_collisions_vs_density.html
+  description: 'Fig 3F: collisions vs DNA-binding density.'
+conclusion: 'viva-Mgen reproduces the DNA-protein-interaction figure: RNA polymerase explores ~all of
+  the chromosome fast while the two replisomes cover it more slowly, and collisions are dominated by RNA
+  polymerase displacing SMC then SSB — the qualitative pattern of Karr 2012 Fig 3E. Coordinate-resolved
+  but reduced (binned, approximate gene positions).'

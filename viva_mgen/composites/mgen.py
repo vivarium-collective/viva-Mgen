@@ -49,12 +49,14 @@ _NODE_NAMES = {
     "FtsZPolymerizationReproductionProcess": "ftsz",
     "CytokinesisReproductionProcess": "cytokinesis",
     "HostInteractionReproductionProcess": "host_interaction",
+    "ChromosomeDynamicsReproductionProcess": "chromosome",
 }
 
 # port -> store overrides (disambiguate two processes' identically-named ports)
 _PORT_STORE = {
     ("RNAModificationReproductionProcess", "modification_enzyme"): "rna_modification_enzyme",
     ("ProteinModificationReproductionProcess", "modification_enzyme"): "protein_modification_enzyme",
+    ("ChromosomeDynamicsReproductionProcess", "rna_polymerase"): "rna_pol",
 }
 
 # store keys that hold map[float] (per-gene) values — pre-seeded so additive
@@ -65,8 +67,11 @@ _MAP_STORES = {
     "process_i_done", "translocated", "processed_ii", "unfolded", "folded",
     "unmodified", "modified", "monomers", "complexes", "active_fraction",
     "free_trna", "aminoacylated_trna", "rprotein_counts", "rrna_counts",
-    "adhesin_proteins",
+    "adhesin_proteins", "occupancy", "collisions",
 }
+
+# store keys that hold list[float] (chromosome polymerase positions)
+_LIST_STORES = {"rna_pol_positions", "dna_pol_positions"}
 
 # initial float-store values (resources/enzymes/setpoints); unlisted floats -> 0.0
 _FLOAT_INIT = {
@@ -78,6 +83,7 @@ _FLOAT_INIT = {
     "signal_peptidase": 20.0, "chaperone_count": 50.0, "rna_modification_enzyme": 20.0,
     "protein_modification_enzyme": 20.0, "regulator": 1.0, "synthetase": 30.0,
     "assembly_factor": 20.0, "ftsz_monomer": 500.0, "septum_diameter": 200.0,
+    "replication_active": 1.0,
 }
 
 # observables the RAM emitter captures (study-measured + integration readouts)
@@ -94,6 +100,9 @@ _EMIT = {
     "septum_diameter": "float", "contraction_progress": "float", "divided": "float",
     "terminal_organelle_fraction": "float", "adhesion_strength": "float",
     "ribosome_30S": "float", "ribosome_50S": "float",
+    "fraction_explored": "float", "dna_binding_density": "float",
+    "n_collisions": "float", "percent_rnap_explored": "float",
+    "percent_dnap_explored": "float",
 }
 
 
@@ -117,6 +126,7 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         "transcription": {"seed": seed},
         "translation": {"seed": seed + 1},
         "replication": {"initial_dnaA": initial_dnaA, "initial_dntp": initial_dntp, "seed": seed},
+        "chromosome": {"seed": seed},
     }
 
     stores, doc, used = {}, {}, set()
@@ -124,8 +134,14 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
     def store(key):
         used.add(key)
         if key not in stores:
-            stores[key] = ({g: 0.0 for g in DEFAULT_GENES} if key in _MAP_STORES
-                           else _FLOAT_INIT.get(key, 0.0))
+            if key in _LIST_STORES:
+                stores[key] = []
+            elif key in _MAP_STORES:
+                stores[key] = ({} if key in ("occupancy", "collisions", "mass_fractions",
+                                             "fold_change", "active_fraction")
+                               else {g: 0.0 for g in DEFAULT_GENES})
+            else:
+                stores[key] = _FLOAT_INIT.get(key, 0.0)
         return ["stores", key]
 
     for cls_name, node in _NODE_NAMES.items():
