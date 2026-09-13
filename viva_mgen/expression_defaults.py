@@ -59,8 +59,23 @@ def _build_panel() -> dict:
     return panel
 
 
+def _parca_panel() -> dict:
+    """Per-gene panel computed by the native ParCa from the REAL observed
+    expression (viva_mgen.parca), preferred over the log-normal draw. The named
+    genes keep their hand-tuned rates."""
+    from .parca import calculate_parameters
+    panel = calculate_parameters()
+    panel.update(_NAMED)   # keep the well-characterized genes exact
+    return panel
+
+
 try:
-    REPRESENTATIVE_GENES = _build_panel()
+    # prefer the ParCa (real observed expression); fall back to the log-normal
+    # panel, then to the named genes, so the module always yields a usable panel.
+    try:
+        REPRESENTATIVE_GENES = _parca_panel()
+    except Exception:  # noqa: BLE001 — no decoded expression available
+        REPRESENTATIVE_GENES = _build_panel()
 except Exception:  # noqa: BLE001 — fall back to the named panel if genes.csv is unreadable
     REPRESENTATIVE_GENES = dict(_NAMED)
 

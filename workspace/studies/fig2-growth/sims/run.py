@@ -69,6 +69,13 @@ def _mrna_protein_decoupling(n_cells=48, n_hours=9.0, dt=300.0):
     from viva_mgen.processes.decay import (RnaDecayReproductionProcess,
                                            ProteinDecayReproductionProcess)
     core = build_core()
+    # mRNA gene keys only — the paper's "low-copy bursty" (Fig 2G) is about mRNA;
+    # stable RNAs (rRNA/tRNA) are legitimately high-copy and must be excluded from
+    # the mRNA copy-number statistic (now that RNA type comes from real KB data).
+    from viva_mgen.kb import load_genes
+    from viva_mgen.parca import rna_type
+    _mrna_keys = {((g.get("symbol") or "").strip() or g["gene_id"])
+                  for g in load_genes() if rna_type(g) == "mRNA"}
     # smaller dt for the stochastic expression so mRNA decay keeps it bursty/low
     edt = 30.0
     steps = int(n_hours * 3600.0 / edt)
@@ -105,8 +112,9 @@ def _mrna_protein_decoupling(n_cells=48, n_hours=9.0, dt=300.0):
         per_gene.setdefault(c, {})
         for g in genes:
             per_gene[c][g] = (rna.get(g, 0.0), prot.get(g, 0.0))
+        mrna_genes = [g for g in genes if g in _mrna_keys] or genes
         if rna:
-            mrna_per_gene.append(np.mean([rna.get(g, 0.0) for g in genes]))
+            mrna_per_gene.append(np.mean([rna.get(g, 0.0) for g in mrna_genes]))
     # per-gene |Pearson r| across cells, averaged over genes
     all_genes = sorted({g for cell in per_gene.values() for g in cell})
     r_by_gene = []
