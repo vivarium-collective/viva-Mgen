@@ -162,6 +162,19 @@ def load_gene_expression() -> dict:
     return out
 
 
+@functools.lru_cache(maxsize=1)
+def load_metabolic_demand() -> dict:
+    """The aggregate NMP + amino-acid demand the fitted transcriptome/proteome
+    imply (``datasets/karr_metabolic_demand.json``) — the ParCa's forward coupling
+    to metabolism. ``{"nmp": {A,C,G,U: fraction}, "aa": {<aa>: fraction}}``; empty
+    dict if the file is absent."""
+    path = dataset_path("karr_metabolic_demand.json")
+    if not path.is_file():
+        return {}
+    with open(path) as f:
+        return json.load(f)
+
+
 def gene_essentiality_reference() -> dict:
     """Map normalized gene id -> reference essentiality (bool), where known."""
     out = {}

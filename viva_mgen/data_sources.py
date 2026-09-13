@@ -33,6 +33,11 @@ _FILES = [
      "M. genitalium whole-cell model per-process kinetic constants and initial "
      "states, transcribed verbatim from the reference repo's data/parameters.json "
      "and consumed via viva_mgen.kb.load_karr_parameters()."),
+    ("metabolic-demand", "datasets/karr_metabolic_demand.json", "parameters",
+     "Aggregate NMP + amino-acid demand the fitted transcriptome/proteome imply — "
+     "the metabolic requirement the ParCa hands to metabolism (Karr FitConstants "
+     "forward coupling). Computed from the decoded genome + per-gene synthesis rates; "
+     "M. genitalium's AT-rich genome shows in the ~62%% A+U ribonucleotide demand."),
     ("ips189-network", "datasets/ips189.sbml.xml", "knowledge-base"),
     ("gene-list", "datasets/genes.csv", "knowledge-base"),
     ("observed-gene-expression", "datasets/karr_gene_expression.csv", "knowledge-base",

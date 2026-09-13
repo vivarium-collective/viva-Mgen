@@ -78,6 +78,21 @@ def test_supercoiling_constraint_rebalances_topoisomerases():
         assert synth("topa") > synth("gyra")
 
 
+def test_metabolic_demand_composition():
+    """The ParCa's metabolic-demand output is a normalized NMP + AA composition;
+    M. genitalium's AT-rich genome shows in an A+U-dominated ribonucleotide demand."""
+    d = parca.metabolic_demand()
+    if not d:
+        import pytest
+        pytest.skip("metabolic-demand dataset not present")
+    nmp = d["nmp"]
+    assert set(nmp) == {"A", "C", "G", "U"}
+    assert abs(sum(nmp.values()) - 1.0) < 1e-6
+    assert nmp["A"] + nmp["U"] > 0.55          # AT-rich genome
+    aa = d["aa"]
+    assert len(aa) == 20 and abs(sum(aa.values()) - 1.0) < 1e-6
+
+
 def test_decay_rates_match_halflives():
     rates = parca.mrna_decay_rates()
     panel = parca.calculate_parameters()
