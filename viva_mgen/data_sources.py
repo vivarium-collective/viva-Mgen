@@ -36,11 +36,13 @@ _FILES = [
     ("ips189-network", "datasets/ips189.sbml.xml", "knowledge-base"),
     ("gene-list", "datasets/genes.csv", "knowledge-base"),
     ("observed-gene-expression", "datasets/karr_gene_expression.csv", "knowledge-base",
-     "Observed per-gene expression (Weiner et al. 2003 M. pneumoniae transcription "
-     "profiles at 32/37/43 C, mapped onto the 525 M. genitalium genes) — the "
-     "experimentally observed input the Karr 2012 parameter fit targets. Decoded "
-     "directly from the knowledge-base MCOS .mat (see scripts/extract_kb_expression.py); "
-     "row order matches genes.csv."),
+     "Genuine per-gene knowledge-base parameters for all 525 M. genitalium genes, "
+     "decoded natively from the Karr 2012 knowledge-base MCOS .mat (no MATLAB/Octave; "
+     "see viva_mgen.kb_decode + scripts/extract_kb_genes.py): RNA type, genome "
+     "coordinates and length, transcription direction, mRNA half-life, Karr's fitted "
+     "synthesis rate, and the Weiner et al. 2003 observed expression profile "
+     "(32/37/43 C). Row order matches genes.csv; consumed by the ParCa "
+     "(viva_mgen.parca)."),
     ("karr-2012-supplement", "workspace/references/papers/Karr2012_supplementary_information.pdf", "reference"),
 ]
 

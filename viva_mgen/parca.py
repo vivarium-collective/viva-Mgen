@@ -67,7 +67,21 @@ def calculate_parameters() -> dict:
     if not expr:
         raise RuntimeError(
             "no observed gene expression available (datasets/karr_gene_expression.csv "
-            "missing); run scripts/extract_kb_expression.py")
+            "missing); run scripts/extract_kb_genes.py")
+
+    def _rt(g):
+        """Real KB RNA type when decoded, else name-based classification."""
+        return (expr.get(g["gene_id"], {}).get("rna_type") or "").strip() or rna_type(g)
+
+    def _half_s(g):
+        """Real KB per-gene half-life (min → s), else the by-type scheme."""
+        hl = expr.get(g["gene_id"], {}).get("half_life_min")
+        if hl and hl > 0:
+            return hl * 60.0
+        return _HALFLIFE_MIN.get(_rt(g), _HALFLIFE_MIN["mRNA"]) * 60.0
+
+    def _len(g):
+        return int(expr.get(g["gene_id"], {}).get("length_nt") or 1000)
 
     # observed expression (37 C column, mean fallback); impute missing/zero genes
     # with half the smallest observed value (FitConstants imputeMissingData).
@@ -88,10 +102,10 @@ def calculate_parameters() -> dict:
     for g in genes:
         gid = g["gene_id"]
         e = obs[gid] if obs[gid] else floor
-        decay = math.log(2.0) / (_HALFLIFE_MIN[rna_type(g)] * 60.0)
+        decay = math.log(2.0) / _half_s(g)
         weight[gid] = e * (math.log(2.0) / _CELL_CYCLE_S + decay)
 
-    mrna_weights = sorted(weight[g["gene_id"]] for g in genes if rna_type(g) == "mRNA")
+    mrna_weights = sorted(weight[g["gene_id"]] for g in genes if _rt(g) == "mRNA")
     med_w = mrna_weights[len(mrna_weights) // 2] if mrna_weights else 1.0
     scale = _MEDIAN_MRNA_SYNTH_PER_S / med_w if med_w else 1.0
 
@@ -99,13 +113,12 @@ def calculate_parameters() -> dict:
     for g in genes:
         gid = g["gene_id"]
         key = (g.get("symbol") or "").strip() or gid
-        rt = rna_type(g)
-        half_s = _HALFLIFE_MIN[rt] * 60.0
+        half_s = _half_s(g)
         synth = weight[gid] * scale
         # translation rate: proportional to synthesis (more mRNA → more protein),
         # in the same band the reduced model used (0.005–0.15 /mrna/s).
         transl = min(0.15, max(0.005, synth * 120.0))
-        panel[key] = (synth, half_s, transl, _PROTEIN_HALFLIFE_S, 1000)
+        panel[key] = (synth, half_s, transl, _PROTEIN_HALFLIFE_S, _len(g))
     return panel
 
 
