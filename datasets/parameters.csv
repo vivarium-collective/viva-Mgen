@@ -1,0 +1,29 @@
+parameter,value,units,source,description
+genome_length_bp,580070,bp,M. genitalium G37,Chromosome length
+n_genes,525,count,Karr 2012 reconstruction,Protein+RNA genes
+cell_initial_dry_weight,3.93e-15,g,parameters.json states.Mass,Newborn dry weight
+fraction_wet_weight,0.7,fraction,parameters.json states.Mass,Water fraction of wet weight
+dry_mass_fraction_DNA,0.1688,fraction,parameters.json states.Mass,Dry-weight fraction: DNA
+dry_mass_fraction_RNA,0.0929552671058823,fraction,parameters.json states.Mass,Dry-weight fraction: RNA
+dry_mass_fraction_protein,0.619701780705882,fraction,parameters.json states.Mass,Dry-weight fraction: protein
+dry_mass_fraction_lipid,0.0568059965647059,fraction,parameters.json states.Mass,Dry-weight fraction: lipid
+dry_mass_fraction_carbohydrate,0.00516418150588235,fraction,parameters.json states.Mass,Dry-weight fraction: carbohydrate
+dry_mass_fraction_nucleotide,0.01833748,fraction,parameters.json states.Mass,Dry-weight fraction: nucleotide
+dry_mass_fraction_ion,0.00980392156862745,fraction,parameters.json states.Mass,Dry-weight fraction: ion
+dry_mass_fraction_polyamine,0.01323529411764706,fraction,parameters.json states.Mass,Dry-weight fraction: polyamine
+dry_mass_fraction_vitamin,0.01519607843137255,fraction,parameters.json states.Mass,Dry-weight fraction: vitamin
+cell_cycle_length,32400.0,s,parameters.json states.Time,Doubling time (~9 h)
+replication_initiation_duration,12960.0,s,parameters.json states.Time,Fig 4 phase
+replication_duration,15571.0,s,parameters.json states.Time,Fig 4 phase
+cytokinesis_duration,3869.0,s,parameters.json states.Time,Fig 4 phase
+mean_ntp_conc,5.0,mM,parameters.json states.Metabolite,Mean NTP pool
+mean_ndp_conc,0.5,mM,parameters.json states.Metabolite,Mean NDP pool
+mean_nmp_conc,0.2,mM,parameters.json states.Metabolite,Mean NMP pool
+growth_associated_maintenance,59.81,mmol/gDW,parameters.json processes.Metabolism,GAM
+non_growth_associated_maintenance,8.39,mmol/gDW/h,parameters.json processes.Metabolism,NGAM
+exchange_ub_carbon,12.0,mmol/gDW/h,parameters.json processes.Metabolism,Carbon uptake UB
+exchange_ub_noncarbon,20.0,mmol/gDW/h,parameters.json processes.Metabolism,Non-carbon uptake UB
+ips189_reactions,351,count,Suthers 2009 iPS189 (BioModels MODEL1507180052),Metabolic reactions
+ips189_metabolites,346,count,Suthers 2009 iPS189,Metabolites
+ips189_genes,126,count,Suthers 2009 iPS189,Metabolic genes
+step_size,1.0,s,Karr 2012,Simulation timestep
