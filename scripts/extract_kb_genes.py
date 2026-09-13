@@ -34,7 +34,7 @@ _DEFAULT_KB = [
 
 def main() -> int:
     sys.path.insert(0, str(WS))
-    from viva_mgen.kb_decode import decode_genes
+    from viva_mgen.kb_decode import decode_genes, metabolic_demand
 
     kb = Path(sys.argv[1]) if len(sys.argv) > 1 else next(
         (p for p in _DEFAULT_KB if p.is_file()), None)
@@ -76,6 +76,14 @@ def main() -> int:
             ])
             n += 1
     print(f"wrote {out} ({n} genes) from {kb}")
+
+    # aggregate metabolic demand (NMP + AA composition the expression implies) —
+    # the ParCa's forward coupling to metabolism.
+    import json
+    demand = metabolic_demand(kb)
+    dpath = WS / "datasets/karr_metabolic_demand.json"
+    json.dump(demand, dpath.open("w"), indent=1)
+    print(f"wrote {dpath} (NMP A+U={demand['nmp']['A'] + demand['nmp']['U']:.2f})")
 
     # provenance sanity
     vals = list(decoded.values())

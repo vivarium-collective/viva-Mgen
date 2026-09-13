@@ -204,3 +204,12 @@ def mrna_decay_rates() -> dict:
 
 def translation_rates() -> dict:
     return {g: v[2] for g, v in calculate_parameters().items()}
+
+
+def metabolic_demand() -> dict:
+    """The aggregate NMP + amino-acid demand the fitted expression implies — the
+    metabolic requirement the ParCa hands to metabolism (Karr FitConstants forward
+    coupling). Precomputed from the decoded genome + per-gene synthesis rates; see
+    viva_mgen.kb_decode.metabolic_demand / scripts/extract_kb_genes.py."""
+    from .kb import load_metabolic_demand
+    return load_metabolic_demand()

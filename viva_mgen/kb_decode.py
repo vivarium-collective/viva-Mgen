@@ -206,6 +206,42 @@ def aa_composition(dna: str) -> dict:
     return comp
 
 
+def metabolic_demand(mat_path: Path) -> dict:
+    """Aggregate NMP + amino-acid demand the transcriptome/proteome imply.
+
+    For each gene the transcription flux (∝ its synthesis rate) times its RNA base
+    composition gives the ribonucleotide demand; the translation flux (∝ mRNA
+    abundance) times its codon-derived amino-acid composition gives the AA demand.
+    Summed over genes and normalized, this is the metabolic demand the parameter
+    fit hands to metabolism — the forward coupling of Karr's FitConstants.
+
+    Returns ``{"nmp": {A,C,G,U: fraction}, "aa": {<aa>: fraction}}``.
+    """
+    genome = load_genome(mat_path)
+    genes = decode_genes(mat_path)
+    nmp = {"A": 0.0, "C": 0.0, "G": 0.0, "U": 0.0}
+    aa: dict = {}
+    import math
+    for g in genes:
+        rate = g.get("synthesis_rate") or 0.0
+        if not math.isfinite(rate) or rate <= 0:
+            continue
+        dna = gene_dna(g, genome)
+        if not dna:
+            continue
+        for b, c in rna_base_composition(dna).items():
+            nmp[b] += rate * c
+        if g.get("rna_type") == "mRNA":
+            for a, c in aa_composition(dna).items():
+                aa[a] = aa.get(a, 0.0) + rate * c
+    ntot = sum(nmp.values()) or 1.0
+    atot = sum(aa.values()) or 1.0
+    return {
+        "nmp": {k: v / ntot for k, v in nmp.items()},
+        "aa": {k: v / atot for k, v in sorted(aa.items())},
+    }
+
+
 def decode_genes(mat_path: Path) -> list:
     """Decode the 525 ``Gene`` objects → a list of dicts with the genuine KB values:
     ``gene_id, symbol, name, rna_type, start, end, length, direction, half_life_min,
