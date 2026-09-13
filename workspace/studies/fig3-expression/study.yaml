@@ -340,48 +340,48 @@ canonical_runs:
 visualizations:
 - name: fig3-combined
   chart: viz/fig3_combined.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 - name: fig3-a-occupancy
   chart: viz/fig3_a_occupancy.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 - name: fig3-b-explored
   chart: viz/fig3_b_explored.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 - name: fig3-c-rna-expressed
   chart: viz/fig3_c_rna_expressed.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 - name: fig3-d-polymerase-traces
   chart: viz/fig3_d_polymerase_traces.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 - name: fig3-e-collision-matrix
   chart: viz/fig3_e_collision_matrix.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 - name: fig3-f-collisions-vs-density
   chart: viz/fig3_f_collisions_vs_density.html
-  render: python sims/run.py
+  render: python scripts/regen_fig3_chromosome.py
 embed_visualizations:
 - name: fig3-combined
   url: /workspace/studies/fig3-expression/viz/fig3_combined.html
-  description: Figure 3 reproduced — chromosome DNA–protein interactions, all subpanels (a–f) as in Karr
-    2012.
+  description: Figure 3 reproduced — DNA–protein interactions, panels a–f as in Karr 2012.
 - name: fig3-a-occupancy
   url: /workspace/studies/fig3-expression/viz/fig3_a_occupancy.html
-  description: 'Fig 3A: chromosome protein-occupancy density around the genome.'
+  description: 'Fig 3A: circular chromosome binding-probability rings (all proteins / RNA pol / DnaA /
+    DNA pol).'
 - name: fig3-b-explored
   url: /workspace/studies/fig3-expression/viz/fig3_b_explored.html
-  description: 'Fig 3B: % chromosome explored over time, by protein.'
+  description: 'Fig 3B: % chromosome explored over time — All, RNA pol, SMC, DNA pol, Gyrase.'
 - name: fig3-c-rna-expressed
   url: /workspace/studies/fig3-expression/viz/fig3_c_rna_expressed.html
   description: 'Fig 3C: % RNA expressed over time with t50.'
 - name: fig3-d-polymerase-traces
   url: /workspace/studies/fig3-expression/viz/fig3_d_polymerase_traces.html
-  description: 'Fig 3D: RNA-pol + DNA-pol position kymograph.'
+  description: 'Fig 3D: polymerase space–time plot (RNA pol, replication forks, DnaA at oriC).'
 - name: fig3-e-collision-matrix
   url: /workspace/studies/fig3-expression/viz/fig3_e_collision_matrix.html
-  description: 'Fig 3E: protein-protein collision-frequency matrix.'
+  description: 'Fig 3E: protein–protein collision-frequency matrix.'
 - name: fig3-f-collisions-vs-density
   url: /workspace/studies/fig3-expression/viz/fig3_f_collisions_vs_density.html
-  description: 'Fig 3F: collisions vs DNA-binding density.'
+  description: 'Fig 3F: collisions vs DNA-binding density across cells.'
 conclusion: 'viva-Mgen reproduces the DNA-protein-interaction figure: RNA polymerase explores ~all of
   the chromosome fast while the two replisomes cover it more slowly, and collisions are dominated by RNA
   polymerase displacing SMC then SSB — the qualitative pattern of Karr 2012 Fig 3E. Coordinate-resolved

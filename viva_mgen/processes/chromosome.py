@@ -97,14 +97,17 @@ class ChromosomeDynamicsReproductionProcess(Process):
     config_schema = {
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "n_bins": {"_type": "integer", "_default": 580},
-        "n_rna_pol": {"_type": "integer", "_default": 120},
+        "n_rna_pol": {"_type": "integer", "_default": 30},         # concurrently elongating pols
         "rna_pol_rate_bp": {"_type": "float", "_default": 50.0},   # nt/s
-        "dna_pol_rate_bp": {"_type": "float", "_default": 100.0},  # nt/s per replisome
+        "dna_pol_rate_bp": {"_type": "float", "_default": 20.0},   # nt/s per replisome → ~4 h to traverse the genome (paper's replication phase)
         "n_smc": {"_type": "integer", "_default": 40},
         "n_ssb": {"_type": "integer", "_default": 30},
         "n_gyrase": {"_type": "integer", "_default": 20},
         "n_topo": {"_type": "integer", "_default": 10},
         "n_tf": {"_type": "integer", "_default": 12},
+        # fraction of each structural protein's sites that unbind + rebind to a
+        # NEW random position per second (sets the chromosome-exploration rate).
+        "struct_turnover_per_s": {"_type": "float", "_default": 0.008},
         "seed": {"_type": "integer", "_default": 0},
     }
 
@@ -126,6 +129,16 @@ class ChromosomeDynamicsReproductionProcess(Process):
         self.explored_any = np.zeros(self.nb, bool)
         self.explored_rnap = np.zeros(self.nb, bool)
         self.explored_dnap = np.zeros(self.nb, bool)
+        # per-protein cumulative occupancy + exploration, read by the Fig-3 viz to
+        # draw the circular per-protein binding-probability rings (A) and the
+        # per-protein exploration curves (B). Not exposed as composite ports.
+        self.occ_by = {}                           # label -> cumulative bound-time per bin
+        self.explored_by = {}                      # label -> bool array (ever bound)
+        # structural proteins bind PERSISTENTLY and turn over a small fraction of
+        # their sites each second, so the chromosome is explored GRADUALLY (a
+        # coupon-collector saturation) rather than being ~fully covered in the
+        # first step — matching the paper's "50% bound by 6 min, 90% by 20 min".
+        self._struct_sites = {}                    # label -> np.array of bound bins
         self.rna_pols = []                          # list of [pos, end]
         self.dna_pos = None                         # [left, right] once replicating
         self.collisions = {}
@@ -165,13 +178,31 @@ class ChromosomeDynamicsReproductionProcess(Process):
             self.occ[bin_idx] += 1.0
             self.explored_any[bin_idx] = True
             occupant[bin_idx] = label
+            if label not in self.occ_by:
+                self.occ_by[label] = np.zeros(nb)
+                self.explored_by[label] = np.zeros(nb, bool)
+            self.occ_by[label][bin_idx] += 1.0
+            self.explored_by[label][bin_idx] = True
 
-        # 1. structural / DNA-binding proteins occupy sites this step
+        # 1. structural / DNA-binding proteins occupy sites PERSISTENTLY, turning
+        #    over a fraction to new positions each step (gradual exploration).
         cfg = self.config
         place(self.oriC, "DnaA")
+        turnover = float(cfg["struct_turnover_per_s"]) * interval
         for label, n in (("SMC", cfg["n_smc"]), ("SSB", cfg["n_ssb"]),
                          ("GyrAB", cfg["n_gyrase"]), ("Topo IV", cfg["n_topo"])):
-            for b in self._rng.integers(0, nb, int(n)):
+            n = int(n)
+            sites = self._struct_sites.get(label)
+            if sites is None:
+                sites = self._rng.integers(0, nb, n)             # initial binding
+            else:
+                k = int(round(min(1.0, turnover) * n))           # rebind k sites
+                if k > 0:
+                    idx = self._rng.choice(n, k, replace=False)
+                    sites = sites.copy()
+                    sites[idx] = self._rng.integers(0, nb, k)
+            self._struct_sites[label] = sites
+            for b in sites:
                 place(b, label)
         # transcription factors at a few promoters
         for b in self._rng.choice(self.gene_bins, min(int(cfg["n_tf"]), len(self.gene_bins)), replace=False):

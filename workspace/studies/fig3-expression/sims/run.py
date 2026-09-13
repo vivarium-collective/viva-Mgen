@@ -52,14 +52,39 @@ STUDY_SLUG = "fig3-expression"
 INVESTIGATION_SLUG = "mgen"
 
 
-def _chromosome_metrics(core, dt=30.0, cycle_s=9 * 3600.0):
+def _density_collision_r(core, seeds=range(1, 13)):
+    """Fig 3F is a per-CELL scatter: cells with a higher DNA-bound-protein density
+    suffer more collisions (positive correlation). Measure that across cells with
+    varying protein load — not a per-timestep correlation within one cell."""
+    dens_pts, coll_pts = [], []
+    for s in seeds:
+        load = 0.6 + 0.9 * ((s % 6) / 5.0)
+        ch = ChromosomeDynamicsReproductionProcess(config={
+            "seed": int(s), "n_smc": int(40 * load), "n_ssb": int(30 * load),
+            "n_gyrase": int(20 * load), "n_rna_pol": int(30 * load)}, core=core)
+        dsum, out = 0.0, None
+        n = int(2 * 3600 / 60.0)
+        for _ in range(n):
+            out = ch.update({"rna_polymerase": float(ch.config["n_rna_pol"]),
+                             "replication_active": 1.0}, 60.0)
+            dsum += out["dna_binding_density"]
+        dens_pts.append(dsum / n)
+        coll_pts.append(out["n_collisions"])
+    import numpy as _np
+    if _np.std(dens_pts) and _np.std(coll_pts):
+        return float(_np.corrcoef(dens_pts, coll_pts)[0, 1])
+    return 0.0
+
+
+def _chromosome_metrics(core, dt=60.0, cycle_s=9 * 3600.0):
     """Run the chromosome process over one cell cycle; return Fig-3 observables."""
     ch = ChromosomeDynamicsReproductionProcess(config={"seed": 0}, core=core)
     t_min, explored, rnap_expl, dens, ncoll = [], [], [], [], []
     out = None
     n = int(cycle_s / dt)
     for k in range(n):
-        out = ch.update({"rna_polymerase": 120.0, "replication_active": 1.0}, dt)
+        out = ch.update({"rna_polymerase": float(ch.config["n_rna_pol"]),
+                         "replication_active": 1.0}, dt)
         t_min.append(k * dt / 60.0)
         explored.append(out["fraction_explored"] * 100.0)
         rnap_expl.append(out["percent_rnap_explored"] * 100.0)
@@ -79,9 +104,8 @@ def _chromosome_metrics(core, dt=30.0, cycle_s=9 * 3600.0):
     total = float(sum(collisions.values())) or 1.0
     by_rnap = sum(v for k, v in collisions.items() if k.split("||")[0] == "RNA Pol")
     disp_smc = sum(v for k, v in collisions.items() if k.split("||")[-1] == "SMC")
-    coll_delta = np.diff(np.concatenate([[0.0], ncoll]))
-    # correlate per-step new collisions with the instantaneous binding density
-    r_cd = float(np.corrcoef(dens, coll_delta)[0, 1]) if np.std(dens) and np.std(coll_delta) else 0.0
+    # Fig 3F: collisions vs binding density measured ACROSS cells (positive).
+    r_cd = _density_collision_r(core)
 
     return {
         "pct_explored_at_6min": _at(6.0),
