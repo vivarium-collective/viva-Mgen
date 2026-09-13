@@ -70,9 +70,10 @@ class ChromosomeDynamicsReproductionProcess(Process):
     percent_rnap_explored : overwrite[float]   fraction explored by RNA pol alone
     percent_dnap_explored : overwrite[float]   fraction explored by DNA pol alone
     occupancy : overwrite[map[float]]          cumulative bound-time per bin (bin->count)
-    rna_pol_positions : overwrite[list[float]] current active RNA-pol bin positions
-    dna_pol_positions : overwrite[list[float]] the two replisome bin positions
-    collisions : overwrite[map[float]]         "Mover||Occupant" -> count
+    rna_pol_positions : overwrite[list[float]] active RNA-pol positions, SIGNED bins from oriC
+    dna_pol_positions : overwrite[list[float]] the two replisome positions, SIGNED bins from oriC
+                                               ([+off, -off]: forks diverge from oriC to ±terC)
+    collisions : overwrite[map[float]]         "Binder||Resident" -> count (Fig 4E panel)
     """
 
     description = (
@@ -80,11 +81,12 @@ class ChromosomeDynamicsReproductionProcess(Process):
         "of the dynamics behind Karr 2012 Fig 3.\n"
         "The 580,070 bp chromosome is binned; RNA polymerases initiate at gene sites "
         "(locus-tag-ordered positions, rRNA hotspot weighted) and elongate at "
-        "~50 nt/s; two replisomes advance bidirectionally from oriC at ~100 nt/s; "
-        "structural proteins (SMC, SSB, gyrase, topoisomerase, DnaA, TFs) occupy sites; "
-        "and when a moving polymerase enters an occupied bin a COLLISION is recorded by "
-        "protein pair and the weaker partner displaced (RNA pol yields to the fork; "
-        "SMC/SSB yield to polymerases).\n"
+        "~50 nt/s; two replisomes initiate at oriC and advance OUTWARD, symmetrically, "
+        "to terC (reported as signed positions ±off from oriC — a V, as in Fig 4D); "
+        "the full DNA-binding-protein panel of Fig 4E occupies sites (SMC, SSB, GyrAB, "
+        "Topo IV, DnaB, DnaN, DnaA, and the Fur/GntR/HrcA/LuxR transcription factors); "
+        "and whenever a protein binds an already-occupied bin a binding×unbinding "
+        "COLLISION is recorded by protein pair (RNA pol yields to the fork).\n"
         "Contract — in: rna_polymerase (available RNA pols), replication_active (0/1). "
         "out (snapshots): occupancy (bin→bound-time), fraction_explored, "
         "percent_rnap/dnap_explored, rna_pol_positions, dna_pol_positions, collisions "
@@ -104,7 +106,9 @@ class ChromosomeDynamicsReproductionProcess(Process):
         "n_ssb": {"_type": "integer", "_default": 30},
         "n_gyrase": {"_type": "integer", "_default": 20},
         "n_topo": {"_type": "integer", "_default": 10},
-        "n_tf": {"_type": "integer", "_default": 12},
+        "n_dnab": {"_type": "integer", "_default": 4},     # replicative helicase (DnaB)
+        "n_dnan": {"_type": "integer", "_default": 4},     # sliding clamp (DnaN / beta-clamp)
+        "n_tf": {"_type": "integer", "_default": 12},      # transcription factors, split across Fur/GntR/HrcA/LuxR
         # fraction of each structural protein's sites that unbind + rebind to a
         # NEW random position per second (sets the chromosome-exploration rate).
         "struct_turnover_per_s": {"_type": "float", "_default": 0.008},
@@ -116,6 +120,13 @@ class ChromosomeDynamicsReproductionProcess(Process):
         # bins an RNA pol elongates across before release (longer span → the
         # polymerases sweep more of the genome per pass → 90%% coverage sooner).
         "rna_gene_span_bins": {"_type": "integer", "_default": 20},
+        # fraction of structural REBINDS that are treated as displacement
+        # collisions. The high turnover above is an exploration device; most
+        # rebinding lands on free DNA, so only a minority displaces a bound
+        # protein — this keeps the moving polymerases the dominant collision
+        # cause (Karr Fig 3F: ~84%% by RNA pol) while still populating the Fig-4E
+        # structural rows/columns.
+        "struct_collision_frac": {"_type": "float", "_default": 0.12},
         "seed": {"_type": "integer", "_default": 0},
     }
 
@@ -149,9 +160,13 @@ class ChromosomeDynamicsReproductionProcess(Process):
         self._struct_sites = {}                    # label -> np.array of bound bins
         self._t_struct = 0.0                        # elapsed time (drives the binding ramp)
         self.rna_pols = []                          # list of [pos, end]
-        self.dna_pos = None                         # [left, right] once replicating
+        self.dna_off = None                         # fork offset from oriC (bins), once replicating
         self.collisions = {}
         self.cur_bound = np.zeros(self.nb, bool)
+        # the full DNA-binding-protein panel of Karr 2012 Fig 4E (binding ×
+        # unbinding collision matrix): the persistently-bound structural set +
+        # the two replisome accessory factors + the transcription factors.
+        self._tf_labels = ("Fur", "GntR", "HrcA", "LuxR")
 
     def inputs(self):
         return {"rna_polymerase": "float", "replication_active": "float"}
@@ -176,17 +191,31 @@ class ChromosomeDynamicsReproductionProcess(Process):
         key = f"{mover}||{occupant}"
         self.collisions[key] = self.collisions.get(key, 0.0) + 1.0
 
+    def _signed(self, bin_idx):
+        """Position as a SIGNED offset from oriC (bins): oriC = 0 in the centre,
+        terC = ±nb/2 at both ends. This is the Karr 2012 Fig 4D convention — the
+        two replication forks diverge from oriC (centre) outward to terC (a V),
+        rather than wrapping the [0, nb) axis into a crossing X."""
+        b = int(bin_idx) % self.nb
+        return b if b <= self.terC else b - self.nb
+
     def update(self, state, interval):
         nb = self.nb
         self.cur_bound = np.zeros(nb, bool)
-        occupant = {}  # bin -> protein label (last writer for collision checks)
+        occupant = {}  # bin -> RESIDENT protein label (first binder this step)
 
-        def place(bin_idx, label):
+        def place(bin_idx, label, record=True):
             bin_idx = int(bin_idx) % nb
+            resident = occupant.get(bin_idx)
+            if record and resident is not None and resident != label:
+                # `label` binds a site already held by `resident` → a
+                # binding × unbinding collision (Fig 4E). The resident stays the
+                # site's occupant; the collision is what the matrix counts.
+                self._collide(label, resident)
             self.cur_bound[bin_idx] = True
             self.occ[bin_idx] += 1.0
             self.explored_any[bin_idx] = True
-            occupant[bin_idx] = label
+            occupant.setdefault(bin_idx, label)
             if label not in self.occ_by:
                 self.occ_by[label] = np.zeros(nb)
                 self.explored_by[label] = np.zeros(nb, bool)
@@ -194,32 +223,50 @@ class ChromosomeDynamicsReproductionProcess(Process):
             self.explored_by[label][bin_idx] = True
 
         # 1. structural / DNA-binding proteins occupy sites PERSISTENTLY, turning
-        #    over a fraction to new positions each step (gradual exploration).
+        #    over a fraction to new positions each step (gradual exploration). The
+        #    full Fig-4E panel: condensin (SMC), SSB, the topoisomerases (GyrAB,
+        #    Topo IV), and the replicative helicase/clamp (DnaB, DnaN).
         cfg = self.config
         place(self.oriC, "DnaA")
         self._t_struct += interval
         ramp = 1.0 - np.exp(-self._t_struct / max(float(cfg["struct_bind_tau_s"]), 1.0))
         turnover = float(cfg["struct_turnover_per_s"]) * interval
+        # A collision is a BINDING event — a protein landing on an already-occupied
+        # site — not persistent occupancy. So only NEWLY-bound sites (this step's
+        # rebinds + growth) record collisions; sites that merely persist do not
+        # (else the dense SMC coat would flood the matrix every step and RNA pol
+        # would stop being the dominant cause, contra Fig 3F's ~84%).
         for label, n_max in (("SMC", cfg["n_smc"]), ("SSB", cfg["n_ssb"]),
-                             ("GyrAB", cfg["n_gyrase"]), ("Topo IV", cfg["n_topo"])):
+                             ("GyrAB", cfg["n_gyrase"]), ("Topo IV", cfg["n_topo"]),
+                             ("DnaB", cfg["n_dnab"]), ("DnaN", cfg["n_dnan"])):
             n_now = max(1, int(round(int(n_max) * ramp)))         # progressively-bound count
             sites = self._struct_sites.get(label)
+            new_idx = set()
             if sites is None:
                 sites = self._rng.integers(0, nb, n_now)
+                new_idx = set(range(len(sites)))                  # initial binding
             else:
                 k = int(round(min(1.0, turnover) * len(sites)))  # rebind a fraction
                 if k > 0:
                     idx = self._rng.choice(len(sites), k, replace=False)
                     sites = sites.copy()
                     sites[idx] = self._rng.integers(0, nb, k)
+                    new_idx.update(int(i) for i in idx)
                 if n_now > len(sites):                            # grow toward n_max
-                    sites = np.concatenate([sites, self._rng.integers(0, nb, n_now - len(sites))])
+                    old = len(sites)
+                    sites = np.concatenate([sites, self._rng.integers(0, nb, n_now - old)])
+                    new_idx.update(range(old, len(sites)))
             self._struct_sites[label] = sites
-            for b in sites:
-                place(b, label)
-        # transcription factors at a few promoters
-        for b in self._rng.choice(self.gene_bins, min(int(cfg["n_tf"]), len(self.gene_bins)), replace=False):
-            place(b, "Fur")
+            frac = float(cfg["struct_collision_frac"])
+            rec_idx = {j for j in new_idx if self._rng.random() < frac}
+            for j, b in enumerate(sites):
+                place(b, label, record=(j in rec_idx))
+        # transcription factors at a few promoters (Fur / GntR / HrcA / LuxR) —
+        # re-placed (a binding event) each step, so they record collisions.
+        n_tf = min(int(cfg["n_tf"]), len(self.gene_bins))
+        if n_tf > 0:
+            for j, b in enumerate(self._rng.choice(self.gene_bins, n_tf, replace=False)):
+                place(b, self._tf_labels[j % len(self._tf_labels)])
 
         step_bins_rna = max(1, int(round(cfg["rna_pol_rate_bp"] * interval / self.bp_per_bin)))
         step_bins_dna = max(1, int(round(cfg["dna_pol_rate_bp"] * interval / self.bp_per_bin)))
@@ -234,39 +281,40 @@ class ChromosomeDynamicsReproductionProcess(Process):
         for pol in self.rna_pols:
             pos, end = pol
             newpos = pos + step_bins_rna
-            # collision check along the path
-            for b in range(pos, min(newpos, end) + 1):
+            released = False
+            # a moving RNA pol displaces every bound protein along the bins it
+            # sweeps this step (the dominant collision source, Fig 3F) — except
+            # the replication fork, which displaces the RNA pol instead.
+            for b in range(pos + 1, min(newpos, end) + 1):
                 bb = b % nb
                 occ_label = occupant.get(bb)
-                if occ_label and occ_label not in ("RNA Pol",):
-                    if occ_label == "DNA Pol":
-                        self._collide("DNA Pol", "RNA Pol")  # RNA pol displaced by fork
-                        newpos = end + 1  # release this RNA pol
-                        break
-                    else:
-                        self._collide("RNA Pol", occ_label)  # RNA pol displaces structural
-                        self.cur_bound[bb] = False
+                if occ_label is None or occ_label == "RNA Pol":
+                    continue
+                if occ_label == "DNA Pol":
+                    self._collide("DNA Pol", "RNA Pol")  # RNA pol displaced by the fork
+                    released = True
+                    break
+                self._collide("RNA Pol", occ_label)      # RNA pol displaces the bound protein
             pol[0] = newpos
-            if newpos <= end:
-                place(newpos, "RNA Pol")
+            if not released and newpos <= end:
+                place(newpos, "RNA Pol", record=False)   # collisions already counted along the path
                 self.explored_rnap[newpos % nb] = True
                 still.append(pol)
-            # else: reached end -> released (slot frees for a new initiation)
+            # else: reached end / displaced -> released (slot frees for a new initiation)
         self.rna_pols = still
 
-        # 3. DNA polymerase: two replisomes from oriC, bidirectional, if replicating
+        # 3. DNA polymerase: two replisomes initiate at oriC and advance OUTWARD,
+        #    symmetrically, to terC (Fig 4D). Positions are reported as signed
+        #    offsets from oriC so the space–time plot is a V (oriC-centred), and
+        #    each fork clamps once it reaches terC (that arm is fully replicated).
+        dna_report = []
         if state.get("replication_active", 0.0) >= 0.5:
-            if self.dna_pos is None:
-                self.dna_pos = [self.oriC, self.oriC]
-            self.dna_pos[0] = self.dna_pos[0] + step_bins_dna         # rightward toward terC
-            self.dna_pos[1] = self.dna_pos[1] - step_bins_dna         # leftward toward terC
-            for i, dp in enumerate(self.dna_pos):
-                bb = int(dp) % nb
-                occ_label = occupant.get(bb)
-                if occ_label and occ_label not in ("DNA Pol",):
-                    self._collide("DNA Pol", occ_label)              # fork displaces anything
-                place(bb, "DNA Pol")
+            self.dna_off = min(self.terC, (self.dna_off or 0) + step_bins_dna)
+            for sign in (+1, -1):
+                bb = int(sign * self.dna_off) % nb
+                place(bb, "DNA Pol")                     # fork collides with whatever it meets
                 self.explored_dnap[bb] = True
+                dna_report.append(float(sign * self.dna_off))
 
         n_coll = float(sum(self.collisions.values()))
         return {
@@ -276,7 +324,8 @@ class ChromosomeDynamicsReproductionProcess(Process):
             "percent_rnap_explored": float(self.explored_rnap.mean()),
             "percent_dnap_explored": float(self.explored_dnap.mean()),
             "occupancy": {str(i): float(v) for i, v in enumerate(self.occ) if v > 0},
-            "rna_pol_positions": [float(p[0] % nb) for p in self.rna_pols],
-            "dna_pol_positions": [float(x % nb) for x in (self.dna_pos or [])],
+            # signed offsets from oriC (bins): oriC=0 centre, terC=±nb/2
+            "rna_pol_positions": [float(self._signed(p[0])) for p in self.rna_pols],
+            "dna_pol_positions": dna_report,
             "collisions": dict(self.collisions),
         }

@@ -66,11 +66,18 @@ class FtsZPolymerizationReproductionProcess(Process):
     )
 
     config_schema = {
-        # activationFwd ≈ 1.1 /s in the original; fraction of free FtsZ activated per second
+        # k_on for the conserved free⇌ring relaxation = real FtsZ-GTP forward
+        # activation rate (Karr 2012 parameters.json FtsZPolymerization.activationFwd = 1.1 /s).
         "activation_rate": {"_type": "float", "_default": 1.1},
-        # fraction of the FtsZ-GTP pool elongating into ring filaments per second
+        # fraction of the FtsZ-GTP pool elongating into ring filaments per second.
+        # (The real mass-action nucleation/elongation/exchange fwd+rev constants —
+        # nucleationFwd 4.2e6 / nucleationRev 40, elongationFwd 5.1e6 / elongationRev 2.9,
+        # exchangeFwd 1e4 / exchangeRev 5e3 — are in different (bimolecular) units with no
+        # slot in this reduced conserved-pool relaxation; they are available via
+        # viva_mgen.kb.karr_process_params("FtsZPolymerization") but not forced into the math.)
         "elongation_rate": {"_type": "float", "_default": 0.5},
-        # GDP↔GTP exchange / filament dissociation returning ring subunits per second
+        # k_off for the free⇌ring relaxation = real FtsZ-GTP reverse activation rate
+        # (Karr 2012 parameters.json FtsZPolymerization.activationRev = 0.01 /s).
         "dissociation_rate": {"_type": "float", "_default": 0.01},
         "initial_ftsz_gtp": {"_type": "float", "_default": 0.0},
         "initial_ring": {"_type": "float", "_default": 0.0},
@@ -179,7 +186,13 @@ class CytokinesisReproductionProcess(Process):
         # M. genitalium cell width — the initial septum diameter to pinch shut (nm)
         "initial_cell_width_nm": {"_type": "float", "_default": 200.0},
         # contraction rate (nm/s); default pinches ~200 nm over the fitted
-        # cytokinesis duration (~3869 s) at full ring availability
+        # cytokinesis duration (~3869 s) at full ring availability.
+        # (The original's per-filament bind/bend/dissociate rate constants —
+        # Karr 2012 parameters.json Cytokinesis.rateFilamentBindingMembrane 0.7,
+        # rateFilamentDissociation 0.7, rateFtsZGtpHydrolysis 0.15 (all /s) — describe
+        # the polygon-edge cycle the reduced pinch-rate formulation lumps into this
+        # single nm/s speed; they have no direct slot here and are available via
+        # viva_mgen.kb.karr_process_params("Cytokinesis").)
         "contraction_rate_nm_per_s": {"_type": "float", "_default": 200.0 / C.CYTOKINESIS_DURATION_S},
         # replication must be essentially complete before the ring can pinch
         "replication_complete_threshold": {"_type": "float", "_default": 0.999},
