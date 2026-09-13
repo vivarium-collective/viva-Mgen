@@ -236,16 +236,6 @@ _save_viz('fig1-architecture', 'fig1-b-wiring', _render_one('', {}, RUNS_DB, STU
 # fig1-c-dynamics
 _save_viz('fig1-architecture', 'fig1-c-dynamics', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
-# **wiring-matrix**
-
-# wiring-matrix
-_save_viz('fig1-architecture', 'wiring-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **cell-dashboard**
-
-# cell-dashboard
-_save_viz('fig1-architecture', 'cell-dashboard', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -519,21 +509,6 @@ _save_viz('fig4-cell-cycle', 'fig4-d-dntp-vs-repl', _render_one('', {}, RUNS_DB,
 
 # fig4-e-init-vs-repl
 _save_viz('fig4-cell-cycle', 'fig4-e-init-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **init-vs-repl**
-
-# init-vs-repl
-_save_viz('fig4-cell-cycle', 'init-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **dntp-vs-repl**
-
-# dntp-vs-repl
-_save_viz('fig4-cell-cycle', 'dntp-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **cell-cycle-trajectory**
-
-# cell-cycle-trajectory
-_save_viz('fig4-cell-cycle', 'cell-cycle-trajectory', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
