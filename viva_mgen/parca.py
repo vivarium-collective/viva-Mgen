@@ -206,6 +206,78 @@ def translation_rates() -> dict:
     return {g: v[2] for g, v in calculate_parameters().items()}
 
 
+_NMP_NTP = {"C": "ctp_c", "G": "gtp_c", "U": "utp_c"}   # atp is energy-dominated → excluded
+# free amino-acid metabolites (iPS189, cytosol) — what the network must supply for
+# translation (charged tRNAs are a conserved moiety and can't be a net sink)
+_AA_MET = {
+    "A": "ala_DASH_L_c", "R": "arg_DASH_L_c", "N": "asn_DASH_L_c", "D": "asp_DASH_L_c",
+    "C": "cys_DASH_L_c", "Q": "gln_DASH_L_c", "E": "glu_DASH_L_c", "G": "gly_c",
+    "H": "his_DASH_L_c", "I": "ile_DASH_L_c", "L": "leu_DASH_L_c", "K": "lys_DASH_L_c",
+    "M": "met_DASH_L_c", "F": "phe_DASH_L_c", "P": "pro_DASH_L_c", "S": "ser_DASH_L_c",
+    "T": "thr_DASH_L_c", "W": "trp_DASH_L_c", "Y": "tyr_DASH_L_c", "V": "val_DASH_L_c",
+}
+
+
+def _max_precursor_supply(model, coeffs) -> float:
+    """Max flux of a sink that consumes ``coeffs`` (metabolite_id → fitted fraction)
+    in fixed proportion — the rate the network can supply that precursor mix."""
+    import cobra
+    with model:
+        mets = {}
+        for mid, frac in coeffs.items():
+            if frac <= 0 or mid not in model.metabolites:
+                continue
+            mets[model.metabolites.get_by_id(mid)] = -float(frac)   # consumed
+        if not mets:
+            return 0.0
+        demand = cobra.Reaction("PARCA_DEMAND")
+        demand.lower_bound = 0.0
+        demand.upper_bound = 1000.0
+        model.add_reactions([demand])
+        demand.add_metabolites(mets)
+        model.objective = demand
+        sol = model.optimize()
+        return float(sol.objective_value or 0.0) if sol.status == "optimal" else 0.0
+
+
+def close_metabolic_loop() -> dict:
+    """Close the expression ↔ metabolism loop (the Karr FitConstants criterion):
+    can the metabolic network supply the precursor demand the fitted expression
+    implies, in the fitted composition?
+
+    Rather than rewrite the tightly-coupled biomass reaction (iPS189 supplies amino
+    acids via fixed-ratio dipeptide uptake, so an arbitrary proteome composition is
+    infeasible), we add sink reactions that consume the precursors in the *fitted*
+    proportions — the ribonucleotides (C/G/U → ctp/gtp/utp) and the charged tRNAs
+    (amino acids) — and maximize each. A positive supply flux means the network can
+    produce that precursor mix; the loop is consistent when both the RNA and protein
+    precursor demands are supplyable alongside a feasible baseline growth.
+
+    Returns ``{feasible, growth_baseline, nmp_supply_flux, aa_supply_flux,
+    n_aa, n_nmp}``.
+    """
+    from .kb import load_metabolic_model
+    demand = metabolic_demand()
+    model = load_metabolic_model()
+    baseline = float(model.optimize().objective_value or 0.0)
+
+    nmp = demand.get("nmp", {})
+    aa = demand.get("aa", {})
+    nmp_coeffs = {_NMP_NTP[b]: f for b, f in nmp.items() if b in _NMP_NTP}
+    aa_coeffs = {_AA_MET[a]: f for a, f in aa.items() if a in _AA_MET}
+    nmp_flux = _max_precursor_supply(model, nmp_coeffs)
+    aa_flux = _max_precursor_supply(model, aa_coeffs)
+
+    return {
+        "feasible": bool(baseline > 1e-9 and nmp_flux > 1e-9 and aa_flux > 1e-9),
+        "growth_baseline": baseline,
+        "nmp_supply_flux": nmp_flux,
+        "aa_supply_flux": aa_flux,
+        "n_aa": len(aa_coeffs),
+        "n_nmp": len(nmp_coeffs),
+    }
+
+
 def metabolic_demand() -> dict:
     """The aggregate NMP + amino-acid demand the fitted expression implies — the
     metabolic requirement the ParCa hands to metabolism (Karr FitConstants forward
