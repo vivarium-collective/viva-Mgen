@@ -83,6 +83,16 @@ jobs:
           fi
           rm -rf dashboard && mkdir -p dashboard
           cp -R "$GITHUB_WORKSPACE/reports/published/dashboard/." dashboard/
+          # root landing: the bundle lives under dashboard/, so redirect the bare
+          # gh-pages URL (…/viva-Mgen/) to it — otherwise the root 404s.
+          printf '%s\n' \
+            '<!doctype html>' \
+            '<meta charset="utf-8">' \
+            '<title>viva-Mgen — read-only workbench</title>' \
+            '<meta http-equiv="refresh" content="0; url=./dashboard/">' \
+            '<link rel="canonical" href="./dashboard/">' \
+            '<p><a href="./dashboard/">viva-Mgen read-only workbench →</a></p>' \
+            > index.html
           git add -A
           if git diff --cached --quiet; then
             echo "dashboard snapshot unchanged; skipping commit"
