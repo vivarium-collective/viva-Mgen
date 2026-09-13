@@ -105,6 +105,11 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
                reaction_bound_scale=None, initial_dnaA=0.0, initial_dntp=0.0,
                seed=0, interval=1.0):
     """Return the integrated 28-submodel M. genitalium composite document."""
+    if core is None:
+        # port introspection below instantiates each process, which needs a core;
+        # the generator-build path calls us with core=None, so allocate one.
+        from ..core import build_core
+        core = build_core()
     classes = all_process_classes()
     configs = {
         "metabolism": {"disrupted_genes": list(disrupted_genes or []),
