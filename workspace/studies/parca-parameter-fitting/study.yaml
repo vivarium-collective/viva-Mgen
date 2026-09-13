@@ -1,0 +1,218 @@
+schema_version: 4
+name: parca-parameter-fitting
+title: ParCa — parameter fitting (Karr 2012 FitConstants reproduction)
+created: '2026-09-13'
+status: complete
+phase: Evaluate
+question: 'Can viva-Mgen reproduce Karr 2012''s parameter calculator (FitConstants) — computing the per-gene
+  expression, decay and synthesis parameters the whole-cell model runs on from the real observed knowledge-base
+  data, rather than hand-tuned guesses — and are those fitted parameters metabolically feasible? '
+hypothesis: 'Starting from the experimentally observed gene expression (Weiner 2003, decoded from the
+  knowledge base) and the real per-gene half-lives, an analytic fit under the FitConstants constraints
+  (RNA mass, DnaA/FtsZ held, net supercoiling) yields a per-gene parameter panel that reproduces the paper''s
+  expression kinetics and whose implied metabolic demand the iPS189 network can supply. '
+objective: 'Run the mycoplasma_parca composite: compute the fitted per-gene panel from the decoded knowledge
+  base, report the fit summary (gene count, mRNA/rRNA half-lives, median synthesis rate), the metabolic
+  demand it implies, and the expression↔metabolism feasibility closure. '
+description: 'This is the UPSTREAM study the seven figure studies depend on — it produces the per-gene
+  expression/decay/synthesis parameters they consume (viva_mgen.parca, wired into viva_mgen.expression_defaults).
+  It is a native reproduction of Karr 2012 FitConstants: observed expression + per-gene half-lives are
+  decoded directly from the knowledge-base MCOS .mat (no MATLAB/Octave); the initialization + analytic
+  QP fit apply the real FitConstants linear constraints (RNA-mass balance, DnaA/FtsZ expression held,
+  net-supercoiling zero using the real ported constants); and the expression↔metabolism loop is closed
+  by verifying the iPS189 FBA network can supply the ribonucleotide and amino-acid precursor demand in
+  the fitted composition. Fidelity: genuine — every input is real decoded KB data; the nonlinear metabolism
+  resource coupling + heuristic refinement of the original fmincon are the reduced part. '
+baseline:
+- name: baseline
+  composite: viva_mgen.composites.mgen.mycoplasma_parca
+  params: {}
+variants: []
+simulation_set:
+- name: baseline
+  status: ran
+  base_model: viva_mgen.composites.mgen.mycoplasma_parca
+  duration_min: 0
+  seeds:
+  - 0
+  condition: Canonical ParCa fit via sims/run.py (recorded in .pbg/runs.jsonl).
+  readouts:
+  - n_genes
+  - mrna_halflife_min_mean
+  - rrna_halflife_min
+  - nmp_au_fraction
+  - closed_loop_feasible
+  applies_tests:
+  - full-gene-panel
+  - mrna-halflife-realistic
+  - stable-rna-long-lived
+  - metabolic-demand-at-rich
+  - expression-metabolism-closed
+expected_behavior:
+- name: full-gene-panel
+  en: The fit covers the full M. genitalium gene set (~522 of 525 genes).
+  observable: n_genes
+  condition: 500 <= n_genes <= 525
+  rationale: Karr 2012 tracks all ~480 protein-coding genes plus tRNA/rRNA (525 in genes.csv); the panel
+    is computed over the full decoded set.
+  measure:
+    kind: derived_scalar
+    field: n_genes
+  expect:
+    op: range
+    low: 500
+    high: 525
+- name: mrna-halflife-realistic
+  en: Mean mRNA half-life is a few minutes, as in the knowledge base.
+  observable: mrna_halflife_min_mean
+  condition: 2.0 <= mrna_halflife_min_mean <= 7.0
+  rationale: Decoded per-gene mRNA half-lives average ~4.6 min (bacterial mRNA t½ ~2-5 min).
+  measure:
+    kind: derived_scalar
+    field: mrna_halflife_min_mean
+  expect:
+    op: range
+    low: 2.0
+    high: 7.0
+- name: stable-rna-long-lived
+  en: Stable RNAs (rRNA) are long-lived — orders of magnitude above mRNA.
+  observable: rrna_halflife_min
+  condition: 600 <= rrna_halflife_min <= 100000
+  rationale: Decoded rRNA half-life is 1200 min (20 h), vs ~2.5 min for mRNA.
+  measure:
+    kind: derived_scalar
+    field: rrna_halflife_min
+  expect:
+    op: range
+    low: 600.0
+    high: 100000.0
+- name: metabolic-demand-at-rich
+  en: The ribonucleotide demand is AT-rich (A+U dominant), reflecting the genome.
+  observable: nmp_au_fraction
+  condition: 0.55 <= nmp_au_fraction <= 0.75
+  rationale: M. genitalium's ~32% GC genome yields A+U ≈ 0.62 of the ribonucleotide demand.
+  measure:
+    kind: derived_scalar
+    field: nmp_au_fraction
+  expect:
+    op: range
+    low: 0.55
+    high: 0.75
+- name: expression-metabolism-closed
+  en: The iPS189 network can supply the fitted precursor demand (loop closed).
+  observable: closed_loop_feasible
+  condition: 0.5 <= closed_loop_feasible <= 1.5
+  rationale: Closure — the fitted expression's ribonucleotide + amino-acid demand is supplyable by the
+    iPS189 FBA network alongside feasible growth (feasible = 1.0).
+  measure:
+    kind: derived_scalar
+    field: closed_loop_feasible
+  expect:
+    op: range
+    low: 0.5
+    high: 1.5
+behavior_tests:
+- name: full-gene-panel
+  classification: primary
+  description: The fit covers the full M. genitalium gene set (~522 of 525 genes).
+  measure:
+    kind: derived_scalar
+    field: n_genes
+  pass_if:
+    op: range
+    low: 500
+    high: 525
+    provenance:
+      kind: knowledge_base
+      note: Karr 2012 tracks all ~480 protein-coding genes plus tRNA/rRNA (525 total in genes.csv); the
+        panel is computed over the full decoded set.
+  requires_simulation: baseline
+- name: mrna-halflife-realistic
+  classification: primary
+  description: Mean mRNA half-life is a few minutes, as in the knowledge base.
+  measure:
+    kind: derived_scalar
+    field: mrna_halflife_min_mean
+  pass_if:
+    op: range
+    low: 2.0
+    high: 7.0
+    provenance:
+      kind: knowledge_base
+      note: Decoded per-gene mRNA half-lives average ~4.6 min (bacterial mRNA t½ ~2-5 min).
+  requires_simulation: baseline
+- name: stable-rna-long-lived
+  classification: primary
+  description: Stable RNAs (rRNA) are long-lived — orders of magnitude above mRNA.
+  measure:
+    kind: derived_scalar
+    field: rrna_halflife_min
+  pass_if:
+    op: range
+    low: 600.0
+    high: 100000.0
+    provenance:
+      kind: knowledge_base
+      note: Decoded rRNA half-life is 1200 min (20 h), vs ~2.5 min for mRNA.
+  requires_simulation: baseline
+- name: metabolic-demand-at-rich
+  classification: primary
+  description: The ribonucleotide demand is AT-rich (A+U dominant), reflecting the genome.
+  measure:
+    kind: derived_scalar
+    field: nmp_au_fraction
+  pass_if:
+    op: range
+    low: 0.55
+    high: 0.75
+    provenance:
+      kind: knowledge_base
+      note: M. genitalium's ~32% GC genome yields A+U ≈ 0.62 of the ribonucleotide demand.
+  requires_simulation: baseline
+- name: expression-metabolism-closed
+  classification: primary
+  description: The iPS189 network can supply the fitted precursor demand (loop closed).
+  measure:
+    kind: derived_scalar
+    field: closed_loop_feasible
+  pass_if:
+    op: range
+    low: 0.5
+    high: 1.5
+    provenance:
+      kind: model
+      note: Closure — the fitted expression's ribonucleotide + amino-acid demand is supplyable by the
+        iPS189 FBA network alongside feasible growth (feasible = 1.0).
+  requires_simulation: baseline
+visualizations:
+- name: parca-combined
+  chart: viz/parca_combined.html
+  render: python scripts/regen_parca.py
+- name: parca-a-synthesis-vs-expression
+  chart: viz/parca_a_synthesis_vs_expression.html
+  render: python scripts/regen_parca.py
+- name: parca-b-halflife-by-type
+  chart: viz/parca_b_halflife_by_type.html
+  render: python scripts/regen_parca.py
+- name: parca-c-metabolic-demand
+  chart: viz/parca_c_metabolic_demand.html
+  render: python scripts/regen_parca.py
+- name: parca-d-closure
+  chart: viz/parca_d_closure.html
+  render: python scripts/regen_parca.py
+embed_visualizations:
+- name: parca-combined
+  url: /workspace/studies/parca-parameter-fitting/viz/parca_combined.html
+  description: 'ParCa summary — panels a–d: fit, half-lives, demand, closure.'
+- name: parca-a-synthesis-vs-expression
+  url: /workspace/studies/parca-parameter-fitting/viz/parca_a_synthesis_vs_expression.html
+  description: Fitted synthesis rate vs observed expression, per RNA type (log-log).
+- name: parca-b-halflife-by-type
+  url: /workspace/studies/parca-parameter-fitting/viz/parca_b_halflife_by_type.html
+  description: Per-gene RNA half-life by type — mRNA short-lived, tRNA/rRNA stable.
+- name: parca-c-metabolic-demand
+  url: /workspace/studies/parca-parameter-fitting/viz/parca_c_metabolic_demand.html
+  description: Ribonucleotide demand the transcriptome implies — AT-rich (A+U dominant).
+- name: parca-d-closure
+  url: /workspace/studies/parca-parameter-fitting/viz/parca_d_closure.html
+  description: Expression↔metabolism closure — iPS189 precursor supply fluxes (feasible > 0).

@@ -1,5 +1,7 @@
 schema_version: 4
 name: fig7-kinetic-parameters
+parent_studies:
+- parca-parameter-fitting
 title: 'Fig 7E-G — Kinetic parameters: growth depends sigmoidally on an enzyme''s kcat (Vmax proxy)'
 created: '2026-09-12'
 status: complete

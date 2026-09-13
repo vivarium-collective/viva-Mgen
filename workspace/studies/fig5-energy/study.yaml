@@ -1,5 +1,7 @@
 schema_version: 4
 name: fig5-energy
+parent_studies:
+- parca-parameter-fitting
 title: 'Fig 5 — Global distribution of cellular energy: ATP > GTP synthesis and a translation-dominated
   budget'
 created: '2026-09-12'

@@ -21,6 +21,7 @@ from .decay import RnaDecayReproductionProcess, ProteinDecayReproductionProcess
 from .replication import ReplicationReproductionProcess
 # migrated submodels (one module per category)
 from . import dna, rna, protein, cytokinesis, chromosome
+from .parameter_calculator import ParameterCalculatorReproductionProcess
 
 _CORE_MODS = None
 
@@ -29,8 +30,9 @@ def all_process_classes() -> dict:
     """Return ``{class_name: class}`` for every ``*ReproductionProcess`` defined
     across the process submodules (core + migrated)."""
     from . import metabolism, mass, transcription, translation, decay, replication
+    from . import parameter_calculator
     mods = [metabolism, mass, transcription, translation, decay, replication,
-            dna, rna, protein, cytokinesis, chromosome]
+            dna, rna, protein, cytokinesis, chromosome, parameter_calculator]
     out = {}
     for mod in mods:
         for name, obj in inspect.getmembers(mod, inspect.isclass):

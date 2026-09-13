@@ -1,5 +1,7 @@
 schema_version: 4
 name: fig6-gene-essentiality
+parent_studies:
+- parca-parameter-fitting
 title: 'Fig 6A — Single-gene-disruption essentiality: model vs experiment'
 created: '2026-09-12'
 status: complete

@@ -1,5 +1,7 @@
 schema_version: 4
 name: fig1-architecture
+parent_studies:
+- parca-parameter-fitting
 title: 'Fig 1 — Whole-cell integration: six submodels wired through shared cell variables'
 created: '2026-09-12'
 status: complete

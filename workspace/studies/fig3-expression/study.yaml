@@ -1,5 +1,7 @@
 schema_version: 4
 name: fig3-expression
+parent_studies:
+- parca-parameter-fitting
 title: Fig 3 — Chromosome DNA-protein interactions (viva-Mgen)
 created: '2026-09-12'
 status: complete
