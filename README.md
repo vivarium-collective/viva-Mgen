@@ -26,9 +26,15 @@ composed through shared cell-variable stores, and exercised by a showcase
 ## What it reproduces
 
 The original whole-cell model integrates 28 submodels over 16 cell variables,
-requires a MySQL knowledge base, and runs ~8–10 h per cell on a cluster. This
-reproduction implements a **reduced-but-genuine core** of that model in
-process-bigraph:
+requires a MySQL knowledge base, and runs ~8–10 h per cell on a cluster. This reproduction now implements **all ~28 submodels** as reduced-but-genuine
+process-bigraph Processes (29 `*ReproductionProcess` classes across
+`viva_mgen/processes/`: metabolism, mass/growth, transcription, translation,
+RNA/protein decay, replication, replication-initiation, DNA supercoiling/
+condensation/segregation/damage/repair, transcriptional regulation, RNA
+processing/modification, tRNA aminoacylation, protein processing I/II,
+translocation, folding, modification, activation, complexation, ribosome &
+terminal-organelle assembly, FtsZ polymerization, cytokinesis, host
+interaction). The headline studies exercise this core:
 
 | Submodel (reproduction) | Reproduces | Fidelity |
 |---|---|---|
