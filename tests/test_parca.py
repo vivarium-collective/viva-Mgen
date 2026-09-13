@@ -24,10 +24,15 @@ def test_parca_panel_from_real_expression():
         synth, half_s, transl, prot_half, length = v
         assert synth > 0 and half_s > 0 and transl > 0 and length > 0
 
-    # half-lives follow the KB by-RNA-type scheme: rRNA/tRNA far more stable than mRNA
-    genes = {((g.get("symbol") or "").strip() or g["gene_id"]): g for g in load_genes()}
-    mrna = [v[1] for k, v in panel.items() if k in genes and parca.rna_type(genes[k]) == "mRNA"]
-    rrna = [v[1] for k, v in panel.items() if k in genes and parca.rna_type(genes[k]) == "rRNA"]
+    # half-lives are the real decoded per-gene KB values: rRNA/tRNA far more stable
+    # than every mRNA. Classify by the REAL KB RNA type (not the name heuristic).
+    expr = load_gene_expression()
+    key_type = {}
+    for g in load_genes():
+        k = (g.get("symbol") or "").strip() or g["gene_id"]
+        key_type[k] = (expr.get(g["gene_id"], {}).get("rna_type") or "").strip()
+    mrna = [v[1] for k, v in panel.items() if key_type.get(k) == "mRNA"]
+    rrna = [v[1] for k, v in panel.items() if key_type.get(k) == "rRNA"]
     assert rrna and max(mrna) < min(rrna), "rRNA half-life must exceed every mRNA half-life"
 
     # abundant EF-Tu (tuf) is synthesized well above the median (real expression signal)
