@@ -12,9 +12,16 @@ Two genuine data sources back the reproduction:
   each with symbol, name, an essentiality classification, and its associated
   metabolic reactions).
 
-The heavy MATLAB knowledge base (``knowledgeBase.mat``) is an undecodable MCOS
-object graph, so per-species copy numbers / kcats are not available from the
-repo; the FBA network above stands in for the metabolic parts.
+* **Observed gene expression** — the Weiner et al. 2003 transcription profiles
+  (``datasets/karr_gene_expression.csv``), decoded directly from the knowledge
+  base's MCOS ``.mat`` (see ``scripts/extract_kb_expression.py``) and used as the
+  observed input to the parameter calculator (:mod:`viva_mgen.parca`).
+
+The heavy MATLAB knowledge base (``knowledgeBase.mat``) is an MCOS object graph;
+its aggregate arrays (gene expression) are recoverable via the subsystem decoder
+above, but per-object copy numbers / kcats remain locked in the object store, so
+the FBA network stands in for the metabolic parts and the parameter calculator
+fits the rest.
 """
 
 from __future__ import annotations
@@ -120,6 +127,32 @@ def load_genes() -> tuple:
                 "reactions": [r.strip() for r in (row.get("associated_reactions") or "").split(",") if r.strip()],
             })
     return tuple(genes)
+
+
+@functools.lru_cache(maxsize=1)
+def load_gene_expression() -> dict:
+    """Map gene_id -> observed expression dict from ``datasets/karr_gene_expression.csv``:
+    ``{expression_32C, expression_37C, expression_43C, expression_mean}`` (floats),
+    the Weiner et al. 2003 transcription profiles decoded from the Karr knowledge
+    base (see scripts/extract_kb_expression.py). Empty dict if the file is absent."""
+    path = dataset_path("karr_gene_expression.csv")
+    out: dict = {}
+    if not path.is_file():
+        return out
+    with open(path, newline="") as f:
+        for row in csv.DictReader(f):
+            def _f(k):
+                try:
+                    return float(row[k])
+                except (KeyError, ValueError, TypeError):
+                    return None
+            out[row["gene_id"]] = {
+                "expression_32C": _f("expression_32C"),
+                "expression_37C": _f("expression_37C"),
+                "expression_43C": _f("expression_43C"),
+                "expression_mean": _f("expression_mean"),
+            }
+    return out
 
 
 def gene_essentiality_reference() -> dict:
