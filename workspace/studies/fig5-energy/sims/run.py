@@ -80,20 +80,27 @@ def _run_metabolism(core, n_seconds=3600.0, dt=60.0):
 
 def _run_expression_accounting(core, n_seconds=3600, dt=1.0):
     """Step transcription + translation directly for one hour and sum the
-    magnitude of their NTP/GTP consumption. Transcription feeds its synthesized
-    mRNA forward into an accumulating pool that translation reads each step
-    (decay omitted for the energy tally, per the reduced accounting). Pools are
-    kept large each step so consumption is never supply-capped."""
+    magnitude of their NTP/GTP consumption. mRNA DECAY is included: without it the
+    mRNA pool grows without bound and is re-translated every step, which inflates
+    translation GTP relative to transcription NTP and drives the transcription
+    energy share far below the paper's ~7%. With decay the pool stays low/bursty,
+    so each transcript is translated a realistic number of times."""
+    from viva_mgen.processes.decay import RnaDecayReproductionProcess
     txn = TranscriptionReproductionProcess({"seed": 0}, core=core)
     tsl = TranslationReproductionProcess({"seed": 1}, core=core)
+    rdec = RnaDecayReproductionProcess({"seed": 2}, core=core)
     rna_counts: dict[str, float] = {}
     ntp_used_total = 0.0
     gtp_used_total = 0.0
     for _ in range(int(n_seconds)):
         tx = txn.update({"ntp": 1e12, "rna_pol": 100.0}, dt)
         for gene, n in tx.get("rna_counts", {}).items():
-            rna_counts[gene] = rna_counts.get(gene, 0.0) + float(n)
+            rna_counts[gene] = max(0.0, rna_counts.get(gene, 0.0) + float(n))
         ntp_used_total += abs(float(tx.get("ntp", 0.0)))
+
+        dd = rdec.update({"rna_counts": dict(rna_counts)}, dt)      # keep mRNA low/bursty
+        for gene, n in dd.get("rna_counts", {}).items():
+            rna_counts[gene] = max(0.0, rna_counts.get(gene, 0.0) + float(n))
 
         ts = tsl.update({"rna_counts": dict(rna_counts), "gtp": 1e12}, dt)
         gtp_used_total += abs(float(ts.get("gtp", 0.0)))
