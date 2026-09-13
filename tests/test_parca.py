@@ -93,6 +93,21 @@ def test_metabolic_demand_composition():
     assert len(aa) == 20 and abs(sum(aa.values()) - 1.0) < 1e-6
 
 
+def test_closed_metabolic_loop_is_consistent():
+    """The expression↔metabolism loop closes: the iPS189 network can supply the
+    ribonucleotide and amino-acid precursor demand in the ParCa's fitted composition
+    alongside feasible baseline growth (Karr FitConstants feasibility criterion)."""
+    r = parca.close_metabolic_loop()
+    if not r.get("growth_baseline"):
+        import pytest
+        pytest.skip("metabolic model not available")
+    assert r["growth_baseline"] > 0
+    assert r["nmp_supply_flux"] > 0, "network must supply the fitted ribonucleotide mix"
+    assert r["aa_supply_flux"] > 0, "network must supply the fitted amino-acid mix"
+    assert r["feasible"] is True
+    assert r["n_aa"] == 20 and r["n_nmp"] == 3
+
+
 def test_decay_rates_match_halflives():
     rates = parca.mrna_decay_rates()
     panel = parca.calculate_parameters()
