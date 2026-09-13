@@ -73,7 +73,7 @@ class ReplicationReproductionProcess(Process):
     config_schema = {
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "dnaA_threshold": {"_type": "float", "_default": 30.0},
-        "dnaA_synthesis_rate": {"_type": "float", "_default": 30.0 / 12960.0},  # → ~init duration
+        "dnaA_synthesis_rate": {"_type": "float", "_default": 30.0 / 14400.0},  # → ~3.6 h mean initiation
         "initial_dnaA": {"_type": "float", "_default": 0.0},
         "dntp_synthesis_rate": {"_type": "float", "_default": 580070.0 / 15571.0},  # nt-equiv/s
         # dNTP synthesis runs SLOWER during initiation than during replication:
@@ -83,7 +83,7 @@ class ReplicationReproductionProcess(Process):
         # This keeps replication dNTP-limited near 4.33 h while the surplus still
         # MODULATES it — preserving the emergent inverse initiation↔replication
         # relationship (Fig 4E) as cell-to-cell variation rather than dominating it.
-        "init_synth_fraction": {"_type": "float", "_default": 0.2},
+        "init_synth_fraction": {"_type": "float", "_default": 0.08},
         "dna_pol_rate": {"_type": "float", "_default": 250.0},  # nt/s (both replisomes), pol cap
         "initial_dntp": {"_type": "float", "_default": 0.0},
         "seed": {"_type": "integer", "_default": 0},

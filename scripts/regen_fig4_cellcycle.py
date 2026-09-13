@@ -48,8 +48,8 @@ def _run_population(core):
     idur, rdur, dstart, d0s, dnaA0, cyto = [], [], [], [], [], []
     for i in range(N_CELLS):
         rng = np.random.default_rng(1000 + i)
-        a0 = float(rng.uniform(0.0, 8.0))
-        d0 = float(rng.uniform(0.0, 12000.0))
+        a0 = float(rng.uniform(0.0, 10.0))
+        d0 = float(rng.uniform(0.0, 6000.0))
         p = ReplicationReproductionProcess(
             {"initial_dnaA": a0, "initial_dntp": d0, "seed": int(i)}, core=core)
         out = None
