@@ -1,12 +1,3 @@
-runs:
-- name: baseline
-  run_id: fig5-energy-baseline
-  status: completed
-  emitter: xarray
-  n_steps: 108
-  store_path: workspace/studies/fig5-energy/results/baseline.zarr
-  timestamp: 1789260461.9
-
 schema_version: 4
 name: fig5-energy
 title: "Fig 5 — Global distribution of cellular energy: ATP > GTP synthesis and a translation-dominated budget"
@@ -133,3 +124,100 @@ readouts:
   store_path: stores/growth_rate
   status: available
 
+runs:
+- name: baseline
+  run_id: fig5-energy-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig5-energy/results/baseline.zarr
+  timestamp: 1789259045.0
+
+pipeline_gate:
+  prerequisites:
+  - study: fig2-growth
+    condition: tests-passed
+  enables: []
+  proceed_condition: |
+    The integrated cell reproduces the Fig 5 energy picture — ATP > GTP synthesis
+    and a translation-dominated expression budget — at reduced fidelity.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig5-energy/sims/run.py
+  args: []
+  label: "Fig 5 energy: one hour, ATP/GTP synthesis + expression energy budget"
+  default: true
+
+visualizations:
+- name: fig5-combined
+  chart: viz/fig5_combined.html
+  render: "python sims/run.py"
+- name: fig5-a-synthesis-rates
+  chart: viz/fig5_a_synthesis_rates.html
+  render: "python sims/run.py"
+- name: fig5-b-ntp-vs-cellcycle
+  chart: viz/fig5_b_ntp_vs_cellcycle.html
+  render: "python sims/run.py"
+- name: fig5-c-atp-gtp-usage
+  chart: viz/fig5_c_atp_gtp_usage.html
+  render: "python sims/run.py"
+- name: fig5-d-energy-allocation
+  chart: viz/fig5_d_energy_allocation.html
+  render: "python sims/run.py"
+- name: fig5-ratio-atp-gtp
+  chart: viz/fig5_ratio_atp_gtp.html
+  render: "python sims/run.py"
+- name: energy-allocation
+  chart: viz/energy_allocation.html
+  render: "python sims/run.py"
+- name: synthesis-rates
+  chart: viz/synthesis_rates.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: fig5-combined
+  url: /workspace/studies/fig5-energy/viz/fig5_combined.html
+  description: "Figure 5 reproduced — all subpanels combined as in Karr 2012."
+- name: fig5-a-synthesis-rates
+  url: /workspace/studies/fig5-energy/viz/fig5_a_synthesis_rates.html
+  description: "Figure 5 subpanel: synthesis rates."
+- name: fig5-b-ntp-vs-cellcycle
+  url: /workspace/studies/fig5-energy/viz/fig5_b_ntp_vs_cellcycle.html
+  description: "Figure 5 subpanel: ntp vs cellcycle."
+- name: fig5-c-atp-gtp-usage
+  url: /workspace/studies/fig5-energy/viz/fig5_c_atp_gtp_usage.html
+  description: "Figure 5 subpanel: atp gtp usage."
+- name: fig5-d-energy-allocation
+  url: /workspace/studies/fig5-energy/viz/fig5_d_energy_allocation.html
+  description: "Figure 5 subpanel: energy allocation."
+- name: fig5-ratio-atp-gtp
+  url: /workspace/studies/fig5-energy/viz/fig5_ratio_atp_gtp.html
+  description: "Figure 5 subpanel: atp gtp."
+- name: energy-allocation
+  url: /workspace/studies/fig5-energy/viz/energy_allocation.html
+  description: "Energy allocation across processes (Fig 5D): translation dominates the modeled expression energy, ahead of transcription, with a representative ~44% unaccounted slice echoing the paper's structure."
+- name: synthesis-rates
+  url: /workspace/studies/fig5-energy/viz/synthesis_rates.html
+  description: "ATP vs GTP synthesis flux (Fig 5A): ATP synthesis far exceeds GTP, both positive."
+
+provenance:
+  kind: experiment/model
+  note: >-
+    Karr et al. 2012 Fig 5A (ATP/GTP dominate the synthesized energy carriers,
+    ATP > GTP) and Fig 5D (energy budget dominated by translation ~29%, then
+    tRNA-aminoacylation ~15%, then transcription ~7%, with ~44% unaccounted).
+    Reduced reproduction: only ATP/GTP carriers and only the transcription/
+    translation expression processes are modeled.
+
+conclusion: |
+  The viva-Mgen cell reproduces Fig 5's qualitative energy picture at reduced
+  fidelity. Fig 5A: ATP synthesis flux (0.813) exceeds GTP (0.202) by 4.03×, both
+  positive — ATP and GTP are the dominant synthesized carriers. Fig 5D: of the
+  modeled expression energy, translation takes 96.8% (9.83M GTP/h) versus
+  transcription's 3.2% (0.32M NTP/h), reproducing the translation >> transcription
+  ordering. Caveat: only ATP/GTP among carriers are modeled and only transcription/
+  translation contribute to the tallied budget — NAD/FAD/NADP and tRNA-aminoacylation
+  are absent — so the reduced shares (96.8/3.2 of modeled energy) diverge from the
+  paper's exact 29/15/7/44 whole-cell split. The Fig 5D donut's ~44% "unaccounted"
+  slice is a fixed representative value shown only to echo the paper's structure.

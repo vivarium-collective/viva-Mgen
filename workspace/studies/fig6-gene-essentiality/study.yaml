@@ -1,12 +1,3 @@
-runs:
-- name: baseline
-  run_id: fig6-gene-essentiality-baseline
-  status: completed
-  emitter: xarray
-  n_steps: 108
-  store_path: workspace/studies/fig6-gene-essentiality/results/baseline.zarr
-  timestamp: 1789260462.5
-
 schema_version: 4
 name: fig6-gene-essentiality
 title: "Fig 6A — Single-gene-disruption essentiality: model vs experiment"
@@ -139,3 +130,86 @@ readouts:
   store_path: stores/feasible
   status: available
 
+runs:
+- name: baseline
+  run_id: fig6-gene-essentiality-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig6-gene-essentiality/results/baseline.zarr
+  timestamp: 1789259045.0
+
+pipeline_gate:
+  prerequisites:
+  - study: fig2-growth
+    condition: tests-passed
+  enables:
+  - fig7-kinetic-parameters
+  proceed_condition: |
+    The FBA metabolism submodel reproduces the Fig 6A essentiality phenotype over
+    the metabolic subset at ~76% accuracy, validating the single-gene-knockout
+    machinery the kinetic-parameter (Fig 7) study builds on.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig6-gene-essentiality/sims/run.py
+  args: []
+  label: "Fig 6A gene essentiality: single-gene-knockout scan + confusion matrix"
+  default: true
+
+visualizations:
+- name: fig6-combined
+  chart: viz/fig6_combined.html
+  render: "python sims/run.py"
+- name: fig6-a-confusion
+  chart: viz/fig6_a_confusion.html
+  render: "python sims/run.py"
+- name: fig6-b-phenotype-classes
+  chart: viz/fig6_b_phenotype_classes.html
+  render: "python sims/run.py"
+- name: fig6-c-growthfraction-dist
+  chart: viz/fig6_c_growthfraction_dist.html
+  render: "python sims/run.py"
+- name: fig6-d-performance-summary
+  chart: viz/fig6_d_performance_summary.html
+  render: "python sims/run.py"
+- name: confusion-matrix
+  chart: viz/confusion_matrix.html
+  render: "python sims/run.py"
+- name: accuracy-summary
+  chart: viz/accuracy_summary.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: fig6-combined
+  url: /workspace/studies/fig6-gene-essentiality/viz/fig6_combined.html
+  description: "Figure 6 reproduced — all subpanels combined as in Karr 2012."
+- name: fig6-a-confusion
+  url: /workspace/studies/fig6-gene-essentiality/viz/fig6_a_confusion.html
+  description: "Figure 6 subpanel: confusion."
+- name: fig6-b-phenotype-classes
+  url: /workspace/studies/fig6-gene-essentiality/viz/fig6_b_phenotype_classes.html
+  description: "Figure 6 subpanel: phenotype classes."
+- name: fig6-c-growthfraction-dist
+  url: /workspace/studies/fig6-gene-essentiality/viz/fig6_c_growthfraction_dist.html
+  description: "Figure 6 subpanel: growthfraction dist."
+- name: fig6-d-performance-summary
+  url: /workspace/studies/fig6-gene-essentiality/viz/fig6_d_performance_summary.html
+  description: "Figure 6 subpanel: performance summary."
+- name: confusion-matrix
+  url: /workspace/studies/fig6-gene-essentiality/viz/confusion_matrix.html
+  description: "2x2 model-vs-reference essentiality confusion matrix over the 125 metabolic genes (Fig 6A)."
+- name: accuracy-summary
+  url: /workspace/studies/fig6-gene-essentiality/viz/accuracy_summary.html
+  description: "Essentiality prediction performance: accuracy, sensitivity, and specificity as percentages."
+
+conclusion: |
+  viva-Mgen reproduces the Fig 6A single-gene-disruption essentiality phenotype
+  over the metabolic subset at HIGH fidelity: across the 125 iPS189 metabolic
+  genes with a reference essentiality call, single-gene FBA knockouts recover the
+  reference classification with 0.760 accuracy (sensitivity 0.755, specificity
+  0.789), in the neighborhood of the paper's 79% whole-cell and ~87% iPS189
+  metabolic figures. Confusion matrix [[TP 80, FN 26], [FP 4, TN 15]] over 106
+  reference-essential and 19 reference-non-essential genes. Essentiality is
+  called by growth collapse (growth_fraction < 0.05); the representative MG_023
+  knockout collapses growth to 0.000.

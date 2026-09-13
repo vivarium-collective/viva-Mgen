@@ -1,12 +1,3 @@
-runs:
-- name: baseline
-  run_id: fig2-growth-baseline
-  status: completed
-  emitter: xarray
-  n_steps: 108
-  store_path: workspace/studies/fig2-growth/results/baseline.zarr
-  timestamp: 1789260459.3
-
 schema_version: 4
 name: fig2-growth
 title: "Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition"
@@ -137,3 +128,106 @@ readouts:
   store_path: stores/volume
   status: available
 
+runs:
+- name: baseline
+  run_id: fig2-growth-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig2-growth/results/baseline.zarr
+  timestamp: 1789259045.0
+
+pipeline_gate:
+  prerequisites:
+  - study: fig1-architecture
+    condition: tests-passed
+  enables:
+  - fig5-energy
+  - fig6-gene-essentiality
+  proceed_condition: |
+    The integrated cell reproduces the 9 h doubling time and protein-dominant
+    composition, establishing the FBA-driven growth backbone the energy and
+    gene-disruption studies build on.
+
+canonical_runs:
+- name: default
+  script: workspace/studies/fig2-growth/sims/run.py
+  args: []
+  label: "Fig 2 growth: one cell cycle, mass + composition"
+  default: true
+
+visualizations:
+- name: fig2-combined
+  chart: viz/fig2_combined.html
+  render: "python sims/run.py"
+- name: fig2-a-growth
+  chart: viz/fig2_a_growth.html
+  render: "python sims/run.py"
+- name: fig2-b-doubling
+  chart: viz/fig2_b_doubling.html
+  render: "python sims/run.py"
+- name: fig2-c-composition
+  chart: viz/fig2_c_composition.html
+  render: "python sims/run.py"
+- name: fig2-d-dynamics
+  chart: viz/fig2_d_dynamics.html
+  render: "python sims/run.py"
+- name: fig2-e-fluxes
+  chart: viz/fig2_e_fluxes.html
+  render: "python sims/run.py"
+- name: fig2-f-metabolites
+  chart: viz/fig2_f_metabolites.html
+  render: "python sims/run.py"
+- name: fig2-g-expression
+  chart: viz/fig2_g_expression.html
+  render: "python sims/run.py"
+- name: fig2-h-mrna-protein
+  chart: viz/fig2_h_mrna_protein.html
+  render: "python sims/run.py"
+- name: growth-curve
+  chart: viz/growth_curve.html
+  render: "python sims/run.py"
+- name: composition-donut
+  chart: viz/composition_donut.html
+  render: "python sims/run.py"
+
+embed_visualizations:
+- name: fig2-combined
+  url: /workspace/studies/fig2-growth/viz/fig2_combined.html
+  description: "Figure 2 reproduced — all subpanels combined as in Karr 2012."
+- name: fig2-a-growth
+  url: /workspace/studies/fig2-growth/viz/fig2_a_growth.html
+  description: "Figure 2 subpanel: growth."
+- name: fig2-b-doubling
+  url: /workspace/studies/fig2-growth/viz/fig2_b_doubling.html
+  description: "Figure 2 subpanel: doubling."
+- name: fig2-c-composition
+  url: /workspace/studies/fig2-growth/viz/fig2_c_composition.html
+  description: "Figure 2 subpanel: composition."
+- name: fig2-d-dynamics
+  url: /workspace/studies/fig2-growth/viz/fig2_d_dynamics.html
+  description: "Figure 2 subpanel: dynamics."
+- name: fig2-e-fluxes
+  url: /workspace/studies/fig2-growth/viz/fig2_e_fluxes.html
+  description: "Figure 2 subpanel: fluxes."
+- name: fig2-f-metabolites
+  url: /workspace/studies/fig2-growth/viz/fig2_f_metabolites.html
+  description: "Figure 2 subpanel: metabolites."
+- name: fig2-g-expression
+  url: /workspace/studies/fig2-growth/viz/fig2_g_expression.html
+  description: "Figure 2 subpanel: expression."
+- name: fig2-h-mrna-protein
+  url: /workspace/studies/fig2-growth/viz/fig2_h_mrna_protein.html
+  description: "Figure 2 subpanel: mrna protein."
+- name: growth-curve
+  url: /workspace/studies/fig2-growth/viz/growth_curve.html
+  description: "Total dry mass and its major macromolecule fractions over one ~9 h cell cycle."
+- name: composition-donut
+  url: /workspace/studies/fig2-growth/viz/composition_donut.html
+  description: "Dry-mass composition at division — protein-dominant, matching Fig 2C."
+
+conclusion: |
+  The viva-Mgen integrated cell reproduces Fig 2's growth phenotype at full
+  fidelity: fitted doubling time 9.000 h (target ~9), mass doubling 2.000× over
+  the cycle, and protein at 62.0% of dry mass — matching the measured and fitted
+  M. genitalium values.

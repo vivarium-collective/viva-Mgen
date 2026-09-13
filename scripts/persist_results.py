@@ -89,10 +89,15 @@ def _write_runs_block(slug, run_id, store_rel, n):
         f"  store_path: {store_rel}\n"
         f"  timestamp: {time.time():.1f}\n\n"
     )
-    # drop ALL existing top-level runs: blocks (server flush may add one after
-    # pipeline_gate / at EOF), then insert one clean block before pipeline_gate
-    t = re.sub(r"(?ms)^runs:\n(?:[ \t-].*\n|\n)*?(?=^[A-Za-z_]+:|\Z)", "", t)
+    # NON-DESTRUCTIVE: never rewrite an existing runs: block (a prior greedy
+    # regex here twice ate the visualizations/embed/conclusion sections). If a
+    # runs: block already exists, leave the whole file alone; only insert one
+    # (before pipeline_gate) when absent.
+    if "\nruns:\n" in t:
+        return
     i = t.find("\npipeline_gate:")
+    if i == -1:
+        return
     t = t[:i + 1] + block + t[i + 1:]
     p.write_text(t)
 
