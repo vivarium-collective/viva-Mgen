@@ -26,6 +26,7 @@ ODE/discretization + polygon-pinching + Boolean-host machinery of the originals.
 
 from __future__ import annotations
 
+import numpy as np
 from process_bigraph import Process, Step
 
 from .. import constants as C
@@ -77,8 +78,8 @@ class FtsZPolymerizationReproductionProcess(Process):
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
-        self._ftsz_gtp = float(self.config["initial_ftsz_gtp"])  # activated monomer pool
         self._ring = float(self.config["initial_ring"])          # subunits in ring filaments
+        self._free = None                                        # free FtsZ (set from supply)
 
     def inputs(self):
         return {"ftsz_monomer": "float", "gtp": "float"}
@@ -93,27 +94,39 @@ class FtsZPolymerizationReproductionProcess(Process):
         return {"ftsz_monomer": 0.0, "gtp": 0.0}
 
     def update(self, state, interval):
-        monomer = max(float(state.get("ftsz_monomer", 0.0)), 0.0)
+        supply = max(float(state.get("ftsz_monomer", 0.0)), 0.0)
         gtp = max(float(state.get("gtp", 0.0)), 0.0)
 
-        # Activation: FtsZ + GTP -> FtsZ-GTP  (MATLAB diff() term p(1)*y(1), each
-        # activated monomer carries one bound GTP). Rate-limited by both the free
-        # monomer supply and free GTP.
-        activated = self.config["activation_rate"] * monomer * interval
-        activated = min(activated, monomer, gtp)
-        self._ftsz_gtp += activated
-        gtp_consumed = activated  # one GTP bound per activated subunit
+        # FtsZ is a CONSERVED pool partitioned between free subunits and the ring;
+        # ``ftsz_monomer`` is the total FtsZ available. Modelling the exchange on a
+        # conserved pool (rather than an unbounded first-order source) makes the
+        # steady-state ring size ≈ supply·k_on/(k_on+k_off) — independent of the
+        # timestep — instead of blowing up or collapsing with Δt.
+        if self._free is None:
+            self._free = supply
+        total = self._free + self._ring
+        if supply > total:                 # newly synthesised FtsZ enters the free pool
+            self._free += supply - total
+            total = supply
 
-        # Elongation: FtsZ-GTP polymerizes into ring filaments (nucleation +
-        # elongation terms p(5)/p(7) collapsed into a single first-order flux).
-        elong = min(self.config["elongation_rate"] * self._ftsz_gtp * interval, self._ftsz_gtp)
-        self._ftsz_gtp -= elong
-        self._ring += elong
+        # Exact two-state relaxation of the conserved pool (free ⇌ ring) over the
+        # interval: ring → ring_eq = total·k_on/(k_on+k_off) with time constant
+        # 1/(k_on+k_off). Solving the ODE closed-form makes the result identical at
+        # any Δt (no operator-splitting error), so the ring reaches its functional
+        # size (≈ full pool, k_on ≫ k_off) and drives the septum to close.
+        k_on = max(float(self.config["activation_rate"]), 0.0)
+        k_off = max(float(self.config["dissociation_rate"]), 0.0)
+        ksum = k_on + k_off
+        ring_eq = total * (k_on / ksum) if ksum > 0 else self._ring
+        ring_new = ring_eq + (self._ring - ring_eq) * np.exp(-ksum * interval)
 
-        # GDP↔GTP exchange / dissociation: a fraction of ring subunits fall off
-        # (become GDP monomers) and re-enter the cycle (reverse terms p(8)/exchange).
-        depoly = min(self.config["dissociation_rate"] * self._ring * interval, self._ring)
-        self._ring -= depoly
+        # GTP cost: one GTP per net new ring subunit; cap growth if GTP-limited.
+        added = max(0.0, ring_new - self._ring)
+        gtp_consumed = min(added, gtp)
+        if added > gtp:
+            ring_new = self._ring + gtp
+        self._ring = ring_new
+        self._free = total - self._ring
 
         return {
             "ftsz_ring_filaments": max(self._ring, 0.0),
