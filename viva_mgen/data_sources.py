@@ -46,8 +46,8 @@ _REFERENCES = [
 
 
 def _raw_base(root: Path) -> str:
-    """``https://github.com/<owner>/<repo>/raw/<branch>`` from the git remote,
-    falling back to the known coordinates when git is unavailable."""
+    """``owner/repo`` from the git remote, falling back to the known coordinates
+    when git is unavailable (e.g. in the env worker)."""
     owner_repo = _FALLBACK_OWNER_REPO
     try:
         out = subprocess.run(
@@ -61,12 +61,16 @@ def _raw_base(root: Path) -> str:
                 owner_repo = slug
     except Exception:  # noqa: BLE001 — git absent in the env worker is fine
         pass
-    return f"https://github.com/{owner_repo}/raw/{_BRANCH}"
+    return owner_repo
 
 
 def list_sources() -> list:
     root = Path(__file__).resolve().parent.parent
-    base = _raw_base(root)
+    owner_repo = _raw_base(root)
+    # "open ↗" points at GitHub's BLOB view (syntax-highlighted / CSV-as-table /
+    # line numbers + a Download-raw button) rather than the raw endpoint, which
+    # just dumps unusable text (e.g. a 471 KB SBML XML) into the browser.
+    blob = f"https://github.com/{owner_repo}/blob/{_BRANCH}"
     rows = []
     for key, rel, category in _FILES:
         p = root / rel
@@ -76,7 +80,7 @@ def list_sources() -> list:
             "category": category,
             "kind": "file",
             "size_bytes": (p.stat().st_size if p.exists() else 0),
-            "url": f"{base}/{rel}",
+            "url": f"{blob}/{rel}",
         })
     for key, url, category, note in _REFERENCES:
         rows.append({
