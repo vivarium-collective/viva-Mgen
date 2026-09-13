@@ -127,7 +127,7 @@ def main():
                                                [{"type": "xy", "colspan": 2}, None]],
                         subplot_titles=("(a) 28-submodel architecture", "(b) process ↔ cell-variable wiring",
                                         "(c) integrated cell dynamics over the 9 h cycle"),
-                        vertical_spacing=0.12, row_heights=[0.55, 0.45])
+                        vertical_spacing=0.16, row_heights=[0.56, 0.44])
     fig.add_trace(go.Sunburst(labels=labels, parents=parents, branchvalues="remainder"), 1, 1)
     fig.add_trace(go.Heatmap(z=mat, x=stores, y=procs, colorscale="Blues", showscale=False), 1, 2)
     for i, (name, ys) in enumerate([("mass", norm(mass)), ("growth rate", norm(gr)),
@@ -135,9 +135,13 @@ def main():
                                     ("total protein", norm(tot_prot))]):
         fig.add_trace(go.Scatter(x=t_h, y=ys, mode="lines", name=name,
                                  line=dict(color=PAL[i % len(PAL)])), 2, 1)
+    # The 87 store labels are unreadable in this cell (and their rotated text
+    # collides with panel c) — hide them here; panel b standalone keeps them.
+    fig.update_xaxes(showticklabels=False, title_text="87 cell variables (see panel b)", row=1, col=2)
+    fig.update_yaxes(tickfont=dict(size=7), row=1, col=2)
     fig.update_xaxes(title_text="time (h)", row=2, col=1)
     fig.update_yaxes(title_text="normalized", row=2, col=1)
-    fig.update_layout(height=1050, width=1050, template="plotly_white",
+    fig.update_layout(height=1150, width=1050, template="plotly_white", legend=dict(y=0.42),
                       title_text="Figure 1 — The whole-cell model integrates 28 submodels through shared cell variables (viva-Mgen)")
     (VIZ / "fig1_combined.html").write_text(fig.to_html(full_html=True, include_plotlyjs="cdn"))
 
