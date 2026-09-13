@@ -60,6 +60,13 @@ datasets:
   - Raw states.Mass / states.Time / states.Metabolite / processes.Metabolism
     parameter blocks extracted verbatim from the Karr 2012 parameters.json.
 
+# Resources tab data-source provider — lists the parameter / knowledge-base
+# files so all model parameters are browsable in the dashboard Resources tab.
+dashboard:
+  data_sources:
+    label: M. genitalium parameters & knowledge base
+    provider: viva_mgen.data_sources:list_sources
+
 references_bib: workspace/references/papers.bib
 server:
   enabled: false
