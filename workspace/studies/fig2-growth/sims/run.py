@@ -72,7 +72,8 @@ def _mrna_protein_decoupling(n_cells=48, n_hours=9.0, dt=300.0):
     # smaller dt for the stochastic expression so mRNA decay keeps it bursty/low
     edt = 30.0
     steps = int(n_hours * 3600.0 / edt)
-    mrna_pts, prot_pts, mrna_per_gene = [], [], []
+    age_rng = np.random.default_rng(4242)
+    per_gene, mrna_per_gene = {}, []
     for c in range(n_cells):
         txn = TranscriptionReproductionProcess({"seed": c}, core=core)
         tsl = TranslationReproductionProcess({"seed": c + 5000}, core=core)
@@ -80,7 +81,11 @@ def _mrna_protein_decoupling(n_cells=48, n_hours=9.0, dt=300.0):
         pdec = ProteinDecayReproductionProcess({"seed": c + 13000}, core=core)
         rna: dict = {}
         prot: dict = {}
-        for _ in range(steps):
+        # cells are UNSYNCHRONISED: each is sampled at a random age, so cumulative
+        # protein varies with age while the current (bursty, decaying) mRNA snapshot
+        # does not — the mechanism behind the mRNA↔protein decoupling of Fig 2H.
+        steps_c = int(age_rng.uniform(0.08, 1.0) * steps)
+        for _ in range(steps_c):
             d = txn.update({"ntp": 1e12, "rna_pol": 100.0}, edt)
             for g, n in d.get("rna_counts", {}).items():
                 rna[g] = max(0.0, rna.get(g, 0.0) + float(n))
@@ -94,15 +99,23 @@ def _mrna_protein_decoupling(n_cells=48, n_hours=9.0, dt=300.0):
             for g, n in dp.get("protein_counts", {}).items():
                 prot[g] = max(0.0, prot.get(g, 0.0) + float(n))
         genes = sorted(set(rna) | set(prot))
+        # keep per-gene, per-cell samples so the correlation is measured WITHIN a
+        # gene across cells (Fig 2H), not pooled across genes (where the gene's
+        # expression level would trivially correlate both).
+        per_gene.setdefault(c, {})
         for g in genes:
-            mrna_pts.append(rna.get(g, 0.0)); prot_pts.append(prot.get(g, 0.0))
+            per_gene[c][g] = (rna.get(g, 0.0), prot.get(g, 0.0))
         if rna:
             mrna_per_gene.append(np.mean([rna.get(g, 0.0) for g in genes]))
-    mrna_pts, prot_pts = np.array(mrna_pts), np.array(prot_pts)
-    if mrna_pts.std() > 0 and prot_pts.std() > 0:
-        corr = abs(float(np.corrcoef(mrna_pts, prot_pts)[0, 1]))
-    else:
-        corr = 0.0
+    # per-gene |Pearson r| across cells, averaged over genes
+    all_genes = sorted({g for cell in per_gene.values() for g in cell})
+    r_by_gene = []
+    for g in all_genes:
+        m = np.array([per_gene[c][g][0] for c in per_gene if g in per_gene[c]])
+        p = np.array([per_gene[c][g][1] for c in per_gene if g in per_gene[c]])
+        if len(m) > 3 and m.std() > 0 and p.std() > 0:
+            r_by_gene.append(abs(float(np.corrcoef(m, p)[0, 1])))
+    corr = float(np.mean(r_by_gene)) if r_by_gene else 0.0
     return corr, float(np.mean(mrna_per_gene) if mrna_per_gene else 0.0)
 
 

@@ -98,23 +98,36 @@ def _population(core, n_cells=16, dt=300.0):
 
 
 def _mrna_protein_scatter(core, n_cells=128):
-    """One stochastic step per seeded cell -> (mRNA, protein) sample per gene."""
-    rng = np.random.default_rng(3)
+    """Fig 2H scatter: per-gene CURRENT (bursty, decaying) mRNA vs CUMULATIVE
+    protein across unsynchronised cells — the two are decoupled because mRNA is a
+    short-lived snapshot while protein integrates over the cell's (random) age."""
+    from viva_mgen.processes.decay import (RnaDecayReproductionProcess,
+                                           ProteinDecayReproductionProcess)
+    age_rng = np.random.default_rng(3)
+    edt = 30.0
     xs, ys = [], []
     for s in range(n_cells):
         txn = TranscriptionReproductionProcess({"seed": s}, core=core)
         tsl = TranslationReproductionProcess({"seed": s + 1000}, core=core)
-        mrna = {}
-        for _ in range(int(rng.integers(30, 300))):   # unsynchronised ages
-            tx = txn.update({"ntp": 1e12, "rna_pol": 100.0}, 1.0)
+        rdec = RnaDecayReproductionProcess({"seed": s + 2000}, core=core)
+        pdec = ProteinDecayReproductionProcess({"seed": s + 3000}, core=core)
+        rna, prot = {}, {}
+        steps = int(age_rng.uniform(0.08, 1.0) * (9 * 3600 / edt))   # random age
+        for _ in range(steps):
+            tx = txn.update({"ntp": 1e12, "rna_pol": 100.0}, edt)
             for g, v in tx.get("rna_counts", {}).items():
-                mrna[g] = mrna.get(g, 0.0) + float(v)
-        ts = tsl.update({"rna_counts": dict(mrna), "gtp": 1e12}, 1.0)
-        prot = {g: 0.0 for g in mrna}
-        # accumulate a little protein proportional to mRNA history
-        for g in mrna:
-            xs.append(mrna.get(g, 0.0))
-            ys.append(mrna.get(g, 0.0) * rng.uniform(20, 120))
+                rna[g] = max(0.0, rna.get(g, 0.0) + float(v))
+            dd = rdec.update({"rna_counts": dict(rna)}, edt)          # decay → bursty/low
+            for g, v in dd.get("rna_counts", {}).items():
+                rna[g] = max(0.0, rna.get(g, 0.0) + float(v))
+            ts = tsl.update({"rna_counts": dict(rna), "gtp": 1e12}, edt)
+            for g, v in ts.get("protein_counts", {}).items():
+                prot[g] = max(0.0, prot.get(g, 0.0) + float(v))
+            dp = pdec.update({"protein_counts": dict(prot)}, edt)
+            for g, v in dp.get("protein_counts", {}).items():
+                prot[g] = max(0.0, prot.get(g, 0.0) + float(v))
+        for g in set(rna) | set(prot):
+            xs.append(rna.get(g, 0.0)); ys.append(prot.get(g, 0.0))
     return np.array(xs), np.array(ys)
 
 
