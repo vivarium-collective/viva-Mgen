@@ -24,10 +24,15 @@ from pathlib import Path
 _FALLBACK_OWNER_REPO = "vivarium-collective/viva-Mgen"
 _BRANCH = "main"
 
-# (key, path relative to repo root, category)
+# (key, path relative to repo root, category, optional note)
 _FILES = [
     ("mgen-parameters", "datasets/parameters.csv", "parameters"),
     ("fitted-constants", "datasets/fitted_constants.json", "parameters"),
+    ("karr-kinetic-parameters", "datasets/karr_parameters.json", "parameters",
+     "Karr 2012 kinetic parameters (knowledge base constants) — the real "
+     "M. genitalium whole-cell model per-process kinetic constants and initial "
+     "states, transcribed verbatim from the reference repo's data/parameters.json "
+     "and consumed via viva_mgen.kb.load_karr_parameters()."),
     ("ips189-network", "datasets/ips189.sbml.xml", "knowledge-base"),
     ("gene-list", "datasets/genes.csv", "knowledge-base"),
     ("karr-2012-supplement", "workspace/references/papers/Karr2012_supplementary_information.pdf", "reference"),
@@ -72,16 +77,21 @@ def list_sources() -> list:
     # just dumps unusable text (e.g. a 471 KB SBML XML) into the browser.
     blob = f"https://github.com/{owner_repo}/blob/{_BRANCH}"
     rows = []
-    for key, rel, category in _FILES:
+    for entry in _FILES:
+        key, rel, category = entry[0], entry[1], entry[2]
+        note = entry[3] if len(entry) > 3 else None
         p = root / rel
-        rows.append({
+        row = {
             "key": key,
             "path": rel,
             "category": category,
             "kind": "file",
             "size_bytes": (p.stat().st_size if p.exists() else 0),
             "url": f"{blob}/{rel}",
-        })
+        }
+        if note:
+            row["note"] = note
+        rows.append(row)
     for key, url, category, note in _REFERENCES:
         rows.append({
             "key": key,

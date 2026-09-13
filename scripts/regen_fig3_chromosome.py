@@ -165,8 +165,13 @@ def main():
                        annotation_text=f"t50 = {d['t50']:.0f} min")
     (VIZ / "fig3_c_rna_expressed.html").write_text(viz._page(figc, "Fig 3C"))
 
-    # ---- (D) space–time plot: position (nt) vs time (h) ----
-    figd = go.Figure(layout=viz._layout("Polymerase space–time plot (Fig 3D)", "time (h)", "chromosome position (nt)"))
+    # ---- (D) space–time plot: position (nt, oriC-centred) vs time (h) ----
+    # Karr Fig 4D convention: oriC at the centre (0), terC at both extremes
+    # (±terC). The two replication forks initiate at oriC and diverge OUTWARD to
+    # terC — a V — while RNA pols scatter across both arms and the DnaA complex
+    # sits at oriC (y=0).
+    terc_nt = (d["nb"] // 2) * d["kb_per_bin"] * 1000
+    figd = go.Figure(layout=viz._layout("Polymerase space–time plot (Fig 3D)", "time (h)", "position (nt, oriC-centred)"))
     xr, yr = [], []
     for tt, snap in zip(d["t_h"], d["rna_snaps"]):
         for p in snap:
@@ -175,9 +180,11 @@ def main():
                                 marker=dict(color=PAL[0], size=3, opacity=0.3)))
     for i in range(2):
         ys = [(snap[i] * d["kb_per_bin"] * 1000 if len(snap) > i else None) for snap in d["dna_snaps"]]
-        figd.add_trace(go.Scatter(x=list(d["t_h"]), y=ys, mode="markers", name=f"DNA pol {i+1}",
+        figd.add_trace(go.Scatter(x=list(d["t_h"]), y=ys, mode="markers", name=f"DNA pol fork {i+1}",
                                   marker=dict(color=PAL[2], size=4)))
-    figd.add_hline(y=0, line_color=PAL[3], line_width=2, annotation_text="DnaA @ oriC")
+    figd.add_hline(y=0, line_color=PAL[3], line_width=2, annotation_text="oriC (DnaA complex)")
+    figd.update_yaxes(range=[-terc_nt * 1.02, terc_nt * 1.02],
+                      tickvals=[-terc_nt, 0, terc_nt], ticktext=["terC", "oriC", "terC"])
     (VIZ / "fig3_d_polymerase_traces.html").write_text(viz._page(figd, "Fig 3D"))
 
     # ---- (E) collision-frequency matrix ----
@@ -234,6 +241,9 @@ def _combined(viz, PAL, d, theta, ring_specs, movers, occs, mat, fdens, fcoll, r
         ys = [(snap[i] * d["kb_per_bin"] * 1000 if len(snap) > i else None) for snap in d["dna_snaps"]]
         fig.add_trace(go.Scatter(x=list(d["t_h"]), y=ys, mode="markers",
                                  marker=dict(color=PAL[2], size=3), showlegend=False), 2, 2)
+    _terc_nt = (nb // 2) * d["kb_per_bin"] * 1000
+    fig.update_yaxes(range=[-_terc_nt * 1.02, _terc_nt * 1.02], tickvals=[-_terc_nt, 0, _terc_nt],
+                     ticktext=["terC", "oriC", "terC"], row=2, col=2)
     fig.add_trace(go.Heatmap(z=mat, x=occs, y=movers, colorscale="Reds", showscale=False), 3, 1)
     fig.add_trace(go.Scatter(x=fdens, y=fcoll, mode="markers",
                              marker=dict(color=PAL[2], size=7, opacity=0.75), showlegend=False), 3, 2)

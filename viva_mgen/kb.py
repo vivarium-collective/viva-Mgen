@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import csv
 import functools
+import json
 import os
 from pathlib import Path
 from typing import Optional
@@ -70,6 +71,35 @@ def load_metabolic_model(sbml_path: Optional[str] = None):
         )
     model = cobra.io.read_sbml_model(str(path))
     return model
+
+
+@functools.lru_cache(maxsize=1)
+def load_karr_parameters() -> dict:
+    """Load ``datasets/karr_parameters.json`` and return the full parameter dict.
+
+    These are the **real** Karr 2012 *M. genitalium* whole-cell model per-process
+    kinetic constants (and initial ``states``), transcribed verbatim from the
+    reference repo's ``data/parameters.json``. The returned dict has a top-level
+    ``"processes"`` object (per-process constant dicts) and, when present, a
+    ``"states"`` object; a ``"_source"`` key documents the provenance.
+    """
+    path = dataset_path("karr_parameters.json")
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"Karr parameters not found at {path}. Expected the versioned copy "
+            "at datasets/karr_parameters.json."
+        )
+    with open(path) as f:
+        return json.load(f)
+
+
+def karr_process_params(process_name: str) -> dict:
+    """Return one process's real Karr 2012 constant dict (empty dict if absent).
+
+    ``process_name`` is the original submodel name, e.g. ``"FtsZPolymerization"``,
+    ``"DNASupercoiling"``, ``"ReplicationInitiation"``.
+    """
+    return load_karr_parameters().get("processes", {}).get(process_name, {})
 
 
 @functools.lru_cache(maxsize=1)

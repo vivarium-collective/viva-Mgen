@@ -84,7 +84,15 @@ class ReplicationReproductionProcess(Process):
         # MODULATES it — preserving the emergent inverse initiation↔replication
         # relationship (Fig 4E) as cell-to-cell variation rather than dominating it.
         "init_synth_fraction": {"_type": "float", "_default": 0.08},
-        "dna_pol_rate": {"_type": "float", "_default": 250.0},  # nt/s (both replisomes), pol cap
+        # pol elongation cap, nt/s covering the whole chromosome = 2 × real per-replisome
+        # rate (Karr 2012 parameters.json Replication.dnaPolymeraseElongationRate = 100.0
+        # nt/s, ×2 for both replisomes). Non-binding at the default dNTP-limited rate
+        # (~37 nt/s), so replication stays dNTP-synthesis-limited near the ~4.33 h paper value.
+        # (The reduced lumped-polymerase model has no Okazaki/primer/ligase/ssb machinery, so
+        # okazakiFragmentMeanLength 1500, primerLength 11, ligaseRate 0.04, ssbDissociationRate
+        # 0.3 and ssbComplexSpacing 30 have no slot here — available via
+        # viva_mgen.kb.karr_process_params("Replication").)
+        "dna_pol_rate": {"_type": "float", "_default": 200.0},
         "initial_dntp": {"_type": "float", "_default": 0.0},
         "seed": {"_type": "integer", "_default": 0},
     }

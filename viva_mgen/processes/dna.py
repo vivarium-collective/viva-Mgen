@@ -61,6 +61,14 @@ class ReplicationInitiationReproductionProcess(Process):
         "recruit_rate": {"_type": "float", "_default": 30.0 / 12960.0},  # → ~init duration (Fig 4C)
         "initial_complex": {"_type": "float", "_default": 0.0},
         "seed": {"_type": "integer", "_default": 0},
+        # The reduced cooperative recruitment uses (1 + complex/threshold) as its
+        # cooperativity factor. The real Hill-type cooperativity and DnaA-ATP/ADP
+        # binding constants — Karr 2012 parameters.json ReplicationInitiation
+        # siteCooperativity 170, stateCooperativity 2, kb1ATP 25 / kb1ADP 2.5,
+        # kb2ATP 0.61 / kb2ADP 0.61, kd1ATP 20 / kd1ADP 20, k_Regen 125,
+        # K_Regen_P4 0.018 — parameterize the per-box binding/unbinding this single
+        # cooperative pool omits, so they have no default slot here; available via
+        # viva_mgen.kb.karr_process_params("ReplicationInitiation").
     }
 
     def __init__(self, config=None, core=None):
@@ -130,8 +138,17 @@ class DNASupercoilingReproductionProcess(Process):
 
     config_schema = {
         "setpoint": {"_type": "float", "_default": -0.06},  # maintained negative superhelicity
-        "gyrase_rate": {"_type": "float", "_default": 1.0},  # supercoiling acts / gyrase / s
-        "atp_per_act": {"_type": "float", "_default": 2.0},  # ~2 ATP per gyrase catalytic act
+        # supercoiling acts / gyrase / s = real gyrase activity rate
+        # (Karr 2012 parameters.json DNASupercoiling.gyraseActivityRate = 1.2).
+        # The reduced model lumps all topoisomerase activity into this one gyrase
+        # relaxation; the real topoI/topoIV activity rates (topoIActivityRate 1.0,
+        # topoIVActivityRate 2.5), per-act linking-number changes (gyraseDeltaLK -2,
+        # topoIDeltaLK 1, topoIVDeltaLK -2), and gyraseMeanDwellTime 45 s have no
+        # per-enzyme slot here — available via
+        # viva_mgen.kb.karr_process_params("DNASupercoiling").
+        "gyrase_rate": {"_type": "float", "_default": 1.2},
+        # ATP per gyrase catalytic act (Karr 2012 parameters.json DNASupercoiling.gyraseATPCost = 2.0).
+        "atp_per_act": {"_type": "float", "_default": 2.0},
         "relaxed_bp_per_turn": {"_type": "float", "_default": 10.5},
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "initial_sigma": {"_type": "float", "_default": 0.0},  # start relaxed, gyrase supercoils it
@@ -196,7 +213,12 @@ class ChromosomeCondensationReproductionProcess(Process):
     )
 
     config_schema = {
-        "bind_rate": {"_type": "float", "_default": 1.0e-3},  # per-SMC compaction rate
+        # per-SMC compaction rate (lumped). The real SMC binding-site geometry —
+        # Karr 2012 parameters.json ChromosomeCondensation.smcSepNt 7130 (nt between
+        # bound SMC complexes) and smcSepProbCenter 2800 — are spacings, not a rate,
+        # so they have no slot in this saturating-fraction reduction; available via
+        # viva_mgen.kb.karr_process_params("ChromosomeCondensation").
+        "bind_rate": {"_type": "float", "_default": 1.0e-3},
         "initial_fraction": {"_type": "float", "_default": 0.0},
     }
 
@@ -254,6 +276,10 @@ class ChromosomeSegregationReproductionProcess(Process):
         "complete_threshold": {"_type": "float", "_default": 0.999},  # replication ~complete
         "segregation_rate": {"_type": "float", "_default": 1.0 / 3869.0},  # ~cytokinesis duration
         "initial_fraction": {"_type": "float", "_default": 0.0},
+        # The reduced ramp omits the segregation event's energetic cost; the real
+        # per-event GTP cost (Karr 2012 parameters.json ChromosomeSegregation.gtpCost 1.0)
+        # has no slot here — available via
+        # viva_mgen.kb.karr_process_params("ChromosomeSegregation").
     }
 
     def __init__(self, config=None, core=None):
