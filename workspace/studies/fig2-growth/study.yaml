@@ -128,6 +128,15 @@ readouts:
   store_path: stores/volume
   status: available
 
+runs:
+- name: baseline
+  run_id: fig2-growth-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig2-growth/results/baseline.zarr
+  timestamp: 1789259045.0
+
 pipeline_gate:
   prerequisites:
   - study: fig1-architecture

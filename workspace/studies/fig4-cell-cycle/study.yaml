@@ -144,6 +144,15 @@ readouts:
   store_path: stores/phase_code
   status: available
 
+runs:
+- name: baseline
+  run_id: fig4-cell-cycle-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 162
+  store_path: workspace/studies/fig4-cell-cycle/results/baseline.zarr
+  timestamp: 1789259045.0
+
 pipeline_gate:
   prerequisites:
   - study: fig1-architecture

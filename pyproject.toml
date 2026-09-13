@@ -39,6 +39,8 @@ workspace = [
     "pypdf>=4.0",
     "matplotlib",
     "vivarium-workbench",
+    "xarray",
+    "zarr",
 ]
 
 [project.urls]

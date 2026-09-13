@@ -146,6 +146,15 @@ readouts:
   store_path: stores/gtp
   status: available
 
+runs:
+- name: baseline
+  run_id: fig3-expression-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 120
+  store_path: workspace/studies/fig3-expression/results/baseline.zarr
+  timestamp: 1789259045.0
+
 pipeline_gate:
   prerequisites:
   - study: fig1-architecture

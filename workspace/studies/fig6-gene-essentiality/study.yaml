@@ -130,6 +130,15 @@ readouts:
   store_path: stores/feasible
   status: available
 
+runs:
+- name: baseline
+  run_id: fig6-gene-essentiality-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig6-gene-essentiality/results/baseline.zarr
+  timestamp: 1789259045.0
+
 pipeline_gate:
   prerequisites:
   - study: fig2-growth

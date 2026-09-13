@@ -152,6 +152,15 @@ readouts:
   store_path: stores/growth_rate
   status: available
 
+runs:
+- name: baseline
+  run_id: fig7-kinetic-parameters-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig7-kinetic-parameters/results/baseline.zarr
+  timestamp: 1789259045.0
+
 pipeline_gate:
   prerequisites:
   - study: fig6-gene-essentiality
