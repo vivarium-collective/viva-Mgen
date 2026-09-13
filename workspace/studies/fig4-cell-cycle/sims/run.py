@@ -87,7 +87,7 @@ def _run_population(core):
 def _run_trajectory(core, initial_dnaA=8.0, initial_dntp=20000.0, seed=1,
                     interval=100.0, n_seconds=40000.0):
     """One representative cell through the full composite for a dynamics viz."""
-    doc = build_mgen(core, initial_dnaA=initial_dnaA, initial_dntp=initial_dntp, seed=seed)
+    doc = build_mgen(core, initial_dnaA=initial_dnaA, initial_dntp=initial_dntp, seed=seed, interval=n_seconds)
     doc["replication"]["interval"] = interval
     for _pk in ("metabolism","mass","transcription","translation","rna_decay","protein_decay"):
         doc[_pk]["interval"] = n_seconds  # fig4 measures the cell cycle only

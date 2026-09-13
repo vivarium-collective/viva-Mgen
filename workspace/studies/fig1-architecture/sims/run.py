@@ -74,7 +74,7 @@ def _wiring_matrix(doc: dict):
 
 def _run(runtime_s=1200.0, heavy_interval=60.0):
     core = build_core()
-    doc = build_mgen(core)
+    doc = build_mgen(core, interval=heavy_interval)
     # keep FBA cost reasonable: metabolism + mass on a coarse timestep, expression at 1 s
     doc["metabolism"]["interval"] = heavy_interval
     doc["mass"]["interval"] = heavy_interval

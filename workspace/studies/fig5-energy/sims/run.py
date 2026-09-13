@@ -60,7 +60,7 @@ FIG5D_UNACCOUNTED = 0.44
 
 def _run_metabolism(core, n_seconds=3600.0, dt=60.0):
     """Integrated cell for one hour; time-averaged ATP/GTP production flux."""
-    doc = build_mgen(core)
+    doc = build_mgen(core, interval=dt)
     doc["metabolism"]["interval"] = dt
     doc["mass"]["interval"] = dt
     for _pk in ("replication","transcription","translation","rna_decay","protein_decay"):

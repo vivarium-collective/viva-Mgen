@@ -42,7 +42,7 @@ INVESTIGATION_SLUG = "mgen"
 
 def _run(n_hours=9.0, dt=300.0):
     core = build_core()
-    doc = build_mgen(core)
+    doc = build_mgen(core, interval=dt)
     # coarse timestep so a full ~9 h cycle is a few dozen FBA solves, not 32400
     doc["metabolism"]["interval"] = dt
     doc["mass"]["interval"] = dt
