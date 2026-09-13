@@ -1,48 +1,73 @@
 schema_version: 4
 name: fig4-cell-cycle
-title: "Fig 4 — Emergent, unregulated control of cell-cycle duration"
+title: Fig 4 — Emergent, unregulated control of cell-cycle duration
 created: '2026-09-12'
 status: complete
 phase: Evaluate
+question: 'Does the viva-Mgen replication submodel reproduce Fig 4''s central finding —
 
-question: |
-  Does the viva-Mgen replication submodel reproduce Fig 4's central finding —
-  that M. genitalium's cell-cycle duration is controlled *emergently*, without a
+  that M. genitalium''s cell-cycle duration is controlled *emergently*, without a
+
   dedicated genetic regulator, through the coupling of replication initiation and
+
   a dNTP surplus that it builds up?
-hypothesis: |
-  If DnaA accumulates stochastically to trigger initiation while dNTPs
+
+  '
+hypothesis: 'If DnaA accumulates stochastically to trigger initiation while dNTPs
+
   accumulate (unconsumed) during that same initiation phase, then across single
+
   cells (1) more birth DnaA shortens initiation (Fig 4C), (2) a larger dNTP pool
+
   at replication start shortens replication (Fig 4D), and (3) initiation and
+
   replication durations are inversely correlated (Fig 4E) — a longer initiation
+
   buys a bigger dNTP surplus that speeds replication, buffering total cycle length.
-objective: |
-  Simulate a population of ~128 single cells with random birth DnaA and dNTP
+
+  '
+objective: 'Simulate a population of ~128 single cells with random birth DnaA and dNTP
+
   levels by stepping the ReplicationReproductionProcess directly, recover the
+
   three Fig 4 single-cell correlations, and render a representative single-cell
+
   dynamics trajectory through the fig4_cell_cycle composite.
-description: |
-  REDUCED MECHANISM, GENUINE DYNAMICS. This is a clean-room reproduction of the
+
+  '
+description: 'REDUCED MECHANISM, GENUINE DYNAMICS. This is a clean-room reproduction of the
+
   emergent cell-cycle regulation Karr 2012 uncovered, not the full
+
   replisome/Okazaki-fragment machinery of the original Replication submodel. The
+
   mechanism is genuine: a dNTP-buffered three-phase cycle (initiation ->
+
   replication -> done) in which DnaA accumulates stochastically to a threshold to
+
   fire initiation, dNTPs accumulate unconsumed during initiation, and the
+
   resulting surplus sets the speed of the deterministic, dNTP-limited replication
+
   phase. No gene explicitly regulates cycle length; the buffering is emergent
+
   from that coupling. Achieved (committed production run, 128/128 cells
+
   completing): r(initiation, replication) = -0.930 (Fig 4E),
+
   r(dNTP-at-start, replication) = -0.951 (Fig 4D),
+
   r(initial DnaA, initiation) = -0.743 (Fig 4C).
 
+  '
 baseline:
 - name: baseline
   composite: viva_mgen.composites.mgen.mycoplasma_genitalium
-  params: {initial_dnaA: 5, initial_dntp: 0, seed: 0}
-
+  params:
+    initial_dnaA: 5
+    initial_dntp: 0
+    seed: 0
 variants: []
-
 simulation_set:
 - name: baseline
   status: ran
@@ -50,9 +75,11 @@ simulation_set:
   duration_min: 60
   seeds:
   - 0
-  condition: >-
-    Canonical viva-Mgen fig4-cell-cycle run via sims/run.py (recorded in .pbg/runs.jsonl).
-  params: {'initial_dnaA': 5, 'initial_dntp': 0, 'seed': 0}
+  condition: Canonical viva-Mgen fig4-cell-cycle run via sims/run.py (recorded in .pbg/runs.jsonl).
+  params:
+    initial_dnaA: 5
+    initial_dntp: 0
+    seed: 0
   readouts:
   - r_init_repl
   - r_dntp_repl
@@ -61,75 +88,89 @@ simulation_set:
   - initiation-replication-inversely-correlated
   - dntp-controls-replication-duration
   - more-dnaa-shortens-initiation
-
 expected_behavior:
 - name: initiation-replication-inversely-correlated
-  en: "Across single cells, initiation and replication durations are inversely correlated (Fig 4E)."
+  en: Across single cells, initiation and replication durations are inversely correlated (Fig 4E).
   observable: r_init_repl
   condition: -1.0 <= r_init_repl <= -0.2
-  rationale: >-
-    dNTPs accumulate unconsumed during initiation, so a longer initiation builds a
-    larger surplus that speeds the subsequent replication — buffering total cycle
-    length. Achieved r = -0.930.
-  measure: {kind: derived_scalar, field: r_init_repl}
-  expect: {op: range, low: -1.0, high: -0.7}
+  rationale: dNTPs accumulate unconsumed during initiation, so a longer initiation builds a larger surplus
+    that speeds the subsequent replication — buffering total cycle length. Achieved r = -0.930.
+  measure:
+    kind: derived_scalar
+    field: r_init_repl
+  expect:
+    op: range
+    low: -1.0
+    high: -0.7
 - name: dntp-controls-replication-duration
-  en: "A higher dNTP pool at the start of replication shortens replication (Fig 4D)."
+  en: A higher dNTP pool at the start of replication shortens replication (Fig 4D).
   observable: r_dntp_repl
   condition: -1.0 <= r_dntp_repl <= -0.2
-  rationale: >-
-    Replication is dNTP-limited; a larger starting pool lets polymerase run nearer
-    its rate cap, finishing sooner. Achieved r = -0.951.
-  measure: {kind: derived_scalar, field: r_dntp_repl}
-  expect: {op: range, low: -1.0, high: -0.7}
+  rationale: Replication is dNTP-limited; a larger starting pool lets polymerase run nearer its rate cap,
+    finishing sooner. Achieved r = -0.951.
+  measure:
+    kind: derived_scalar
+    field: r_dntp_repl
+  expect:
+    op: range
+    low: -1.0
+    high: -0.7
 - name: more-dnaa-shortens-initiation
-  en: "More DnaA present at birth shortens replication-initiation duration (Fig 4C)."
+  en: More DnaA present at birth shortens replication-initiation duration (Fig 4C).
   observable: r_dnaA_init
   condition: -1.0 <= r_dnaA_init <= -0.2
-  rationale: >-
-    Initiation fires when DnaA reaches a fixed threshold; starting closer to it
-    means less to accumulate. Achieved r = -0.743.
-  measure: {kind: derived_scalar, field: r_dnaA_init}
-  expect: {op: range, low: -1.0, high: -0.4}
-
+  rationale: Initiation fires when DnaA reaches a fixed threshold; starting closer to it means less to
+    accumulate. Achieved r = -0.743.
+  measure:
+    kind: derived_scalar
+    field: r_dnaA_init
+  expect:
+    op: range
+    low: -1.0
+    high: -0.4
 behavior_tests:
 - name: initiation-replication-inversely-correlated
   classification: primary
-  description: "Pearson r(initiation_duration, replication_duration) is clearly negative (Fig 4E)."
-  measure: {kind: derived_scalar, field: r_init_repl}
+  description: Pearson r(initiation_duration, replication_duration) is clearly negative (Fig 4E).
+  measure:
+    kind: derived_scalar
+    field: r_init_repl
   pass_if:
     op: range
     low: -1.0
     high: -0.7
     provenance:
       kind: model
-      note: "Karr 2012 Fig 4E — inverse initiation↔replication duration control; achieved r = -0.930."
+      note: Karr 2012 Fig 4E — inverse initiation↔replication duration control; achieved r = -0.930.
   requires_simulation: baseline
 - name: dntp-controls-replication-duration
   classification: primary
-  description: "Pearson r(dntp_at_replication_start, replication_duration) is clearly negative (Fig 4D)."
-  measure: {kind: derived_scalar, field: r_dntp_repl}
+  description: Pearson r(dntp_at_replication_start, replication_duration) is clearly negative (Fig 4D).
+  measure:
+    kind: derived_scalar
+    field: r_dntp_repl
   pass_if:
     op: range
     low: -1.0
     high: -0.7
     provenance:
       kind: model
-      note: "Karr 2012 Fig 4D — higher starting dNTP shortens replication; achieved r = -0.951."
+      note: Karr 2012 Fig 4D — higher starting dNTP shortens replication; achieved r = -0.951.
   requires_simulation: baseline
 - name: more-dnaa-shortens-initiation
   classification: primary
-  description: "Pearson r(initial_dnaA, initiation_duration) is clearly negative (Fig 4C)."
-  measure: {kind: derived_scalar, field: r_dnaA_init}
+  description: Pearson r(initial_dnaA, initiation_duration) is clearly negative (Fig 4C).
+  measure:
+    kind: derived_scalar
+    field: r_dnaA_init
   pass_if:
     op: range
     low: -1.0
     high: -0.4
     provenance:
       kind: model
-      note: "Karr 2012 Fig 4C — more initial DnaA shortens initiation; achieved r = -0.743."
+      note: Karr 2012 Fig 4C — more initial DnaA shortens initiation; achieved r = -0.743.
   requires_simulation: baseline
-
 readouts:
 - name: replicated_fraction
   store_path: stores/replicated_fraction
@@ -143,7 +184,6 @@ readouts:
 - name: phase_code
   store_path: stores/phase_code
   status: available
-
 runs:
 - name: baseline
   run_id: fig4-cell-cycle-baseline
@@ -152,88 +192,78 @@ runs:
   n_steps: 162
   store_path: workspace/studies/fig4-cell-cycle/results/baseline.zarr
   timestamp: 1789259045.0
-
 pipeline_gate:
   prerequisites:
   - study: fig1-architecture
     condition: tests-passed
   enables: []
-  proceed_condition: |
-    All three Fig 4 single-cell correlations come out clearly negative, showing
+  proceed_condition: 'All three Fig 4 single-cell correlations come out clearly negative, showing
+
     the emergent, genetically-unregulated buffering of cell-cycle duration is
+
     reproduced by the reduced dNTP-coupled mechanism.
 
+    '
 canonical_runs:
 - name: default
   script: workspace/studies/fig4-cell-cycle/sims/run.py
   args: []
-  label: "Fig 4 cell cycle: 128-cell population + representative trajectory"
+  label: 'Fig 4 cell cycle: 128-cell population + representative trajectory'
   default: true
-
 visualizations:
 - name: fig4-combined
   chart: viz/fig4_combined.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig4_cellcycle.py
 - name: fig4-a-phase-durations
   chart: viz/fig4_a_phase_durations.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig4_cellcycle.py
 - name: fig4-b-single-cell-dynamics
   chart: viz/fig4_b_single_cell_dynamics.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig4_cellcycle.py
 - name: fig4-c-dnaA-vs-init
   chart: viz/fig4_c_dnaA_vs_init.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig4_cellcycle.py
 - name: fig4-d-dntp-vs-repl
   chart: viz/fig4_d_dntp_vs_repl.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig4_cellcycle.py
 - name: fig4-e-init-vs-repl
   chart: viz/fig4_e_init_vs_repl.html
-  render: "python sims/run.py"
-- name: init-vs-repl
-  chart: viz/init_vs_repl.html
-  render: "python sims/run.py"
-- name: dntp-vs-repl
-  chart: viz/dntp_vs_repl.html
-  render: "python sims/run.py"
-- name: cell-cycle-trajectory
-  chart: viz/cell_cycle_trajectory.html
-  render: "python sims/run.py"
-
+  render: python scripts/regen_fig4_cellcycle.py
 embed_visualizations:
 - name: fig4-combined
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_combined.html
-  description: "Figure 4 reproduced — all subpanels combined as in Karr 2012."
+  description: Figure 4 reproduced — emergent cell-cycle-duration regulation, all subpanels (a–e) as in
+    Karr 2012.
 - name: fig4-a-phase-durations
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_a_phase_durations.html
-  description: "Figure 4 subpanel: phase durations."
+  description: 'Fig 4A: initiation/replication/cytokinesis/total cell-cycle duration distributions (~9
+    h cycle).'
 - name: fig4-b-single-cell-dynamics
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_b_single_cell_dynamics.html
-  description: "Figure 4 subpanel: single cell dynamics."
+  description: 'Fig 4B: single-cell DnaA, chromosome copy, and dNTP dynamics with phase shading.'
 - name: fig4-c-dnaA-vs-init
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_c_dnaA_vs_init.html
-  description: "Figure 4 subpanel: dnaA vs init."
+  description: 'Fig 4C: initial DnaA vs initiation duration (negative).'
 - name: fig4-d-dntp-vs-repl
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_d_dntp_vs_repl.html
-  description: "Figure 4 subpanel: dntp vs repl."
+  description: 'Fig 4D: dNTP surplus at replication start vs replication duration (negative).'
 - name: fig4-e-init-vs-repl
   url: /workspace/studies/fig4-cell-cycle/viz/fig4_e_init_vs_repl.html
-  description: "Figure 4 subpanel: init vs repl."
-- name: init-vs-repl
-  url: /workspace/studies/fig4-cell-cycle/viz/init_vs_repl.html
-  description: "Initiation vs replication duration across 128 single cells — inversely correlated (Fig 4E)."
-- name: dntp-vs-repl
-  url: /workspace/studies/fig4-cell-cycle/viz/dntp_vs_repl.html
-  description: "dNTP pool at replication start vs replication duration — higher surplus, faster replication (Fig 4D)."
-- name: cell-cycle-trajectory
-  url: /workspace/studies/fig4-cell-cycle/viz/cell_cycle_trajectory.html
-  description: "One representative cell through the three-phase cycle: replicated fraction, dNTP pool, DnaA complex vs time (Fig 4B)."
+  description: 'Fig 4E: emergent inverse initiation↔replication duration relationship.'
+conclusion: 'viva-Mgen reproduces Fig 4''s emergent cell-cycle regulation with a reduced but
 
-conclusion: |
-  viva-Mgen reproduces Fig 4's emergent cell-cycle regulation with a reduced but
   mechanistically genuine dNTP-buffered replication model. Across 128 single
+
   cells (all completing), the three signature correlations are clearly negative:
+
   more birth DnaA shortens initiation (r = -0.743, Fig 4C), a larger starting
+
   dNTP pool shortens replication (r = -0.951, Fig 4D), and initiation and
+
   replication durations are inversely related (r = -0.930, Fig 4E) — the
+
   self-buffering of total cycle length that arises without any dedicated genetic
+
   regulator.
+
+  '

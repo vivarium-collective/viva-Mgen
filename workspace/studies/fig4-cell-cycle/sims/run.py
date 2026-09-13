@@ -63,8 +63,13 @@ def _run_population(core):
     init_dur, repl_dur, dntp_start, dnaA0 = [], [], [], []
     for i in range(N_CELLS):
         rng = np.random.default_rng(1000 + i)
-        initial_dnaA = float(rng.uniform(0.0, 15.0))
-        initial_dntp = float(rng.uniform(0.0, 80000.0))
+        # birth-state spread: a little DnaA and a modest dNTP pool at birth. The
+        # ranges are kept tight so the S-phase-limited replication lands near the
+        # paper's ~4.33 h (a large birth dNTP pool would let the polymerase race
+        # through the genome in ~1 h); the cell-to-cell variation still drives the
+        # emergent inverse initiation↔replication relationship (Fig 4C/D/E).
+        initial_dnaA = float(rng.uniform(0.0, 8.0))
+        initial_dntp = float(rng.uniform(0.0, 12000.0))
         p = ReplicationReproductionProcess(
             {"initial_dnaA": initial_dnaA, "initial_dntp": initial_dntp, "seed": int(i)},
             core=core,

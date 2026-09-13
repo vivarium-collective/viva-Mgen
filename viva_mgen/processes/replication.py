@@ -55,9 +55,10 @@ class ReplicationReproductionProcess(Process):
         "dNTP-buffered three-phase replication — reduced reproduction of the emergent "
         "cell-cycle regulation Karr 2012 uncovered (Fig 4).\n"
         "INITIATION: DnaA accumulates stochastically (Poisson) into the oriC complex while "
-        "dNTPs build up unconsumed; replication begins when DnaA ≥ threshold. REPLICATION: DNA "
-        "polymerase advances min(rate·Δt, dNTP) per step, consuming 1 dNTP/nt while dNTP is "
-        "replenished at the synthesis rate; done at terC.\n"
+        "dNTPs build up (at a reduced pre-S-phase rate) unconsumed; replication begins when "
+        "DnaA ≥ threshold. REPLICATION: dNTP synthesis up-regulates to its full rate and DNA "
+        "polymerase advances min(rate·Δt, dNTP) per step, consuming 1 dNTP/nt; done at terC "
+        "after ~4 h (dNTP-synthesis-limited).\n"
         "Because dNTPs accumulate during initiation, a longer initiation builds a larger surplus "
         "that makes replication FASTER — an emergent inverse initiation↔replication relationship "
         "that buffers total cell-cycle length (Fig 4C/D/E).\n"
@@ -75,6 +76,14 @@ class ReplicationReproductionProcess(Process):
         "dnaA_synthesis_rate": {"_type": "float", "_default": 30.0 / 12960.0},  # → ~init duration
         "initial_dnaA": {"_type": "float", "_default": 0.0},
         "dntp_synthesis_rate": {"_type": "float", "_default": 580070.0 / 15571.0},  # nt-equiv/s
+        # dNTP synthesis runs SLOWER during initiation than during replication:
+        # dNTP synthesis is up-regulated for S-phase, so only a modest surplus
+        # accumulates before replication (a large surplus would let the pol race
+        # through the genome in ~1 h instead of the ~4.33 h the paper reports).
+        # This keeps replication dNTP-limited near 4.33 h while the surplus still
+        # MODULATES it — preserving the emergent inverse initiation↔replication
+        # relationship (Fig 4E) as cell-to-cell variation rather than dominating it.
+        "init_synth_fraction": {"_type": "float", "_default": 0.2},
         "dna_pol_rate": {"_type": "float", "_default": 250.0},  # nt/s (both replisomes), pol cap
         "initial_dntp": {"_type": "float", "_default": 0.0},
         "seed": {"_type": "integer", "_default": 0},
@@ -118,8 +127,9 @@ class ReplicationReproductionProcess(Process):
 
         if self._phase == _INIT:
             # DnaA accumulates stochastically; dNTP accumulates (no consumption yet)
+            # but at the reduced pre-S-phase rate, so only a modest surplus builds.
             self._dnaA += float(self._rng.poisson(max(self.config["dnaA_synthesis_rate"] * interval, 0.0)))
-            self._dntp += synth
+            self._dntp += synth * self.config["init_synth_fraction"]
             if self._dnaA >= self.config["dnaA_threshold"]:
                 self._phase = _REPL
                 self._init_dur = self._t
