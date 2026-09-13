@@ -58,7 +58,7 @@
             <span class="dot"></span>2&nbsp;·&nbsp;Execution
           </span>
           
-          <span class="status-step gate-step axis-evaluation_status gate-state-not-assessed set" title="Gate 3 · Evidence">
+          <span class="status-step gate-step axis-evaluation_status gate-state-passed-with-conditions set" title="Gate 3 · Evidence">
             <span class="dot"></span>3&nbsp;·&nbsp;Evidence
           </span>
           
@@ -96,13 +96,15 @@
           
         </div>
         
-        <div class="status-detail-row gate-row gate-state-not-assessed">
+        <div class="status-detail-row gate-row gate-state-passed-with-conditions">
           <span class="status-detail-axis">3 · Evidence</span>
           <span class="status-chip gate-state-not-assessed">not set</span>
           
-          <span class="gate-computed-chip gate-state-not-assessed" title="no verdicts recorded yet">◆ computed: not_evaluated</span>
+          <span class="gate-computed-chip gate-state-passed-with-conditions" title="no verdicts recorded yet + visualization readiness gate (V4)">◆ computed: not_evaluated</span>
           
           
+          
+          <span class="gate-viz-gap-note" style="font-size:0.86em;color:#92400e">visualization gap: no figures</span>
           
         </div>
         
@@ -180,7 +182,7 @@ enzyme is no longer rate-limiting?
   </div>
   <div class="act-cluster" data-act="evidence">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed"></span>
+      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed-with-conditions"></span>
       <span class="act-label">Evidence</span>
     </div>
     <div class="act-tabs">
@@ -798,32 +800,9 @@ dynamic range.
 
     
     
-    <div class="viz-actions-row" style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-      <button type="button" class="btn-mini" onclick="window._vivStudyFiguresFromCard(event, 'fig7-kinetic-parameters')" title="Download this study's visualizations (figure panels + its composite) as a zip">↓ visualizations</button>
-    </div>
-    
 
     <div id="native-gallery-panel" class="figure-mount"><p class="empty-message">Loading figures…</p></div>
 
-    
-    
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig7-kinetic-parameters/viz/kcat_growth_curve.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="kcat-growth-curve"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">Growth fraction vs flux-bound scale (kcat/Vmax proxy, log x) for the leucine-uptake target and two secondary uptake reactions — a monotonic, saturating sigmoid (Fig 7E).</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">kcat-growth-curve</span>
-        
-        <a href="/viva-Mgen/dashboard/workspace/studies/fig7-kinetic-parameters/viz/kcat_growth_curve.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
     
     
 
@@ -1102,57 +1081,11 @@ pass_if: {"high": 1.05, "low": 0.3, "op": "range", "provenance": {"kind": "model
 
     
     
-    <div class="decide-section" style="margin-top:18px">
-      <h3 class="overview-label">Conclusion</h3>
-      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>The viva-Mgen cell reproduces Fig 7's central kcat→growth law at reduced
-fidelity. Sweeping the growth-limiting leucine-uptake reaction
-EX_leu_DASH_L_e's flux bound (a Vmax proxy) over 0.01–10x wild-type yields a
-textbook sigmoid: growth_fraction rises monotonically from 0.136 at 0.01x,
-crosses through the mid-range, and saturates at 1.000 by ~0.1x, giving a
-dynamic range of 0.864. Both primary tests pass (monotonic = 1.0,
-saturates = 1.0) and the reaction is genuinely limiting (dynamic_range 0.864 &gt;
-0.3) — matching the qualitative dependence the paper exploits to reconcile
-model and experiment for lpdA/deoD/thyA. kcat is a flux-bound proxy, not
-explicit enzyme kinetics, and the specific paper genetics are not individually
-modelled.</p>
-</div>
-    </div>
-    
     
 
   </div>
 
   
-  
-  <div class="overview-section"><h2 class="overview-label">Plan &amp; assumptions</h2>
-
-    
-    <div class="overview-section">
-      <h3 class="overview-label">Pipeline gate</h3>
-      <p class="muted" style="margin: 0 0 8px 0;font-size:0.88em">
-        Each study is a model-building gate: it answers <em>"Can we safely build the next layer?"</em>
-      </p>
-      
-      <div style="margin-bottom:6px"><strong>Prerequisites:</strong>
-        <code>{&#39;study&#39;: &#39;fig6-gene-essentiality&#39;, &#39;condition&#39;: &#39;tests-passed&#39;}</code>
-      </div>
-      
-      
-      
-      <div><strong>Proceed when:</strong> <span class="muted">The reduced cell reproduces Fig 7&#39;s qualitative kcat→growth law — a
-monotonic, saturating sigmoid with a clear dynamic range — establishing that
-tuning a rate-limiting enzyme&#39;s Vmax proxy moves predicted growth, the
-mechanism the paper uses to reconcile model and experiment.
-</span></div>
-      
-    </div>
-    
-
-    
-
-    
-
-  </div>
   
 
   
@@ -1201,7 +1134,7 @@ mechanism the paper uses to reconcile model and experiment.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "d0a81f08492238b1f8ddea0ba2f7e87c1dc054d1", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/d0a81f08492238b1f8ddea0ba2f7e87c1dc054d1", "branch": "main", "generated_at": "2026-09-13 00:47 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "0a351451464828fe62ba1a29ff6ea62b09f57b02", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/0a351451464828fe62ba1a29ff6ea62b09f57b02", "branch": "main", "generated_at": "2026-09-13 00:49 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig7-kinetic-parameters";

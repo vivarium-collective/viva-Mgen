@@ -204,28 +204,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **wiring-matrix**
-
-def _save_viz(study, slug, html):
-    d = REPO / 'reports/notebooks/figures' / study
-    d.mkdir(parents=True, exist_ok=True)
-    out = d / (slug + '.html')
-    out.write_text(html, encoding='utf-8')
-    print('  wrote', out)
-
-
-# wiring-matrix
-_save_viz('fig1-architecture', 'wiring-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **cell-dashboard**
-
-# cell-dashboard
-_save_viz('fig1-architecture', 'cell-dashboard', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -277,20 +255,6 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
-
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **growth-curve**
-
-# growth-curve
-_save_viz('fig2-growth', 'growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **composition-donut**
-
-# composition-donut
-_save_viz('fig2-growth', 'composition-donut', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -347,20 +311,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **expression-timeseries**
-
-# expression-timeseries
-_save_viz('fig3-expression', 'expression-timeseries', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **protein-vs-mrna**
-
-# protein-vs-mrna
-_save_viz('fig3-expression', 'protein-vs-mrna', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -415,25 +365,6 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
-
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **init-vs-repl**
-
-# init-vs-repl
-_save_viz('fig4-cell-cycle', 'init-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **dntp-vs-repl**
-
-# dntp-vs-repl
-_save_viz('fig4-cell-cycle', 'dntp-vs-repl', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **cell-cycle-trajectory**
-
-# cell-cycle-trajectory
-_save_viz('fig4-cell-cycle', 'cell-cycle-trajectory', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -491,20 +422,6 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **energy-allocation**
-
-# energy-allocation
-_save_viz('fig5-energy', 'energy-allocation', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **synthesis-rates**
-
-# synthesis-rates
-_save_viz('fig5-energy', 'synthesis-rates', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
 # ### Acceptance criteria
 #
 # _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
@@ -559,20 +476,6 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
-
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **confusion-matrix**
-
-# confusion-matrix
-_save_viz('fig6-gene-essentiality', 'confusion-matrix', _render_one('', {}, RUNS_DB, STUDY_YAML))
-
-# **accuracy-summary**
-
-# accuracy-summary
-_save_viz('fig6-gene-essentiality', 'accuracy-summary', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #
@@ -629,15 +532,6 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
-
-# ### Visualizations
-#
-# _Results are shown by the figures below, produced by the run above._
-
-# **kcat-growth-curve**
-
-# kcat-growth-curve
-_save_viz('fig7-kinetic-parameters', 'kcat-growth-curve', _render_one('', {}, RUNS_DB, STUDY_YAML))
 
 # ### Acceptance criteria
 #

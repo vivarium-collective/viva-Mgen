@@ -58,7 +58,7 @@
             <span class="dot"></span>2&nbsp;·&nbsp;Execution
           </span>
           
-          <span class="status-step gate-step axis-evaluation_status gate-state-not-assessed set" title="Gate 3 · Evidence">
+          <span class="status-step gate-step axis-evaluation_status gate-state-passed-with-conditions set" title="Gate 3 · Evidence">
             <span class="dot"></span>3&nbsp;·&nbsp;Evidence
           </span>
           
@@ -96,13 +96,15 @@
           
         </div>
         
-        <div class="status-detail-row gate-row gate-state-not-assessed">
+        <div class="status-detail-row gate-row gate-state-passed-with-conditions">
           <span class="status-detail-axis">3 · Evidence</span>
           <span class="status-chip gate-state-not-assessed">not set</span>
           
-          <span class="gate-computed-chip gate-state-not-assessed" title="no verdicts recorded yet">◆ computed: not_evaluated</span>
+          <span class="gate-computed-chip gate-state-passed-with-conditions" title="no verdicts recorded yet + visualization readiness gate (V4)">◆ computed: not_evaluated</span>
           
           
+          
+          <span class="gate-viz-gap-note" style="font-size:0.86em;color:#92400e">visualization gap: no figures</span>
           
         </div>
         
@@ -180,7 +182,7 @@ cell?
   </div>
   <div class="act-cluster" data-act="evidence">
     <div class="act-header">
-      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed"></span>
+      <span class="act-gate-dot" data-gate="evidence" data-gate-state="passed-with-conditions"></span>
       <span class="act-label">Evidence</span>
     </div>
     <div class="act-tabs">
@@ -796,49 +798,9 @@ confirm it composes and stays viable.
 
     
     
-    <div class="viz-actions-row" style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-      <button type="button" class="btn-mini" onclick="window._vivStudyFiguresFromCard(event, 'fig1-architecture')" title="Download this study's visualizations (figure panels + its composite) as a zip">↓ visualizations</button>
-    </div>
-    
 
     <div id="native-gallery-panel" class="figure-mount"><p class="empty-message">Loading figures…</p></div>
 
-    
-    
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig1-architecture/viz/wiring_matrix.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="wiring-matrix"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">Process × cell-variable coupling matrix derived from the composite doc — the Fig 1B wiring diagram.</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">wiring-matrix</span>
-        
-        <a href="/viva-Mgen/dashboard/workspace/studies/fig1-architecture/viz/wiring_matrix.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
-    
-    <div class="figure-card embed-viz-card">
-      <iframe src="/viva-Mgen/dashboard/workspace/studies/fig1-architecture/viz/cell_dashboard.html"
-              class="figure-media-frame figure-media-frame--embed"
-              loading="lazy" title="cell-dashboard"
-              onload="window.__fitFigureFrame&&window.__fitFigureFrame(this)"
-              ></iframe>
-      
-      <p class="figure-desc muted">Integrated cell dynamics over 20 min — mass, growth rate, and total mRNA/protein counts sharing one clock.</p>
-      
-      <div class="figure-caption-row">
-        <span class="figure-source-chip">embed</span>
-        <span class="figure-title">cell-dashboard</span>
-        
-        <a href="/viva-Mgen/dashboard/workspace/studies/fig1-architecture/viz/cell_dashboard.html" target="_blank" class="figure-open-link">Open in new tab ↗</a>
-      </div>
-    </div>
     
     
 
@@ -1117,56 +1079,11 @@ pass_if: {"high": 1.1, "low": 0.9, "op": "range", "provenance": {"kind": "model"
 
     
     
-    <div class="decide-section" style="margin-top:18px">
-      <h3 class="overview-label">Conclusion</h3>
-      <div class="conclusion-md" style="background:#f8fafc;padding:12px;border-left:3px solid #94a3b8;border-radius:3px;font-size:0.9em;line-height:1.5"><p>viva-Mgen reproduces Fig 1's architecture as a runnable integrated cell, not a
-drawing. The composite wires exactly 6 submodels through shared bigraph stores,
-with 3 cell variables coupled across ≥2 submodels (growth_fraction, rna_counts,
-protein_counts) — the integration Fig 1B depicts. Over a 20 min run the cell
-stays viable (growth_fraction 1.000) and grows (mass 3.93 → 4.03 fg). Distinct
-mRNA/protein species produced were 0 over this short window, consistent with the
-low stochastic expression rate; this study demonstrates the architecture, not an
-expression phenotype.</p>
-</div>
-    </div>
-    
     
 
   </div>
 
   
-  
-  <div class="overview-section"><h2 class="overview-label">Plan &amp; assumptions</h2>
-
-    
-    <div class="overview-section">
-      <h3 class="overview-label">Pipeline gate</h3>
-      <p class="muted" style="margin: 0 0 8px 0;font-size:0.88em">
-        Each study is a model-building gate: it answers <em>"Can we safely build the next layer?"</em>
-      </p>
-      
-      <div style="margin-bottom:6px"><strong>Prerequisites:</strong> <em class="muted">none (root study)</em></div>
-      
-      
-      <div style="margin-bottom:6px"><strong>Enables:</strong>
-        <code>fig2-growth</code> · <code>fig3-expression</code>
-      </div>
-      
-      
-      <div><strong>Proceed when:</strong> <span class="muted">All six submodels compose into one integrated cell that runs and stays
-viable, with the shared cell variables (Fig 1B wiring) in place. This
-integrated backbone is the substrate the growth (fig2) and expression (fig3)
-studies foreground.
-</span></div>
-      
-    </div>
-    
-
-    
-
-    
-
-  </div>
   
 
   
@@ -1215,7 +1132,7 @@ studies foreground.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "d0a81f08492238b1f8ddea0ba2f7e87c1dc054d1", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/d0a81f08492238b1f8ddea0ba2f7e87c1dc054d1", "branch": "main", "generated_at": "2026-09-13 00:47 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "0a351451464828fe62ba1a29ff6ea62b09f57b02", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/0a351451464828fe62ba1a29ff6ea62b09f57b02", "branch": "main", "generated_at": "2026-09-13 00:49 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig1-architecture";
