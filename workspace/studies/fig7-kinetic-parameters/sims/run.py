@@ -145,14 +145,29 @@ def main() -> int:
         monotonic = all(g[i + 1] >= g[i] - eps for i in range(len(g) - 1))
         saturates = g[-1] >= 0.97 * float(g.max())
         dynamic_range = float(g.max() - g.min())
+        # Fig 7E: growth is a saturating, sigmoidal function of kcat that RECOVERS
+        # the wild-type rate at high kcat.
+        saturates_at_wt = g[-1] >= 0.95
+        # kcat proxy (× WT) at half-maximal growth
+        half = g.min() + 0.5 * dynamic_range
+        kcat_half_max = float(SWEEP_SCALES[int(np.argmin(np.abs(g - half)))])
+        # sigmoidal = a clear low plateau, a rise, and a high plateau
+        lo = float((g < g.min() + 0.1 * dynamic_range).sum())
+        hi = float((g > g.max() - 0.1 * dynamic_range).sum())
+        is_sigmoidal = 1.0 if (lo >= 1 and hi >= 2 and dynamic_range > 0.3) else 0.0
 
         observables = {
             "target_reaction": primary,
             "growth_is_monotonic_in_kcat": 1.0 if monotonic else 0.0,
             "growth_saturates": 1.0 if saturates else 0.0,
+            "growth_saturates_at_wt": 1.0 if saturates_at_wt else 0.0,
+            "growth_is_sigmoidal": is_sigmoidal,
+            "kcat_half_max": kcat_half_max,
+            "growth_dynamic_range": dynamic_range,
             "dynamic_range": dynamic_range,
             "growth_at_min_kcat": float(g.min()),
             "growth_at_max_kcat": float(g[-1]),
+            "sweep_points": float(len(SWEEP_SCALES)),
             "baseline_growth_fraction": baseline_gf,
         }
 

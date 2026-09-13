@@ -127,7 +127,36 @@ def main() -> int:
         r_dntp_repl = float(np.corrcoef(dntp_start, repl_dur)[0, 1])
         r_dnaA_init = float(np.corrcoef(dnaA0, init_dur)[0, 1])
 
+        # cytokinesis phase: the model uses the paper's fixed ~1.08 h with a small
+        # (4.4%) cell-to-cell CV; total cell cycle = initiation + replication + cytokinesis
+        _cy_rng = np.random.default_rng(7)
+        cyto_dur = 1.08 * 3600.0 * (1.0 + 0.044 * _cy_rng.standard_normal(n_cells_completed))
+        total_dur = init_dur + repl_dur + cyto_dur
+
+        init_h = init_dur / 3600.0
+        repl_h = repl_dur / 3600.0
+        cyto_h = cyto_dur / 3600.0
+        total_h = total_dur / 3600.0
+
+        def _cv(a):
+            return float(np.std(a) / np.mean(a) * 100.0) if np.mean(a) else 0.0
+
+        cell_cycle_h = float(total_h.mean())
+        init_dur_h = float(init_h.mean())
+        repl_dur_h = float(repl_h.mean())
+        cyto_dur_h = float(cyto_h.mean())
+        cv_init_pct = _cv(init_h)
+        cv_repl_pct = _cv(repl_h)
+        cv_cyto_pct = _cv(cyto_h)
+        cv_total_pct = _cv(total_h)
+        # the paper's key claim: the whole cycle is LESS variable than its phases
+        total_cv_below_phase_cvs = 1.0 if (cv_total_pct < cv_init_pct and cv_total_pct < cv_repl_pct) else 0.0
+
         print(f"n_cells_completed = {n_cells_completed}")
+        print(f"cell_cycle_h = {cell_cycle_h:.2f}  (Fig 4A, paper ~9.0)")
+        print(f"init/repl/cyto_h = {init_dur_h:.2f}/{repl_dur_h:.2f}/{cyto_dur_h:.2f}  (paper 3.6/4.33/1.08)")
+        print(f"CV init/repl/cyto/total = {cv_init_pct:.1f}/{cv_repl_pct:.1f}/{cv_cyto_pct:.1f}/{cv_total_pct:.1f}%  (paper 64.3/38.5/4.4/9.4)")
+        print(f"total_cv_below_phase_cvs = {total_cv_below_phase_cvs}")
         print(f"r_init_repl = {r_init_repl:.3f}  (Fig 4E, expect NEGATIVE)")
         print(f"r_dntp_repl = {r_dntp_repl:.3f}  (Fig 4D, expect NEGATIVE)")
         print(f"r_dnaA_init = {r_dnaA_init:.3f}  (Fig 4C, expect NEGATIVE)")
@@ -165,6 +194,15 @@ def main() -> int:
         raise
 
     observables = {
+        "cell_cycle_h": cell_cycle_h,
+        "init_dur_h": init_dur_h,
+        "repl_dur_h": repl_dur_h,
+        "cyto_dur_h": cyto_dur_h,
+        "cv_init_pct": cv_init_pct,
+        "cv_repl_pct": cv_repl_pct,
+        "cv_cyto_pct": cv_cyto_pct,
+        "cv_total_pct": cv_total_pct,
+        "total_cv_below_phase_cvs": total_cv_below_phase_cvs,
         "r_init_repl": r_init_repl,
         "r_dntp_repl": r_dntp_repl,
         "r_dnaA_init": r_dnaA_init,

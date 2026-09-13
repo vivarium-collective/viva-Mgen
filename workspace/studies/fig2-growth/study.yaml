@@ -67,84 +67,201 @@ simulation_set:
   - protein-dominant-composition
 expected_behavior:
 - name: doubling-time-near-9h
-  en: The fitted doubling time is ~9 h, matching the measured M. genitalium doubling time (Fig 2A/B).
+  en: The population median doubling time is ≈8.9 h, matching measured M. genitalium (Fig 2A/B).
   observable: doubling_time_h
-  condition: 8.5 <= doubling_time_h <= 9.5
-  rationale: Growth is calibrated to the model's fitted cell-cycle length (32400 s = 9 h); the exponential-fit
-    doubling time should recover it. Achieved 9.000 h.
+  condition: 8.3 <= doubling_time_h <= 9.5
+  rationale: M. genitalium doubling time τ ≈ 9.0 h measured (Fig 2A); the simulated median is 8.9 h (Fig
+    2B). Test the exponential-fit doubling time falls in [8.3, 9.5] h.
   measure:
     kind: derived_scalar
     field: doubling_time_h
   expect:
     op: range
-    low: 8.5
+    low: 8.3
     high: 9.5
-- name: mass-doubles-in-cycle
-  en: Total dry mass doubles over one cell cycle (Fig 2B/2D).
+- name: mass-doubles-over-cycle
+  en: Dry mass doubles over one cell cycle (Fig 2B).
   observable: final_mass_ratio
-  condition: 1.9 <= final_mass_ratio <= 2.1
-  rationale: A newborn cell grows to twice its birth mass before division. Achieved 2.000.
+  condition: 1.8 <= final_mass_ratio <= 2.2
+  rationale: A cell doubles its mass between birth and division (Karr 2012 Fig 2B). Test mass fold-change
+    ≈2 over the 9 h cycle.
   measure:
     kind: derived_scalar
     field: final_mass_ratio
   expect:
     op: range
-    low: 1.9
-    high: 2.1
+    low: 1.8
+    high: 2.2
 - name: protein-dominant-composition
-  en: Protein is the dominant dry-mass component (~62%), consistent with Fig 2C.
+  en: Protein is the dominant dry-mass component (~62–75%), matching Morowitz 1962 (Fig 2C).
   observable: protein_fraction
-  condition: 0.55 <= protein_fraction <= 0.68
-  rationale: Fitted dry-weight fraction of protein is 0.620. Achieved 0.620.
+  condition: 0.62 <= protein_fraction <= 0.75
+  rationale: 'Dry-mass composition is protein-dominant: protein ≈62–75% (Karr 2012 Fig 2C vs Morowitz
+    1962). Test the protein dry-mass fraction is in [0.62, 0.75].'
   measure:
     kind: derived_scalar
     field: protein_fraction
   expect:
     op: range
-    low: 0.55
-    high: 0.68
+    low: 0.62
+    high: 0.75
+- name: rna-fraction-small
+  en: RNA is a small dry-mass fraction (~5–15%), consistent with Fig 2C.
+  observable: rna_fraction
+  condition: 0.05 <= rna_fraction <= 0.15
+  rationale: RNA is ≈9% of dry mass (Karr 2012 Fig 2C / Morowitz 1962). Test the RNA dry-mass fraction
+    is in [0.05, 0.15].
+  measure:
+    kind: derived_scalar
+    field: rna_fraction
+  expect:
+    op: range
+    low: 0.05
+    high: 0.15
+- name: dna-doubles-in-s-phase
+  en: DNA content doubles 1→2 over the cycle as the chromosome replicates (Fig 2D).
+  observable: dna_fold_change
+  condition: 1.8 <= dna_fold_change <= 2.2
+  rationale: Single-cell DNA content steps from 1× to 2× during S-phase (Karr 2012 Fig 2D). Test DNA fold-change
+    ≈2 over the cycle.
+  measure:
+    kind: derived_scalar
+    field: dna_fold_change
+  expect:
+    op: range
+    low: 1.8
+    high: 2.2
+- name: mrna-low-copy-bursty
+  en: Single-cell mRNA is low-copy (~0–2 per gene), bursty (Fig 2G).
+  observable: mean_mrna_per_gene
+  condition: 0.0 <= mean_mrna_per_gene <= 2.5
+  rationale: mRNA is present at low, discrete copy numbers (0–2 per gene) due to short half-lives and
+    bursty synthesis (Karr 2012 Fig 2G). Test mean mRNA per gene ≤2.5.
+  measure:
+    kind: derived_scalar
+    field: mean_mrna_per_gene
+  expect:
+    op: range
+    low: 0.0
+    high: 2.5
+- name: mrna-protein-decoupled
+  en: Across cells, mRNA and protein copy numbers are uncorrelated (Fig 2H).
+  observable: mrna_protein_abs_corr
+  condition: 0.0 <= mrna_protein_abs_corr <= 0.4
+  rationale: Single-cell mRNA (transient, bursty) and protein (cumulative, long-lived) copy numbers are
+    decoupled — no correlation across a population (Karr 2012 Fig 2H). Test |Pearson r| < 0.4.
+  measure:
+    kind: derived_scalar
+    field: mrna_protein_abs_corr
+  expect:
+    op: range
+    low: 0.0
+    high: 0.4
 behavior_tests:
 - name: doubling-time-near-9h
   classification: primary
-  description: Exponential-fit doubling time within [8.5, 9.5] h of the fitted 9 h.
+  description: The population median doubling time is ≈8.9 h, matching measured M. genitalium (Fig 2A/B).
   measure:
     kind: derived_scalar
     field: doubling_time_h
   pass_if:
     op: range
-    low: 8.5
+    low: 8.3
     high: 9.5
     provenance:
       kind: experiment
-      note: M. genitalium doubling time τ ≈ 9 h (Karr 2012 Fig 2A/B); achieved 9.000 h.
+      note: M. genitalium doubling time τ ≈ 9.0 h measured (Fig 2A); the simulated median is 8.9 h (Fig
+        2B). Test the exponential-fit doubling time falls in [8.3, 9.5] h.
   requires_simulation: baseline
-- name: mass-doubles-in-cycle
+- name: mass-doubles-over-cycle
   classification: primary
-  description: Mass ratio over one cell cycle within [1.9, 2.1].
+  description: Dry mass doubles over one cell cycle (Fig 2B).
   measure:
     kind: derived_scalar
     field: final_mass_ratio
   pass_if:
     op: range
-    low: 1.9
-    high: 2.1
+    low: 1.8
+    high: 2.2
     provenance:
-      kind: theory
-      note: A cell doubles its mass per cycle; achieved 2.000.
+      kind: model
+      note: A cell doubles its mass between birth and division (Karr 2012 Fig 2B). Test mass fold-change
+        ≈2 over the 9 h cycle.
   requires_simulation: baseline
 - name: protein-dominant-composition
   classification: primary
-  description: Protein dry-mass fraction within [0.55, 0.68].
+  description: Protein is the dominant dry-mass component (~62–75%), matching Morowitz 1962 (Fig 2C).
   measure:
     kind: derived_scalar
     field: protein_fraction
   pass_if:
     op: range
-    low: 0.55
-    high: 0.68
+    low: 0.62
+    high: 0.75
     provenance:
       kind: experiment
-      note: Fitted protein fraction 0.620 (Fig 2C).
+      note: 'Dry-mass composition is protein-dominant: protein ≈62–75% (Karr 2012 Fig 2C vs Morowitz 1962).
+        Test the protein dry-mass fraction is in [0.62, 0.75].'
+  requires_simulation: baseline
+- name: rna-fraction-small
+  classification: secondary
+  description: RNA is a small dry-mass fraction (~5–15%), consistent with Fig 2C.
+  measure:
+    kind: derived_scalar
+    field: rna_fraction
+  pass_if:
+    op: range
+    low: 0.05
+    high: 0.15
+    provenance:
+      kind: experiment
+      note: RNA is ≈9% of dry mass (Karr 2012 Fig 2C / Morowitz 1962). Test the RNA dry-mass fraction
+        is in [0.05, 0.15].
+  requires_simulation: baseline
+- name: dna-doubles-in-s-phase
+  classification: primary
+  description: DNA content doubles 1→2 over the cycle as the chromosome replicates (Fig 2D).
+  measure:
+    kind: derived_scalar
+    field: dna_fold_change
+  pass_if:
+    op: range
+    low: 1.8
+    high: 2.2
+    provenance:
+      kind: model
+      note: Single-cell DNA content steps from 1× to 2× during S-phase (Karr 2012 Fig 2D). Test DNA fold-change
+        ≈2 over the cycle.
+  requires_simulation: baseline
+- name: mrna-low-copy-bursty
+  classification: primary
+  description: Single-cell mRNA is low-copy (~0–2 per gene), bursty (Fig 2G).
+  measure:
+    kind: derived_scalar
+    field: mean_mrna_per_gene
+  pass_if:
+    op: range
+    low: 0.0
+    high: 2.5
+    provenance:
+      kind: experiment
+      note: mRNA is present at low, discrete copy numbers (0–2 per gene) due to short half-lives and bursty
+        synthesis (Karr 2012 Fig 2G). Test mean mRNA per gene ≤2.5.
+  requires_simulation: baseline
+- name: mrna-protein-decoupled
+  classification: primary
+  description: Across cells, mRNA and protein copy numbers are uncorrelated (Fig 2H).
+  measure:
+    kind: derived_scalar
+    field: mrna_protein_abs_corr
+  pass_if:
+    op: range
+    low: 0.0
+    high: 0.4
+    provenance:
+      kind: experiment
+      note: Single-cell mRNA (transient, bursty) and protein (cumulative, long-lived) copy numbers are
+        decoupled — no correlation across a population (Karr 2012 Fig 2H). Test |Pearson r| < 0.4.
   requires_simulation: baseline
 readouts:
 - name: mass

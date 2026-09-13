@@ -49,7 +49,8 @@ def _store_keys(port_map: dict) -> set:
     """Store keys a process touches: the terminal store name in each ["stores", key] path."""
     keys = set()
     for path in (port_map or {}).values():
-        if isinstance(path, (list, tuple)) and len(path) >= 2 and path[0] == "stores":
+        # hierarchy: ["cell", <compartment>, <name>]; legacy: ["stores", <name>]
+        if isinstance(path, (list, tuple)) and len(path) >= 2 and path[0] in ("cell", "stores"):
             keys.add(path[-1])
     return keys
 
@@ -72,13 +73,15 @@ def _wiring_matrix(doc: dict):
     return proc_names, store_names, matrix
 
 
-def _run(runtime_s=1200.0, heavy_interval=60.0):
+def _run(runtime_s=32400.0, heavy_interval=300.0):
+    # run the full ~9 h cell cycle at a coarse timestep so the integrated cell
+    # completes replication and divides (needed for the Fig-1 integration tests)
     core = build_core()
     doc = build_mgen(core, interval=heavy_interval)
-    # keep FBA cost reasonable: metabolism + mass on a coarse timestep, expression at 1 s
-    doc["metabolism"]["interval"] = heavy_interval
-    doc["mass"]["interval"] = heavy_interval
-    doc["replication"]["interval"] = heavy_interval
+    for _pk in ("metabolism", "mass", "replication", "transcription",
+                "translation", "rna_decay", "protein_decay"):
+        if _pk in doc:
+            doc[_pk]["interval"] = heavy_interval
 
     proc_names, store_names, matrix = _wiring_matrix(doc)
 
@@ -109,6 +112,12 @@ def main() -> int:
         first, last = rows[0], rows[-1]
         growth_fraction_final = float(last.get("growth_fraction", 0.0))
         mass_grew = 1.0 if float(last.get("mass", 0.0)) > float(first.get("mass", 0.0)) else 0.0
+        mass_fold_change = float(last.get("mass", 0.0)) / max(float(first.get("mass", 0.0)), 1e-9)
+        replicated_fraction_final = float(last.get("replicated_fraction", 0.0))
+        # the integrated cell divides when the septum pinches shut (or the divided flag trips)
+        min_septum = min(float(r.get("septum_diameter", 1e9)) for r in rows)
+        divides = 1.0 if (max(float(r.get("divided", 0.0)) for r in rows) >= 1.0
+                          or min_septum <= 1.0) else 0.0
         final_rna = last.get("rna_counts", {}) or {}
         final_protein = last.get("protein_counts", {}) or {}
         mrna_species_produced = float(sum(1 for v in final_rna.values() if v and v > 0))
@@ -120,11 +129,14 @@ def main() -> int:
             "n_stores_coupled": n_stores_coupled,
             "growth_fraction_final": growth_fraction_final,
             "mass_grew": mass_grew,
+            "mass_fold_change": mass_fold_change,
+            "replicated_fraction_final": replicated_fraction_final,
+            "divides": divides,
             "mrna_species_produced": mrna_species_produced,
             "protein_species_produced": protein_species_produced,
         }
         for k, v in observables.items():
-            print(f"{k:26s} = {v}")
+            print(f"{k:28s} = {v}")
 
         # --- visualizations ---
         viz_dir = STUDY_DIR / "viz"

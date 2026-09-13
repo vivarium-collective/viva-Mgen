@@ -67,90 +67,240 @@ simulation_set:
   - protein-exceeds-mrna
   - genes-become-expressed
 expected_behavior:
-- name: mrna-is-bursty-low-copy
-  en: mRNA stays low-copy and bursty — time-averaged mRNA per gene is order 0-2 copies (Fig 2G).
-  observable: mean_mrna_per_gene
-  condition: 0.0 <= mean_mrna_per_gene <= 5.0
-  rationale: Short mRNA half-lives (~150-180 s) and low synthesis rates keep steady-state mRNA at a fraction
-    of one to a few copies per gene. Achieved ~1.6.
+- name: chromosome-50pct-bound-by-6min
+  en: '% of the chromosome protein-bound at 6 min ≈ 50% (Fig 3B).'
+  observable: pct_explored_at_6min
+  condition: 40 <= pct_explored_at_6min <= 65
+  rationale: 'Karr 2012 Fig 3B: 50% of the chromosome is bound by ≥1 protein within the first 6 min.'
   measure:
     kind: derived_scalar
-    field: mean_mrna_per_gene
+    field: pct_explored_at_6min
   expect:
     op: range
-    low: 0.0
-    high: 5.0
-- name: protein-exceeds-mrna
-  en: Protein accumulates far above mRNA — the mRNA↔protein decoupling of Fig 2H (ratio >> 1).
-  observable: protein_to_mrna_ratio
-  condition: protein_to_mrna_ratio >= 5.0
-  rationale: Protein is synthesized proportionally to mRNA but decays ~150× more slowly (half-life 25000
-    s vs ~170 s), so it accumulates to orders of magnitude more copies than the transient mRNA pool. Achieved
-    ~200.
+    low: 40
+    high: 65
+- name: chromosome-90pct-bound-by-20min
+  en: '% of the chromosome protein-bound at 20 min ≈ 90% (Fig 3B).'
+  observable: pct_explored_at_20min
+  condition: 80 <= pct_explored_at_20min <= 100
+  rationale: 'Karr 2012 Fig 3B: 90% of the chromosome bound within 20 min.'
   measure:
     kind: derived_scalar
-    field: protein_to_mrna_ratio
+    field: pct_explored_at_20min
   expect:
     op: range
-    low: 5.0
-    high: 1.0e9
-- name: genes-become-expressed
-  en: Every panel gene has produced protein by the end of one hour (fraction ≈ 1.0).
-  observable: fraction_genes_expressed
-  condition: fraction_genes_expressed >= 0.9
-  rationale: Over an hour each gene fires enough transcription/translation events that all 6 accumulate
-    protein. Achieved 1.000.
+    low: 80
+    high: 100
+- name: rnap-binds-90pct-within-49min
+  en: RNA polymerase binds 90% of the chromosome within 49 min (Fig 3B).
+  observable: rnap_90pct_time_min
+  condition: 0 <= rnap_90pct_time_min <= 49
+  rationale: 'Karr 2012 Fig 3B: RNA polymerase binds 90% of the chromosome within the first 49 min.'
   measure:
     kind: derived_scalar
-    field: fraction_genes_expressed
+    field: rnap_90pct_time_min
   expect:
     op: range
-    low: 0.9
+    low: 0
+    high: 49
+- name: rna-expression-t50-18min
+  en: Time for 50% of genes to be expressed ≈ 18 min (Fig 3C).
+  observable: rna_t50_min
+  condition: 10 <= rna_t50_min <= 30
+  rationale: 'Karr 2012 Fig 3C: RNA-expression t50 = 18 min.'
+  measure:
+    kind: derived_scalar
+    field: rna_t50_min
+  expect:
+    op: range
+    low: 10
+    high: 30
+- name: rna-expression-90pct-by-143min
+  en: 90% of genes expressed within ~143 min (Fig 3C).
+  observable: rna_t90_min
+  condition: 60 <= rna_t90_min <= 200
+  rationale: 'Karr 2012 Fig 3C: 90% of genes expressed within the first 143 min.'
+  measure:
+    kind: derived_scalar
+    field: rna_t90_min
+  expect:
+    op: range
+    low: 60
+    high: 200
+- name: collisions-per-cycle-gt-30000
+  en: More than 30,000 protein–DNA collisions per cell cycle (Fig 3F).
+  observable: n_collisions_per_cycle
+  condition: 30000 <= n_collisions_per_cycle <= 1000000000.0
+  rationale: 'Karr 2012 Fig 3F: >30,000 collisions per cell (~0.93 displacements/s).'
+  measure:
+    kind: derived_scalar
+    field: n_collisions_per_cycle
+  expect:
+    op: range
+    low: 30000
+    high: 1000000000.0
+- name: collisions-mostly-by-rnap
+  en: Most collisions are caused by RNA polymerase (~84%; Fig 3F).
+  observable: frac_collisions_by_rnap
+  condition: 0.7 <= frac_collisions_by_rnap <= 1.0
+  rationale: 'Karr 2012 Fig 3F: collisions caused mostly by RNA polymerase (84%) and DNA pol (8%).'
+  measure:
+    kind: derived_scalar
+    field: frac_collisions_by_rnap
+  expect:
+    op: range
+    low: 0.7
+    high: 1.0
+- name: collisions-displace-smc
+  en: Collisions displace mostly SMC (~70%; Fig 3F).
+  observable: frac_collisions_displacing_smc
+  condition: 0.5 <= frac_collisions_displacing_smc <= 0.85
+  rationale: 'Karr 2012 Fig 3F: displaced proteins are mostly SMC (70%) and SSB (6%).'
+  measure:
+    kind: derived_scalar
+    field: frac_collisions_displacing_smc
+  expect:
+    op: range
+    low: 0.5
+    high: 0.85
+- name: collisions-density-positive
+  en: Collisions rise with DNA-bound-protein density — positive correlation (Fig 3F).
+  observable: collisions_density_pearson_r
+  condition: 0.2 <= collisions_density_pearson_r <= 1.0
+  rationale: 'Karr 2012 Fig 3F: collisions vs DNA-bound protein density are positively correlated.'
+  measure:
+    kind: derived_scalar
+    field: collisions_density_pearson_r
+  expect:
+    op: range
+    low: 0.2
     high: 1.0
 behavior_tests:
-- name: mrna-is-bursty-low-copy
+- name: chromosome-50pct-bound-by-6min
   classification: primary
-  description: Time-averaged mRNA per gene within [0, 5] copies (low, bursty).
+  description: '% of the chromosome protein-bound at 6 min ≈ 50% (Fig 3B).'
   measure:
     kind: derived_scalar
-    field: mean_mrna_per_gene
+    field: pct_explored_at_6min
   pass_if:
     op: range
-    low: 0.0
-    high: 5.0
+    low: 40
+    high: 65
     provenance:
       kind: experiment
-      note: Single-cell mRNA is low-copy and bursty (Karr 2012 Fig 2G); reduced panel achieved mean_mrna_per_gene
-        ~1.6. Representative rates, not KB-fitted.
+      note: 'Karr 2012 Fig 3B: 50% of the chromosome is bound by ≥1 protein within the first 6 min.'
   requires_simulation: baseline
-- name: protein-exceeds-mrna
+- name: chromosome-90pct-bound-by-20min
   classification: primary
-  description: Final protein-to-mRNA ratio within [5, 1e9] — protein >> mRNA (decoupling).
+  description: '% of the chromosome protein-bound at 20 min ≈ 90% (Fig 3B).'
   measure:
     kind: derived_scalar
-    field: protein_to_mrna_ratio
+    field: pct_explored_at_20min
   pass_if:
     op: range
-    low: 5.0
-    high: 1.0e9
+    low: 80
+    high: 100
     provenance:
       kind: experiment
-      note: mRNA and protein copy-number distributions are decoupled, protein far higher (Karr 2012 Fig
-        2H); achieved ratio ~200 (varies run to run).
+      note: 'Karr 2012 Fig 3B: 90% of the chromosome bound within 20 min.'
   requires_simulation: baseline
-- name: genes-become-expressed
+- name: rnap-binds-90pct-within-49min
   classification: primary
-  description: Fraction of panel genes with protein by 1 h within [0.9, 1.0].
+  description: RNA polymerase binds 90% of the chromosome within 49 min (Fig 3B).
   measure:
     kind: derived_scalar
-    field: fraction_genes_expressed
+    field: rnap_90pct_time_min
   pass_if:
     op: range
-    low: 0.9
+    low: 0
+    high: 49
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 3B: RNA polymerase binds 90% of the chromosome within the first 49 min.'
+  requires_simulation: baseline
+- name: rna-expression-t50-18min
+  classification: secondary
+  description: Time for 50% of genes to be expressed ≈ 18 min (Fig 3C).
+  measure:
+    kind: derived_scalar
+    field: rna_t50_min
+  pass_if:
+    op: range
+    low: 10
+    high: 30
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 3C: RNA-expression t50 = 18 min.'
+  requires_simulation: baseline
+- name: rna-expression-90pct-by-143min
+  classification: secondary
+  description: 90% of genes expressed within ~143 min (Fig 3C).
+  measure:
+    kind: derived_scalar
+    field: rna_t90_min
+  pass_if:
+    op: range
+    low: 60
+    high: 200
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 3C: 90% of genes expressed within the first 143 min.'
+  requires_simulation: baseline
+- name: collisions-per-cycle-gt-30000
+  classification: secondary
+  description: More than 30,000 protein–DNA collisions per cell cycle (Fig 3F).
+  measure:
+    kind: derived_scalar
+    field: n_collisions_per_cycle
+  pass_if:
+    op: range
+    low: 30000
+    high: 1000000000.0
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 3F: >30,000 collisions per cell (~0.93 displacements/s).'
+  requires_simulation: baseline
+- name: collisions-mostly-by-rnap
+  classification: secondary
+  description: Most collisions are caused by RNA polymerase (~84%; Fig 3F).
+  measure:
+    kind: derived_scalar
+    field: frac_collisions_by_rnap
+  pass_if:
+    op: range
+    low: 0.7
     high: 1.0
     provenance:
-      kind: model
-      note: Over 1 h all representative genes express; achieved 1.000.
+      kind: experiment
+      note: 'Karr 2012 Fig 3F: collisions caused mostly by RNA polymerase (84%) and DNA pol (8%).'
+  requires_simulation: baseline
+- name: collisions-displace-smc
+  classification: secondary
+  description: Collisions displace mostly SMC (~70%; Fig 3F).
+  measure:
+    kind: derived_scalar
+    field: frac_collisions_displacing_smc
+  pass_if:
+    op: range
+    low: 0.5
+    high: 0.85
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 3F: displaced proteins are mostly SMC (70%) and SSB (6%).'
+  requires_simulation: baseline
+- name: collisions-density-positive
+  classification: secondary
+  description: Collisions rise with DNA-bound-protein density — positive correlation (Fig 3F).
+  measure:
+    kind: derived_scalar
+    field: collisions_density_pearson_r
+  pass_if:
+    op: range
+    low: 0.2
+    high: 1.0
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 3F: collisions vs DNA-bound protein density are positively correlated.'
   requires_simulation: baseline
 readouts:
 - name: ntp

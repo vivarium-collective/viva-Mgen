@@ -89,12 +89,83 @@ simulation_set:
   - dntp-controls-replication-duration
   - more-dnaa-shortens-initiation
 expected_behavior:
+- name: cell-cycle-duration-9h
+  en: Total cell-cycle duration ≈ 9 h (Fig 4A).
+  observable: cell_cycle_h
+  condition: 8.5 <= cell_cycle_h <= 9.5
+  rationale: 'Karr 2012: 9.0 h cell cycle (median in-silico doubling 8.9 h; Fig 2B/4A).'
+  measure:
+    kind: derived_scalar
+    field: cell_cycle_h
+  expect:
+    op: range
+    low: 8.5
+    high: 9.5
+- name: initiation-duration-3.6h
+  en: Replication-initiation duration ≈ 3.6 h (Fig 4A).
+  observable: init_dur_h
+  condition: 3.0 <= init_dur_h <= 4.2
+  rationale: 'Karr 2012 Time state: replicationInitiationDuration = 12960 s ≈ 3.6 h.'
+  measure:
+    kind: derived_scalar
+    field: init_dur_h
+  expect:
+    op: range
+    low: 3.0
+    high: 4.2
+- name: replication-duration-4.33h
+  en: Replication duration ≈ 4.33 h (Fig 4A).
+  observable: repl_dur_h
+  condition: 3.8 <= repl_dur_h <= 4.9
+  rationale: 'Karr 2012 Time state: replicationDuration = 15571 s ≈ 4.33 h.'
+  measure:
+    kind: derived_scalar
+    field: repl_dur_h
+  expect:
+    op: range
+    low: 3.8
+    high: 4.9
+- name: cytokinesis-duration-1.08h
+  en: Cytokinesis duration ≈ 1.08 h (Fig 4A).
+  observable: cyto_dur_h
+  condition: 0.9 <= cyto_dur_h <= 1.3
+  rationale: 'Karr 2012 Time state: cytokinesisDuration = 3869 s ≈ 1.08 h.'
+  measure:
+    kind: derived_scalar
+    field: cyto_dur_h
+  expect:
+    op: range
+    low: 0.9
+    high: 1.3
+- name: replication-duration-variable
+  en: Replication-duration cell-to-cell CV is high (~38.5%; Fig 4A).
+  observable: cv_repl_pct
+  condition: 25 <= cv_repl_pct <= 55
+  rationale: 'Karr 2012 Fig 4A: replication-duration CV = 38.5% across 128 cells.'
+  measure:
+    kind: derived_scalar
+    field: cv_repl_pct
+  expect:
+    op: range
+    low: 25
+    high: 55
+- name: total-cycle-less-variable-than-phases
+  en: The whole cell cycle is LESS variable than its individual phases (Fig 4A).
+  observable: total_cv_below_phase_cvs
+  condition: 1.0 <= total_cv_below_phase_cvs <= 1.0
+  rationale: 'Karr 2012 Fig 4A: cycle CV 9.4% < initiation 64.3% and replication 38.5% — emergent buffering.'
+  measure:
+    kind: derived_scalar
+    field: total_cv_below_phase_cvs
+  expect:
+    op: range
+    low: 1.0
+    high: 1.0
 - name: initiation-replication-inversely-correlated
-  en: Across single cells, initiation and replication durations are inversely correlated (Fig 4E).
+  en: Initiation and replication durations are inversely correlated (Fig 4E).
   observable: r_init_repl
-  condition: -1.0 <= r_init_repl <= -0.2
-  rationale: dNTPs accumulate unconsumed during initiation, so a longer initiation builds a larger surplus
-    that speeds the subsequent replication — buffering total cycle length. Achieved r = -0.930.
+  condition: -1.0 <= r_init_repl <= -0.7
+  rationale: 'Karr 2012 Fig 4E: longer initiation → shorter replication (dNTP-surplus buffering).'
   measure:
     kind: derived_scalar
     field: r_init_repl
@@ -102,36 +173,118 @@ expected_behavior:
     op: range
     low: -1.0
     high: -0.7
-- name: dntp-controls-replication-duration
-  en: A higher dNTP pool at the start of replication shortens replication (Fig 4D).
-  observable: r_dntp_repl
-  condition: -1.0 <= r_dntp_repl <= -0.2
-  rationale: Replication is dNTP-limited; a larger starting pool lets polymerase run nearer its rate cap,
-    finishing sooner. Achieved r = -0.951.
-  measure:
-    kind: derived_scalar
-    field: r_dntp_repl
-  expect:
-    op: range
-    low: -1.0
-    high: -0.7
 - name: more-dnaa-shortens-initiation
-  en: More DnaA present at birth shortens replication-initiation duration (Fig 4C).
+  en: Initial DnaA count vs initiation duration is negatively correlated (Fig 4C).
   observable: r_dnaA_init
-  condition: -1.0 <= r_dnaA_init <= -0.2
-  rationale: Initiation fires when DnaA reaches a fixed threshold; starting closer to it means less to
-    accumulate. Achieved r = -0.743.
+  condition: -1.0 <= r_dnaA_init <= -0.35
+  rationale: 'Karr 2012 Fig 4C: initial DnaA vs initiation duration, R² ≈ 0.49 (r ≈ -0.7).'
   measure:
     kind: derived_scalar
     field: r_dnaA_init
   expect:
     op: range
     low: -1.0
-    high: -0.4
+    high: -0.35
+- name: dntp-controls-replication-duration
+  en: dNTP at replication start vs replication duration is negative (Fig 4D).
+  observable: r_dntp_repl
+  condition: -1.0 <= r_dntp_repl <= -0.7
+  rationale: 'Karr 2012 Fig 4D: higher dNTP at replication start → shorter replication.'
+  measure:
+    kind: derived_scalar
+    field: r_dntp_repl
+  expect:
+    op: range
+    low: -1.0
+    high: -0.7
 behavior_tests:
-- name: initiation-replication-inversely-correlated
+- name: cell-cycle-duration-9h
   classification: primary
-  description: Pearson r(initiation_duration, replication_duration) is clearly negative (Fig 4E).
+  description: Total cell-cycle duration ≈ 9 h (Fig 4A).
+  measure:
+    kind: derived_scalar
+    field: cell_cycle_h
+  pass_if:
+    op: range
+    low: 8.5
+    high: 9.5
+    provenance:
+      kind: experiment
+      note: 'Karr 2012: 9.0 h cell cycle (median in-silico doubling 8.9 h; Fig 2B/4A).'
+  requires_simulation: baseline
+- name: initiation-duration-3.6h
+  classification: primary
+  description: Replication-initiation duration ≈ 3.6 h (Fig 4A).
+  measure:
+    kind: derived_scalar
+    field: init_dur_h
+  pass_if:
+    op: range
+    low: 3.0
+    high: 4.2
+    provenance:
+      kind: model
+      note: 'Karr 2012 Time state: replicationInitiationDuration = 12960 s ≈ 3.6 h.'
+  requires_simulation: baseline
+- name: replication-duration-4.33h
+  classification: primary
+  description: Replication duration ≈ 4.33 h (Fig 4A).
+  measure:
+    kind: derived_scalar
+    field: repl_dur_h
+  pass_if:
+    op: range
+    low: 3.8
+    high: 4.9
+    provenance:
+      kind: model
+      note: 'Karr 2012 Time state: replicationDuration = 15571 s ≈ 4.33 h.'
+  requires_simulation: baseline
+- name: cytokinesis-duration-1.08h
+  classification: secondary
+  description: Cytokinesis duration ≈ 1.08 h (Fig 4A).
+  measure:
+    kind: derived_scalar
+    field: cyto_dur_h
+  pass_if:
+    op: range
+    low: 0.9
+    high: 1.3
+    provenance:
+      kind: model
+      note: 'Karr 2012 Time state: cytokinesisDuration = 3869 s ≈ 1.08 h.'
+  requires_simulation: baseline
+- name: replication-duration-variable
+  classification: secondary
+  description: Replication-duration cell-to-cell CV is high (~38.5%; Fig 4A).
+  measure:
+    kind: derived_scalar
+    field: cv_repl_pct
+  pass_if:
+    op: range
+    low: 25
+    high: 55
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 4A: replication-duration CV = 38.5% across 128 cells.'
+  requires_simulation: baseline
+- name: total-cycle-less-variable-than-phases
+  classification: secondary
+  description: The whole cell cycle is LESS variable than its individual phases (Fig 4A).
+  measure:
+    kind: derived_scalar
+    field: total_cv_below_phase_cvs
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 4A: cycle CV 9.4% < initiation 64.3% and replication 38.5% — emergent buffering.'
+  requires_simulation: baseline
+- name: initiation-replication-inversely-correlated
+  classification: secondary
+  description: Initiation and replication durations are inversely correlated (Fig 4E).
   measure:
     kind: derived_scalar
     field: r_init_repl
@@ -140,12 +293,26 @@ behavior_tests:
     low: -1.0
     high: -0.7
     provenance:
-      kind: model
-      note: Karr 2012 Fig 4E — inverse initiation↔replication duration control; achieved r = -0.930.
+      kind: experiment
+      note: 'Karr 2012 Fig 4E: longer initiation → shorter replication (dNTP-surplus buffering).'
+  requires_simulation: baseline
+- name: more-dnaa-shortens-initiation
+  classification: secondary
+  description: Initial DnaA count vs initiation duration is negatively correlated (Fig 4C).
+  measure:
+    kind: derived_scalar
+    field: r_dnaA_init
+  pass_if:
+    op: range
+    low: -1.0
+    high: -0.35
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 4C: initial DnaA vs initiation duration, R² ≈ 0.49 (r ≈ -0.7).'
   requires_simulation: baseline
 - name: dntp-controls-replication-duration
-  classification: primary
-  description: Pearson r(dntp_at_replication_start, replication_duration) is clearly negative (Fig 4D).
+  classification: secondary
+  description: dNTP at replication start vs replication duration is negative (Fig 4D).
   measure:
     kind: derived_scalar
     field: r_dntp_repl
@@ -154,22 +321,8 @@ behavior_tests:
     low: -1.0
     high: -0.7
     provenance:
-      kind: model
-      note: Karr 2012 Fig 4D — higher starting dNTP shortens replication; achieved r = -0.951.
-  requires_simulation: baseline
-- name: more-dnaa-shortens-initiation
-  classification: primary
-  description: Pearson r(initial_dnaA, initiation_duration) is clearly negative (Fig 4C).
-  measure:
-    kind: derived_scalar
-    field: r_dnaA_init
-  pass_if:
-    op: range
-    low: -1.0
-    high: -0.4
-    provenance:
-      kind: model
-      note: Karr 2012 Fig 4C — more initial DnaA shortens initiation; achieved r = -0.743.
+      kind: experiment
+      note: 'Karr 2012 Fig 4D: higher dNTP at replication start → shorter replication.'
   requires_simulation: baseline
 readouts:
 - name: replicated_fraction

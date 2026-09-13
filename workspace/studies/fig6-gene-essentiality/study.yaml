@@ -86,65 +86,244 @@ simulation_set:
   - essentiality-accuracy-high
   - essential-genes-detected
 expected_behavior:
-- name: essentiality-accuracy-high
-  en: Model-vs-reference essentiality accuracy over the metabolic subset is high (~0.76), in the neighborhood
-    of the paper's whole-cell (79%) and iPS189 metabolic (87%) accuracy.
+- name: essentiality-accuracy
+  en: Model-vs-experiment single-gene essentiality accuracy >= ~79%.
   observable: essentiality_accuracy
-  condition: 0.70 <= essentiality_accuracy <= 1.0
-  rationale: Single-gene FBA knockouts should recover the essentiality classification for most metabolic
-    genes. Achieved 0.760 over 125 genes.
+  condition: 0.78 <= essentiality_accuracy <= 1.0
+  rationale: 'Fig 6A: 79% accuracy (316/401 correct) vs Glass et al. 2006, p<1e-7. (Metabolic-subset FBA
+    currently reaches ~76%.)'
   measure:
     kind: derived_scalar
     field: essentiality_accuracy
   expect:
     op: range
-    low: 0.7
+    low: 0.78
     high: 1.0
-- name: essential-genes-detected
-  en: The model detects most reference-essential metabolic genes (sensitivity ~0.76).
+- name: essentiality-sensitivity
+  en: Sensitivity (true-essential recall) in the paper's range (~0.79).
   observable: sensitivity
-  condition: 0.70 <= sensitivity <= 1.0
-  rationale: Reference-essential genes should collapse growth on knockout. Of 106 reference-essential
-    genes the model calls 80 essential — sensitivity 0.755.
+  condition: 0.75 <= sensitivity <= 1.0
+  rationale: 'Fig 6A confusion table (Glass 2006): sensitivity ~0.79.'
   measure:
     kind: derived_scalar
     field: sensitivity
   expect:
     op: range
-    low: 0.7
+    low: 0.75
+    high: 1.0
+- name: essentiality-specificity
+  en: Specificity (true-nonessential recall) in the paper's range (~0.77).
+  observable: specificity
+  condition: 0.65 <= specificity <= 1.0
+  rationale: 'Fig 6A confusion table (Glass 2006): specificity ~0.77.'
+  measure:
+    kind: derived_scalar
+    field: specificity
+  expect:
+    op: range
+    low: 0.65
+    high: 1.0
+- name: growth-distribution-bimodal
+  en: KO growth-fraction distribution is bimodal (essential~0 / viable~1).
+  observable: growth_distribution_bimodal
+  condition: growth_distribution_bimodal == 1.0
+  rationale: 'Fig 6/S2: single-gene-KO growth is bimodal — genes are essential (growth~0) or non-essential
+    (growth~1), few intermediate.'
+  measure:
+    kind: derived_scalar
+    field: growth_distribution_bimodal
+  expect:
+    op: range
+    low: 1.0
+    high: 1.0
+- name: pathology-metabolic-non-growing
+  en: A metabolic disruption is non-growing (Fig 6B, trmK column).
+  observable: pathology_metabolic_non_growing
+  condition: pathology_metabolic_non_growing == 1.0
+  rationale: 'Fig 6B: metabolic-gene disruptions are the most debilitating — non-growing.'
+  measure:
+    kind: derived_scalar
+    field: pathology_metabolic_non_growing
+  expect:
+    op: range
+    low: 1.0
+    high: 1.0
+- name: pathology-rna-ko-stops-rna
+  en: An RNA-synthesis disruption stops RNA accumulation (Fig 6B, rpoE).
+  observable: pathology_rna_ko_stops_rna
+  condition: pathology_rna_ko_stops_rna == 1.0
+  rationale: 'Fig 6B: RNA-synthesis disruptions (rpoE) fail to accumulate RNA (and cascade to protein).'
+  measure:
+    kind: derived_scalar
+    field: pathology_rna_ko_stops_rna
+  expect:
+    op: range
+    low: 1.0
+    high: 1.0
+- name: pathology-protein-ko-stops-protein
+  en: A protein-synthesis disruption stops protein accumulation (Fig 6B, asnS).
+  observable: pathology_protein_ko_stops_protein
+  condition: pathology_protein_ko_stops_protein == 1.0
+  rationale: 'Fig 6B: protein-synthesis disruptions (asnS) fail to accumulate protein.'
+  measure:
+    kind: derived_scalar
+    field: pathology_protein_ko_stops_protein
+  expect:
+    op: range
+    low: 1.0
+    high: 1.0
+- name: pathology-dna-ko-non-replicative
+  en: A DNA-synthesis disruption is non-replicative — DNA never doubles (Fig 6B, dnaN).
+  observable: pathology_dna_ko_non_replicative
+  condition: pathology_dna_ko_non_replicative == 1.0
+  rationale: 'Fig 6B: DNA-synthesis disruptions (dnaN) never double their DNA.'
+  measure:
+    kind: derived_scalar
+    field: pathology_dna_ko_non_replicative
+  expect:
+    op: range
+    low: 1.0
+    high: 1.0
+- name: pathology-cytokinesis-ko-non-fissive
+  en: A cytokinesis disruption is non-fissive — septum never closes (Fig 6B, parC).
+  observable: pathology_cytokinesis_ko_non_fissive
+  condition: pathology_cytokinesis_ko_non_fissive == 1.0
+  rationale: 'Fig 6B: cytokinesis disruptions (parC) never close the septum / divide.'
+  measure:
+    kind: derived_scalar
+    field: pathology_cytokinesis_ko_non_fissive
+  expect:
+    op: range
+    low: 1.0
     high: 1.0
 behavior_tests:
-- name: essentiality-accuracy-high
+- name: essentiality-accuracy
   classification: primary
-  description: Model-vs-reference essentiality accuracy over the metabolic subset within [0.70, 1.0].
+  description: Model-vs-experiment single-gene essentiality accuracy >= ~79%.
   measure:
     kind: derived_scalar
     field: essentiality_accuracy
   pass_if:
     op: range
-    low: 0.7
+    low: 0.78
     high: 1.0
     provenance:
       kind: experiment
-      note: 'Gene-essentiality accuracy: 79% overall for the Karr 2012 whole-cell model (Fig 6A; Glass
-        et al. 2006 essentiality data), ~87% for the iPS189 metabolic model (Suthers et al. 2009). Achieved
-        0.760 over 125 metabolic genes with a reference call.'
+      note: 'Fig 6A: 79% accuracy (316/401 correct) vs Glass et al. 2006, p<1e-7. (Metabolic-subset FBA
+        currently reaches ~76%.)'
   requires_simulation: baseline
-- name: essential-genes-detected
+- name: essentiality-sensitivity
   classification: primary
-  description: Sensitivity (fraction of reference-essential metabolic genes called essential) within [0.70,
-    1.0].
+  description: Sensitivity (true-essential recall) in the paper's range (~0.79).
   measure:
     kind: derived_scalar
     field: sensitivity
   pass_if:
     op: range
-    low: 0.7
+    low: 0.75
     high: 1.0
     provenance:
       kind: experiment
-      note: Reference-essential genes should collapse growth on single knockout. Achieved sensitivity
-        0.755 (80 of 106 reference-essential genes detected).
+      note: 'Fig 6A confusion table (Glass 2006): sensitivity ~0.79.'
+  requires_simulation: baseline
+- name: essentiality-specificity
+  classification: primary
+  description: Specificity (true-nonessential recall) in the paper's range (~0.77).
+  measure:
+    kind: derived_scalar
+    field: specificity
+  pass_if:
+    op: range
+    low: 0.65
+    high: 1.0
+    provenance:
+      kind: experiment
+      note: 'Fig 6A confusion table (Glass 2006): specificity ~0.77.'
+  requires_simulation: baseline
+- name: growth-distribution-bimodal
+  classification: primary
+  description: KO growth-fraction distribution is bimodal (essential~0 / viable~1).
+  measure:
+    kind: derived_scalar
+    field: growth_distribution_bimodal
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: model
+      note: 'Fig 6/S2: single-gene-KO growth is bimodal — genes are essential (growth~0) or non-essential
+        (growth~1), few intermediate.'
+  requires_simulation: baseline
+- name: pathology-metabolic-non-growing
+  classification: primary
+  description: A metabolic disruption is non-growing (Fig 6B, trmK column).
+  measure:
+    kind: derived_scalar
+    field: pathology_metabolic_non_growing
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: model
+      note: 'Fig 6B: metabolic-gene disruptions are the most debilitating — non-growing.'
+  requires_simulation: baseline
+- name: pathology-rna-ko-stops-rna
+  classification: primary
+  description: An RNA-synthesis disruption stops RNA accumulation (Fig 6B, rpoE).
+  measure:
+    kind: derived_scalar
+    field: pathology_rna_ko_stops_rna
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: model
+      note: 'Fig 6B: RNA-synthesis disruptions (rpoE) fail to accumulate RNA (and cascade to protein).'
+  requires_simulation: baseline
+- name: pathology-protein-ko-stops-protein
+  classification: primary
+  description: A protein-synthesis disruption stops protein accumulation (Fig 6B, asnS).
+  measure:
+    kind: derived_scalar
+    field: pathology_protein_ko_stops_protein
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: model
+      note: 'Fig 6B: protein-synthesis disruptions (asnS) fail to accumulate protein.'
+  requires_simulation: baseline
+- name: pathology-dna-ko-non-replicative
+  classification: primary
+  description: A DNA-synthesis disruption is non-replicative — DNA never doubles (Fig 6B, dnaN).
+  measure:
+    kind: derived_scalar
+    field: pathology_dna_ko_non_replicative
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: model
+      note: 'Fig 6B: DNA-synthesis disruptions (dnaN) never double their DNA.'
+  requires_simulation: baseline
+- name: pathology-cytokinesis-ko-non-fissive
+  classification: primary
+  description: A cytokinesis disruption is non-fissive — septum never closes (Fig 6B, parC).
+  measure:
+    kind: derived_scalar
+    field: pathology_cytokinesis_ko_non_fissive
+  pass_if:
+    op: range
+    low: 1.0
+    high: 1.0
+    provenance:
+      kind: model
+      note: 'Fig 6B: cytokinesis disruptions (parC) never close the septum / divide.'
   requires_simulation: baseline
 provenance:
   kind: experiment

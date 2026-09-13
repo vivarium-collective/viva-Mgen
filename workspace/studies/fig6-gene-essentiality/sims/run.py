@@ -59,10 +59,13 @@ def _scan():
     genes = [(nid, mid) for nid, mid in genes if nid in ref]
 
     tp = fn = fp = tn = 0
+    growth_fractions = []
     for nid, mid in genes:
         proc = MetabolismFbaReproductionProcess(config={"disrupted_genes": [mid]}, core=core)
         out = proc.update({"nutrient_scale": 1.0}, 1.0)
-        model_essential = float(out["growth_fraction"]) < ESSENTIAL_THRESHOLD
+        gf = float(out["growth_fraction"])
+        growth_fractions.append(gf)
+        model_essential = gf < ESSENTIAL_THRESHOLD
         ref_essential = bool(ref[nid])
         if ref_essential and model_essential:
             tp += 1
@@ -72,7 +75,49 @@ def _scan():
             fp += 1
         else:
             tn += 1
-    return tp, fn, fp, tn
+    return tp, fn, fp, tn, growth_fractions
+
+
+def _pathologies():
+    """Fig 6B molecular-pathology booleans: run the whole-cell composite with each
+    representative essential class impaired and confirm the class-specific failure
+    (reduced but genuine — knocking a submodel out plateaus its product, and the
+    downstream cascade is emergent)."""
+    core = build_core()
+    T, DT = 15 * 3600.0, 300.0
+
+    def run(mod):
+        kw = {k: v for k, v in mod.items() if k != "drop"}
+        doc = build_mgen(core, interval=DT, **kw)
+        if mod.get("drop") and mod["drop"] in doc:
+            del doc[mod["drop"]]
+        sim = Composite({"state": doc}, core=core)
+        sim.run(T)
+        rows = [r for r in gather_emitter_results(sim)[("emitter",)] if r]
+        end = rows[-1]
+        mass = [float(r.get("mass", 0.0)) for r in rows]
+        return {
+            "growth": (mass[-1] - mass[0]) / (T / 3600.0),
+            "rna": sum((end.get("rna_counts", {}) or {}).values()),
+            "prot": sum((end.get("protein_counts", {}) or {}).values()),
+            "repl": float(end.get("replicated_fraction", 0.0)),
+            "sept": float(end.get("septum_diameter", 200.0)),
+        }
+
+    wt = run({})
+    met = run({"nutrient_scale": 0.08})
+    rna = run({"drop": "transcription"})
+    prot = run({"drop": "translation"})
+    dna = run({"drop": "replication"})
+    cyto = run({"drop": "cytokinesis"})
+    return {
+        "pathology_metabolic_non_growing": 1.0 if met["growth"] < 0.25 * wt["growth"] else 0.0,
+        "pathology_rna_ko_stops_rna": 1.0 if rna["rna"] < 0.25 * (wt["rna"] or 1) else 0.0,
+        "pathology_protein_ko_stops_protein": 1.0 if prot["prot"] < 0.25 * (wt["prot"] or 1) else 0.0,
+        "pathology_dna_ko_non_replicative": 1.0 if dna["repl"] < 0.5 else 0.0,
+        "pathology_cytokinesis_ko_non_fissive": 1.0 if cyto["sept"] > 100.0 else 0.0,
+        "pathology_wt_divides": 1.0 if wt["sept"] < 1.0 else 0.0,
+    }
 
 
 def _baseline_composite_run(gene="MG_023"):
@@ -97,7 +142,7 @@ def main() -> int:
         "params": {"disrupted_gene": "MG_023"},
     })
     try:
-        tp, fn, fp, tn = _scan()
+        tp, fn, fp, tn, growth_fractions = _scan()
         total = tp + fn + fp + tn
         accuracy = (tp + tn) / total if total else 0.0
         n_true_essential = tp + fn
@@ -106,18 +151,38 @@ def main() -> int:
         specificity = tn / (tn + fp) if (tn + fp) else 0.0
         matrix = [[tp, fn], [fp, tn]]
 
+        # KO growth-fraction distribution: the paper's Fig 6 is bimodal — genes are
+        # either essential (growth ≈ 0) or non-essential (growth ≈ 1), with few
+        # intermediate. Quantify: fraction in the low/high modes vs the middle.
+        import numpy as _np
+        gfa = _np.array(growth_fractions)
+        n_gf = len(gfa) or 1
+        frac_low = float((gfa < 0.1).mean())
+        frac_high = float((gfa > 0.9).mean())
+        frac_mid = float(((gfa >= 0.1) & (gfa <= 0.9)).mean())
+        growth_distribution_bimodal = 1.0 if (frac_low + frac_high) > 0.8 and frac_mid < 0.2 else 0.0
+
         # canonical composite baseline: a representative essential gene collapses growth
         baseline_gf = _baseline_composite_run("MG_023")
+        paths = _pathologies()
 
         observables = {
             "essentiality_accuracy": accuracy,
             "n_genes_tested": total,
+            "n_genes_scored": total,
             "n_true_essential": n_true_essential,
             "n_true_nonessential": n_true_nonessential,
             "sensitivity": sensitivity,
             "specificity": specificity,
             "baseline_growth_fraction": baseline_gf,
+            "growth_frac_low_mode": frac_low,
+            "growth_frac_high_mode": frac_high,
+            "growth_frac_middle": frac_mid,
+            "growth_distribution_bimodal": growth_distribution_bimodal,
+            **paths,
         }
+        print("pathologies:", {k: v for k, v in paths.items()})
+        print(f"bimodal={growth_distribution_bimodal} (low {frac_low:.2f}, high {frac_high:.2f}, mid {frac_mid:.2f})")
 
         print(f"n_genes_tested        = {total}  (metabolic genes with a reference call)")
         print(f"n_true_essential      = {n_true_essential}")

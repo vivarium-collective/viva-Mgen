@@ -86,11 +86,11 @@ simulation_set:
   - translation-dominates-energy
 expected_behavior:
 - name: atp-exceeds-gtp-synthesis
-  en: ATP synthesis flux exceeds GTP synthesis flux (ATP > GTP > 0), matching Fig 5A.
+  en: ATP:GTP synthesis-flux ratio in [2,8] (ATP the dominant energy carrier).
   observable: atp_to_gtp_ratio
-  condition: atp_to_gtp_ratio > 1.0
-  rationale: FBA over iPS189 carries far more flux through ATP synthase (ATPS4r) than through the GTP-producing
-    kinases. Achieved 4.03.
+  condition: 2.0 <= atp_to_gtp_ratio <= 8.0
+  rationale: 'Fig 5A: ATP and GTP are the dominant synthesized carriers with ATP > GTP; iPS189 FBA gives
+    ~4.0.'
   measure:
     kind: derived_scalar
     field: atp_to_gtp_ratio
@@ -98,23 +98,87 @@ expected_behavior:
     op: range
     low: 2.0
     high: 8.0
-- name: translation-dominates-energy
-  en: Translation dominates the modeled expression energy budget, ahead of transcription (Fig 5D ordering).
-  observable: translation_share
-  condition: translation_share > transcription_share
-  rationale: Each peptide bond costs ~2 GTP and translation events far outnumber transcription events,
-    so translation carries the bulk of expression energy. Achieved 0.968 (translation) vs 0.032 (transcription).
+- name: atp-gtp-dominate-redox
+  en: ATP+GTP synthesized >1000x the redox carriers (NAD(P)H, FADH2).
+  observable: atp_gtp_to_redox_ratio
+  condition: 1000.0 <= atp_gtp_to_redox_ratio <= 1000000000000.0
+  rationale: 'Fig 5A: ATP/GTP synthesis is >1000x that of NAD(H)/NADP(H)/FAD(H2). (Our reduced FBA measures
+    GROSS carrier turnover, where redox recycling is large — expected to fall short until net-synthesis
+    accounting is added.)'
   measure:
     kind: derived_scalar
-    field: translation_share
+    field: atp_gtp_to_redox_ratio
   expect:
     op: range
-    low: 0.5
-    high: 1.0
+    low: 1000.0
+    high: 1000000000000.0
+- name: translation-largest-energy-consumer
+  en: Translation is the largest ATP+GTP consumer (~29% of total).
+  observable: translation_energy_share
+  condition: 0.2 <= translation_energy_share <= 0.4
+  rationale: 'Fig 5D: Translation = 29.0% of average ATP+GTP usage.'
+  measure:
+    kind: derived_scalar
+    field: translation_energy_share
+  expect:
+    op: range
+    low: 0.2
+    high: 0.4
+- name: aminoacylation-energy-share
+  en: tRNA aminoacylation is the second-largest consumer (~15%).
+  observable: aminoacylation_energy_share
+  condition: 0.1 <= aminoacylation_energy_share <= 0.22
+  rationale: 'Fig 5D: tRNA aminoacylation = 15.1% of ATP+GTP usage.'
+  measure:
+    kind: derived_scalar
+    field: aminoacylation_energy_share
+  expect:
+    op: range
+    low: 0.1
+    high: 0.22
+- name: transcription-energy-share
+  en: Transcription consumes ~7% of ATP+GTP.
+  observable: transcription_energy_share
+  condition: 0.04 <= transcription_energy_share <= 0.12
+  rationale: 'Fig 5D: Transcription = 7.1% of ATP+GTP usage. (Reduced-panel transcription accounting currently
+    under-counts NTP relative to translation.)'
+  measure:
+    kind: derived_scalar
+    field: transcription_energy_share
+  expect:
+    op: range
+    low: 0.04
+    high: 0.12
+- name: unaccounted-energy-gap
+  en: A ~44% model-vs-experiment unaccounted energy gap is carried through.
+  observable: unaccounted_share
+  condition: 0.35 <= unaccounted_share <= 0.5
+  rationale: 'Fig 5D: 44.3% of experimentally-observed energy production is unaccounted for by the model
+    — a genuine reported discrepancy.'
+  measure:
+    kind: derived_scalar
+    field: unaccounted_share
+  expect:
+    op: range
+    low: 0.35
+    high: 0.5
+- name: ntp-use-invariant-across-cells
+  en: Total NTP use is nearly invariant across cell-cycle length (low CV).
+  observable: ntp_use_cv_across_cells
+  condition: 0.0 <= ntp_use_cv_across_cells <= 0.15
+  rationale: 'Fig 5B: total ATP/GTP use is nearly invariant across cells except the very slowest — metabolism
+    (not expression) sets cycle length.'
+  measure:
+    kind: derived_scalar
+    field: ntp_use_cv_across_cells
+  expect:
+    op: range
+    low: 0.0
+    high: 0.15
 behavior_tests:
 - name: atp-exceeds-gtp-synthesis
   classification: primary
-  description: ATP:GTP synthesis flux ratio within [2.0, 8.0] (ATP > GTP > 0).
+  description: ATP:GTP synthesis-flux ratio in [2,8] (ATP the dominant energy carrier).
   measure:
     kind: derived_scalar
     field: atp_to_gtp_ratio
@@ -124,23 +188,97 @@ behavior_tests:
     high: 8.0
     provenance:
       kind: model
-      note: Fig 5A shows ATP and GTP as the dominant synthesized carriers with ATP > GTP; iPS189 FBA gives
-        ratio 4.03 (ATP 0.813 vs GTP 0.202).
+      note: 'Fig 5A: ATP and GTP are the dominant synthesized carriers with ATP > GTP; iPS189 FBA gives
+        ~4.0.'
   requires_simulation: baseline
-- name: translation-dominates-energy
+- name: atp-gtp-dominate-redox
   classification: primary
-  description: Translation's share of modeled expression energy within [0.5, 1.0].
+  description: ATP+GTP synthesized >1000x the redox carriers (NAD(P)H, FADH2).
   measure:
     kind: derived_scalar
-    field: translation_share
+    field: atp_gtp_to_redox_ratio
   pass_if:
     op: range
-    low: 0.5
-    high: 1.0
+    low: 1000.0
+    high: 1000000000000.0
+    provenance:
+      kind: experiment
+      note: 'Fig 5A: ATP/GTP synthesis is >1000x that of NAD(H)/NADP(H)/FAD(H2). (Our reduced FBA measures
+        GROSS carrier turnover, where redox recycling is large — expected to fall short until net-synthesis
+        accounting is added.)'
+  requires_simulation: baseline
+- name: translation-largest-energy-consumer
+  classification: primary
+  description: Translation is the largest ATP+GTP consumer (~29% of total).
+  measure:
+    kind: derived_scalar
+    field: translation_energy_share
+  pass_if:
+    op: range
+    low: 0.2
+    high: 0.4
+    provenance:
+      kind: experiment
+      note: 'Fig 5D: Translation = 29.0% of average ATP+GTP usage.'
+  requires_simulation: baseline
+- name: aminoacylation-energy-share
+  classification: primary
+  description: tRNA aminoacylation is the second-largest consumer (~15%).
+  measure:
+    kind: derived_scalar
+    field: aminoacylation_energy_share
+  pass_if:
+    op: range
+    low: 0.1
+    high: 0.22
+    provenance:
+      kind: experiment
+      note: 'Fig 5D: tRNA aminoacylation = 15.1% of ATP+GTP usage.'
+  requires_simulation: baseline
+- name: transcription-energy-share
+  classification: primary
+  description: Transcription consumes ~7% of ATP+GTP.
+  measure:
+    kind: derived_scalar
+    field: transcription_energy_share
+  pass_if:
+    op: range
+    low: 0.04
+    high: 0.12
+    provenance:
+      kind: experiment
+      note: 'Fig 5D: Transcription = 7.1% of ATP+GTP usage. (Reduced-panel transcription accounting currently
+        under-counts NTP relative to translation.)'
+  requires_simulation: baseline
+- name: unaccounted-energy-gap
+  classification: primary
+  description: A ~44% model-vs-experiment unaccounted energy gap is carried through.
+  measure:
+    kind: derived_scalar
+    field: unaccounted_share
+  pass_if:
+    op: range
+    low: 0.35
+    high: 0.5
     provenance:
       kind: model
-      note: Fig 5D's budget is translation-dominated (~29%, ahead of transcription ~7%); the reduced model
-        reproduces the ordering with translation at 0.968 of the modeled expression energy.
+      note: 'Fig 5D: 44.3% of experimentally-observed energy production is unaccounted for by the model
+        — a genuine reported discrepancy.'
+  requires_simulation: baseline
+- name: ntp-use-invariant-across-cells
+  classification: primary
+  description: Total NTP use is nearly invariant across cell-cycle length (low CV).
+  measure:
+    kind: derived_scalar
+    field: ntp_use_cv_across_cells
+  pass_if:
+    op: range
+    low: 0.0
+    high: 0.15
+    provenance:
+      kind: model
+      note: 'Fig 5B: total ATP/GTP use is nearly invariant across cells except the very slowest — metabolism
+        (not expression) sets cycle length.'
   requires_simulation: baseline
 readouts:
 - name: atp_production

@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
-"""Canonical run for the ``fig3-expression`` study (Fig 3 / 2G-2H of Karr et al. 2012).
+"""Canonical run for the ``fig3-expression`` study (Fig 3 of Karr et al. 2012).
 
-Runs the stochastic transcription + translation + RNA/protein decay processes on
-the representative gene panel through shared bigraph stores for one hour, and
-checks that the reproduction recapitulates the *qualitative* single-cell
-expression phenomena of Fig 2G/2H: bursty, low-copy mRNA and protein that
-accumulates to much higher, more stable copy numbers (the mRNA↔protein
-decoupling). Renders an interactive expression time-series and a per-gene
-mRNA-vs-protein comparison, and records the run in ``.pbg/runs.jsonl``.
+Reproduces the chromosome DNA–protein-interaction phenomena of Figure 3 and
+records paper-grounded observables for the study's report cards:
 
-REDUCED FIDELITY: a 6-gene representative panel, not the full ~480-gene set. It
-reproduces the qualitative decoupling, NOT the paper's quantitative t50 = 18 min
-mRNA half-life-of-expression value (that requires the full gene set) — see the
-study conclusion for this divergence.
+* chromosome-exploration kinetics — % of the genome protein-bound at 6 min and
+  20 min, and the time for RNA polymerase to bind 90 % of the chromosome (Fig 3B);
+* RNA-expression kinetics — t50, the time for 50 % of genes to be expressed (Fig 3C);
+* protein–DNA collisions over a cell cycle — total count, the fraction caused by
+  RNA polymerase, the fraction displacing SMC, and the collisions-vs-density
+  correlation (Fig 3E/3F).
+
+Chromosome dynamics come from :class:`ChromosomeDynamicsReproductionProcess`
+(read, not modified); RNA-expression timing from the transcription process on the
+representative gene panel.
+
+REDUCED FIDELITY: binned genome, representative protein counts, a 6-gene
+expression panel — so absolute collision counts and t50 are representative, not
+KB-fitted. The report cards are set to the paper's values so the divergences are
+explicit and can be closed later via the model mechanisms.
 """
 from __future__ import annotations
 
@@ -34,11 +40,10 @@ STUDY_DIR = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = _workspace_root(STUDY_DIR)
 
 import numpy as np
-from process_bigraph import Composite, gather_emitter_results
 
 from viva_mgen.core import build_core
-from viva_mgen.composites import build_mgen
-from viva_mgen import viz
+from viva_mgen.processes.chromosome import ChromosomeDynamicsReproductionProcess
+from viva_mgen.processes.transcription import TranscriptionReproductionProcess
 from viva_mgen.expression_defaults import DEFAULT_GENES
 from vivarium_workbench.lib.run_log import append_run_event
 
@@ -47,21 +52,67 @@ STUDY_SLUG = "fig3-expression"
 INVESTIGATION_SLUG = "mgen"
 
 
-def _run(n_seconds=3600.0, dt=1.0, seed=0):
-    core = build_core()
-    doc = build_mgen(core, seed=seed)
-    for _pk in ("metabolism","mass","replication"):
-        doc[_pk]["interval"] = n_seconds  # run once; fig3 measures expression only
-    # The map[float] store apply accumulates deltas only into keys that already
-    # exist; a bare {} drops every synthesized species. Seed the panel gene keys
-    # at 0.0 so the stochastic synthesis/decay deltas land and accumulate.
-    doc["stores"]["rna_counts"] = {g: 0.0 for g in DEFAULT_GENES}
-    doc["stores"]["protein_counts"] = {g: 0.0 for g in DEFAULT_GENES}
-    sim = Composite({"state": doc}, core=core)
-    sim.run(n_seconds)
-    rows = gather_emitter_results(sim)[("emitter",)]
-    rows = [r for r in rows if r is not None]
-    return rows, dt
+def _chromosome_metrics(core, dt=30.0, cycle_s=9 * 3600.0):
+    """Run the chromosome process over one cell cycle; return Fig-3 observables."""
+    ch = ChromosomeDynamicsReproductionProcess(config={"seed": 0}, core=core)
+    t_min, explored, rnap_expl, dens, ncoll = [], [], [], [], []
+    out = None
+    n = int(cycle_s / dt)
+    for k in range(n):
+        out = ch.update({"rna_polymerase": 120.0, "replication_active": 1.0}, dt)
+        t_min.append(k * dt / 60.0)
+        explored.append(out["fraction_explored"] * 100.0)
+        rnap_expl.append(out["percent_rnap_explored"] * 100.0)
+        dens.append(out["dna_binding_density"])
+        ncoll.append(out["n_collisions"])
+    t_min = np.array(t_min); explored = np.array(explored)
+    rnap_expl = np.array(rnap_expl); dens = np.array(dens); ncoll = np.array(ncoll)
+
+    def _at(tmin):
+        return float(np.interp(tmin, t_min, explored))
+
+    def _first_time_ge(arr, thr):
+        idx = np.where(arr >= thr)[0]
+        return float(t_min[idx[0]]) if len(idx) else float("inf")
+
+    collisions = out["collisions"] or {}
+    total = float(sum(collisions.values())) or 1.0
+    by_rnap = sum(v for k, v in collisions.items() if k.split("||")[0] == "RNA Pol")
+    disp_smc = sum(v for k, v in collisions.items() if k.split("||")[-1] == "SMC")
+    coll_delta = np.diff(np.concatenate([[0.0], ncoll]))
+    # correlate per-step new collisions with the instantaneous binding density
+    r_cd = float(np.corrcoef(dens, coll_delta)[0, 1]) if np.std(dens) and np.std(coll_delta) else 0.0
+
+    return {
+        "pct_explored_at_6min": _at(6.0),
+        "pct_explored_at_20min": _at(20.0),
+        "rnap_90pct_time_min": _first_time_ge(rnap_expl, 90.0),
+        "n_collisions_per_cycle": float(ncoll[-1]),
+        "frac_collisions_by_rnap": float(by_rnap / total),
+        "frac_collisions_displacing_smc": float(disp_smc / total),
+        "collisions_density_pearson_r": r_cd,
+    }
+
+
+def _rna_expression_t50(core, dt=1.0, max_min=150.0):
+    """Time for 50 % (and track 90 %) of the gene panel to be expressed (Fig 3C)."""
+    txn = TranscriptionReproductionProcess(config={"seed": 3}, core=core)
+    seen = set()
+    n_genes = len(DEFAULT_GENES)
+    t50 = t90 = float("inf")
+    for k in range(int(max_min * 60 / dt)):
+        d = txn.update({"ntp": 1e12, "rna_pol": 100.0}, dt)
+        for g, nsyn in (d.get("rna_counts") or {}).items():
+            if nsyn > 0:
+                seen.add(g)
+        frac = len(seen) / n_genes
+        tmin = k * dt / 60.0
+        if frac >= 0.5 and t50 == float("inf"):
+            t50 = tmin
+        if frac >= 0.9 and t90 == float("inf"):
+            t90 = tmin
+            break
+    return {"rna_t50_min": t50, "rna_t90_min": t90}
 
 
 def main() -> int:
@@ -74,56 +125,12 @@ def main() -> int:
         "params": {"seed": 0},
     })
     try:
-        rows, dt = _run()
-
-        n_genes = len(DEFAULT_GENES)
-        # per-row totals across the gene panel
-        total_mrna = np.array([sum((r.get("rna_counts") or {}).values()) for r in rows], dtype=float)
-        total_protein = np.array([sum((r.get("protein_counts") or {}).values()) for r in rows], dtype=float)
-        t_min = np.arange(len(rows)) * dt / 60.0  # minutes
-
-        final_rna = rows[-1].get("rna_counts") or {}
-        final_protein = rows[-1].get("protein_counts") or {}
-
-        # observables
-        mean_mrna_per_gene = float(total_mrna.mean() / n_genes)
-        final_total_mrna = float(total_mrna[-1])
-        final_total_protein = float(total_protein[-1])
-        protein_to_mrna_ratio = float(final_total_protein / max(1.0, final_total_mrna))
-        fraction_genes_expressed = float(
-            sum(1 for g in DEFAULT_GENES if float(final_protein.get(g, 0.0)) > 0.0) / n_genes)
-
-        print(f"mean_mrna_per_gene       = {mean_mrna_per_gene:.3f}  (low/bursty, expect ~0-2)")
-        print(f"final_total_mrna         = {final_total_mrna:.1f}")
-        print(f"final_total_protein      = {final_total_protein:.1f}  (>> mRNA)")
-        print(f"protein_to_mrna_ratio    = {protein_to_mrna_ratio:.1f}  (>> 1, Fig 2H decoupling)")
-        print(f"fraction_genes_expressed = {fraction_genes_expressed:.3f}  (expect ~1.0)")
-
-        viz_dir = STUDY_DIR / "viz"
-        viz_dir.mkdir(parents=True, exist_ok=True)
-
-        # 1) expression time series — total mRNA vs total protein over the hour
-        (viz_dir / "expression_timeseries.html").write_text(viz.line_series_html(
-            "Gene expression dynamics: bursty mRNA vs accumulating protein (Fig 2G)",
-            t_min, {"total mRNA": total_mrna, "total protein": total_protein},
-            x_title="time (min)", y_title="copy number"))
-
-        # 2) per-gene final protein vs mRNA — grouped bars showing protein >> mRNA
-        genes = list(DEFAULT_GENES)
-        (viz_dir / "protein_vs_mrna.html").write_text(viz.grouped_bar_html(
-            "mRNA vs protein copy number by gene (Fig 2H)",
-            genes,
-            {"mRNA": [float(final_rna.get(g, 0.0)) for g in genes],
-             "protein": [float(final_protein.get(g, 0.0)) for g in genes]},
-            x_title="gene", y_title="final copy number"))
-
-        observables = {
-            "mean_mrna_per_gene": mean_mrna_per_gene,
-            "final_total_mrna": final_total_mrna,
-            "final_total_protein": final_total_protein,
-            "protein_to_mrna_ratio": protein_to_mrna_ratio,
-            "fraction_genes_expressed": fraction_genes_expressed,
-        }
+        core = build_core()
+        obs = {}
+        obs.update(_chromosome_metrics(core))
+        obs.update(_rna_expression_t50(core))
+        for k, v in obs.items():
+            print(f"{k:34s} = {v}")
     except Exception:
         append_run_event(WORKSPACE_ROOT, {
             "run_id": run_id, "event": "completed", "completed_at": time.time(),
@@ -132,8 +139,7 @@ def main() -> int:
 
     append_run_event(WORKSPACE_ROOT, {
         "run_id": run_id, "event": "completed", "completed_at": time.time(),
-        "n_steps": len(rows), "status": "completed",
-        "observables": observables})
+        "n_steps": 1, "status": "completed", "observables": obs})
     return 0
 
 
