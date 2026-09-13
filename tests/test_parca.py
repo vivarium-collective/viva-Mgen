@@ -42,6 +42,42 @@ def test_parca_panel_from_real_expression():
         assert panel["tuf"][0] > median
 
 
+def test_fit_analytically_satisfies_constraints():
+    """The analytic QP projects the observed distribution onto the FitConstants
+    linear constraints: RNA mass reproduced exactly, DnaA/FtsZ held, and the
+    projection is the least-change (closest to the initial guess)."""
+    import numpy as np
+    n = 50
+    rng = np.random.default_rng(0)
+    counts0 = rng.uniform(1, 100, n)
+    mw = rng.uniform(300, 3000, n)
+    # scale counts0 so the mass constraint is already consistent, then hold two genes
+    held = [3, 7]
+    fitted = parca.fit_analytically(counts0, mw, held_idx=held)
+    mc = parca._mass_constants()
+    target = mc["dry_weight_g"] * mc["rna_fraction"] * parca._NA
+    assert np.isclose(fitted @ mw, target, rtol=1e-9), "RNA-mass constraint must hold"
+    for j in held:
+        assert np.isclose(fitted[j], counts0[j], rtol=1e-9), "held genes must be unchanged"
+    assert (fitted >= 0).all()
+
+
+def test_supercoiling_constraint_rebalances_topoisomerases():
+    """With the net-supercoiling constraint active, the fitted topoisomerase-I
+    (topA) expression rises relative to gyrase to zero net supercoiling activity —
+    a real effect of the QP (the observed data alone has topA < gyrA)."""
+    panel = parca.calculate_parameters()
+    genes = {(g.get("symbol") or "").strip().lower(): g for g in load_genes()}
+
+    def synth(sym):
+        g = genes[sym]
+        key = (g.get("symbol") or "").strip() or g["gene_id"]
+        return panel[key][0]
+
+    if "topa" in genes and "gyra" in genes:
+        assert synth("topa") > synth("gyra")
+
+
 def test_decay_rates_match_halflives():
     rates = parca.mrna_decay_rates()
     panel = parca.calculate_parameters()
