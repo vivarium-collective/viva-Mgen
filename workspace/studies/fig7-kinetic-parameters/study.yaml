@@ -1,3 +1,12 @@
+runs:
+- name: baseline
+  run_id: fig7-kinetic-parameters-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig7-kinetic-parameters/results/baseline.zarr
+  timestamp: 1789260463.1
+
 schema_version: 4
 name: fig7-kinetic-parameters
 title: "Fig 7E-G — Kinetic parameters: growth depends sigmoidally on an enzyme's kcat (Vmax proxy)"
@@ -152,64 +161,3 @@ readouts:
   store_path: stores/growth_rate
   status: available
 
-runs:
-- name: baseline
-  run_id: fig7-kinetic-parameters-baseline
-  status: completed
-  emitter: xarray
-  n_steps: 108
-  store_path: workspace/studies/fig7-kinetic-parameters/results/baseline.zarr
-  timestamp: 1789259045.0
-
-pipeline_gate:
-  prerequisites:
-  - study: fig6-gene-essentiality
-    condition: tests-passed
-  enables: []
-  proceed_condition: |
-    The reduced cell reproduces Fig 7's qualitative kcat→growth law — a
-    monotonic, saturating sigmoid with a clear dynamic range — establishing that
-    tuning a rate-limiting enzyme's Vmax proxy moves predicted growth, the
-    mechanism the paper uses to reconcile model and experiment.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig7-kinetic-parameters/sims/run.py
-  args: []
-  label: "Fig 7E kcat sweep: growth vs flux-bound (Vmax proxy)"
-  default: true
-
-visualizations:
-- name: kcat-growth-curve
-  chart: viz/kcat_growth_curve.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: kcat-growth-curve
-  url: /workspace/studies/fig7-kinetic-parameters/viz/kcat_growth_curve.html
-  description: >-
-    Growth fraction vs flux-bound scale (kcat/Vmax proxy, log x) for the
-    leucine-uptake target and two secondary uptake reactions — a monotonic,
-    saturating sigmoid (Fig 7E).
-
-provenance:
-  kind: model
-  note: >-
-    Karr et al. 2012, Fig 7E-G — predicted growth rate depends on an enzyme's
-    kinetic parameter (kcat), producing a sigmoidal growth-vs-kcat curve; tuning
-    kcat reconciles model and experiment for lpdA, deoD, thyA. Reproduced here at
-    REDUCED fidelity with kcat as a multiplicative FBA flux-bound (Vmax) proxy on
-    a growth-limiting reaction (EX_leu_DASH_L_e), not explicit enzyme kinetics.
-
-conclusion: |
-  The viva-Mgen cell reproduces Fig 7's central kcat→growth law at reduced
-  fidelity. Sweeping the growth-limiting leucine-uptake reaction
-  EX_leu_DASH_L_e's flux bound (a Vmax proxy) over 0.01–10x wild-type yields a
-  textbook sigmoid: growth_fraction rises monotonically from 0.136 at 0.01x,
-  crosses through the mid-range, and saturates at 1.000 by ~0.1x, giving a
-  dynamic range of 0.864. Both primary tests pass (monotonic = 1.0,
-  saturates = 1.0) and the reaction is genuinely limiting (dynamic_range 0.864 >
-  0.3) — matching the qualitative dependence the paper exploits to reconcile
-  model and experiment for lpdA/deoD/thyA. kcat is a flux-bound proxy, not
-  explicit enzyme kinetics, and the specific paper genetics are not individually
-  modelled.

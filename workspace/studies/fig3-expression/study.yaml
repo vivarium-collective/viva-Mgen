@@ -1,3 +1,12 @@
+runs:
+- name: baseline
+  run_id: fig3-expression-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 120
+  store_path: workspace/studies/fig3-expression/results/baseline.zarr
+  timestamp: 1789260460.0
+
 schema_version: 4
 name: fig3-expression
 title: "Fig 3 (2G/2H) — Single-cell expression: bursty mRNA vs accumulating protein"
@@ -146,57 +155,3 @@ readouts:
   store_path: stores/gtp
   status: available
 
-runs:
-- name: baseline
-  run_id: fig3-expression-baseline
-  status: completed
-  emitter: xarray
-  n_steps: 120
-  store_path: workspace/studies/fig3-expression/results/baseline.zarr
-  timestamp: 1789259045.0
-
-pipeline_gate:
-  prerequisites:
-  - study: fig1-architecture
-    condition: tests-passed
-  enables: []
-  proceed_condition: |
-    The expression module reproduces the qualitative Fig 2G/2H decoupling —
-    bursty low-copy mRNA and protein accumulating orders of magnitude higher —
-    on the representative gene panel. Quantitative population statistics (t50)
-    are explicitly out of scope for the reduced panel.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig3-expression/sims/run.py
-  args: []
-  label: "Fig 3 expression: 1 h stochastic transcription/translation/decay"
-  default: true
-
-visualizations:
-- name: expression-timeseries
-  chart: viz/expression_timeseries.html
-  render: "python sims/run.py"
-- name: protein-vs-mrna
-  chart: viz/protein_vs_mrna.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: expression-timeseries
-  url: /workspace/studies/fig3-expression/viz/expression_timeseries.html
-  description: "Total mRNA (bursty, low) and total protein (accumulating) across the panel over 1 h."
-- name: protein-vs-mrna
-  url: /workspace/studies/fig3-expression/viz/protein_vs_mrna.html
-  description: "Per-gene final mRNA vs protein copy number — protein >> mRNA (Fig 2H decoupling)."
-
-conclusion: |
-  The reduced viva-Mgen expression module reproduces the qualitative single-cell
-  dynamics of Fig 2G/2H: mRNA stays low and bursty (mean ~1.6 copies per gene,
-  final total ~9 across the 6-gene panel) while protein accumulates far higher
-  (final total ~1750-2000 copies), a protein-to-mRNA ratio of ~200 and all 6
-  panel genes expressed by 1 h. Copy numbers vary run to run — the intended
-  single-cell stochastic variability. REDUCED FIDELITY caveat: this is a
-  representative 6-gene panel with order-of-magnitude rates, not the full ~480
-  genes with KB-fitted rates, so it deliberately does NOT reproduce the paper's
-  quantitative t50 = 18 min half-of-expression statistic; it establishes the
-  decoupling phenomenon, not that population number.

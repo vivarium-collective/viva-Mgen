@@ -1,3 +1,12 @@
+runs:
+- name: baseline
+  run_id: fig2-growth-baseline
+  status: completed
+  emitter: xarray
+  n_steps: 108
+  store_path: workspace/studies/fig2-growth/results/baseline.zarr
+  timestamp: 1789260459.3
+
 schema_version: 4
 name: fig2-growth
 title: "Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition"
@@ -128,52 +137,3 @@ readouts:
   store_path: stores/volume
   status: available
 
-runs:
-- name: baseline
-  run_id: fig2-growth-baseline
-  status: completed
-  emitter: xarray
-  n_steps: 108
-  store_path: workspace/studies/fig2-growth/results/baseline.zarr
-  timestamp: 1789259045.0
-
-pipeline_gate:
-  prerequisites:
-  - study: fig1-architecture
-    condition: tests-passed
-  enables:
-  - fig5-energy
-  - fig6-gene-essentiality
-  proceed_condition: |
-    The integrated cell reproduces the 9 h doubling time and protein-dominant
-    composition, establishing the FBA-driven growth backbone the energy and
-    gene-disruption studies build on.
-
-canonical_runs:
-- name: default
-  script: workspace/studies/fig2-growth/sims/run.py
-  args: []
-  label: "Fig 2 growth: one cell cycle, mass + composition"
-  default: true
-
-visualizations:
-- name: growth-curve
-  chart: viz/growth_curve.html
-  render: "python sims/run.py"
-- name: composition-donut
-  chart: viz/composition_donut.html
-  render: "python sims/run.py"
-
-embed_visualizations:
-- name: growth-curve
-  url: /workspace/studies/fig2-growth/viz/growth_curve.html
-  description: "Total dry mass and its major macromolecule fractions over one ~9 h cell cycle."
-- name: composition-donut
-  url: /workspace/studies/fig2-growth/viz/composition_donut.html
-  description: "Dry-mass composition at division — protein-dominant, matching Fig 2C."
-
-conclusion: |
-  The viva-Mgen integrated cell reproduces Fig 2's growth phenotype at full
-  fidelity: fitted doubling time 9.000 h (target ~9), mass doubling 2.000× over
-  the cycle, and protein at 62.0% of dry mass — matching the measured and fitted
-  M. genitalium values.
