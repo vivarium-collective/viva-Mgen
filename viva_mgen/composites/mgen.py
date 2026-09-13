@@ -73,6 +73,75 @@ _MAP_STORES = {
 # store keys that hold list[float] (chromosome polymerase positions)
 _LIST_STORES = {"rna_pol_positions", "dna_pol_positions"}
 
+# The whole cell is one root store tree named ``cell`` (not the generic
+# "stores"), organised into biologically meaningful compartments/pools. Every
+# cell variable lives under ``cell/<compartment>/<name>`` so the loom shows an
+# intuitive, navigable hierarchy instead of one flat 87-node row. Each process
+# still wires to the SAME leaf path everywhere, so shared state stays shared.
+_ROOT = "cell"
+_STORE_GROUP = {
+    # whole-cell physiology / growth state
+    "mass": "physiology", "volume": "physiology", "growth_rate": "physiology",
+    "growth_fraction": "physiology", "phase_code": "physiology",
+    # metabolism — energy carriers, precursor pools, biomass, FBA status
+    "atp": "metabolism", "gtp": "metabolism", "ntp": "metabolism",
+    "amino_acid": "metabolism", "dntp_pool": "metabolism",
+    "dntp_at_replication_start": "metabolism", "dntp_synthesis_scale": "metabolism",
+    "nutrient_scale": "metabolism", "atp_production": "metabolism",
+    "gtp_production": "metabolism", "feasible": "metabolism",
+    "mass_fractions": "metabolism",
+    # genome — chromosome replication, structure, maintenance, DNA-binding (Fig 3)
+    "chromosome_copy": "genome", "replicated_fraction": "genome",
+    "replication_active": "genome", "replication_duration": "genome",
+    "initiation_duration": "genome", "initiation_ready": "genome",
+    "dnaA_free": "genome", "dnaA_complex": "genome", "complex_size": "genome",
+    "superhelical_density": "genome", "condensed_fraction": "genome",
+    "segregated_fraction": "genome", "lesions": "genome",
+    "damaging_agent": "genome", "repair_enzyme": "genome", "gyrase": "genome",
+    "smc": "genome", "occupancy": "genome", "collisions": "genome",
+    "n_collisions": "genome", "fraction_explored": "genome",
+    "dna_binding_density": "genome", "percent_rnap_explored": "genome",
+    "percent_dnap_explored": "genome", "rna_pol_positions": "genome",
+    "dna_pol_positions": "genome",
+    # transcriptome — RNA synthesis/processing/modification, tRNA charging, regulation
+    "rna_counts": "transcriptome", "nascent_rna": "transcriptome",
+    "mature_rna": "transcriptome", "unmodified_rna": "transcriptome",
+    "modified_rna": "transcriptome", "rna_pol": "transcriptome",
+    "rna_modification_enzyme": "transcriptome", "tf_activity": "transcriptome",
+    "fold_change": "transcriptome", "regulator": "transcriptome",
+    "free_trna": "transcriptome", "aminoacylated_trna": "transcriptome",
+    "synthetase": "transcriptome",
+    # proteome — protein maturation chain and complexes
+    "protein_counts": "proteome", "nascent": "proteome",
+    "process_i_done": "proteome", "processed_ii": "proteome",
+    "translocated": "proteome", "unfolded": "proteome", "folded": "proteome",
+    "unmodified": "proteome", "modified": "proteome", "monomers": "proteome",
+    "complexes": "proteome", "active_fraction": "proteome",
+    "chaperone_count": "proteome", "deformylase": "proteome",
+    "translocase": "proteome", "signal_peptidase": "proteome",
+    "protein_modification_enzyme": "proteome",
+    # ribosome — assembly of the translation machinery
+    "ribosome_30S": "ribosome", "ribosome_50S": "ribosome",
+    "rprotein_counts": "ribosome", "rrna_counts": "ribosome",
+    "assembly_factor": "ribosome",
+    # division — FtsZ ring, septum, cytokinesis
+    "division": "division", "divided": "division", "ftsz_monomer": "division",
+    "ftsz_ring_filaments": "division", "septum_diameter": "division",
+    "contraction_progress": "division",
+    # envelope — cell surface, terminal organelle, adhesion
+    "terminal_organelle_fraction": "envelope", "adhesion_strength": "envelope",
+    "adhesin_proteins": "envelope",
+}
+
+
+def _store_path(key):
+    """``[cell, <compartment>, <key>]`` — fail loud on an unmapped store so a new
+    process port can never silently land outside the biological hierarchy."""
+    group = _STORE_GROUP.get(key)
+    if group is None:
+        raise KeyError(f"store {key!r} has no biological compartment in _STORE_GROUP")
+    return [_ROOT, group, key]
+
 # initial float-store values (resources/enzymes/setpoints); unlisted floats -> 0.0
 _FLOAT_INIT = {
     "atp": 1e9, "gtp": 1e9, "ntp": 1e8, "amino_acid": 1e8,
@@ -129,36 +198,44 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         "chromosome": {"seed": seed},
     }
 
-    stores, doc, used = {}, {}, set()
+    cell, doc, used = {}, {}, set()
+
+    def _init_value(key):
+        if key in _LIST_STORES:
+            return []
+        if key in _MAP_STORES:
+            return ({} if key in ("occupancy", "collisions", "mass_fractions",
+                                  "fold_change", "active_fraction")
+                    else {g: 0.0 for g in DEFAULT_GENES})
+        return _FLOAT_INIT.get(key, 0.0)
 
     def store(key):
         used.add(key)
-        if key not in stores:
-            if key in _LIST_STORES:
-                stores[key] = []
-            elif key in _MAP_STORES:
-                stores[key] = ({} if key in ("occupancy", "collisions", "mass_fractions",
-                                             "fold_change", "active_fraction")
-                               else {g: 0.0 for g in DEFAULT_GENES})
-            else:
-                stores[key] = _FLOAT_INIT.get(key, 0.0)
-        return ["stores", key]
+        path = _store_path(key)
+        group, leaf = path[1], path[2]
+        grp = cell.setdefault(group, {})
+        if leaf not in grp:
+            grp[leaf] = _init_value(key)
+        return path
 
     for cls_name, node in _NODE_NAMES.items():
         cls = classes[cls_name]
         proc = cls(config={}, core=core)
         inputs = {p: store(_store_key(cls_name, p)) for p in proc.inputs()}
         outputs = {p: store(_store_key(cls_name, p)) for p in proc.outputs()}
-        doc[node] = {"_type": "process", "address": f"local:{cls_name}",
+        # Dotted address so the dashboard/loom can import the class and show its
+        # describe() contract + docstring (bare local:<Class> can't be imported).
+        doc[node] = {"_type": "process", "address": f"local:{cls.__module__}.{cls_name}",
                      "config": configs.get(node, {}), "interval": interval,
                      "inputs": inputs, "outputs": outputs}
 
-    stores["nutrient_scale"] = nutrient_scale  # honor the param override
-    doc["stores"] = stores
+    # honor the param override (nutrient_scale lives under cell/metabolism)
+    cell.setdefault("metabolism", {})["nutrient_scale"] = nutrient_scale
+    doc[_ROOT] = cell
     emit = {k: v for k, v in _EMIT.items() if k in used}
     doc["emitter"] = {"_type": "step", "address": "local:RAMEmitter",
                       "config": {"emit": emit},
-                      "inputs": {k: ["stores", k] for k in emit}}
+                      "inputs": {k: _store_path(k) for k in emit}}
     return doc
 
 
@@ -175,9 +252,10 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         "seed": {"type": "integer", "default": 0, "description": "Stochastic seed"},
     },
     emitters=[{"address": "local:ParquetEmitter",
-               "paths": ["stores/mass", "stores/growth_fraction", "stores/growth_rate",
-                         "stores/volume", "stores/atp_production", "stores/gtp_production",
-                         "stores/replicated_fraction", "stores/dntp_pool"]}],
+               "paths": ["cell/physiology/mass", "cell/physiology/growth_fraction",
+                         "cell/physiology/growth_rate", "cell/physiology/volume",
+                         "cell/metabolism/atp_production", "cell/metabolism/gtp_production",
+                         "cell/genome/replicated_fraction", "cell/metabolism/dntp_pool"]}],
 )
 def mycoplasma_genitalium(core=None, *, nutrient_scale=1.0, initial_dnaA=0.0,
                           initial_dntp=0.0, seed=0):

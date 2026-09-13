@@ -16,9 +16,18 @@ from .processes import all_process_classes
 
 
 def register_processes(core):
-    """Register every viva-Mgen ``*ReproductionProcess`` class into ``core``."""
+    """Register every viva-Mgen ``*ReproductionProcess`` class into ``core``.
+
+    Each class is registered under BOTH its bare name (``MetabolismFbaReproductionProcess``)
+    and its dotted import path (``viva_mgen.processes.metabolism.MetabolismFbaReproductionProcess``).
+    The composite wires processes by their dotted ``local:<module>.<Class>`` address
+    so the dashboard/loom can import the class and surface each process's
+    ``describe()`` contract + docstring in the inspector; the bare alias keeps any
+    legacy ``local:<Class>`` reference resolving.
+    """
     for name, cls in all_process_classes().items():
         core.register_link(name, cls)
+        core.register_link(f"{cls.__module__}.{name}", cls)
     return core
 
 
