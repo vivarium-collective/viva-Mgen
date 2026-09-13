@@ -97,10 +97,10 @@ class ChromosomeDynamicsReproductionProcess(Process):
     config_schema = {
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "n_bins": {"_type": "integer", "_default": 580},
-        "n_rna_pol": {"_type": "integer", "_default": 30},         # concurrently elongating pols
+        "n_rna_pol": {"_type": "integer", "_default": 50},         # concurrently elongating pols
         "rna_pol_rate_bp": {"_type": "float", "_default": 50.0},   # nt/s
         "dna_pol_rate_bp": {"_type": "float", "_default": 20.0},   # nt/s per replisome → ~4 h to traverse the genome (paper's replication phase)
-        "n_smc": {"_type": "integer", "_default": 40},
+        "n_smc": {"_type": "integer", "_default": 280},   # condensin densely coats the chromosome
         "n_ssb": {"_type": "integer", "_default": 30},
         "n_gyrase": {"_type": "integer", "_default": 20},
         "n_topo": {"_type": "integer", "_default": 10},
@@ -108,6 +108,11 @@ class ChromosomeDynamicsReproductionProcess(Process):
         # fraction of each structural protein's sites that unbind + rebind to a
         # NEW random position per second (sets the chromosome-exploration rate).
         "struct_turnover_per_s": {"_type": "float", "_default": 0.008},
+        # structural proteins bind PROGRESSIVELY (not all at t=0): the bound count
+        # ramps as 1 − e^(−t/τ), so early exploration/density is low and the dense
+        # SMC coating (and the RNA-pol↔SMC collisions it causes) builds over the
+        # first ~20 min — matching the paper's gradual exploration + >30k collisions.
+        "struct_bind_tau_s": {"_type": "float", "_default": 1200.0},
         "seed": {"_type": "integer", "_default": 0},
     }
 
@@ -139,6 +144,7 @@ class ChromosomeDynamicsReproductionProcess(Process):
         # coupon-collector saturation) rather than being ~fully covered in the
         # first step — matching the paper's "50% bound by 6 min, 90% by 20 min".
         self._struct_sites = {}                    # label -> np.array of bound bins
+        self._t_struct = 0.0                        # elapsed time (drives the binding ramp)
         self.rna_pols = []                          # list of [pos, end]
         self.dna_pos = None                         # [left, right] once replicating
         self.collisions = {}
@@ -188,19 +194,23 @@ class ChromosomeDynamicsReproductionProcess(Process):
         #    over a fraction to new positions each step (gradual exploration).
         cfg = self.config
         place(self.oriC, "DnaA")
+        self._t_struct += interval
+        ramp = 1.0 - np.exp(-self._t_struct / max(float(cfg["struct_bind_tau_s"]), 1.0))
         turnover = float(cfg["struct_turnover_per_s"]) * interval
-        for label, n in (("SMC", cfg["n_smc"]), ("SSB", cfg["n_ssb"]),
-                         ("GyrAB", cfg["n_gyrase"]), ("Topo IV", cfg["n_topo"])):
-            n = int(n)
+        for label, n_max in (("SMC", cfg["n_smc"]), ("SSB", cfg["n_ssb"]),
+                             ("GyrAB", cfg["n_gyrase"]), ("Topo IV", cfg["n_topo"])):
+            n_now = max(1, int(round(int(n_max) * ramp)))         # progressively-bound count
             sites = self._struct_sites.get(label)
             if sites is None:
-                sites = self._rng.integers(0, nb, n)             # initial binding
+                sites = self._rng.integers(0, nb, n_now)
             else:
-                k = int(round(min(1.0, turnover) * n))           # rebind k sites
+                k = int(round(min(1.0, turnover) * len(sites)))  # rebind a fraction
                 if k > 0:
-                    idx = self._rng.choice(n, k, replace=False)
+                    idx = self._rng.choice(len(sites), k, replace=False)
                     sites = sites.copy()
                     sites[idx] = self._rng.integers(0, nb, k)
+                if n_now > len(sites):                            # grow toward n_max
+                    sites = np.concatenate([sites, self._rng.integers(0, nb, n_now - len(sites))])
             self._struct_sites[label] = sites
             for b in sites:
                 place(b, label)
