@@ -256,20 +256,15 @@ _save_viz('fig1-architecture', 'cell-dashboard', _render_one('', {}, RUNS_DB, ST
 #
 # | simulation | composite | steps | params |
 # | --- | --- | --- | --- |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
-# | `baseline` | `viva_mgen.composites.whole_cell.fig2_growth` | 120 | — |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_genitalium` | 0 | — |
 
 # ### Specification (process-bigraph) — load, inspect, edit
 #
 # Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
 
-# **Composite `viva_mgen.composites.whole_cell.fig2_growth`** — `spec_viva_mgen_composites_whole_cell_fig2_growth` (a plain, editable dict)
+# **Composite `viva_mgen.composites.mgen.mycoplasma_genitalium`** — `spec_viva_mgen_composites_mgen_mycoplasma_genitalium` (a plain, editable dict)
 
-# _composite spec file for `viva_mgen.composites.whole_cell.fig2_growth` not found under `viva_mgen/composites/` — skipped._
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_genitalium` not found under `viva_mgen/composites/` — skipped._
 
 # ### Run
 #
@@ -281,41 +276,7 @@ STUDY_DIR = REPO / 'workspace/studies' / STUDY
 STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
-# Runtime knobs — edit freely. STEPS = number of composite steps;
-# INTERVAL = global dt filling ${interval} placeholders (a per-process
-# interval pinned in the edit cell above takes precedence).
-STEPS_baseline = 120
-INTERVAL_baseline = 0.1
-STEPS_baseline = 120
-INTERVAL_baseline = 0.1
-STEPS_baseline = 120
-INTERVAL_baseline = 0.1
-STEPS_baseline = 120
-INTERVAL_baseline = 0.1
-STEPS_baseline = 120
-INTERVAL_baseline = 0.1
-STEPS_baseline = 120
-INTERVAL_baseline = 0.1
-
-if RERUN:
-    with quiet():  # the sim prints per-step progress; keep it out of the notebook
-        # Generic process-bigraph protocol (no workspace runner detected):
-        from viva_superpowers.composite_spec import build_composite_from_spec
-        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
-        comp.run(STEPS_baseline)  # writes the composite's declared emitter
-        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
-        comp.run(STEPS_baseline)  # writes the composite's declared emitter
-        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
-        comp.run(STEPS_baseline)  # writes the composite's declared emitter
-        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
-        comp.run(STEPS_baseline)  # writes the composite's declared emitter
-        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
-        comp.run(STEPS_baseline)  # writes the composite's declared emitter
-        comp = build_composite_from_spec(spec_viva_mgen_composites_whole_cell_fig2_growth, {'interval': INTERVAL_baseline}, core=core)
-        comp.run(STEPS_baseline)  # writes the composite's declared emitter
-    print(f'ran 6 simulation(s) -> {RUNS_DB}')
-else:
-    print("RERUN=False — rendering committed", RUNS_DB)
+print("No recorded runs for this study; nothing to reproduce.")
 
 # ### Visualizations
 #
