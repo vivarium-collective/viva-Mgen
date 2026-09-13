@@ -157,6 +157,89 @@ def _render_one(address, config, runs_db, study_yaml):
         return _p.read_text(encoding='utf-8', errors='replace')
     return f'<p style="color:#6b7280">unsupported figure type: {address}</p>'
 
+# ## Study: ParCa — parameter fitting (Karr 2012 FitConstants reproduction) (`parca-parameter-fitting`)
+#
+# **Question.** Can viva-Mgen reproduce Karr 2012's parameter calculator (FitConstants) — computing the per-gene expression, decay and synthesis parameters the whole-cell model runs on from the real observed knowledge-base data, rather than hand-tuned guesses — and are those fitted parameters metabolically feasible?
+#
+# **Objective.** Run the mycoplasma_parca composite: compute the fitted per-gene panel from the decoded knowledge base, report the fit summary (gene count, mRNA/rRNA half-lives, median synthesis rate), the metabolic demand it implies, and the expression↔metabolism feasibility closure.
+#
+# **Hypothesis.** Starting from the experimentally observed gene expression (Weiner 2003, decoded from the knowledge base) and the real per-gene half-lives, an analytic fit under the FitConstants constraints (RNA mass, DnaA/FtsZ held, net supercoiling) yields a per-gene parameter panel that reproduces the paper's expression kinetics and whose implied metabolic demand the iPS189 network can supply.
+
+# ### Parameters
+#
+# | simulation | composite | steps | params |
+# | --- | --- | --- | --- |
+# | `baseline` | `viva_mgen.composites.mgen.mycoplasma_parca` | 0 | — |
+
+# ### Specification (process-bigraph) — load, inspect, edit
+#
+# Each composite is a process-bigraph *document*: named processes (`_type: process`) bound to an `address`, wired by `inputs`/`outputs` ports over shared stores. For every composite below the first cell loads the spec into a plain **editable Python dict** and prints its structure; the second cell is a **control panel** listing every configuration value and per-process `interval` so you can tweak any of them. Your edits are read when the composite is built and run, in the **Run** section.
+
+# **Composite `viva_mgen.composites.mgen.mycoplasma_parca`** — `spec_viva_mgen_composites_mgen_mycoplasma_parca` (a plain, editable dict)
+
+# _composite spec file for `viva_mgen.composites.mgen.mycoplasma_parca` not found under `viva_mgen/composites/` — skipped._
+
+# ### Run
+#
+# _Set the runtime (`STEPS`) and step size (`INTERVAL`), then run. Each simulation builds the (edited) spec above and writes `runs.db`; the figures below read it. Set `RERUN = False` to skip re-simulating._
+
+# === Study: parca-parameter-fitting ===
+STUDY = 'parca-parameter-fitting'
+STUDY_DIR = REPO / 'workspace/studies' / STUDY
+STUDY_YAML = str(STUDY_DIR / "study.yaml")
+RUNS_DB = str(STUDY_DIR / "runs.db")
+
+print("No recorded runs for this study; nothing to reproduce.")
+
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **parca-combined**
+
+def _save_viz(study, slug, html):
+    d = REPO / 'reports/notebooks/figures' / study
+    d.mkdir(parents=True, exist_ok=True)
+    out = d / (slug + '.html')
+    out.write_text(html, encoding='utf-8')
+    print('  wrote', out)
+
+
+# parca-combined
+_save_viz('parca-parameter-fitting', 'parca-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **parca-a-synthesis-vs-expression**
+
+# parca-a-synthesis-vs-expression
+_save_viz('parca-parameter-fitting', 'parca-a-synthesis-vs-expression', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **parca-b-halflife-by-type**
+
+# parca-b-halflife-by-type
+_save_viz('parca-parameter-fitting', 'parca-b-halflife-by-type', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **parca-c-metabolic-demand**
+
+# parca-c-metabolic-demand
+_save_viz('parca-parameter-fitting', 'parca-c-metabolic-demand', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **parca-d-closure**
+
+# parca-d-closure
+_save_viz('parca-parameter-fitting', 'parca-d-closure', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# ### Acceptance criteria
+#
+# _Pre-registered checks (criteria/thresholds only — run the cells above to evaluate them)._
+#
+# | test | measures | passes if |
+# | --- | --- | --- |
+# | full-gene-panel | kind=derived_scalar field=n_genes | op range low 500 high 525 provenance {'kind': 'knowledge_base', 'note': 'Karr 2012 tracks all ~480 protein-coding genes plus tRNA/rRNA (525 total in genes.csv); the panel is computed over the full decoded set.'} |
+# | mrna-halflife-realistic | kind=derived_scalar field=mrna_halflife_min_mean | op range low 2.0 high 7.0 provenance {'kind': 'knowledge_base', 'note': 'Decoded per-gene mRNA half-lives average ~4.6 min (bacterial mRNA t½ ~2-5 min).'} |
+# | stable-rna-long-lived | kind=derived_scalar field=rrna_halflife_min | op range low 600.0 high 100000.0 provenance {'kind': 'knowledge_base', 'note': 'Decoded rRNA half-life is 1200 min (20 h), vs ~2.5 min for mRNA.'} |
+# | metabolic-demand-at-rich | kind=derived_scalar field=nmp_au_fraction | op range low 0.55 high 0.75 provenance {'kind': 'knowledge_base', 'note': "M. genitalium's ~32% GC genome yields A+U ≈ 0.62 of the ribonucleotide demand."} |
+# | expression-metabolism-closed | kind=derived_scalar field=closed_loop_feasible | op range low 0.5 high 1.5 provenance {'kind': 'model', 'note': "Closure — the fitted expression's ribonucleotide + amino-acid demand is supplyable by the iPS189 FBA network alongside feasible growth (feasible = 1.0)."} |
+
 # ## Study: Fig 1 — Whole-cell integration: six submodels wired through shared cell variables (`fig1-architecture`)
 #
 # **Question.** Does viva-Mgen actually reproduce Fig 1's central architectural claim — that
@@ -209,14 +292,6 @@ print("No recorded runs for this study; nothing to reproduce.")
 # _Results are shown by the figures below, produced by the run above._
 
 # **fig1-combined**
-
-def _save_viz(study, slug, html):
-    d = REPO / 'reports/notebooks/figures' / study
-    d.mkdir(parents=True, exist_ok=True)
-    out = d / (slug + '.html')
-    out.write_text(html, encoding='utf-8')
-    print('  wrote', out)
-
 
 # fig1-combined
 _save_viz('fig1-architecture', 'fig1-combined', _render_one('', {}, RUNS_DB, STUDY_YAML))
