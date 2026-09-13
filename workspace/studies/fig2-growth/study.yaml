@@ -1,40 +1,54 @@
 schema_version: 4
 name: fig2-growth
-title: "Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition"
+title: 'Fig 2 — Cell growth: 9 h doubling time and protein-dominant composition'
 created: '2026-09-12'
 status: complete
 phase: Evaluate
+question: 'Does the reduced-but-genuine viva-Mgen cell (FBA metabolism over iPS189
 
-question: |
-  Does the reduced-but-genuine viva-Mgen cell (FBA metabolism over iPS189
-  driving mass accumulation) reproduce the trained whole-cell model's core
+  driving mass accumulation) reproduce the trained whole-cell model''s core
+
   growth phenotype from Fig 2 — a ~9 h doubling time and a protein-dominant
+
   dry-mass composition?
-hypothesis: |
-  With growth calibrated to the model's fitted cell-cycle length (32400 s) and
+
+  '
+hypothesis: 'With growth calibrated to the model''s fitted cell-cycle length (32400 s) and
+
   the fitted dry-mass fractions from parameters.json, the integrated cell should
+
   double its mass in ~9 h and show ~62% protein by dry mass, matching Fig 2A/B
+
   (doubling time) and Fig 2C (composition).
-objective: |
-  Run the fig2_growth composite (metabolism + mass) for one cell cycle, fit the
+
+  '
+objective: 'Run the fig2_growth composite (metabolism + mass) for one cell cycle, fit the
+
   exponential growth rate to recover the doubling time, confirm mass doubles over
+
   the cycle, and read out the dry-mass composition at division.
-description: |
-  FULL FIDELITY for the growth/composition phenotype. Metabolism is real FBA on
+
+  '
+description: 'FULL FIDELITY for the growth/composition phenotype. Metabolism is real FBA on
+
   the published Suthers 2009 iPS189 reconstruction; mass integration uses the
+
   Karr 2012 fitted cell-cycle length and dry-weight fractions. The metabolism
+
   growth flux is calibrated so unperturbed growth (growth_fraction = 1.0) doubles
+
   the cell in the fitted 9 h — the same doubling time measured for M. genitalium
+
   and reproduced in Fig 2A/B. Achieved (committed production run): doubling time
+
   9.000 h, mass ratio 2.000 over the cycle, protein fraction 0.620 of dry mass.
 
+  '
 baseline:
 - name: baseline
   composite: viva_mgen.composites.mgen.mycoplasma_genitalium
   params: {}
-
 variants: []
-
 simulation_set:
 - name: baseline
   status: ran
@@ -42,8 +56,7 @@ simulation_set:
   duration_min: 540
   seeds:
   - 0
-  condition: >-
-    Canonical viva-Mgen fig2-growth run via sims/run.py (recorded in .pbg/runs.jsonl).
+  condition: Canonical viva-Mgen fig2-growth run via sims/run.py (recorded in .pbg/runs.jsonl).
   readouts:
   - doubling_time_h
   - final_mass_ratio
@@ -52,68 +65,87 @@ simulation_set:
   - doubling-time-near-9h
   - mass-doubles-in-cycle
   - protein-dominant-composition
-
 expected_behavior:
 - name: doubling-time-near-9h
-  en: "The fitted doubling time is ~9 h, matching the measured M. genitalium doubling time (Fig 2A/B)."
+  en: The fitted doubling time is ~9 h, matching the measured M. genitalium doubling time (Fig 2A/B).
   observable: doubling_time_h
   condition: 8.5 <= doubling_time_h <= 9.5
-  rationale: >-
-    Growth is calibrated to the model's fitted cell-cycle length (32400 s = 9 h);
-    the exponential-fit doubling time should recover it. Achieved 9.000 h.
-  measure: {kind: derived_scalar, field: doubling_time_h}
-  expect: {op: range, low: 8.5, high: 9.5}
+  rationale: Growth is calibrated to the model's fitted cell-cycle length (32400 s = 9 h); the exponential-fit
+    doubling time should recover it. Achieved 9.000 h.
+  measure:
+    kind: derived_scalar
+    field: doubling_time_h
+  expect:
+    op: range
+    low: 8.5
+    high: 9.5
 - name: mass-doubles-in-cycle
-  en: "Total dry mass doubles over one cell cycle (Fig 2B/2D)."
+  en: Total dry mass doubles over one cell cycle (Fig 2B/2D).
   observable: final_mass_ratio
   condition: 1.9 <= final_mass_ratio <= 2.1
-  rationale: >-
-    A newborn cell grows to twice its birth mass before division. Achieved 2.000.
-  measure: {kind: derived_scalar, field: final_mass_ratio}
-  expect: {op: range, low: 1.9, high: 2.1}
+  rationale: A newborn cell grows to twice its birth mass before division. Achieved 2.000.
+  measure:
+    kind: derived_scalar
+    field: final_mass_ratio
+  expect:
+    op: range
+    low: 1.9
+    high: 2.1
 - name: protein-dominant-composition
-  en: "Protein is the dominant dry-mass component (~62%), consistent with Fig 2C."
+  en: Protein is the dominant dry-mass component (~62%), consistent with Fig 2C.
   observable: protein_fraction
   condition: 0.55 <= protein_fraction <= 0.68
-  rationale: >-
-    Fitted dry-weight fraction of protein is 0.620. Achieved 0.620.
-  measure: {kind: derived_scalar, field: protein_fraction}
-  expect: {op: range, low: 0.55, high: 0.68}
-
+  rationale: Fitted dry-weight fraction of protein is 0.620. Achieved 0.620.
+  measure:
+    kind: derived_scalar
+    field: protein_fraction
+  expect:
+    op: range
+    low: 0.55
+    high: 0.68
 behavior_tests:
 - name: doubling-time-near-9h
   classification: primary
-  description: "Exponential-fit doubling time within [8.5, 9.5] h of the fitted 9 h."
-  measure: {kind: derived_scalar, field: doubling_time_h}
+  description: Exponential-fit doubling time within [8.5, 9.5] h of the fitted 9 h.
+  measure:
+    kind: derived_scalar
+    field: doubling_time_h
   pass_if:
     op: range
     low: 8.5
     high: 9.5
     provenance:
       kind: experiment
-      note: "M. genitalium doubling time τ ≈ 9 h (Karr 2012 Fig 2A/B); achieved 9.000 h."
+      note: M. genitalium doubling time τ ≈ 9 h (Karr 2012 Fig 2A/B); achieved 9.000 h.
   requires_simulation: baseline
 - name: mass-doubles-in-cycle
   classification: primary
-  description: "Mass ratio over one cell cycle within [1.9, 2.1]."
-  measure: {kind: derived_scalar, field: final_mass_ratio}
+  description: Mass ratio over one cell cycle within [1.9, 2.1].
+  measure:
+    kind: derived_scalar
+    field: final_mass_ratio
   pass_if:
     op: range
     low: 1.9
     high: 2.1
-    provenance: {kind: theory, note: "A cell doubles its mass per cycle; achieved 2.000."}
+    provenance:
+      kind: theory
+      note: A cell doubles its mass per cycle; achieved 2.000.
   requires_simulation: baseline
 - name: protein-dominant-composition
   classification: primary
-  description: "Protein dry-mass fraction within [0.55, 0.68]."
-  measure: {kind: derived_scalar, field: protein_fraction}
+  description: Protein dry-mass fraction within [0.55, 0.68].
+  measure:
+    kind: derived_scalar
+    field: protein_fraction
   pass_if:
     op: range
     low: 0.55
     high: 0.68
-    provenance: {kind: experiment, note: "Fitted protein fraction 0.620 (Fig 2C)."}
+    provenance:
+      kind: experiment
+      note: Fitted protein fraction 0.620 (Fig 2C).
   requires_simulation: baseline
-
 readouts:
 - name: mass
   store_path: stores/mass
@@ -127,7 +159,6 @@ readouts:
 - name: volume
   store_path: stores/volume
   status: available
-
 runs:
 - name: baseline
   run_id: fig2-growth-baseline
@@ -136,7 +167,6 @@ runs:
   n_steps: 108
   store_path: workspace/studies/fig2-growth/results/baseline.zarr
   timestamp: 1789259045.0
-
 pipeline_gate:
   prerequisites:
   - study: fig1-architecture
@@ -144,90 +174,69 @@ pipeline_gate:
   enables:
   - fig5-energy
   - fig6-gene-essentiality
-  proceed_condition: |
-    The integrated cell reproduces the 9 h doubling time and protein-dominant
+  proceed_condition: 'The integrated cell reproduces the 9 h doubling time and protein-dominant
+
     composition, establishing the FBA-driven growth backbone the energy and
+
     gene-disruption studies build on.
 
+    '
 canonical_runs:
 - name: default
   script: workspace/studies/fig2-growth/sims/run.py
   args: []
-  label: "Fig 2 growth: one cell cycle, mass + composition"
+  label: 'Fig 2 growth: one cell cycle, mass + composition'
   default: true
-
 visualizations:
 - name: fig2-combined
   chart: viz/fig2_combined.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig2_growth.py
 - name: fig2-a-growth
   chart: viz/fig2_a_growth.html
-  render: "python sims/run.py"
-- name: fig2-b-doubling
-  chart: viz/fig2_b_doubling.html
-  render: "python sims/run.py"
-- name: fig2-c-composition
-  chart: viz/fig2_c_composition.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig2_growth.py
+- name: fig2-b-composition
+  chart: viz/fig2_b_composition.html
+  render: python scripts/regen_fig2_growth.py
+- name: fig2-c-composition-donut
+  chart: viz/fig2_c_composition_donut.html
+  render: python scripts/regen_fig2_growth.py
 - name: fig2-d-dynamics
   chart: viz/fig2_d_dynamics.html
-  render: "python sims/run.py"
-- name: fig2-e-fluxes
-  chart: viz/fig2_e_fluxes.html
-  render: "python sims/run.py"
-- name: fig2-f-metabolites
-  chart: viz/fig2_f_metabolites.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig2_growth.py
 - name: fig2-g-expression
   chart: viz/fig2_g_expression.html
-  render: "python sims/run.py"
+  render: python scripts/regen_fig2_growth.py
 - name: fig2-h-mrna-protein
   chart: viz/fig2_h_mrna_protein.html
-  render: "python sims/run.py"
-- name: growth-curve
-  chart: viz/growth_curve.html
-  render: "python sims/run.py"
-- name: composition-donut
-  chart: viz/composition_donut.html
-  render: "python sims/run.py"
-
+  render: python scripts/regen_fig2_growth.py
 embed_visualizations:
 - name: fig2-combined
   url: /workspace/studies/fig2-growth/viz/fig2_combined.html
-  description: "Figure 2 reproduced — all subpanels combined as in Karr 2012."
+  description: Figure 2 reproduced — growth + single-cell dynamics, panels a–h as in Karr 2012.
 - name: fig2-a-growth
   url: /workspace/studies/fig2-growth/viz/fig2_a_growth.html
-  description: "Figure 2 subpanel: growth."
-- name: fig2-b-doubling
-  url: /workspace/studies/fig2-growth/viz/fig2_b_doubling.html
-  description: "Figure 2 subpanel: doubling."
-- name: fig2-c-composition
-  url: /workspace/studies/fig2-growth/viz/fig2_c_composition.html
-  description: "Figure 2 subpanel: composition."
+  description: 'Fig 2A/B: cell mass over the cycle across cells + median (doubling ≈ 9 h).'
+- name: fig2-b-composition
+  url: /workspace/studies/fig2-growth/viz/fig2_b_composition.html
+  description: 'Fig 2C: dry-mass composition (protein-dominant).'
+- name: fig2-c-composition-donut
+  url: /workspace/studies/fig2-growth/viz/fig2_c_composition_donut.html
+  description: 'Fig 2C: dry-mass composition donut.'
 - name: fig2-d-dynamics
   url: /workspace/studies/fig2-growth/viz/fig2_d_dynamics.html
-  description: "Figure 2 subpanel: dynamics."
-- name: fig2-e-fluxes
-  url: /workspace/studies/fig2-growth/viz/fig2_e_fluxes.html
-  description: "Figure 2 subpanel: fluxes."
-- name: fig2-f-metabolites
-  url: /workspace/studies/fig2-growth/viz/fig2_f_metabolites.html
-  description: "Figure 2 subpanel: metabolites."
+  description: 'Fig 2D: single-cell component dynamics — DNA steps in S-phase, protein smooth, RNA noisy.'
 - name: fig2-g-expression
   url: /workspace/studies/fig2-growth/viz/fig2_g_expression.html
-  description: "Figure 2 subpanel: expression."
+  description: 'Fig 2G: HMW2 single-cell expression — mRNA bursts, protein steps up after each burst.'
 - name: fig2-h-mrna-protein
   url: /workspace/studies/fig2-growth/viz/fig2_h_mrna_protein.html
-  description: "Figure 2 subpanel: mrna protein."
-- name: growth-curve
-  url: /workspace/studies/fig2-growth/viz/growth_curve.html
-  description: "Total dry mass and its major macromolecule fractions over one ~9 h cell cycle."
-- name: composition-donut
-  url: /workspace/studies/fig2-growth/viz/composition_donut.html
-  description: "Dry-mass composition at division — protein-dominant, matching Fig 2C."
+  description: 'Fig 2H: protein vs mRNA across 128 cells — uncorrelated.'
+conclusion: 'The viva-Mgen integrated cell reproduces Fig 2''s growth phenotype at full
 
-conclusion: |
-  The viva-Mgen integrated cell reproduces Fig 2's growth phenotype at full
   fidelity: fitted doubling time 9.000 h (target ~9), mass doubling 2.000× over
+
   the cycle, and protein at 62.0% of dry mass — matching the measured and fitted
+
   M. genitalium values.
+
+  '
