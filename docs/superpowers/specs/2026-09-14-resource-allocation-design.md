@@ -175,7 +175,13 @@ consumers ◀──alloc__<pool>  (map: consumer→grant)──  AllocatorProces
 - **Missing metabolic production (FBA infeasible, `feasible = 0`):** production 0
   for that tick; pools deplete — this is the correct coupling of a metabolic
   failure to the rest of the cell.
-- **Conservation guard:** `Σ grants ≤ S` asserted in the allocator.
+- **Conservation guard:** `Σ grants ≤ S` (the per-tick allocation invariant) asserted
+  in the allocator, and holds exactly. It does *not* mean the pool level itself
+  stays ≥ 0 across ticks: because a consumer's budget for tick t is sized at
+  t−1 against the t−1 supply, sustained multi-consumer scarcity can transiently
+  drive the pool slightly below zero (by at most ~one tick's over-allocation).
+  This is self-healing within 1-2 ticks since every consumer clamps its pool
+  read at `max(pool, 0.0)`, and the raw pool level is not an emitted observable.
 
 ## Testing
 

@@ -55,7 +55,13 @@ class AllocatorProcess(Process):
     consumers' demands (demand__<pool>) by allocate(), and publishes the grants
     (alloc__<pool>) that each consumer caps its consumption at. Also replenishes
     each pool by this tick's production (consumers draw it down via their own
-    negative deltas), holding the pool >= 0 with sum(grants) <= supply.
+    negative deltas). The PER-TICK allocation invariant sum(grants) <= supply
+    holds exactly; because each consumer's budget is sized one tick ahead of the
+    tick it draws against, sustained multi-consumer scarcity can transiently
+    drive the pool level slightly below zero (by at most ~one tick's
+    over-allocation). This is self-healing within 1-2 ticks — every consumer
+    clamps its pool read at max(pool, 0.0) — and the raw pool level is not an
+    emitted observable.
 
     Contract — per pool P: in <P> (level, float), <P>_production (production, float),
     demand__<P> (consumer->want, map). out <P> (replenish delta, float),
@@ -111,7 +117,7 @@ class AllocatorProcess(Process):
         cap = float(self.config["pool_cap"])
         out = {}
         for p in self._pools:
-            level = float(state.get(p, 0.0) or 0.0)
+            level = max(0.0, float(state.get(p, 0.0) or 0.0))
             production = max(0.0, float(state.get(p + "_production", 0.0) or 0.0))
             demands = state.get("demand__" + p, {}) or {}
             supply = min(level + production, cap)

@@ -195,7 +195,7 @@ class DNASupercoilingReproductionProcess(Process):
         # gyrase catalytic acts this step, capped by ATP (2 ATP/act) — MATLAB gyrase binding
         acts_wanted = abs(gap) * turns  # supercoils still needed
         want_acts = gyrase * self.config["gyrase_rate"] * interval
-        want_atp = want_acts * self.config["atp_per_act"]
+        want_atp = min(want_acts, acts_wanted) * self.config["atp_per_act"]
         budget = select_budget(state.get("alloc__atp", {}), self._cid)
         atp_cap = min(want_atp, budget, atp)  # atp still bounds as a floor safety
         acts = min(want_acts, atp_cap / self.config["atp_per_act"], acts_wanted)
