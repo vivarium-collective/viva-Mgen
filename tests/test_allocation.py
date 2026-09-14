@@ -164,3 +164,58 @@ def test_trna_aminoacylation_respects_atp_budget(core):
     out = proc.update(st, 1.0)
     assert out["atp"] >= -4.0
     assert "demand__atp" in out and out["demand__atp"]["trna_aminoacylation"] > 0
+
+
+# --- GTP consumers (Task 5) ---
+# NOTE: as above, these build via the real constructor + module core fixture
+# rather than the brief's Cls.__new__/core=None idiom, which this venv's
+# process_bigraph/bigraph-schema now rejects.
+
+def test_translation_respects_gtp_budget(core):
+    from viva_mgen.processes.translation import TranslationReproductionProcess as T
+    proc = T(config={"consumer_id": "translation", "translation_rates": {"g1": 10.0},
+                      "gtp_per_protein": 600.0, "seed": 0}, core=core)
+    # unconstrained expectation = rate*copies*interval = 10*1000*1 = 10000 proteins
+    # (>> the 1-protein budget allows) so this fails without the budget clamp.
+    st = {"rna_counts": {"g1": 1000.0}, "gtp": 1e9,
+          "alloc__gtp": {"translation": 600.0}}   # budget = 600 GTP, 600 GTP/protein -> 1 protein
+    out = proc.update(st, 1.0)
+    assert out["gtp"] >= -600.0
+    assert "demand__gtp" in out and out["demand__gtp"]["translation"] > 0
+
+
+def test_protein_translocation_respects_gtp_budget(core):
+    from viva_mgen.processes.protein import ProteinTranslocationReproductionProcess as Tl
+    proc = Tl(config={"consumer_id": "translocation", "seed": 0}, core=core)
+    st = {"process_i_done": {"g1": 1000.0}, "translocase": 1000.0, "gtp": 1e9,
+          "alloc__gtp": {"translocation": 4.0}}   # budget = 4 GTP, 2 GTP/monomer -> 2 monomers
+    out = proc.update(st, 1.0)
+    assert out["gtp"] >= -4.0
+    assert "demand__gtp" in out and out["demand__gtp"]["translocation"] > 0
+
+
+def test_ribosome_assembly_respects_gtp_budget(core):
+    from viva_mgen.processes.protein import (
+        RibosomeAssemblyReproductionProcess as R, _RIBOSOME_30S, _RIBOSOME_50S,
+    )
+    proc = R(config={"consumer_id": "ribosome_assembly", "seed": 0}, core=core)
+    rprot = {p: 1000.0 for p in _RIBOSOME_30S["rproteins"] + _RIBOSOME_50S["rproteins"]}
+    rrna_keys = (
+        (_RIBOSOME_30S["rrna"] if isinstance(_RIBOSOME_30S["rrna"], list) else [_RIBOSOME_30S["rrna"]])
+        + (_RIBOSOME_50S["rrna"] if isinstance(_RIBOSOME_50S["rrna"], list) else [_RIBOSOME_50S["rrna"]])
+    )
+    rrna = {r: 1000.0 for r in rrna_keys}
+    st = {"rprotein_counts": rprot, "rrna_counts": rrna, "assembly_factor": 1000.0,
+          "gtp": 1e9, "alloc__gtp": {"ribosome_assembly": 4.0}}   # budget=4 GTP, 2/complex -> 2 complexes
+    out = proc.update(st, 1.0)
+    assert out["gtp"] >= -4.0
+    assert "demand__gtp" in out and out["demand__gtp"]["ribosome_assembly"] > 0
+
+
+def test_gtp_consumer_respects_budget(core):
+    from viva_mgen.processes.cytokinesis import FtsZPolymerizationReproductionProcess as F
+    proc = F(config={"consumer_id": "ftsz"}, core=core)
+    st = {"ftsz_monomer": 500.0, "gtp": 1e9, "alloc__gtp": {"ftsz": 3.0}}
+    out = proc.update(st, 1.0)
+    assert out["gtp"] >= -3.0
+    assert out["demand__gtp"]["ftsz"] >= 0.0

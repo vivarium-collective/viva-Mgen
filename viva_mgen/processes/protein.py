@@ -200,17 +200,21 @@ class ProteinTranslocationReproductionProcess(Process):
         "translocase_specific_rate": {"_type": "float", "_default": 2.71e12},  # monomers / enzyme / s (non-limiting)
         "gtp_per_monomer": {"_type": "float", "_default": 2.0},  # SRP_GTPUsedPerMonomer
         "seed": {"_type": "integer", "_default": 12},
+        "consumer_id": {"_type": "string", "_default": "translocation"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"process_i_done": "map[float]", "translocase": "float", "gtp": "float"}
+        return {"process_i_done": "map[float]", "translocase": "float", "gtp": "float",
+                "alloc__gtp": "map[float]"}
 
     def outputs(self):
-        return {"process_i_done": "map[float]", "translocated": "map[float]", "gtp": "float"}
+        return {"process_i_done": "map[float]", "translocated": "map[float]", "gtp": "float",
+                "demand__gtp": "map[float]"}
 
     def initial_state(self):
         return {"process_i_done": {}, "translocase": 30.0, "gtp": 1e6}
@@ -220,9 +224,13 @@ class ProteinTranslocationReproductionProcess(Process):
         translocase = float(state.get("translocase", 0.0))
         gtp = float(state.get("gtp", 0.0))
         gtp_per = float(self.config["gtp_per_monomer"])
+        budget = select_budget(state.get("alloc__gtp", {}), self._cid)
         # capacity limited by translocase kinetics AND by GTP available for SRP
         enz_limit = translocase * float(self.config["translocase_specific_rate"]) * interval
-        gtp_limit = gtp / gtp_per if gtp_per > 0 else 0.0
+        total_src = sum(v for v in src.values() if v > 0.0)
+        want_n = min(enz_limit, total_src)  # unconstrained-by-GTP desired transforms
+        want_gtp = want_n * gtp_per
+        gtp_limit = min(gtp, budget) / gtp_per if gtp_per > 0 else 0.0  # gtp still bounds as a floor safety
         limit = min(enz_limit, gtp_limit)
         moved = _enzyme_limited_transform(self._rng, src, limit)
         n_total = sum(moved.values())
@@ -230,6 +238,7 @@ class ProteinTranslocationReproductionProcess(Process):
             "process_i_done": {g: -n for g, n in moved.items()},
             "translocated": {g: float(n) for g, n in moved.items()},
             "gtp": -float(n_total) * gtp_per,
+            "demand__gtp": demand_entry(self._cid, want_gtp),
         }
 
 
@@ -717,11 +726,13 @@ class RibosomeAssemblyReproductionProcess(Process):
     config_schema = {
         "gtp_per_complex": {"_type": "float", "_default": 2.0},
         "seed": {"_type": "integer", "_default": 18},
+        "consumer_id": {"_type": "string", "_default": "ribosome_assembly"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
         return {
@@ -729,6 +740,7 @@ class RibosomeAssemblyReproductionProcess(Process):
             "rrna_counts": "map[float]",
             "assembly_factor": "float",
             "gtp": "float",
+            "alloc__gtp": "map[float]",
         }
 
     def outputs(self):
@@ -738,6 +750,7 @@ class RibosomeAssemblyReproductionProcess(Process):
             "rprotein_counts": "map[float]",
             "rrna_counts": "map[float]",
             "gtp": "float",
+            "demand__gtp": "map[float]",
         }
 
     def initial_state(self):
@@ -751,13 +764,44 @@ class RibosomeAssemblyReproductionProcess(Process):
         limits += [rrna.get(r, 0.0) for r in rrna_keys]
         return int(max(0.0, np.floor(min(limits))))
 
+    def _desired_subunits(self, rprot, rrna, factor):
+        """Total subunits assembly could form this step limited only by rProtein/
+        rRNA/assembly-factor availability (GTP unconstrained) — the pre-budget
+        'want' for demand__gtp."""
+        specs = [("30S", _RIBOSOME_30S), ("50S", _RIBOSOME_50S)]
+        prot_used, rrna_used = {}, {}
+        total = 0
+        for name, spec in specs:
+            n = self._assemble(
+                {p: rprot.get(p, 0.0) + prot_used.get(p, 0.0) for p in spec["rproteins"]},
+                rrna, factor, float("inf"), spec,
+            )
+            rrna_keys = spec["rrna"] if isinstance(spec["rrna"], list) else [spec["rrna"]]
+            for p in spec["rproteins"]:
+                remaining = rprot.get(p, 0.0) + prot_used.get(p, 0.0)
+                n = min(n, int(max(0.0, np.floor(remaining))))
+            for r in rrna_keys:
+                remaining = rrna.get(r, 0.0) + rrna_used.get(r, 0.0)
+                n = min(n, int(max(0.0, np.floor(remaining))))
+            if n <= 0:
+                continue
+            for p in spec["rproteins"]:
+                prot_used[p] = prot_used.get(p, 0.0) - n
+            for r in rrna_keys:
+                rrna_used[r] = rrna_used.get(r, 0.0) - n
+            total += n
+        return total
+
     def update(self, state, interval):
         rprot = {k: float(v) for k, v in (state.get("rprotein_counts", {}) or {}).items()}
         rrna = {k: float(v) for k, v in (state.get("rrna_counts", {}) or {}).items()}
         factor = float(state.get("assembly_factor", 0.0))
         gtp = float(state.get("gtp", 0.0))
         gtp_per = float(self.config["gtp_per_complex"])
-        gtp_cap = gtp / gtp_per if gtp_per > 0 else 0.0
+        budget = select_budget(state.get("alloc__gtp", {}), self._cid)
+        gtp_cap = min(gtp, budget) / gtp_per if gtp_per > 0 else 0.0  # gtp still bounds as a floor safety
+        desired_subunits = self._desired_subunits(rprot, rrna, factor)
+        want_gtp = desired_subunits * gtp_per
 
         prot_used = {}
         rrna_used = {}
@@ -801,6 +845,7 @@ class RibosomeAssemblyReproductionProcess(Process):
             "rprotein_counts": prot_used,
             "rrna_counts": rrna_used,
             "gtp": -gtp_used,
+            "demand__gtp": demand_entry(self._cid, want_gtp),
         }
 
 

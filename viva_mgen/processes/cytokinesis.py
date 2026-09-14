@@ -32,6 +32,7 @@ import numpy as np
 from process_bigraph import Process, Step
 
 from .. import constants as C
+from .allocation import select_budget, demand_entry
 
 
 class FtsZPolymerizationReproductionProcess(Process):
@@ -80,20 +81,23 @@ class FtsZPolymerizationReproductionProcess(Process):
         "dissociation_rate": {"_type": "float", "_default": 0.01},
         "initial_ftsz_gtp": {"_type": "float", "_default": 0.0},
         "initial_ring": {"_type": "float", "_default": 0.0},
+        "consumer_id": {"_type": "string", "_default": "ftsz"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._ring = float(self.config["initial_ring"])          # subunits in ring filaments
         self._free = None                                        # free FtsZ (set from supply)
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"ftsz_monomer": "float", "gtp": "float"}
+        return {"ftsz_monomer": "float", "gtp": "float", "alloc__gtp": "map[float]"}
 
     def outputs(self):
         return {
             "ftsz_ring_filaments": "overwrite[float]",
             "gtp": "float",
+            "demand__gtp": "map[float]",
         }
 
     def initial_state(self):
@@ -102,6 +106,7 @@ class FtsZPolymerizationReproductionProcess(Process):
     def update(self, state, interval):
         supply = max(float(state.get("ftsz_monomer", 0.0)), 0.0)
         gtp = max(float(state.get("gtp", 0.0)), 0.0)
+        budget = select_budget(state.get("alloc__gtp", {}), self._cid)
 
         # FtsZ is a CONSERVED pool partitioned between free subunits and the ring;
         # ``ftsz_monomer`` is the total FtsZ available. Modelling the exchange on a
@@ -126,17 +131,18 @@ class FtsZPolymerizationReproductionProcess(Process):
         ring_eq = total * (k_on / ksum) if ksum > 0 else self._ring
         ring_new = ring_eq + (self._ring - ring_eq) * np.exp(-ksum * interval)
 
-        # GTP cost: one GTP per net new ring subunit; cap growth if GTP-limited.
-        added = max(0.0, ring_new - self._ring)
-        gtp_consumed = min(added, gtp)
-        if added > gtp:
-            ring_new = self._ring + gtp
+        # GTP cost: one GTP per net new ring subunit; cap growth by GTP AND by budget.
+        added = max(0.0, ring_new - self._ring)  # pre-clamp desired ring growth (1 GTP each)
+        gtp_consumed = min(added, gtp, budget)
+        if added > gtp_consumed:
+            ring_new = self._ring + gtp_consumed
         self._ring = ring_new
         self._free = total - self._ring
 
         return {
             "ftsz_ring_filaments": max(self._ring, 0.0),
             "gtp": -gtp_consumed,  # negative delta: GTP consumed this step
+            "demand__gtp": demand_entry(self._cid, added),
         }
 
 

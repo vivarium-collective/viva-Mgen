@@ -83,12 +83,12 @@ _EMPTY_MAP_STORES = {
 
 # demand__<pool> stores are additive map[float]; a consumer's {cid: want} delta
 # is DROPPED if cid isn't already a key. Pre-seed each pool's known consumer ids
-# at 0.0 so their additive demand deltas land. (GTP/NTP/amino_acid consumers
-# arrive in later tasks; only ATP's consumers are wired so far.)
+# at 0.0 so their additive demand deltas land. (NTP/amino_acid consumers arrive
+# in later tasks; ATP's and GTP's consumers are wired so far.)
 _POOL_CONSUMERS = {
     "atp": ["supercoiling", "dna_repair", "protein_folding",
             "protein_modification", "trna_aminoacylation"],
-    "gtp": [],
+    "gtp": ["translation", "translocation", "ribosome_assembly", "ftsz"],
     "ntp": [],
     "amino_acid": [],
 }

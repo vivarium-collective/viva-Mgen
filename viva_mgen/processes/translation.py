@@ -17,6 +17,7 @@ import numpy as np
 from process_bigraph import Process
 
 from ..expression_defaults import translation_rates
+from .allocation import select_budget, demand_entry
 
 
 class TranslationReproductionProcess(Process):
@@ -57,18 +58,20 @@ class TranslationReproductionProcess(Process):
         "translation_rates": {"_type": "map[float]", "_default": {}},
         "gtp_per_protein": {"_type": "float", "_default": 600.0},  # ~2*avg aa length
         "seed": {"_type": "integer", "_default": 1},
+        "consumer_id": {"_type": "string", "_default": "translation"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rates = dict(self.config["translation_rates"]) or translation_rates()
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"rna_counts": "map[float]", "gtp": "float"}
+        return {"rna_counts": "map[float]", "gtp": "float", "alloc__gtp": "map[float]"}
 
     def outputs(self):
-        return {"protein_counts": "map[float]", "gtp": "float"}
+        return {"protein_counts": "map[float]", "gtp": "float", "demand__gtp": "map[float]"}
 
     def initial_state(self):
         return {"rna_counts": {}, "gtp": 1e7}
@@ -77,22 +80,27 @@ class TranslationReproductionProcess(Process):
         mrna = dict(state.get("rna_counts", {}) or {})
         gtp_avail = float(state.get("gtp", 0.0))
         cost = float(self.config["gtp_per_protein"])
+        budget = select_budget(state.get("alloc__gtp", {}), self._cid)
+        gtp_cap = min(gtp_avail, budget)  # gtp_avail still bounds as a floor safety
         new_counts = {}
         gtp_used = 0.0
+        want_gtp = 0.0
         for gene, rate in self._rates.items():
             copies = float(mrna.get(gene, 0.0))
             if copies <= 0:
                 continue
             expected = rate * copies * interval
+            want_gtp += expected * cost  # pre-clamp Poisson-expectation GTP demand
             n = int(self._rng.poisson(max(expected, 0.0)))
             if n <= 0:
                 continue
             need = n * cost
-            if gtp_used + need > gtp_avail:
-                n = int(max(0, (gtp_avail - gtp_used) // cost))
+            if gtp_used + need > gtp_cap:
+                n = int(max(0, (gtp_cap - gtp_used) // cost))
                 need = n * cost
             if n <= 0:
                 continue
             new_counts[gene] = float(n)
             gtp_used += need
-        return {"protein_counts": new_counts, "gtp": -gtp_used}
+        return {"protein_counts": new_counts, "gtp": -gtp_used,
+                "demand__gtp": demand_entry(self._cid, want_gtp)}
