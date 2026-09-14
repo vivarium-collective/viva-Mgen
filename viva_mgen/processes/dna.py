@@ -29,6 +29,7 @@ import numpy as np
 from process_bigraph import Process
 
 from .. import constants as C
+from ..chromosome_state import add_lesions, repair_sites, n_lesions
 from .allocation import select_budget, demand_entry
 
 
@@ -355,13 +356,17 @@ class DNADamageReproductionProcess(Process):
         "out: lesions (additive Δ, new lesions this step).\n"
         "Fidelity: the agent-driven Poisson damage law is faithful. Lesions are counted as one pool "
         "rather than typed and placed at vulnerable-motif sites; the per-reaction small-molecule "
-        "reactant/product stoichiometry is delegated to the metabolite pools."
+        "reactant/product stoichiometry is delegated to the metabolite pools. Lesions are now tracked "
+        "per-site on the shared chromosome structure (lesion_map) that damage adds to and repair "
+        "clears from the same sites — the first consumer of the unified per-site chromosome "
+        "(remaining DNA submodels staged)."
     )
 
     config_schema = {
         "base_rate": {"_type": "float", "_default": 1.0e-3},  # spontaneous lesions / s
         "agent_rate": {"_type": "float", "_default": 1.0e-2},  # lesions / s / unit agent
         "seed": {"_type": "integer", "_default": 3},
+        "n_bins": {"_type": "integer", "_default": 580},
     }
 
     def __init__(self, config=None, core=None):
@@ -372,17 +377,18 @@ class DNADamageReproductionProcess(Process):
         return {"damaging_agent": "float"}
 
     def outputs(self):
-        return {"lesions": "float"}
+        return {"lesions": "float", "lesion_map": "map[float]"}
 
     def initial_state(self):
-        return {"damaging_agent": 0.0}
+        return {"damaging_agent": 0.0, "lesion_map": {}}
 
     def update(self, state, interval):
         agent = max(float(state.get("damaging_agent", 0.0) or 0.0), 0.0)
         # MATLAB: selectionProbability = stepSize · reactionBound · [radiation]; here a lumped Poisson.
         rate = self.config["base_rate"] + self.config["agent_rate"] * agent
         new_lesions = float(self._rng.poisson(max(rate * interval, 0.0)))
-        return {"lesions": new_lesions}
+        return {"lesions": new_lesions,
+                "lesion_map": add_lesions(self._rng, int(self.config["n_bins"]), int(new_lesions))}
 
 
 # ---------------------------------------------------------------------------
@@ -417,40 +423,55 @@ class DNARepairReproductionProcess(Process):
         "pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance "
         "flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the "
         "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated "
-        "ATP budget from the finite metabolism-replenished pool."
+        "ATP budget from the finite metabolism-replenished pool. Lesions are now tracked per-site on "
+        "the shared chromosome structure (lesion_map) that damage adds to and repair clears from the "
+        "same sites — the first consumer of the unified per-site chromosome (remaining DNA submodels "
+        "staged)."
     )
 
     config_schema = {
         "repair_rate": {"_type": "float", "_default": 1.0e-2},  # lesions / enzyme / s
         "atp_per_repair": {"_type": "float", "_default": 4.0},  # ATP per lesion (excise+polymerize+ligate)
         "consumer_id": {"_type": "string", "_default": "dna_repair"},
+        "seed": {"_type": "integer", "_default": 5},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._cid = self.config["consumer_id"]
+        self._rng = np.random.default_rng(int(self.config.get("seed", 5)))
 
     def inputs(self):
         return {"lesions": "float", "repair_enzyme": "float", "atp": "float",
-                "alloc__atp": "map[float]"}
+                "alloc__atp": "map[float]", "lesion_map": "map[float]"}
 
     def outputs(self):
-        return {"lesions": "float", "atp": "float", "demand__atp": "map[float]"}
+        return {"lesions": "float", "atp": "float", "demand__atp": "map[float]",
+                "lesion_map": "map[float]"}
 
     def initial_state(self):
-        return {"lesions": 0.0, "repair_enzyme": 50.0, "atp": 1.0e6}
+        return {"lesions": 0.0, "repair_enzyme": 50.0, "atp": 1.0e6, "lesion_map": {}}
 
     def update(self, state, interval):
-        lesions = max(float(state.get("lesions", 0.0) or 0.0), 0.0)
         enzyme = max(float(state.get("repair_enzyme", 0.0) or 0.0), 0.0)
         atp = max(float(state.get("atp", 0.0) or 0.0), 0.0)
         atp_per = self.config["atp_per_repair"]
+        lesion_map = state.get("lesion_map", {}) or {}
+        # lesion count that gates desired repair: the "lesions" float input (kept
+        # in sync with lesion_map by DNADamage/DNARepair in normal operation) or
+        # the per-site map's own total, whichever is larger — the actual clearing
+        # below is always bounded by repair_sites() to what's truly present in
+        # lesion_map, so this only widens the *demand*, never over-repairs.
+        lesions = max(max(float(state.get("lesions", 0.0) or 0.0), 0.0), n_lesions(lesion_map))
         # MATLAB: repair subroutines clear damagedSites limited by enzymes + ATP/dNTP availability.
         capacity = self.config["repair_rate"] * enzyme * interval
         want_repaired = min(lesions, capacity)  # unconstrained-by-ATP desired repair
         want_atp = want_repaired * atp_per
         budget = select_budget(state.get("alloc__atp", {}), self._cid)
         atp_cap = min(want_atp, budget, atp)  # atp still bounds as a floor safety
-        repaired = min(lesions, capacity, atp_cap / atp_per if atp_per > 0 else lesions)
+        atp_cap_lesions = atp_cap / atp_per if atp_per > 0 else lesions
+        capacity = min(lesions, capacity, atp_cap_lesions)
+        delta, repaired = repair_sites(lesion_map, capacity, self._rng)
         return {"lesions": -repaired, "atp": -repaired * atp_per,
-                "demand__atp": demand_entry(self._cid, want_atp)}
+                "demand__atp": demand_entry(self._cid, want_atp),
+                "lesion_map": delta}

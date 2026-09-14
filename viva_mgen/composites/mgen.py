@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from process_bigraph.composite_generator import composite_generator
 
+from ..chromosome_state import empty_lesion_map
 from ..expression_defaults import DEFAULT_GENES, reference_protein_counts
 from ..processes import all_process_classes
 
@@ -78,6 +79,7 @@ _MAP_STORES = {
     "adhesin_proteins", "occupancy", "collisions", "emergent_mass_fractions",
     "demand__atp", "demand__gtp", "demand__ntp", "demand__amino_acid",
     "alloc__atp", "alloc__gtp", "alloc__ntp", "alloc__amino_acid",
+    "lesion_map",
 }
 
 # map-store keys that init to {} (consumer-keyed or otherwise not per-gene) rather
@@ -140,7 +142,7 @@ _STORE_GROUP = {
     "n_collisions": "genome", "fraction_explored": "genome",
     "dna_binding_density": "genome", "percent_rnap_explored": "genome",
     "percent_dnap_explored": "genome", "rna_pol_positions": "genome",
-    "dna_pol_positions": "genome",
+    "dna_pol_positions": "genome", "lesion_map": "genome",
     # transcriptome — RNA synthesis/processing/modification, tRNA charging, regulation
     "rna_counts": "transcriptome", "nascent_rna": "transcriptome",
     "mature_rna": "transcriptome", "unmodified_rna": "transcriptome",
@@ -249,6 +251,8 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         if key.startswith("demand__"):
             pool = key[len("demand__"):]
             return {cid: 0.0 for cid in _POOL_CONSUMERS.get(pool, [])}
+        if key == "lesion_map":
+            return empty_lesion_map(580)
         if key in _MAP_STORES:
             return ({} if key in _EMPTY_MAP_STORES
                     else {g: 0.0 for g in DEFAULT_GENES})

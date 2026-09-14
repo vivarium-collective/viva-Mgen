@@ -13,7 +13,7 @@ def empty_lesion_map(n_bins: int) -> dict:
     return {str(b): 0.0 for b in range(int(n_bins))}
 
 
-def add_lesions(rng, n_bins: int, count) -> dict:
+def add_lesions(rng, n_bins: int, count) -> dict:  # rng: numpy.random.Generator
     """Additive delta placing ``count`` independent lesions at random bins."""
     count = int(count)
     if count <= 0:
@@ -28,7 +28,7 @@ def n_lesions(lesion_map) -> float:
     return float(sum(float(v) for v in (lesion_map or {}).values()))
 
 
-def repair_sites(lesion_map, capacity, rng):
+def repair_sites(lesion_map, capacity, rng):  # rng: numpy.random.Generator
     """Repair up to ``capacity`` lesion instances from bins with count>0, weighted
     by count. Returns (negative additive delta, number repaired). Never repairs
     more than present, never drives a bin below zero."""
@@ -49,7 +49,7 @@ def repair_sites(lesion_map, capacity, rng):
     return delta, float(cap)
 
 
-def lesion_positions(lesion_map, genome_length_bp: float, n_bins: int) -> list:
-    """bp coordinates (bin centers) of currently-damaged bins."""
+def lesion_positions(lesion_map, genome_length_bp: float, n_bins: int) -> list[float]:
+    """bp coordinates (bin start coordinates) of currently-damaged bins."""
     bp_per_bin = float(genome_length_bp) / int(n_bins)
     return [int(b) * bp_per_bin for b, v in (lesion_map or {}).items() if float(v) > 0.0]
