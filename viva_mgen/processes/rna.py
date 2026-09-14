@@ -378,6 +378,7 @@ class TRNAAminoacylationReproductionProcess(Process):
             "free_trna": "map[float]",
             "aminoacylated_trna": "map[float]",
             "atp": "float",
+            "amino_acid": "float",
             "demand__atp": "map[float]",
             "demand__amino_acid": "map[float]",
         }
@@ -389,7 +390,7 @@ class TRNAAminoacylationReproductionProcess(Process):
         free = {k: float(v) for k, v in (state.get("free_trna", {}) or {}).items() if float(v) > 0}
         total_free = sum(free.values())
         if total_free <= 0:
-            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0,
+            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0, "amino_acid": 0.0,
                     "demand__atp": demand_entry(self._cid, 0.0),
                     "demand__amino_acid": demand_entry(self._cid, 0.0)}
 
@@ -412,7 +413,7 @@ class TRNAAminoacylationReproductionProcess(Process):
         atp_limit = atp_cap / self._atp_cost if self._atp_cost > 0 else atp_cap
         n_total = int(np.floor(min(total_free, aa_cap, atp_limit, enzyme_limit)))
         if n_total <= 0:
-            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0,
+            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0, "amino_acid": 0.0,
                     "demand__atp": demand_entry(self._cid, want_atp),
                     "demand__amino_acid": demand_entry(self._cid, want_aa)}
 
@@ -437,6 +438,7 @@ class TRNAAminoacylationReproductionProcess(Process):
             "free_trna": consumed,
             "aminoacylated_trna": produced,
             "atp": -charged * self._atp_cost,
+            "amino_acid": -charged,  # 1 free amino acid consumed per aminoacylation event
             "demand__atp": demand_entry(self._cid, want_atp),
             "demand__amino_acid": demand_entry(self._cid, want_aa),
         }

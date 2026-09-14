@@ -247,3 +247,17 @@ def test_trna_aminoacylation_respects_amino_acid_budget(core):
     charged = sum(v for v in out["aminoacylated_trna"].values())
     assert charged <= 4.0 + 1e-6
     assert "demand__amino_acid" in out and out["demand__amino_acid"]["trna_aminoacylation"] > 4.0
+
+
+def test_trna_aminoacylation_decrements_amino_acid_pool(core):
+    """Mass balance: each charged tRNA consumes exactly one free amino acid, so
+    the process must emit an "amino_acid" pool delta of -charged (not just cap
+    against it), or the pool never drains and the budget stops binding."""
+    from viva_mgen.processes.rna import TRNAAminoacylationReproductionProcess as T
+    proc = T(config={"consumer_id": "trna_aminoacylation", "seed": 0}, core=core)
+    # no alloc keys -> budgets are inf, so nothing but the co-substrate pools caps charging
+    st = {"free_trna": {"t1": 1000.0}, "amino_acid": 1e9, "atp": 1e9, "synthetase": 1000.0}
+    out = proc.update(st, 1.0)
+    charged = sum(v for v in out["aminoacylated_trna"].values())
+    assert charged > 0
+    assert out["amino_acid"] == -charged
