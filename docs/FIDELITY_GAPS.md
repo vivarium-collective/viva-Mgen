@@ -35,13 +35,18 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   Needs the gene→reaction→enzyme map (already partly in `genes.csv`
   associated_reactions). Independent of Gap 2. Size: M.
 
-- [ ] **Gap 3 — Unified chromosome representation.**
+- [~] **Gap 3 — Unified chromosome representation.** IN PROGRESS.
   Replace the split (aggregate DNA submodels + a separate coordinate-resolved
   `ChromosomeDynamics`) with ONE shared per-site chromosome structure
   (Karr's `CircularSparseMat`: bound-protein footprints, damaged sites,
   per-region linking numbers) that replication, transcription, supercoiling,
   condensation, segregation, and repair all read/write. Largest structural
   change. Depends on nothing but touches many submodels. Size: XL.
+  PHASE 1 landed: shared per-site chromosome structure (`chromosome_state.py`)
+  with DNADamage/DNARepair migrated to per-site lesions on a shared
+  `lesion_map`. STAGED for later phases: replication polymerized-regions,
+  DNASupercoiling per-region linking number, condensation/segregation
+  per-site, and folding ChromosomeDynamics' occupancy in.
 
 - [ ] **Gap 4 — Within-submodel state de-reductions (cluster; splittable).**
   Where the mechanism is faithful but the state is lumped:
