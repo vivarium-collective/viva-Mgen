@@ -57,8 +57,18 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   - 4c. tRNA aminoacylation: model the 20 AA × 37 tRNA reactions with
     per-synthetase kcats instead of one lumped pool.
   - 4d. Protein processing II: carry the per-protein lipoprotein classification
-    so the Lgt transferase step applies only to lipoproteins.
+    so the Lgt transferase step applies only to lipoproteins. **DONE (phase 1)** —
+    per-protein maturation classification decoded from KB (14 lipoproteins, 20 secretory,
+    35 N-terminal-Met-cleavage) now routes ProcessingII (Lgt only), ProcessingI
+    (Met-cleavage subset), and Translocation (secretory+lipoprotein only).
+  
   Each sub-item is its own S/M task. Some (4b, 4c) overlap Gap 3's data.
+
+  **Known follow-up:** the read-only dashboard's `scripts/regen_composite_state.py`
+  docstring→`_contract` splitter garbles `description`/`math` fields for processes
+  with multi-line indented equation blocks (pre-existing; affects protein_folding,
+  complexation, maturation). Cosmetic loom-rendering only; authoritative `description`
+  attributes are correct. Track as regen/parser fix.
 
 - [ ] **Gap 5 — Constants the KB never stored (research task).**
   ProteinFolding / ProteinModification rate matrices, per-monomer protein
