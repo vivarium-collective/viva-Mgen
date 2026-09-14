@@ -195,7 +195,10 @@ def test_translation_respects_gtp_budget(core):
 
 def test_protein_translocation_respects_gtp_budget(core):
     from viva_mgen.processes.protein import ProteinTranslocationReproductionProcess as Tl
-    proc = Tl(config={"consumer_id": "translocation", "seed": 0}, core=core)
+    # g1 is a synthetic gene name (not a real KB panel key), so it must be listed
+    # explicitly as a translocation substrate for GTP gating to apply to it.
+    proc = Tl(config={"consumer_id": "translocation", "seed": 0,
+                       "translocated_genes": ["g1"]}, core=core)
     st = {"process_i_done": {"g1": 1000.0}, "translocase": 1000.0, "gtp": 1e9,
           "alloc__gtp": {"translocation": 4.0}}   # budget = 4 GTP, 2 GTP/monomer -> 2 monomers
     out = proc.update(st, 1.0)
