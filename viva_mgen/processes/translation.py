@@ -16,7 +16,7 @@ from __future__ import annotations
 import numpy as np
 from process_bigraph import Process
 
-from ..expression_defaults import translation_rates
+from ..expression_defaults import translation_rates, gene_lengths
 from .allocation import select_budget, demand_entry
 
 
@@ -44,8 +44,10 @@ class TranslationReproductionProcess(Process):
         "For every gene g in the full M. genitalium gene set (~522 genes), new protein per step is\n"
         "Poisson in the current mRNA copy number\n"
         "    n_g ~ Poisson(r_g · mRNA_g · Δt)\n"
-        "capped by GTP supply (~2 GTP per peptide bond, ≈ gtp_per_protein per chain). Per-gene\n"
-        "rates r_g are ParCa-fitted.\n"
+        "capped by GTP supply. Each chain of gene g costs gtp_per_peptide_bond · (length_g/3)\n"
+        "GTP (~2 GTP per peptide bond over the peptide's residues), so a long protein draws\n"
+        "proportionally more of the shared GTP budget than a short one. Per-gene rates r_g are\n"
+        "ParCa-fitted.\n"
         "Contract — in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). "
         "out: protein_counts (per-gene protein Δ, additive map), gtp (Δ consumed, negative).\n"
         "Fidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\n"
@@ -58,7 +60,12 @@ class TranslationReproductionProcess(Process):
 
     config_schema = {
         "translation_rates": {"_type": "map[float]", "_default": {}},
-        "gtp_per_protein": {"_type": "float", "_default": 600.0},  # ~2*avg aa length
+        # GTP is charged per peptide bond over the chain's residues (length_g/3),
+        # so cost scales with protein length instead of a flat per-chain constant.
+        "gtp_per_peptide_bond": {"_type": "float", "_default": 2.0},
+        "gene_lengths": {"_type": "map[float]", "_default": {}},
+        # flat fallback cost for a gene with no known length (synthetic/test genes)
+        "gtp_per_protein": {"_type": "float", "_default": 600.0},
         "seed": {"_type": "integer", "_default": 1},
         "consumer_id": {"_type": "string", "_default": "translation"},
     }
@@ -66,8 +73,20 @@ class TranslationReproductionProcess(Process):
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rates = dict(self.config["translation_rates"]) or translation_rates()
+        self._lengths = dict(self.config["gene_lengths"]) or gene_lengths()
+        self._gtp_per_bond = float(self.config["gtp_per_peptide_bond"])
+        self._flat_cost = float(self.config["gtp_per_protein"])
         self._rng = np.random.default_rng(int(self.config["seed"]))
         self._cid = self.config["consumer_id"]
+
+    def _cost(self, gene):
+        """GTP per chain of ``gene``: 2 GTP/peptide bond over its residues
+        (length_nt/3); falls back to the flat per-chain cost when the gene's
+        length is unknown (synthetic/test genes)."""
+        length = self._lengths.get(gene)
+        if length is None:
+            return self._flat_cost
+        return self._gtp_per_bond * (float(length) / 3.0)
 
     def inputs(self):
         return {"rna_counts": "map[float]", "gtp": "float", "alloc__gtp": "map[float]"}
@@ -81,22 +100,24 @@ class TranslationReproductionProcess(Process):
     def update(self, state, interval):
         mrna = dict(state.get("rna_counts", {}) or {})
         gtp_avail = float(state.get("gtp", 0.0))
-        cost = float(self.config["gtp_per_protein"])
         budget = select_budget(state.get("alloc__gtp", {}), self._cid)
         gtp_cap = min(gtp_avail, budget)  # gtp_avail still bounds as a floor safety
-        # 1) draw each gene's would-be synthesis (Poisson in its mRNA copies) and
-        #    the whole-process GTP demand, independent of the budget.
+        # 1) draw each gene's would-be synthesis (Poisson in its mRNA copies), its
+        #    per-gene GTP cost (length-proportional), and the whole-process demand.
         drawn = {}
+        costs = {}
         want_gtp = 0.0
         for gene, rate in self._rates.items():
             copies = float(mrna.get(gene, 0.0))
             if copies <= 0:
                 continue
+            cost = self._cost(gene)
             expected = rate * copies * interval
             want_gtp += expected * cost  # pre-clamp Poisson-expectation GTP demand
             n = int(self._rng.poisson(max(expected, 0.0)))
             if n > 0:
                 drawn[gene] = n
+                costs[gene] = cost
         # 2) share the GTP budget PROPORTIONALLY across genes rather than
         #    first-come per dict order — otherwise whichever high-demand gene is
         #    visited first monopolizes the whole budget and starves the rest
@@ -104,7 +125,7 @@ class TranslationReproductionProcess(Process):
         #    gene consumes all ribosomes/GTP). When the draw fits in budget every
         #    gene translates in full; when it does not, each gene keeps the same
         #    fraction of its draw.
-        total_need = sum(n * cost for n in drawn.values())
+        total_need = sum(n * costs[g] for g, n in drawn.items())
         scale = 1.0 if total_need <= gtp_cap else (gtp_cap / total_need if total_need > 0 else 0.0)
         new_counts = {}
         gtp_used = 0.0
@@ -113,6 +134,6 @@ class TranslationReproductionProcess(Process):
             if m <= 0:
                 continue
             new_counts[gene] = float(m)
-            gtp_used += m * cost
+            gtp_used += m * costs[gene]
         return {"protein_counts": new_counts, "gtp": -gtp_used,
                 "demand__gtp": demand_entry(self._cid, want_gtp)}

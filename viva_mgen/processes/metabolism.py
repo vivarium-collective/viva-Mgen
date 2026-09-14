@@ -107,8 +107,9 @@ class MetabolismFbaReproductionProcess(Process):
         # gtp_base_supply fitted so the emergent protein:DNA:RNA dry-mass fractions
         # land on Karr's ~0.70:0.19:0.11 (fig2 report-card bands); GTP demand from
         # translation exceeds supply, so this rate sets the sustainable protein
-        # synthesis. See docs/FIDELITY_GAPS.md gap #2.
-        "gtp_base_supply": {"_type": "float", "_default": 13000.0},
+        # synthesis. Fitted against translation's length-proportional GTP cost
+        # (2 GTP/peptide bond). See docs/FIDELITY_GAPS.md gap #2.
+        "gtp_base_supply": {"_type": "float", "_default": 3500.0},
         "ntp_base_supply": {"_type": "float", "_default": 1.0e6},
         "amino_acid_base_supply": {"_type": "float", "_default": 1.0e6},
         # optional enzyme-gating coupling: scale each reaction's flux bound by

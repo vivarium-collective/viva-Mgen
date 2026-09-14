@@ -838,7 +838,7 @@
         },
         "gtp_base_supply": {
           "_type": "float",
-          "_default": 13000.0
+          "_default": 3500.0
         },
         "ntp_base_supply": {
           "_type": "float",
@@ -1182,9 +1182,17 @@
           "demand__gtp"
         ]
       },
-      "doc": "Stochastic translation \u2014 reproduction of Karr 2012 Translation.\nFor every gene g in the full M. genitalium gene set (~522 genes), new protein per step is\nPoisson in the current mRNA copy number\n    n_g ~ Poisson(r_g \u00b7 mRNA_g \u00b7 \u0394t)\ncapped by GTP supply (~2 GTP per peptide bond, \u2248 gtp_per_protein per chain). Per-gene\nrates r_g are ParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nFidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nGTP budget from the finite metabolism-replenished pool.",
+      "doc": "Stochastic translation \u2014 reproduction of Karr 2012 Translation.\nFor every gene g in the full M. genitalium gene set (~522 genes), new protein per step is\nPoisson in the current mRNA copy number\n    n_g ~ Poisson(r_g \u00b7 mRNA_g \u00b7 \u0394t)\ncapped by GTP supply. Each chain of gene g costs gtp_per_peptide_bond \u00b7 (length_g/3)\nGTP (~2 GTP per peptide bond over the peptide's residues), so a long protein draws\nproportionally more of the shared GTP budget than a short one. Per-gene rates r_g are\nParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nFidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nGTP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "translation_rates": {
+          "_type": "map[float]",
+          "_default": {}
+        },
+        "gtp_per_peptide_bond": {
+          "_type": "float",
+          "_default": 2.0
+        },
+        "gene_lengths": {
           "_type": "map[float]",
           "_default": {}
         },
@@ -1203,7 +1211,7 @@
       },
       "_contract": {
         "summary": "Stochastic translation \u2014 reproduction of Karr 2012 Translation.",
-        "description": "rates r_g are ParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nGTP budget from the finite metabolism-replenished pool.",
+        "description": "capped by GTP supply. Each chain of gene g costs gtp_per_peptide_bond \u00b7 (length_g/3)\nproportionally more of the shared GTP budget than a short one. Per-gene rates r_g are\nParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nGTP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -1211,7 +1219,7 @@
           "For every gene g in the full M. genitalium gene set (~522 genes), new protein per step is",
           "Poisson in the current mRNA copy number",
           "n_g ~ Poisson(r_g \u00b7 mRNA_g \u00b7 \u0394t)",
-          "capped by GTP supply (~2 GTP per peptide bond, \u2248 gtp_per_protein per chain). Per-gene",
+          "GTP (~2 GTP per peptide bond over the peptide's residues), so a long protein draws",
           "Fidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The"
         ],
         "symbols": {},

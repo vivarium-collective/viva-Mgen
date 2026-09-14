@@ -37,16 +37,28 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
      order, so one high-demand gene (MG471, anomalously stable mRNA × max rate)
      ate 96% of the budget and starved the rest (only 45 genes translated). It
      now shares the budget **proportionally** across genes (no gene monopolizes;
-     ~273 genes translate). `gtp_base_supply` is fitted so the emergent
-     protein:DNA:RNA fractions land on ~0.69:0.13:0.18 across seeds (all three
-     fig2 report-card bands green; was 0.002:0.42:0.57).
-  DEFERRED follow-ups (own tasks): (a) protein *count* is high (~460k) because
-  `gtp_per_protein` is a length-independent constant and the translated-length
-  mix skews short (avg ~80 aa) — make GTP cost ∝ peptide length; (b) mRNA is
-  over-represented (RNA fraction ~0.18 vs Karr ~0.11), pulling DNA low — a
-  transcription-rate trim would center it but touches fig3/fig5, so held back;
-  (c) whole-cell mass/atom balance (conserve water, Pi, PPi, GDP, formate) and
-  division-driving from emergent mass.
+     ~273 genes translate).
+  3. *Length-proportional GTP cost.* Translation charged a flat `gtp_per_protein`
+     (600) per chain; it now charges `gtp_per_peptide_bond` (2) · (length_g/3),
+     the faithful ~2 GTP/peptide-bond mechanism — long proteins draw more of the
+     shared budget than short ones. fig2 fractions are unchanged (re-fitting
+     `gtp_base_supply` to 3500 holds them at ~0.69:0.13:0.18) and fig5's energy
+     budget becomes length-accurate (transcription share 0.001→0.006, translation
+     0.997→0.985, both toward Karr).
+  `gtp_base_supply` is fitted so the emergent protein:DNA:RNA fractions land on
+  ~0.69:0.13:0.18 across seeds (all three fig2 report-card bands green; was
+  0.002:0.42:0.57).
+  DEFERRED follow-ups (own tasks): (a) protein *count* is high (~460k). NOTE the
+  length-proportional GTP cost above did NOT fix this — count = target mass ÷
+  mean translated length, and translation is biased toward short genes (mean
+  ~80 aa vs the ~346 aa gene mean), so the real fix is the translation
+  rate/length distribution (a ParCa/rate-fitting issue touching fig3), not the
+  GTP cost. (b) mRNA is over-represented (RNA fraction ~0.18 vs Karr ~0.11),
+  pulling DNA low — a transcription-rate trim would center it but touches
+  fig3/fig5, so held back; (c) whole-cell mass/atom balance (conserve water, Pi,
+  PPi, GDP, formate) and division-driving from emergent mass; (d) fig5's
+  `transcription_energy_share` gate [0.04,0.12] still fails at 0.006 (pre-existing;
+  6× closer after the per-bond cost) — needs the transcription-energy calibration.
 
 - [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
   FBA runs over the real iPS189 network but with static bounds; the original
