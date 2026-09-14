@@ -129,11 +129,20 @@ def test_atp_consumer_respects_budget(core):
 def test_dna_repair_respects_atp_budget(core):
     from viva_mgen.processes.dna import DNARepairReproductionProcess as R
     proc = R(config={"consumer_id": "dna_repair"}, core=core)
-    st = {"lesions": 1000.0, "repair_enzyme": 1000.0, "atp": 1e9,
-          "alloc__atp": {"dna_repair": 4.0}}   # budget = 4 ATP, 4 ATP/repair -> 1 repair
+    atp_per_repair = 4.0  # process default
+    budget = 4.0
+    # plenty of lesions on the shared per-site map (the sole source of repair
+    # demand); enzyme capacity (repair_rate*enzyme*interval = 10) also exceeds
+    # the budget, so the ATP budget is the binding constraint.
+    st = {"lesion_map": {"3": 1000.0}, "repair_enzyme": 1000.0, "atp": 1e9,
+          "alloc__atp": {"dna_repair": budget}}   # budget = 4 ATP, 4 ATP/repair -> 1 repair
     out = proc.update(st, 1.0)
-    assert out["atp"] >= -4.0
+    assert out["atp"] >= -budget            # never spend more than the ATP budget
     assert "demand__atp" in out and out["demand__atp"]["dna_repair"] > 0
+    # repair actually happens (map-driven), and is bounded EXACTLY by the budget
+    assert out["lesions"] < 0
+    assert -out["lesions"] == budget / atp_per_repair
+    assert sum(out["lesion_map"].values()) == out["lesions"]
 
 
 def test_protein_folding_respects_atp_budget(core):
