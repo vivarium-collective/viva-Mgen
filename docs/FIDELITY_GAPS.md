@@ -79,11 +79,14 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   a sourced constants table + wiring, or a documented "irreducible" note per
   constant. Size: M (mostly research).
 
-- [ ] **Gap 7 — Single-cell ensembles.**
+- [x] **Gap 7 — Single-cell ensembles.** DONE (ensemble runner + aggregation + demo CLI landed).
   The mechanisms are stochastic but figures use a single representative run.
   Add an ensemble runner (N independent seeded cells) and aggregate to reproduce
   Karr's cell-to-cell variation (e.g. Fig 2 distributions). Runner/infra, not
-  model change. Independent of the others. Size: M.
+  model change. Independent of the others. Size: M. Delivered: `run_ensemble`, `aggregate`,
+  `final_values` (viva_mgen.ensemble); `scripts/run_ensemble.py` CLI with JSON aggregates
+  (mean±std + per-cell + end-of-cycle distributions). A dashboard variation-figure study
+  consuming it is staged.
 
 ## Recommended order & rationale
 
