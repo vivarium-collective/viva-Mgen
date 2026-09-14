@@ -1,4 +1,4 @@
-"""Cytokinesis & host-interaction submodels — clean-room reproductions (reduced).
+"""Cytokinesis & host-interaction submodels — clean-room reproductions of Karr 2012.
 
 Reproduces three Karr 2012 *M. genitalium* whole-cell model submodels that
 together carry the cell through the final phase of the cell cycle and report on
@@ -19,9 +19,11 @@ its interaction with the host:
   adhesion to the host urogenital epithelium, mediated by the terminal organelle
   and its adhesin lipoproteins (MG_191/MgPa, MG_192, MG_217, MG_318, …).
 
-These are reduced but mechanistically genuine reproductions — the FtsZ-GTP →
-filament → ring-contraction → division chain is real — not the full
-ODE/discretization + polygon-pinching + Boolean-host machinery of the originals.
+The FtsZ-GTP → ring-contraction → division chain is mechanistically genuine and
+uses the real KB activation/dissociation constants; each class's ``description``
+states exactly which assembly detail (mass-action multimers, polygon-edge
+bind/bend cycle) is lumped and points at kb.karr_process_params for the per-step
+constants.
 """
 
 from __future__ import annotations
@@ -52,30 +54,27 @@ class FtsZPolymerizationReproductionProcess(Process):
     """
 
     description = (
-        "FtsZ polymerization — reduced reproduction of Karr 2012 FtsZPolymerization "
+        "FtsZ polymerization — reproduction of Karr 2012 FtsZPolymerization "
         "(Surovtsev 2008 kinetic scheme).\n"
-        "FtsZ cycles through states: inactive monomer → GTP-activated monomer (binds a GTP) → "
-        "nucleated/elongated filament. Reduced mechanism: activation converts free FtsZ to "
-        "FtsZ-GTP at a rate limited by both FtsZ monomer and free GTP (1 GTP bound per "
-        "activation); FtsZ-GTP then elongates into the Z-ring filament pool; a GDP↔GTP "
-        "exchange / dissociation flux returns a fraction of the ring to the monomer cycle.\n"
+        "FtsZ is a CONSERVED pool partitioned between free subunits and the assembled Z-ring. "
+        "GTP-driven activation moves FtsZ free→ring at k_on (real KB activationFwd 1.1 /s) and "
+        "dissociation returns it ring→free at k_off (real KB activationRev 0.01 /s). The step is "
+        "the exact closed-form two-state relaxation of the conserved pool over Δt:\n"
+        "    ring_eq = total · k_on/(k_on+k_off);  ring(t+Δt) = ring_eq + (ring−ring_eq)·e^(−(k_on+k_off)Δt),\n"
+        "costing 1 GTP per net new ring subunit and capping growth at available GTP. Because k_on ≫ "
+        "k_off the ring reaches ≈ the full pool and drives the septum closed.\n"
         "Contract — in (sensors): ftsz_monomer, gtp. out: ftsz_ring_filaments (Z-ring subunit "
         "count snapshot), gtp (negative delta, consumed).\n"
-        "Fidelity: REDUCED mechanism (genuine GTP-driven state-cycle → ring assembly; not the "
-        "full multi-mer ODE + stochastic discretization of the original)."
+        "Fidelity: FAITHFUL activation/dissociation constants (real KB activationFwd/Rev). The "
+        "reduction is the assembly detail: a two-state free⇌ring relaxation stands in for the "
+        "explicit nucleation/elongation/exchange mass-action multimers (their bimolecular fwd/rev "
+        "constants are in different units and available via kb.karr_process_params('FtsZPolymerization'))."
     )
 
     config_schema = {
         # k_on for the conserved free⇌ring relaxation = real FtsZ-GTP forward
         # activation rate (Karr 2012 parameters.json FtsZPolymerization.activationFwd = 1.1 /s).
         "activation_rate": {"_type": "float", "_default": 1.1},
-        # fraction of the FtsZ-GTP pool elongating into ring filaments per second.
-        # (The real mass-action nucleation/elongation/exchange fwd+rev constants —
-        # nucleationFwd 4.2e6 / nucleationRev 40, elongationFwd 5.1e6 / elongationRev 2.9,
-        # exchangeFwd 1e4 / exchangeRev 5e3 — are in different (bimolecular) units with no
-        # slot in this reduced conserved-pool relaxation; they are available via
-        # viva_mgen.kb.karr_process_params("FtsZPolymerization") but not forced into the math.)
-        "elongation_rate": {"_type": "float", "_default": 0.5},
         # k_off for the free⇌ring relaxation = real FtsZ-GTP reverse activation rate
         # (Karr 2012 parameters.json FtsZPolymerization.activationRev = 0.01 /s).
         "dissociation_rate": {"_type": "float", "_default": 0.01},
@@ -166,20 +165,23 @@ class CytokinesisReproductionProcess(Process):
     """
 
     description = (
-        "Cytokinesis — reduced reproduction of Karr 2012 Cytokinesis (Li 2007 bind/bend/"
+        "Cytokinesis — reproduction of Karr 2012 Cytokinesis (Li 2007 bind/bend/"
         "dissociate model).\n"
         "The FtsZ-GTP Z-ring contracts by a cycle of filament binding, GTP-hydrolysis-driven "
-        "bending, and dissociation; each cycle shrinks the pinched (septum) diameter. Reduced "
-        "mechanism: once replication/segregation is complete (replicated_fraction ≥ threshold) "
-        "and Z-ring filaments are present, the septum diameter shrinks from the M. genitalium "
-        "cell width (~200 nm) toward 0 at a contraction rate scaled by ring availability; the "
-        "cell divides when the diameter reaches 0.\n"
+        "bending, and dissociation; each cycle shrinks the pinched (septum) diameter. Once "
+        "replication/segregation is complete (replicated_fraction ≥ threshold) and Z-ring "
+        "filaments are present, the septum diameter shrinks from the M. genitalium cell width "
+        "(~200 nm) toward 0 at a contraction rate scaled by ring availability; the cell divides "
+        "when the diameter reaches 0.\n"
         "The ORIGINAL whole-cell model terminates the simulation when the septum diameter "
         "reaches 0 — this is THE division trigger of the whole-cell model.\n"
         "Contract — in (sensors): ftsz_ring_filaments, replicated_fraction. out: septum_diameter "
         "(nm snapshot), contraction_progress (0..1 snapshot), divided ∈ {0,1}.\n"
-        "Fidelity: REDUCED mechanism (genuine ring-driven pinch-to-division; not the polygon-"
-        "edge binding/bending/dissociation cycle of the original)."
+        "Fidelity: the ring-gated, replication-gated pinch-to-division dynamics are faithful. The "
+        "per-filament bind/bend/dissociate polygon-edge cycle (real KB constants "
+        "rateFilamentBindingMembrane/Dissociation 0.7, rateFtsZGtpHydrolysis 0.15 /s, via "
+        "kb.karr_process_params('Cytokinesis')) is lumped into one ring-availability-scaled nm/s "
+        "contraction speed."
     )
 
     config_schema = {
@@ -270,19 +272,18 @@ class HostInteractionReproductionProcess(Process):
     """
 
     description = (
-        "Host interaction — reduced reproduction of Karr 2012 HostInteraction (qualitative, "
-        "reporting).\n"
+        "Host interaction — reproduction of Karr 2012 HostInteraction (qualitative, reporting).\n"
         "The original decides adherence by a Boolean rule: adherent iff the terminal organelle "
         "is fully assembled AND all adhesin lipoproteins (MG_191/MgPa, MG_192, MG_217, MG_318) "
-        "are present. Reduced mechanism: that all-or-nothing AND is softened to a cooperative "
-        "(Hill-like) saturating function of terminal_organelle_fraction, so adhesion rises "
-        "steeply toward 1 only as assembly approaches completion.\n"
+        "are present. Here that all-or-nothing AND is softened to a cooperative (Hill-like) "
+        "saturating function of terminal_organelle_fraction, so adhesion rises steeply toward 1 "
+        "only as assembly approaches completion.\n"
         "Kept a Process (not a Step) because terminal_organelle_fraction is a genuine "
         "time-varying input, so adhesion_strength evolves over the cell cycle.\n"
         "Contract — in (sensor): terminal_organelle_fraction (0..1). out: adhesion_strength "
         "(0..1 snapshot).\n"
-        "Fidelity: REDUCED / qualitative (as the original is qualitative; continuous softening "
-        "of the Boolean adherence rule)."
+        "Fidelity: faithful to the original, which is itself qualitative/reporting-only; the "
+        "Boolean adherence rule is rendered as a continuous cooperative function of assembly."
     )
 
     config_schema = {

@@ -1,16 +1,18 @@
-"""Genome-scale gene set + parameters for the reduced stochastic expression
-processes (transcription / translation / decay).
+"""Genome-scale gene set + parameters for the stochastic expression processes
+(transcription / translation / decay).
 
-The original whole-cell model tracks all ~480 protein-coding genes with per-species
-rates from its (undecodable-here) knowledge base. This reproduction follows the
-SAME stochastic mechanism (Poisson/multinomial synthesis, Poisson decay) over the
-FULL M. genitalium gene set loaded from ``datasets/genes.csv``, with per-gene
-rates drawn from a realistic heavy-tailed (log-normal) distribution calibrated so
-the ensemble reproduces the paper's expression kinetics — ~50% of genes expressed
-within 18 min and ~90% within 143 min (Fig 3C) — and bursty low-copy single-cell
-mRNA (Fig 2G). A handful of well-known genes keep hand-tuned rates; the rest are
-distributed. Rates are representative (order-of-magnitude genuine), not the exact
-KB values — this is the reduced-fidelity part of the reproduction.
+The whole-cell model tracks all ~480 protein-coding genes with per-gene rates.
+This reproduction follows the SAME stochastic mechanism (Poisson/multinomial
+synthesis, Poisson decay) over the FULL M. genitalium gene set loaded from
+``datasets/genes.csv`` (~522 genes). Per-gene rates are computed by the native
+ParCa (:mod:`viva_mgen.parca`, ``_parca_panel``) from the REAL observed
+expression profile and REAL KB per-gene half-lives — the knowledge base is
+decoded natively by :mod:`viva_mgen.kb_decode`, no MATLAB required. If the
+decoded expression is unavailable the module falls back to a heavy-tailed
+(log-normal) draw calibrated to the paper's expression kinetics (~50% of genes
+expressed within 18 min, ~90% within 143 min, Fig 3C). A handful of well-known
+genes keep hand-tuned rates. Protein half-lives are a single representative
+value because the KB carries no per-monomer protein half-lives.
 """
 
 from __future__ import annotations

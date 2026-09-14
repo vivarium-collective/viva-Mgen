@@ -72,7 +72,8 @@ class MetabolismFbaReproductionProcess(Process):
         "out: growth_rate (biomass flux, raw iPS189 units), growth_fraction "
         "(growth_rate ÷ wild-type, the calibrated unit-free growth the mass submodel "
         "integrates), atp_production (ATP-synthase ATPS4r flux), gtp_production "
-        "(NDP-kinase-family flux), feasible ∈ {0,1}.\n"
+        "(summed GTP-linked kinase/transport flux: NDPK1/NDPK2 nucleoside-diphosphate "
+        "kinases, GK1 guanylate kinase, GTPtp transport), feasible ∈ {0,1}.\n"
         "Fidelity: FULL — the genuine published reconstruction the WCM's metabolism "
         "submodel was built on."
     )
