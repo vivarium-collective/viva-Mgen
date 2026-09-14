@@ -57,7 +57,7 @@ class AllocatorProcess(Process):
     each pool by this tick's production (consumers draw it down via their own
     negative deltas), holding the pool >= 0 with sum(grants) <= supply.
 
-    Contract — per pool P: in <P> (level, float), <P>_supply (production, float),
+    Contract — per pool P: in <P> (level, float), <P>_production (production, float),
     demand__<P> (consumer->want, map). out <P> (replenish delta, float),
     alloc__<P> (consumer->grant, overwrite map).
     Fidelity: FAITHFUL to Karr's demand->allocate->run arbitration (proportional
@@ -70,7 +70,7 @@ class AllocatorProcess(Process):
         "tick's metabolic production; partitions it among consumers' demands (demand__<pool>) "
         "by proportional allocation with a priority-weight hook, publishes grants "
         "(alloc__<pool>), and replenishes the pool by production.\n"
-        "Contract — per pool P: in <P> (level, float), <P>_supply (production, float), "
+        "Contract — per pool P: in <P> (level, float), <P>_production (production, float), "
         "demand__<P> (consumer->want, map). out <P> (replenish delta, float), "
         "alloc__<P> (consumer->grant, overwrite map).\n"
         "Fidelity: FAITHFUL to Karr's demand->allocate->run arbitration (proportional "
@@ -91,7 +91,7 @@ class AllocatorProcess(Process):
         s = {}
         for p in self._pools:
             s[p] = "float"
-            s[p + "_supply"] = "float"
+            s[p + "_production"] = "float"
             s["demand__" + p] = "map[float]"
         return s
 
@@ -103,7 +103,7 @@ class AllocatorProcess(Process):
         return s
 
     def initial_state(self):
-        return {p + "_supply": 0.0 for p in self._pools}
+        return {p + "_production": 0.0 for p in self._pools}
 
     def update(self, state, interval):
         prio = self.config["priorities"] or {}
@@ -111,7 +111,7 @@ class AllocatorProcess(Process):
         out = {}
         for p in self._pools:
             level = float(state.get(p, 0.0) or 0.0)
-            production = max(0.0, float(state.get(p + "_supply", 0.0) or 0.0))
+            production = max(0.0, float(state.get(p + "_production", 0.0) or 0.0))
             demands = state.get("demand__" + p, {}) or {}
             supply = min(level + production, cap)
             out["alloc__" + p] = allocate(supply, demands, prio.get(p))

@@ -51,12 +51,12 @@ def test_allocator_replenishes_and_partitions(core):
     ins = proc.inputs()
     outs = proc.outputs()
     assert ins["atp"] == "float"
-    assert ins["atp_supply"] == "float"
+    assert ins["atp_production"] == "float"
     assert ins["demand__atp"] == "map[float]"
     assert outs["atp"] == "float"
     assert outs["alloc__atp"] == "overwrite[map[float]]"
     # Test arithmetic: supply available = level(5) + production(25) = 30; demands 20+40=60 -> proportional
-    state = {"atp": 5.0, "atp_supply": 25.0,
+    state = {"atp": 5.0, "atp_production": 25.0,
              "demand__atp": {"a": 20.0, "b": 40.0}}
     out = proc.update(state, 1.0)
     assert out["alloc__atp"]["a"] == 10.0 and out["alloc__atp"]["b"] == 20.0
@@ -69,3 +69,16 @@ def test_metabolism_emits_precursor_supply():
     out = MetabolismFbaReproductionProcess.outputs(
         MetabolismFbaReproductionProcess.__new__(MetabolismFbaReproductionProcess))
     assert "ntp_production" in out and "amino_acid_production" in out
+
+
+def test_composite_builds_and_runs_with_allocator():
+    from viva_mgen.composites.mgen import build_mgen
+    from viva_mgen.core import build_core
+    from process_bigraph import Composite
+    core = build_core()
+    doc = build_mgen(core=core)
+    assert "allocator" in doc
+    comp = Composite({"state": doc}, core=core)
+    comp.run(3.0)
+    budget = comp.state["cell"]["budget"]
+    assert "alloc__atp" in budget and "alloc__gtp" in budget
