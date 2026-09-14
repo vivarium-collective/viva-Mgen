@@ -122,9 +122,11 @@ _STORE_GROUP = {
     "amino_acid": "metabolism", "dntp_pool": "metabolism",
     "dntp_at_replication_start": "metabolism", "dntp_synthesis_scale": "metabolism",
     "nutrient_scale": "metabolism", "atp_production": "metabolism",
-    "gtp_production": "metabolism", "ntp_production": "metabolism",
-    "amino_acid_production": "metabolism", "feasible": "metabolism",
+    "gtp_production": "metabolism", "feasible": "metabolism",
     "mass_fractions": "metabolism",
+    # precursor supply RATES (molecules/s) metabolism feeds to the allocator
+    "atp_supply": "metabolism", "gtp_supply": "metabolism",
+    "ntp_supply": "metabolism", "amino_acid_supply": "metabolism",
     # resource-allocation budget — per-pool consumer demand/grant maps
     "demand__atp": "budget", "demand__gtp": "budget",
     "demand__ntp": "budget", "demand__amino_acid": "budget",

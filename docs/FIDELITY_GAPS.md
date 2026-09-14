@@ -17,15 +17,48 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   partitioned among the submodels each tick by a central allocator
   (demand → allocate → run). Spec: `2026-09-14-resource-allocation-design.md`.
 
-- [x] **Gap 2 — Emergent mass + whole-cell conservation.** DONE (merged #14, macromolecule composition; division-driving deferred).
-  Today `MassGrowth` grows mass phenomenologically (exp growth × `growth_fraction`,
-  split by fixed dry-weight fractions). Make total mass the **emergent**
+- [x] **Gap 2 — Emergent mass + whole-cell conservation.** DONE.
+  Macromolecule composition (merged #14): total mass is the **emergent**
   Σ(species count × molecular weight) over the actual molecular inventory
-  (RNA, protein, metabolites, DNA), and enforce whole-cell mass/atom balance so
-  byproducts (water, Pi, PPi, GDP, formate) are conserved rather than "delegated
-  to the pools". Deliverable: a mass process that reads the real species stores
-  and MWs; the fitted fractions become an emergent *output* to validate against,
-  not an input. Depends on Gap 1 (finite pools) being in. Size: L.
+  (RNA, protein, metabolites, DNA); the fitted dry-weight fractions became an
+  emergent *output* validated against Karr's values, not an input.
+  **Synthesis/mass calibration (this round):** the just-added Karr-comparison
+  report card exposed that the emergent inventory was grossly protein-deficient
+  (emergent protein fraction ≈ 0.002 vs Karr's ~0.70). Root cause was two
+  coupled defects, both now fixed:
+  1. *Energy-carrier units.* Metabolism supplied ATP/GTP to the finite pools as
+     raw FBA flux (~0.2–0.8 molecules/tick) while NTP/AA were molecule-scaled, so
+     GTP drained in the first coarse tick and translation stalled after ~1600
+     proteins. Metabolism now emits per-second precursor SUPPLY rates
+     (`<pool>_supply` = base·growth_fraction), the allocator replenishes
+     `rate·interval` (timestep-consistent at dt=1 and dt=300), and the raw FBA
+     `atp/gtp_production` flux is retained as the Fig 5 signal.
+  2. *Greedy per-gene GTP.* Translation consumed its GTP grant first-come in dict
+     order, so one high-demand gene (MG471, anomalously stable mRNA × max rate)
+     ate 96% of the budget and starved the rest (only 45 genes translated). It
+     now shares the budget **proportionally** across genes (no gene monopolizes;
+     ~273 genes translate).
+  3. *Length-proportional GTP cost.* Translation charged a flat `gtp_per_protein`
+     (600) per chain; it now charges `gtp_per_peptide_bond` (2) · (length_g/3),
+     the faithful ~2 GTP/peptide-bond mechanism — long proteins draw more of the
+     shared budget than short ones. fig2 fractions are unchanged (re-fitting
+     `gtp_base_supply` to 3500 holds them at ~0.69:0.13:0.18) and fig5's energy
+     budget becomes length-accurate (transcription share 0.001→0.006, translation
+     0.997→0.985, both toward Karr).
+  `gtp_base_supply` is fitted so the emergent protein:DNA:RNA fractions land on
+  ~0.69:0.13:0.18 across seeds (all three fig2 report-card bands green; was
+  0.002:0.42:0.57).
+  DEFERRED follow-ups (own tasks): (a) protein *count* is high (~460k). NOTE the
+  length-proportional GTP cost above did NOT fix this — count = target mass ÷
+  mean translated length, and translation is biased toward short genes (mean
+  ~80 aa vs the ~346 aa gene mean), so the real fix is the translation
+  rate/length distribution (a ParCa/rate-fitting issue touching fig3), not the
+  GTP cost. (b) mRNA is over-represented (RNA fraction ~0.18 vs Karr ~0.11),
+  pulling DNA low — a transcription-rate trim would center it but touches
+  fig3/fig5, so held back; (c) whole-cell mass/atom balance (conserve water, Pi,
+  PPi, GDP, formate) and division-driving from emergent mass; (d) fig5's
+  `transcription_energy_share` gate [0.04,0.12] still fails at 0.006 (pre-existing;
+  6× closer after the per-bond cost) — needs the transcription-energy calibration.
 
 - [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
   FBA runs over the real iPS189 network but with static bounds; the original

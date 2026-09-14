@@ -69,6 +69,27 @@ def test_translation_needs_mrna(core):
     assert sum(withmrna["protein_counts"].values()) >= 0  # stochastic, nonnegative
 
 
+def test_translation_shares_gtp_proportionally_not_greedily(core):
+    """Under a limiting GTP budget, translation must SHARE across genes in
+    proportion to each gene's would-be synthesis — not spend it first-come in
+    dict order, which let one high-demand gene monopolize the budget and starve
+    the rest (Gap 2 fix). With two equal-demand genes and a budget that covers
+    ~half the total demand, both genes must translate (neither is starved) and
+    the GTP spent must stay within the granted budget."""
+    cost = 600.0
+    p = TranslationReproductionProcess(
+        config={"seed": 7, "translation_rates": {"a": 0.15, "b": 0.15},
+                "gtp_per_protein": cost}, core=core)
+    # large equal mRNA -> large equal demand for both genes; grant covers only
+    # part of it, forcing the proportional split to bind.
+    grant = 300.0 * cost  # room for ~300 peptides total
+    out = p.update({"rna_counts": {"a": 2000.0, "b": 2000.0}, "gtp": 1e12,
+                    "alloc__gtp": {"translation": grant}}, 1.0)
+    pc = out["protein_counts"]
+    assert pc.get("a", 0) > 0 and pc.get("b", 0) > 0  # neither starved
+    assert abs(-out["gtp"]) <= grant + 1e-6           # stays within budget
+
+
 def test_decay_reduces_counts(core):
     p = RnaDecayReproductionProcess(config={"seed": 5}, core=core)
     d = p.update({"rna_counts": {"tuf": 1000.0}}, 300.0)

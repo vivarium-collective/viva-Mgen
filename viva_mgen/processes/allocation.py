@@ -51,36 +51,41 @@ class AllocatorProcess(Process):
     """Central resource allocator (reproduction of Karr 2012 hybrid partitioning).
 
     Runs first each tick. For every finite pool it computes the available supply
-    (current level + this tick's metabolic production), partitions it among the
-    consumers' demands (demand__<pool>) by allocate(), and publishes the grants
-    (alloc__<pool>) that each consumer caps its consumption at. Also replenishes
-    each pool by this tick's production (consumers draw it down via their own
-    negative deltas). The PER-TICK allocation invariant sum(grants) <= supply
-    holds exactly; because each consumer's budget is sized one tick ahead of the
-    tick it draws against, sustained multi-consumer scarcity can transiently
-    drive the pool level slightly below zero (by at most ~one tick's
-    over-allocation). This is self-healing within 1-2 ticks — every consumer
-    clamps its pool read at max(pool, 0.0) — and the raw pool level is not an
-    emitted observable.
+    (current level + this tick's metabolic production = <P>_supply RATE * interval),
+    partitions it among the consumers' demands (demand__<pool>) by allocate(), and
+    publishes the grants (alloc__<pool>) that each consumer caps its consumption
+    at. Also replenishes each pool by this tick's production (consumers draw it
+    down via their own negative deltas). Because <P>_supply is a per-second rate
+    scaled by interval — exactly as each consumer scales its own demand — the
+    allocation is dimensionally consistent at any timestep (dt=1 s or the coarse
+    dt=300 s the figure studies use). The PER-TICK allocation invariant
+    sum(grants) <= supply holds exactly; because each consumer's budget is sized
+    one tick ahead of the tick it draws against, sustained multi-consumer scarcity
+    can transiently drive the pool level slightly below zero (by at most ~one
+    tick's over-allocation). This is self-healing within 1-2 ticks — every
+    consumer clamps its pool read at max(pool, 0.0) — and the raw pool level is
+    not an emitted observable.
 
-    Contract — per pool P: in <P> (level, float), <P>_production (production, float),
-    demand__<P> (consumer->want, map). out <P> (replenish delta, float),
-    alloc__<P> (consumer->grant, overwrite map).
+    Contract — per pool P: in <P> (level, float), <P>_supply (production RATE,
+    molecules/s, float), demand__<P> (consumer->want, map). out <P> (replenish
+    delta, float), alloc__<P> (consumer->grant, overwrite map).
     Fidelity: FAITHFUL to Karr's demand->allocate->run arbitration (proportional
-    partition with a priority-weight hook); one-tick pipeline lag at Δt=1 s.
+    partition with a priority-weight hook); one-tick pipeline lag.
     """
 
     description = (
         "Central resource allocator — reproduction of Karr 2012 hybrid partitioning.\n"
         "Runs first each tick: for each finite pool, available supply = pool level + this "
-        "tick's metabolic production; partitions it among consumers' demands (demand__<pool>) "
-        "by proportional allocation with a priority-weight hook, publishes grants "
-        "(alloc__<pool>), and replenishes the pool by production.\n"
-        "Contract — per pool P: in <P> (level, float), <P>_production (production, float), "
-        "demand__<P> (consumer->want, map). out <P> (replenish delta, float), "
+        "tick's metabolic production (<pool>_supply RATE in molecules/s times the timestep); "
+        "partitions it among consumers' demands (demand__<pool>) by proportional allocation "
+        "with a priority-weight hook, publishes grants (alloc__<pool>), and replenishes the "
+        "pool by production. Supply and demand both scale with the timestep, so the "
+        "partition is consistent at dt=1 s and at the coarse dt=300 s of the figure runs.\n"
+        "Contract — per pool P: in <P> (level, float), <P>_supply (production RATE, "
+        "molecules/s), demand__<P> (consumer->want, map). out <P> (replenish delta, float), "
         "alloc__<P> (consumer->grant, overwrite map).\n"
         "Fidelity: FAITHFUL to Karr's demand->allocate->run arbitration (proportional "
-        "partition + priority hook); one-tick pipeline lag at dt=1 s."
+        "partition + priority hook)."
     )
 
     config_schema = {
@@ -97,7 +102,7 @@ class AllocatorProcess(Process):
         s = {}
         for p in self._pools:
             s[p] = "float"
-            s[p + "_production"] = "float"
+            s[p + "_supply"] = "float"
             s["demand__" + p] = "map[float]"
         return s
 
@@ -110,7 +115,7 @@ class AllocatorProcess(Process):
         return s
 
     def initial_state(self):
-        return {p + "_production": 0.0 for p in self._pools}
+        return {p + "_supply": 0.0 for p in self._pools}
 
     def update(self, state, interval):
         prio = self.config["priorities"] or {}
@@ -118,12 +123,17 @@ class AllocatorProcess(Process):
         out = {}
         for p in self._pools:
             level = max(0.0, float(state.get(p, 0.0) or 0.0))
-            production = max(0.0, float(state.get(p + "_production", 0.0) or 0.0))
+            # <pool>_supply is a RATE (molecules/sec) from metabolism; the amount
+            # produced THIS tick is rate*interval, so supply/replenish track the
+            # timestep and consumers (whose demands are also *interval) stay
+            # dimensionally consistent at any dt.
+            rate = max(0.0, float(state.get(p + "_supply", 0.0) or 0.0))
+            produced = rate * float(interval)
             demands = state.get("demand__" + p, {}) or {}
-            supply = min(level + production, cap)
+            supply = min(level + produced, cap)
             out["alloc__" + p] = allocate(supply, demands, prio.get(p))
             # replenish the pool by this tick's production (bounded by cap)
-            out[p] = min(production, max(0.0, cap - level))
+            out[p] = min(produced, max(0.0, cap - level))
             # Zero out exactly what was read this tick, so the additive
             # demand__<pool> store tracks only the latest tick's wants rather
             # than accumulating forever. A consumer's same-tick demand_entry()
