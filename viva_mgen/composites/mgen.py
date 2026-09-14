@@ -9,6 +9,13 @@ repair chain, and FtsZ→cytokinesis + host interaction) through shared
 cell-variable stores. Every figure-study reuses THIS composite, differing only
 in the parameters it passes and the observables it measures — mirroring the
 Karr 2012 model's own "one whole-cell model, many analyses" design.
+
+The AllocatorProcess (node "allocator") is the whole-cell resource-integration
+layer: it replenishes the shared ATP/GTP/NTP/amino-acid pools from metabolism's
+per-tick production and partitions each finite pool across its competing
+consumer processes every tick (Karr hybrid partitioning — proportional
+scale-back under scarcity, full grant under surplus), so no single consumer
+can starve its siblings.
 """
 
 from __future__ import annotations
@@ -50,6 +57,7 @@ _NODE_NAMES = {
     "CytokinesisReproductionProcess": "cytokinesis",
     "HostInteractionReproductionProcess": "host_interaction",
     "ChromosomeDynamicsReproductionProcess": "chromosome",
+    "AllocatorProcess": "allocator",
 }
 
 # port -> store overrides (disambiguate two processes' identically-named ports)
@@ -68,6 +76,27 @@ _MAP_STORES = {
     "unmodified", "modified", "monomers", "complexes", "active_fraction",
     "free_trna", "aminoacylated_trna", "rprotein_counts", "rrna_counts",
     "adhesin_proteins", "occupancy", "collisions",
+    "demand__atp", "demand__gtp", "demand__ntp", "demand__amino_acid",
+    "alloc__atp", "alloc__gtp", "alloc__ntp", "alloc__amino_acid",
+}
+
+# map-store keys that init to {} (consumer-keyed or otherwise not per-gene) rather
+# than the default per-gene {gene: 0.0} dict
+_EMPTY_MAP_STORES = {
+    "occupancy", "collisions", "mass_fractions", "fold_change", "active_fraction",
+    "demand__atp", "demand__gtp", "demand__ntp", "demand__amino_acid",
+    "alloc__atp", "alloc__gtp", "alloc__ntp", "alloc__amino_acid",
+}
+
+# demand__<pool> stores are additive map[float]; a consumer's {cid: want} delta
+# is DROPPED if cid isn't already a key. Pre-seed each pool's known consumer ids
+# at 0.0 so their additive demand deltas land.
+_POOL_CONSUMERS = {
+    "atp": ["supercoiling", "dna_repair", "protein_folding",
+            "protein_modification", "trna_aminoacylation"],
+    "gtp": ["translation", "translocation", "ribosome_assembly", "ftsz"],
+    "ntp": ["transcription"],
+    "amino_acid": ["trna_aminoacylation"],
 }
 
 # store keys that hold list[float] (chromosome polymerase positions)
@@ -88,8 +117,14 @@ _STORE_GROUP = {
     "amino_acid": "metabolism", "dntp_pool": "metabolism",
     "dntp_at_replication_start": "metabolism", "dntp_synthesis_scale": "metabolism",
     "nutrient_scale": "metabolism", "atp_production": "metabolism",
-    "gtp_production": "metabolism", "feasible": "metabolism",
+    "gtp_production": "metabolism", "ntp_production": "metabolism",
+    "amino_acid_production": "metabolism", "feasible": "metabolism",
     "mass_fractions": "metabolism",
+    # resource-allocation budget — per-pool consumer demand/grant maps
+    "demand__atp": "budget", "demand__gtp": "budget",
+    "demand__ntp": "budget", "demand__amino_acid": "budget",
+    "alloc__atp": "budget", "alloc__gtp": "budget",
+    "alloc__ntp": "budget", "alloc__amino_acid": "budget",
     # genome — chromosome replication, structure, maintenance, DNA-binding (Fig 3)
     "chromosome_copy": "genome", "replicated_fraction": "genome",
     "replication_active": "genome", "replication_duration": "genome",
@@ -145,7 +180,7 @@ def _store_path(key):
 
 # initial float-store values (resources/enzymes/setpoints); unlisted floats -> 0.0
 _FLOAT_INIT = {
-    "atp": 1e9, "gtp": 1e9, "ntp": 1e8, "amino_acid": 1e8,
+    "atp": 1e6, "gtp": 1e6, "ntp": 1e6, "amino_acid": 1e6,
     "nutrient_scale": 1.0, "rna_pol": 100.0, "dntp_synthesis_scale": 1.0,
     "mass": 3.93, "growth_fraction": 1.0, "feasible": 1.0, "chromosome_copy": 1.0,
     "dnaA_free": 50.0, "gyrase": 20.0, "smc": 30.0, "damaging_agent": 0.0,
@@ -204,9 +239,11 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
     def _init_value(key):
         if key in _LIST_STORES:
             return []
+        if key.startswith("demand__"):
+            pool = key[len("demand__"):]
+            return {cid: 0.0 for cid in _POOL_CONSUMERS.get(pool, [])}
         if key in _MAP_STORES:
-            return ({} if key in ("occupancy", "collisions", "mass_fractions",
-                                  "fold_change", "active_fraction")
+            return ({} if key in _EMPTY_MAP_STORES
                     else {g: 0.0 for g in DEFAULT_GENES})
         return _FLOAT_INIT.get(key, 0.0)
 
@@ -219,7 +256,8 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
             grp[leaf] = _init_value(key)
         return path
 
-    for cls_name, node in _NODE_NAMES.items():
+    items = sorted(_NODE_NAMES.items(), key=lambda kv: 0 if kv[1] == "allocator" else 1)
+    for cls_name, node in items:
         cls = classes[cls_name]
         proc = cls(config={}, core=core)
         inputs = {p: store(_store_key(cls_name, p)) for p in proc.inputs()}

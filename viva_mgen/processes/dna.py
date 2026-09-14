@@ -29,6 +29,7 @@ import numpy as np
 from process_bigraph import Process
 
 from .. import constants as C
+from .allocation import select_budget, demand_entry
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +146,9 @@ class DNASupercoilingReproductionProcess(Process):
         "Fidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, "
         "setpoint −0.06, 10.5 bp/turn). σ is tracked genome-wide as one linking-number pool rather "
         "than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme "
-        "rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling'))."
+        "rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')). "
+        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): "
+        "capped each tick at its allocated ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
@@ -164,17 +167,20 @@ class DNASupercoilingReproductionProcess(Process):
         "relaxed_bp_per_turn": {"_type": "float", "_default": 10.5},
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "initial_sigma": {"_type": "float", "_default": 0.0},  # start relaxed, gyrase supercoils it
+        "consumer_id": {"_type": "string", "_default": "supercoiling"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._sigma = float(self.config["initial_sigma"])
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"gyrase": "float", "atp": "float"}
+        return {"gyrase": "float", "atp": "float", "alloc__atp": "map[float]"}
 
     def outputs(self):
-        return {"superhelical_density": "overwrite[float]", "atp": "float"}
+        return {"superhelical_density": "overwrite[float]", "atp": "float",
+                "demand__atp": "map[float]"}
 
     def initial_state(self):
         return {"gyrase": 100.0, "atp": 1.0e6}
@@ -188,13 +194,16 @@ class DNASupercoilingReproductionProcess(Process):
         gap = setpoint - self._sigma  # how far below setpoint we still need to go (σ<0)
         # gyrase catalytic acts this step, capped by ATP (2 ATP/act) — MATLAB gyrase binding
         acts_wanted = abs(gap) * turns  # supercoils still needed
-        acts = min(gyrase * self.config["gyrase_rate"] * interval,
-                   atp / self.config["atp_per_act"],
-                   acts_wanted)
+        want_acts = gyrase * self.config["gyrase_rate"] * interval
+        want_atp = min(want_acts, acts_wanted) * self.config["atp_per_act"]
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        atp_cap = min(want_atp, budget, atp)  # atp still bounds as a floor safety
+        acts = min(want_acts, atp_cap / self.config["atp_per_act"], acts_wanted)
         dsigma = np.sign(gap) * acts / turns
         self._sigma += dsigma
         atp_used = self.config["atp_per_act"] * acts
-        return {"superhelical_density": self._sigma, "atp": -atp_used}
+        return {"superhelical_density": self._sigma, "atp": -atp_used,
+                "demand__atp": demand_entry(self._cid, want_atp)}
 
 
 # ---------------------------------------------------------------------------
@@ -406,22 +415,27 @@ class DNARepairReproductionProcess(Process):
         "out: lesions (negative Δ), atp (negative Δ).\n"
         "Fidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR "
         "pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance "
-        "flux; dNTP accounting is delegated to the metabolite pools."
+        "flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the "
+        "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated "
+        "ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
         "repair_rate": {"_type": "float", "_default": 1.0e-2},  # lesions / enzyme / s
         "atp_per_repair": {"_type": "float", "_default": 4.0},  # ATP per lesion (excise+polymerize+ligate)
+        "consumer_id": {"_type": "string", "_default": "dna_repair"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"lesions": "float", "repair_enzyme": "float", "atp": "float"}
+        return {"lesions": "float", "repair_enzyme": "float", "atp": "float",
+                "alloc__atp": "map[float]"}
 
     def outputs(self):
-        return {"lesions": "float", "atp": "float"}
+        return {"lesions": "float", "atp": "float", "demand__atp": "map[float]"}
 
     def initial_state(self):
         return {"lesions": 0.0, "repair_enzyme": 50.0, "atp": 1.0e6}
@@ -433,5 +447,10 @@ class DNARepairReproductionProcess(Process):
         atp_per = self.config["atp_per_repair"]
         # MATLAB: repair subroutines clear damagedSites limited by enzymes + ATP/dNTP availability.
         capacity = self.config["repair_rate"] * enzyme * interval
-        repaired = min(lesions, capacity, atp / atp_per if atp_per > 0 else lesions)
-        return {"lesions": -repaired, "atp": -repaired * atp_per}
+        want_repaired = min(lesions, capacity)  # unconstrained-by-ATP desired repair
+        want_atp = want_repaired * atp_per
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        atp_cap = min(want_atp, budget, atp)  # atp still bounds as a floor safety
+        repaired = min(lesions, capacity, atp_cap / atp_per if atp_per > 0 else lesions)
+        return {"lesions": -repaired, "atp": -repaired * atp_per,
+                "demand__atp": demand_entry(self._cid, want_atp)}

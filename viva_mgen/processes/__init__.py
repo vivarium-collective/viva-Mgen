@@ -22,6 +22,7 @@ from .replication import ReplicationReproductionProcess
 # migrated submodels (one module per category)
 from . import dna, rna, protein, cytokinesis, chromosome
 from .parameter_calculator import ParameterCalculatorReproductionProcess
+from .allocation import AllocatorProcess  # noqa: F401
 
 _CORE_MODS = None
 
@@ -39,6 +40,8 @@ def all_process_classes() -> dict:
             if (name.endswith("ReproductionProcess") and issubclass(obj, Process)
                     and obj.__module__ == mod.__name__):
                 out[name] = obj
+    from . import allocation
+    out["AllocatorProcess"] = allocation.AllocatorProcess
     return out
 
 

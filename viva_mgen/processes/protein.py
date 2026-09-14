@@ -43,6 +43,7 @@ import numpy as np
 from process_bigraph import Process
 
 from viva_mgen import kb
+from .allocation import select_budget, demand_entry
 
 
 # ---------------------------------------------------------------------------
@@ -191,7 +192,9 @@ class ProteinTranslocationReproductionProcess(Process):
         "out: process_i_done (neg map), translocated (pos map), gtp (neg Δ).\n"
         "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); "
         "the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated "
-        "to the metabolite pools."
+        "to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator "
+        "(Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite "
+        "metabolism-replenished pool."
     )
 
     config_schema = {
@@ -199,17 +202,21 @@ class ProteinTranslocationReproductionProcess(Process):
         "translocase_specific_rate": {"_type": "float", "_default": 2.71e12},  # monomers / enzyme / s (non-limiting)
         "gtp_per_monomer": {"_type": "float", "_default": 2.0},  # SRP_GTPUsedPerMonomer
         "seed": {"_type": "integer", "_default": 12},
+        "consumer_id": {"_type": "string", "_default": "translocation"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"process_i_done": "map[float]", "translocase": "float", "gtp": "float"}
+        return {"process_i_done": "map[float]", "translocase": "float", "gtp": "float",
+                "alloc__gtp": "map[float]"}
 
     def outputs(self):
-        return {"process_i_done": "map[float]", "translocated": "map[float]", "gtp": "float"}
+        return {"process_i_done": "map[float]", "translocated": "map[float]", "gtp": "float",
+                "demand__gtp": "map[float]"}
 
     def initial_state(self):
         return {"process_i_done": {}, "translocase": 30.0, "gtp": 1e6}
@@ -219,9 +226,13 @@ class ProteinTranslocationReproductionProcess(Process):
         translocase = float(state.get("translocase", 0.0))
         gtp = float(state.get("gtp", 0.0))
         gtp_per = float(self.config["gtp_per_monomer"])
+        budget = select_budget(state.get("alloc__gtp", {}), self._cid)
         # capacity limited by translocase kinetics AND by GTP available for SRP
         enz_limit = translocase * float(self.config["translocase_specific_rate"]) * interval
-        gtp_limit = gtp / gtp_per if gtp_per > 0 else 0.0
+        total_src = sum(v for v in src.values() if v > 0.0)
+        want_n = min(enz_limit, total_src)  # unconstrained-by-GTP desired transforms
+        want_gtp = want_n * gtp_per
+        gtp_limit = min(gtp, budget) / gtp_per if gtp_per > 0 else 0.0  # gtp still bounds as a floor safety
         limit = min(enz_limit, gtp_limit)
         moved = _enzyme_limited_transform(self._rng, src, limit)
         n_total = sum(moved.values())
@@ -229,6 +240,7 @@ class ProteinTranslocationReproductionProcess(Process):
             "process_i_done": {g: -n for g, n in moved.items()},
             "translocated": {g: float(n) for g, n in moved.items()},
             "gtp": -float(n_total) * gtp_per,
+            "demand__gtp": demand_entry(self._cid, want_gtp),
         }
 
 
@@ -331,7 +343,9 @@ class ProteinFoldingReproductionProcess(Process):
         "Fidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\n"
         "carries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\n"
         "order-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\n"
-        "coordination is delegated to the metabolite pools."
+        "coordination is delegated to the metabolite pools. Consumption is arbitrated by the\n"
+        "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\n"
+        "ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
@@ -339,17 +353,21 @@ class ProteinFoldingReproductionProcess(Process):
         "chaperone_rate": {"_type": "float", "_default": 0.002},  # 1/s per chaperone
         "atp_per_fold": {"_type": "float", "_default": 7.0},  # ~7 ATP per GroEL cycle
         "seed": {"_type": "integer", "_default": 14},
+        "consumer_id": {"_type": "string", "_default": "protein_folding"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"unfolded": "map[float]", "chaperone_count": "float", "atp": "float"}
+        return {"unfolded": "map[float]", "chaperone_count": "float", "atp": "float",
+                "alloc__atp": "map[float]"}
 
     def outputs(self):
-        return {"unfolded": "map[float]", "folded": "map[float]", "atp": "float"}
+        return {"unfolded": "map[float]", "folded": "map[float]", "atp": "float",
+                "demand__atp": "map[float]"}
 
     def initial_state(self):
         return {"unfolded": {}, "chaperone_count": 100.0, "atp": 1e6}
@@ -362,13 +380,17 @@ class ProteinFoldingReproductionProcess(Process):
         chap = float(self.config["chaperone_rate"]) * cc
         rate = spont + chap
         if rate <= 0.0:
-            return {"unfolded": {}, "folded": {}, "atp": 0.0}
+            return {"unfolded": {}, "folded": {}, "atp": 0.0,
+                    "demand__atp": demand_entry(self._cid, 0.0)}
         # fraction folded this step (exponential approach); chaperone share needs ATP
         frac = 1.0 - np.exp(-rate * interval)
         chap_share = chap / rate  # fraction of folds that are chaperone-assisted
         cost = float(self.config["atp_per_fold"])
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        atp_cap = min(atp, budget)  # atp still bounds as a floor safety
         folded = {}
         atp_used = 0.0
+        want_n_chap_total = 0
         for g, v in unfolded.items():
             v = float(v)
             if v <= 0.0:
@@ -376,20 +398,23 @@ class ProteinFoldingReproductionProcess(Process):
             n = min(int(v), _stochastic_round(self._rng, v * frac))
             if n <= 0:
                 continue
-            # chaperone-assisted subset costs ATP; throttle by remaining ATP
+            # chaperone-assisted subset costs ATP; throttle by remaining budget
             n_chap = _stochastic_round(self._rng, n * chap_share)
+            want_n_chap_total += n_chap  # unconstrained-by-ATP chaperone-assisted want
             need = n_chap * cost
-            if atp_used + need > atp:
-                n_chap = int(max(0.0, (atp - atp_used) // cost)) if cost > 0 else 0
+            if atp_used + need > atp_cap:
+                n_chap = int(max(0.0, (atp_cap - atp_used) // cost)) if cost > 0 else 0
                 # spontaneous folds still proceed for this species
                 n = min(n, (n - n_chap) + n_chap)
                 need = n_chap * cost
             atp_used += need
             folded[g] = float(n)
+        want_atp = want_n_chap_total * cost
         return {
             "unfolded": {g: -n for g, n in folded.items()},
             "folded": dict(folded),
             "atp": -atp_used,
+            "demand__atp": demand_entry(self._cid, want_atp),
         }
 
 
@@ -423,24 +448,30 @@ class ProteinModificationReproductionProcess(Process):
         "out: unmodified (neg map), modified (pos map), atp (neg Δ).\n"
         "Fidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\n"
         "ProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\n"
-        "the per-reaction cofactor stoichiometry is delegated to the metabolite pools."
+        "the per-reaction cofactor stoichiometry is delegated to the metabolite pools. Consumption\n"
+        "is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each\n"
+        "tick at its allocated ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
         "modification_specific_rate": {"_type": "float", "_default": 6.0},  # transforms / enzyme / s
         "atp_per_modification": {"_type": "float", "_default": 1.0},
         "seed": {"_type": "integer", "_default": 15},
+        "consumer_id": {"_type": "string", "_default": "protein_modification"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"unmodified": "map[float]", "modification_enzyme": "float", "atp": "float"}
+        return {"unmodified": "map[float]", "modification_enzyme": "float", "atp": "float",
+                "alloc__atp": "map[float]"}
 
     def outputs(self):
-        return {"unmodified": "map[float]", "modified": "map[float]", "atp": "float"}
+        return {"unmodified": "map[float]", "modified": "map[float]", "atp": "float",
+                "demand__atp": "map[float]"}
 
     def initial_state(self):
         return {"unmodified": {}, "modification_enzyme": 20.0, "atp": 1e6}
@@ -451,7 +482,10 @@ class ProteinModificationReproductionProcess(Process):
         atp = float(state.get("atp", 0.0))
         cost = float(self.config["atp_per_modification"])
         enz_limit = enzyme * float(self.config["modification_specific_rate"]) * interval
-        atp_limit = atp / cost if cost > 0 else float("inf")
+        want_atp = enz_limit * cost  # unconstrained-by-ATP desired modification demand
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        atp_cap = min(atp, budget)  # atp still bounds as a floor safety
+        atp_limit = atp_cap / cost if cost > 0 else float("inf")
         limit = min(enz_limit, atp_limit)
         moved = _enzyme_limited_transform(self._rng, src, limit)
         n_total = sum(moved.values())
@@ -459,6 +493,7 @@ class ProteinModificationReproductionProcess(Process):
             "unmodified": {g: -n for g, n in moved.items()},
             "modified": {g: float(n) for g, n in moved.items()},
             "atp": -float(n_total) * cost,
+            "demand__atp": demand_entry(self._cid, want_atp),
         }
 
 
@@ -691,17 +726,21 @@ class RibosomeAssemblyReproductionProcess(Process):
         "out: ribosome_30S (float Δ), ribosome_50S (float Δ), rprotein_counts (neg map), "
         "rrna_counts (neg map), gtp (neg Δ).\n"
         "Fidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); "
-        "water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere)."
+        "water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere). "
+        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): "
+        "capped each tick at its allocated GTP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
         "gtp_per_complex": {"_type": "float", "_default": 2.0},
         "seed": {"_type": "integer", "_default": 18},
+        "consumer_id": {"_type": "string", "_default": "ribosome_assembly"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
         return {
@@ -709,6 +748,7 @@ class RibosomeAssemblyReproductionProcess(Process):
             "rrna_counts": "map[float]",
             "assembly_factor": "float",
             "gtp": "float",
+            "alloc__gtp": "map[float]",
         }
 
     def outputs(self):
@@ -718,6 +758,7 @@ class RibosomeAssemblyReproductionProcess(Process):
             "rprotein_counts": "map[float]",
             "rrna_counts": "map[float]",
             "gtp": "float",
+            "demand__gtp": "map[float]",
         }
 
     def initial_state(self):
@@ -731,13 +772,44 @@ class RibosomeAssemblyReproductionProcess(Process):
         limits += [rrna.get(r, 0.0) for r in rrna_keys]
         return int(max(0.0, np.floor(min(limits))))
 
+    def _desired_subunits(self, rprot, rrna, factor):
+        """Total subunits assembly could form this step limited only by rProtein/
+        rRNA/assembly-factor availability (GTP unconstrained) — the pre-budget
+        'want' for demand__gtp."""
+        specs = [("30S", _RIBOSOME_30S), ("50S", _RIBOSOME_50S)]
+        prot_used, rrna_used = {}, {}
+        total = 0
+        for name, spec in specs:
+            n = self._assemble(
+                {p: rprot.get(p, 0.0) + prot_used.get(p, 0.0) for p in spec["rproteins"]},
+                rrna, factor, float("inf"), spec,
+            )
+            rrna_keys = spec["rrna"] if isinstance(spec["rrna"], list) else [spec["rrna"]]
+            for p in spec["rproteins"]:
+                remaining = rprot.get(p, 0.0) + prot_used.get(p, 0.0)
+                n = min(n, int(max(0.0, np.floor(remaining))))
+            for r in rrna_keys:
+                remaining = rrna.get(r, 0.0) + rrna_used.get(r, 0.0)
+                n = min(n, int(max(0.0, np.floor(remaining))))
+            if n <= 0:
+                continue
+            for p in spec["rproteins"]:
+                prot_used[p] = prot_used.get(p, 0.0) - n
+            for r in rrna_keys:
+                rrna_used[r] = rrna_used.get(r, 0.0) - n
+            total += n
+        return total
+
     def update(self, state, interval):
         rprot = {k: float(v) for k, v in (state.get("rprotein_counts", {}) or {}).items()}
         rrna = {k: float(v) for k, v in (state.get("rrna_counts", {}) or {}).items()}
         factor = float(state.get("assembly_factor", 0.0))
         gtp = float(state.get("gtp", 0.0))
         gtp_per = float(self.config["gtp_per_complex"])
-        gtp_cap = gtp / gtp_per if gtp_per > 0 else 0.0
+        budget = select_budget(state.get("alloc__gtp", {}), self._cid)
+        gtp_cap = min(gtp, budget) / gtp_per if gtp_per > 0 else 0.0  # gtp still bounds as a floor safety
+        desired_subunits = self._desired_subunits(rprot, rrna, factor)
+        want_gtp = desired_subunits * gtp_per
 
         prot_used = {}
         rrna_used = {}
@@ -781,6 +853,7 @@ class RibosomeAssemblyReproductionProcess(Process):
             "rprotein_counts": prot_used,
             "rrna_counts": rrna_used,
             "gtp": -gtp_used,
+            "demand__gtp": demand_entry(self._cid, want_gtp),
         }
 
 
