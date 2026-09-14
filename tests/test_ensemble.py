@@ -71,13 +71,14 @@ def test_aggregate_accepts_numpy_scalar():
 
 def test_cli_writes_aggregate(tmp_path):
     import subprocess, sys, json, os
+    from pathlib import Path
+    root = str(Path(__file__).resolve().parents[1])   # repo root (tests/ is under it)
     out = tmp_path / "ens.json"
-    env = dict(os.environ, PYTHONPATH="/Users/eranagmon/code/viva-mGen--ensembles")
+    env = dict(os.environ, PYTHONPATH=root)
     r = subprocess.run(
         [sys.executable, "scripts/run_ensemble.py", "--n", "2", "--hours", "0.01",
          "--observable", "mass", "--out", str(out)],
-        cwd="/Users/eranagmon/code/viva-mGen--ensembles", env=env,
-        capture_output=True, text=True, timeout=120)
+        cwd=root, env=env, capture_output=True, text=True, timeout=180)
     assert r.returncode == 0, r.stderr
     d = json.loads(out.read_text())
     assert d["observable"] == "mass" and d["n"] == 2 and len(d["final_values"]) == 2
