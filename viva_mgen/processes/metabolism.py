@@ -73,7 +73,12 @@ class MetabolismFbaReproductionProcess(Process):
         "(growth_rate ÷ wild-type, the calibrated unit-free growth the mass submodel "
         "integrates), atp_production (ATP-synthase ATPS4r flux), gtp_production "
         "(summed GTP-linked kinase/transport flux: NDPK1/NDPK2 nucleoside-diphosphate "
-        "kinases, GK1 guanylate kinase, GTPtp transport), feasible ∈ {0,1}.\n"
+        "kinases, GK1 guanylate kinase, GTPtp transport), feasible ∈ {0,1}; and the "
+        "precursor SUPPLY rates atp/gtp/ntp/amino_acid_supply (molecules/s = "
+        "base_supply·growth_fraction) that replenish the resource allocator's finite "
+        "pools. GTP supply is the calibrated translation throttle (~2 GTP/peptide "
+        "bond), fitted to Karr's ~70% protein dry-mass fraction; the raw FBA "
+        "atp/gtp_production flux drives Fig 5 and is independent of these knobs.\n"
         "Fidelity: FULL — the genuine published reconstruction the WCM's metabolism "
         "submodel was built on.\n"
         "Reaction bounds can also be dynamically gated by the live proteome relative to "
@@ -90,8 +95,20 @@ class MetabolismFbaReproductionProcess(Process):
         "disrupted_genes": {"_type": "list[string]", "_default": []},
         # reaction_id -> multiplicative scale on its flux upper bound (Fig 7)
         "reaction_bound_scale": {"_type": "map[float]", "_default": {}},
-        # base precursor supply per tick (molecules), scaled by growth_fraction —
-        # the metabolism->transcription/translation precursor coupling.
+        # base precursor supply RATE (molecules/second), scaled by growth_fraction
+        # — the metabolism->expression precursor coupling that replenishes the
+        # finite pools the resource allocator partitions. atp/gtp are the calibrated
+        # energy-carrier throttles: GTP supply sets the sustainable translation rate
+        # (~2 GTP/peptide bond), so gtp_base_supply is fitted to Karr's ~70% protein
+        # dry-mass fraction (see docs/FIDELITY_GAPS.md gap #2). The raw FBA ATP/GTP
+        # SYNTHESIS flux is reported separately (atp_production/gtp_production) for
+        # the Fig 5 energy budget and is unaffected by these supply knobs.
+        "atp_base_supply": {"_type": "float", "_default": 1.0e6},
+        # gtp_base_supply fitted so the emergent protein:DNA:RNA dry-mass fractions
+        # land on Karr's ~0.70:0.19:0.11 (fig2 report-card bands); GTP demand from
+        # translation exceeds supply, so this rate sets the sustainable protein
+        # synthesis. See docs/FIDELITY_GAPS.md gap #2.
+        "gtp_base_supply": {"_type": "float", "_default": 13000.0},
         "ntp_base_supply": {"_type": "float", "_default": 1.0e6},
         "amino_acid_base_supply": {"_type": "float", "_default": 1.0e6},
         # optional enzyme-gating coupling: scale each reaction's flux bound by
@@ -134,11 +151,16 @@ class MetabolismFbaReproductionProcess(Process):
         return {
             "growth_rate": "overwrite[float]",
             "growth_fraction": "overwrite[float]",
+            # raw FBA synthesis flux (iPS189 units) — Fig 5 energy-carrier ratio
             "atp_production": "overwrite[float]",
             "gtp_production": "overwrite[float]",
             "feasible": "overwrite[float]",
-            "ntp_production": "overwrite[float]",
-            "amino_acid_production": "overwrite[float]",
+            # precursor SUPPLY rates (molecules/s) feeding the resource allocator's
+            # finite pools — base_supply * growth_fraction
+            "atp_supply": "overwrite[float]",
+            "gtp_supply": "overwrite[float]",
+            "ntp_supply": "overwrite[float]",
+            "amino_acid_supply": "overwrite[float]",
         }
 
     def initial_state(self):
@@ -200,14 +222,16 @@ class MetabolismFbaReproductionProcess(Process):
             for rid in ("NDPK1", "NDPK2", "GK1", "GTPtp"):
                 gtp += abs(self._flux(sol, rid))
         gf = growth / self._wt if self._wt else 0.0
-        ntp_prod = float(self.config["ntp_base_supply"]) * gf
-        aa_prod = float(self.config["amino_acid_base_supply"]) * gf
         return {
             "growth_rate": growth,
             "growth_fraction": gf,
+            # raw FBA synthesis flux — the Fig 5 energy-carrier signal (unscaled)
             "atp_production": atp,
             "gtp_production": gtp,
             "feasible": 1.0 if growth > 1e-6 else 0.0,
-            "ntp_production": ntp_prod,
-            "amino_acid_production": aa_prod,
+            # precursor supply RATES (molecules/s) for the allocator's finite pools
+            "atp_supply": float(self.config["atp_base_supply"]) * gf,
+            "gtp_supply": float(self.config["gtp_base_supply"]) * gf,
+            "ntp_supply": float(self.config["ntp_base_supply"]) * gf,
+            "amino_acid_supply": float(self.config["amino_acid_base_supply"]) * gf,
         }

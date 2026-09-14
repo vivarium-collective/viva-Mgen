@@ -51,24 +51,31 @@ def test_allocator_replenishes_and_partitions(core):
     ins = proc.inputs()
     outs = proc.outputs()
     assert ins["atp"] == "float"
-    assert ins["atp_production"] == "float"
+    assert ins["atp_supply"] == "float"  # production RATE (molecules/s)
     assert ins["demand__atp"] == "map[float]"
     assert outs["atp"] == "float"
     assert outs["alloc__atp"] == "overwrite[map[float]]"
-    # Test arithmetic: supply available = level(5) + production(25) = 30; demands 20+40=60 -> proportional
-    state = {"atp": 5.0, "atp_production": 25.0,
+    # Test arithmetic: supply rate 25/s * interval 1s = 25 produced; available =
+    # level(5) + 25 = 30; demands 20+40=60 -> proportional a=10, b=20
+    state = {"atp": 5.0, "atp_supply": 25.0,
              "demand__atp": {"a": 20.0, "b": 40.0}}
     out = proc.update(state, 1.0)
     assert out["alloc__atp"]["a"] == 10.0 and out["alloc__atp"]["b"] == 20.0
     # pool replenished by production this tick (consumers draw it down elsewhere)
     assert out["atp"] == 25.0
+    # interval-scaling: same rate over a 300 s tick produces 300x as much
+    out300 = proc.update({"atp": 0.0, "atp_supply": 25.0, "demand__atp": {}}, 300.0)
+    assert out300["atp"] == 7500.0
 
 
 def test_metabolism_emits_precursor_supply():
     from viva_mgen.processes.metabolism import MetabolismFbaReproductionProcess
     out = MetabolismFbaReproductionProcess.outputs(
         MetabolismFbaReproductionProcess.__new__(MetabolismFbaReproductionProcess))
-    assert "ntp_production" in out and "amino_acid_production" in out
+    # precursor SUPPLY rates feed the allocator; raw FBA flux stays as *_production
+    assert "ntp_supply" in out and "amino_acid_supply" in out
+    assert "atp_supply" in out and "gtp_supply" in out
+    assert "atp_production" in out and "gtp_production" in out  # FBA flux (Fig 5)
 
 
 def test_allocator_demand_output_negates_input_no_accumulation(core):
@@ -79,7 +86,7 @@ def test_allocator_demand_output_negates_input_no_accumulation(core):
     proc = AllocatorProcess(config={"pools": ["atp"]}, core=core)
     assert proc.outputs()["demand__atp"] == "map[float]"
 
-    state = {"atp": 100.0, "atp_production": 0.0, "demand__atp": {"a": 10.0}}
+    state = {"atp": 100.0, "atp_supply": 0.0, "demand__atp": {"a": 10.0}}
     out1 = proc.update(state, 1.0)
     # the allocator's demand__atp output negates exactly what it read
     assert out1["demand__atp"] == {"a": -10.0}
@@ -90,7 +97,7 @@ def test_allocator_demand_output_negates_input_no_accumulation(core):
     stored_demand = 10.0 + out1["demand__atp"]["a"] + 10.0
     assert stored_demand == 10.0  # no accumulation
 
-    out2 = proc.update({"atp": 100.0, "atp_production": 0.0,
+    out2 = proc.update({"atp": 100.0, "atp_supply": 0.0,
                         "demand__atp": {"a": stored_demand}}, 1.0)
     assert out2["alloc__atp"] == alloc1  # identical allocation, not doubled
     assert out2["demand__atp"] == {"a": -10.0}

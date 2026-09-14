@@ -84,8 +84,9 @@ class TranslationReproductionProcess(Process):
         cost = float(self.config["gtp_per_protein"])
         budget = select_budget(state.get("alloc__gtp", {}), self._cid)
         gtp_cap = min(gtp_avail, budget)  # gtp_avail still bounds as a floor safety
-        new_counts = {}
-        gtp_used = 0.0
+        # 1) draw each gene's would-be synthesis (Poisson in its mRNA copies) and
+        #    the whole-process GTP demand, independent of the budget.
+        drawn = {}
         want_gtp = 0.0
         for gene, rate in self._rates.items():
             copies = float(mrna.get(gene, 0.0))
@@ -94,15 +95,24 @@ class TranslationReproductionProcess(Process):
             expected = rate * copies * interval
             want_gtp += expected * cost  # pre-clamp Poisson-expectation GTP demand
             n = int(self._rng.poisson(max(expected, 0.0)))
-            if n <= 0:
+            if n > 0:
+                drawn[gene] = n
+        # 2) share the GTP budget PROPORTIONALLY across genes rather than
+        #    first-come per dict order — otherwise whichever high-demand gene is
+        #    visited first monopolizes the whole budget and starves the rest
+        #    (Karr's translation spreads elongation across all mRNAs; no single
+        #    gene consumes all ribosomes/GTP). When the draw fits in budget every
+        #    gene translates in full; when it does not, each gene keeps the same
+        #    fraction of its draw.
+        total_need = sum(n * cost for n in drawn.values())
+        scale = 1.0 if total_need <= gtp_cap else (gtp_cap / total_need if total_need > 0 else 0.0)
+        new_counts = {}
+        gtp_used = 0.0
+        for gene, n in drawn.items():
+            m = n if scale >= 1.0 else int(n * scale)
+            if m <= 0:
                 continue
-            need = n * cost
-            if gtp_used + need > gtp_cap:
-                n = int(max(0, (gtp_cap - gtp_used) // cost))
-                need = n * cost
-            if n <= 0:
-                continue
-            new_counts[gene] = float(n)
-            gtp_used += need
+            new_counts[gene] = float(m)
+            gtp_used += m * cost
         return {"protein_counts": new_counts, "gtp": -gtp_used,
                 "demand__gtp": demand_entry(self._cid, want_gtp)}
