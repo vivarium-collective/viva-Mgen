@@ -102,3 +102,24 @@ def protein_decay_rates() -> dict:
 
 def gene_lengths() -> dict:
     return {g: float(v[4]) for g, v in REPRESENTATIVE_GENES.items()}
+
+
+def reference_protein_counts() -> dict:
+    """Expected steady-state protein count per gene, from the panel:
+    mRNA_ss = synthesis_rate / mrna_decay_rate; protein_ss = translation_rate * mRNA_ss / protein_decay_rate.
+    Keyed like protein_counts (gene symbol/id). Used as the reference the dynamic
+    metabolism coupling scales the live proteome against."""
+    synth = synthesis_rates()
+    mdec = mrna_decay_rates()
+    transl = translation_rates()
+    pdec = protein_decay_rates()
+    out = {}
+    for g in synth:
+        md = mdec.get(g, 0.0)
+        pd = pdec.get(g, 0.0)
+        if md <= 0 or pd <= 0:
+            out[g] = 0.0
+            continue
+        mrna_ss = synth[g] / md
+        out[g] = transl.get(g, 0.0) * mrna_ss / pd
+    return out

@@ -75,7 +75,13 @@ class MetabolismFbaReproductionProcess(Process):
         "(summed GTP-linked kinase/transport flux: NDPK1/NDPK2 nucleoside-diphosphate "
         "kinases, GK1 guanylate kinase, GTPtp transport), feasible ∈ {0,1}.\n"
         "Fidelity: FULL — the genuine published reconstruction the WCM's metabolism "
-        "submodel was built on."
+        "submodel was built on.\n"
+        "Reaction bounds can also be dynamically gated by the live proteome relative to "
+        "a steady-state reference (enzyme_coupling) — the graded generalization of the "
+        "discrete gene knockout above, scaling each gene-associated reaction's bound by "
+        "its enzyme's current abundance over the reference instead of an all-or-nothing "
+        "cut. Off by default pending birth-proteome seeding; the absolute kcat·[enzyme] "
+        "form awaits the KB kcats (gap #5)."
     )
 
     config_schema = {
@@ -88,6 +94,12 @@ class MetabolismFbaReproductionProcess(Process):
         # the metabolism->transcription/translation precursor coupling.
         "ntp_base_supply": {"_type": "float", "_default": 1.0e6},
         "amino_acid_base_supply": {"_type": "float", "_default": 1.0e6},
+        # optional enzyme-gating coupling: scale each reaction's flux bound by
+        # the live proteome relative to a steady-state reference (default off)
+        "enzyme_coupling": {"_type": "boolean", "_default": False},
+        "reference_protein_counts": {"_type": "map[float]", "_default": {}},
+        "enzyme_coupling_floor": {"_type": "float", "_default": 0.0},
+        "enzyme_coupling_cap": {"_type": "float", "_default": 1.0},
     }
 
     def __init__(self, config=None, core=None):
@@ -96,9 +108,27 @@ class MetabolismFbaReproductionProcess(Process):
         self._wt = _wt_growth(self.config["sbml_path"] or None) or 1.0
         # normalized-id -> model gene id
         self._gene_index = {normalize_gene_id(g.id): g.id for g in self._model.genes}
+        self._enzyme_coupling = bool(self.config["enzyme_coupling"])
+        # panel-key (symbol-or-id, as expression_defaults keys its panel) ->
+        # normalized model locus tag, so protein_counts/reference_protein_counts
+        # (keyed by symbol) can be matched against model.genes (keyed by locus tag)
+        from ..kb import load_genes
+        panel_to_locus = {}
+        for gg in load_genes():
+            key = (gg.get("symbol") or "").strip() or gg["gene_id"]
+            panel_to_locus[key] = normalize_gene_id(gg["gene_id"])
+        self._panel_to_locus = panel_to_locus
+        # re-key the reference into locus-tag space (matches model.genes ids)
+        self._ref_norm = {}
+        for pk, v in (self.config["reference_protein_counts"] or {}).items():
+            if float(v) > 0:
+                loc = panel_to_locus.get(pk, normalize_gene_id(pk))
+                self._ref_norm[loc] = float(v)
+        self._floor = float(self.config["enzyme_coupling_floor"])
+        self._cap = float(self.config["enzyme_coupling_cap"])
 
     def inputs(self):
-        return {"nutrient_scale": "float"}
+        return {"nutrient_scale": "float", "protein_counts": "map[float]"}
 
     def outputs(self):
         return {
@@ -112,7 +142,7 @@ class MetabolismFbaReproductionProcess(Process):
         }
 
     def initial_state(self):
-        return {"nutrient_scale": 1.0}
+        return {"nutrient_scale": 1.0, "protein_counts": {}}
 
     def _flux(self, sol, rxn_id, default=0.0):
         try:
@@ -142,6 +172,24 @@ class MetabolismFbaReproductionProcess(Process):
                 for r in model.reactions:
                     if r.boundary and r.lower_bound < 0:
                         r.lower_bound = r.lower_bound * scale
+            # optional enzyme-gating coupling: scale each reaction's flux bound
+            # by the live proteome relative to a steady-state reference
+            if self._enzyme_coupling and self._ref_norm:
+                live = {}
+                for pk, c in (state.get("protein_counts", {}) or {}).items():
+                    loc = self._panel_to_locus.get(pk, normalize_gene_id(pk))
+                    live[loc] = live.get(loc, 0.0) + float(c)
+                for r in model.reactions:
+                    genes = [normalize_gene_id(g.id) for g in r.genes]
+                    ratios = [min(live.get(ng, 0.0) / self._ref_norm[ng], self._cap)
+                              for ng in genes if ng in self._ref_norm]
+                    if not ratios:
+                        continue
+                    factor = max(self._floor, min(ratios))
+                    if r.upper_bound > 0:
+                        r.upper_bound = r.upper_bound * factor
+                    if r.lower_bound < 0:
+                        r.lower_bound = r.lower_bound * factor
             sol = model.optimize()
 
         growth = float(sol.objective_value or 0.0) if sol.status == "optimal" else 0.0

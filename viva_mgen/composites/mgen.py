@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from process_bigraph.composite_generator import composite_generator
 
-from ..expression_defaults import DEFAULT_GENES
+from ..expression_defaults import DEFAULT_GENES, reference_protein_counts
 from ..processes import all_process_classes
 
 # class name -> composite node name
@@ -222,7 +222,7 @@ def _store_key(cls_name, port):
 
 def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
                reaction_bound_scale=None, initial_dnaA=0.0, initial_dntp=0.0,
-               seed=0, interval=1.0):
+               seed=0, interval=1.0, enzyme_coupling: bool = False):
     """Return the integrated 28-submodel M. genitalium composite document."""
     if core is None:
         # port introspection below instantiates each process, which needs a core;
@@ -232,7 +232,9 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
     classes = all_process_classes()
     configs = {
         "metabolism": {"disrupted_genes": list(disrupted_genes or []),
-                       "reaction_bound_scale": dict(reaction_bound_scale or {})},
+                       "reaction_bound_scale": dict(reaction_bound_scale or {}),
+                       "enzyme_coupling": enzyme_coupling,
+                       "reference_protein_counts": reference_protein_counts()},
         "transcription": {"seed": seed},
         "translation": {"seed": seed + 1},
         "replication": {"initial_dnaA": initial_dnaA, "initial_dntp": initial_dntp, "seed": seed},
@@ -294,6 +296,8 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         "initial_dntp": {"type": "float", "default": 0.0,
                          "description": "dNTP molecules at birth (Fig 4)"},
         "seed": {"type": "integer", "default": 0, "description": "Stochastic seed"},
+        "enzyme_coupling": {"type": "boolean", "default": False,
+                           "description": "Gate metabolism's reaction bounds by the live proteome vs a steady-state reference (off by default)"},
     },
     emitters=[{"address": "local:ParquetEmitter",
                "paths": ["cell/physiology/mass", "cell/physiology/growth_fraction",
@@ -302,9 +306,9 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
                          "cell/genome/replicated_fraction", "cell/metabolism/dntp_pool"]}],
 )
 def mycoplasma_genitalium(core=None, *, nutrient_scale=1.0, initial_dnaA=0.0,
-                          initial_dntp=0.0, seed=0):
+                          initial_dntp=0.0, seed=0, enzyme_coupling: bool = False):
     return build_mgen(core, nutrient_scale=nutrient_scale, initial_dnaA=initial_dnaA,
-                      initial_dntp=initial_dntp, seed=seed)
+                      initial_dntp=initial_dntp, seed=seed, enzyme_coupling=enzyme_coupling)
 
 
 def build_parca(core=None, *, seed=0, interval=1.0):
