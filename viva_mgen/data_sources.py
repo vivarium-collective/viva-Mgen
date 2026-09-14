@@ -67,6 +67,9 @@ _FILES = [
      "(32/37/43 C). Row order matches genes.csv; consumed by the ParCa "
      "(viva_mgen.parca)."),
     ("karr-2012-supplement", "workspace/references/papers/Karr2012_supplementary_information.pdf", "reference"),
+    ("karr-reference-values", "datasets/karr_reference_values.json", "reference",
+     "Curated Karr 2012 reported quantitative results — targets + tolerance bands "
+     "the study report cards gate against."),
     ("constant-provenance", "datasets/constant_provenance.json", "parameters",
      "Per-constant source-tier audit (real_kb / real_supplement / order_of_magnitude / "
      "irreducible) of every numeric kinetic constant across all process config_schemas, "

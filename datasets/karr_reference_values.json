@@ -1,0 +1,10 @@
+{
+  "source": "Karr et al. 2012, Cell 150:389-401 — reported quantitative results",
+  "values": {
+    "mass_fraction_protein": {"description": "protein fraction of macromolecular dry mass", "target": 0.705, "band": [0.55, 0.80], "unit": "fraction", "source": "Karr 2012 cell composition (protein 0.62 of total; 0.705 renormalized over protein+DNA+RNA)", "observable": "emergent_protein_fraction"},
+    "mass_fraction_dna": {"description": "DNA fraction of macromolecular dry mass", "target": 0.192, "band": [0.10, 0.35], "unit": "fraction", "source": "Karr 2012 (DNA 0.169 of total; 0.192 renormalized)", "observable": "emergent_dna_fraction"},
+    "mass_fraction_rna": {"description": "RNA fraction of macromolecular dry mass", "target": 0.106, "band": [0.05, 0.25], "unit": "fraction", "source": "Karr 2012 (RNA 0.093 of total; 0.106 renormalized)", "observable": "emergent_rna_fraction"},
+    "single_cell_mrna_cv": {"description": "coefficient of variation of per-cell total mRNA across independent cells", "target": 0.3, "band": [0.001, 1.5], "unit": "cv", "source": "Karr 2012 Fig 2 single-cell distributions (bursty low-copy mRNA)", "observable": "single_cell_mrna_cv"},
+    "doubling_time_h": {"description": "cell-cycle length", "target": 9.0, "band": [7.0, 11.0], "unit": "h", "source": "Karr 2012 Fig 2A (mean tau = 9.0 h)", "observable": "doubling_time_h"}
+  }
+}
