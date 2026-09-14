@@ -12,12 +12,12 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
 
 ## Status
 
-- [~] **Gap 1 — Resource-allocation layer.** IN PROGRESS (branch
+- [x] **Gap 1 — Resource-allocation layer.** DONE (merged #13) (branch
   `feat/resource-allocation`). Finite metabolite pools replenished by metabolism,
   partitioned among the submodels each tick by a central allocator
   (demand → allocate → run). Spec: `2026-09-14-resource-allocation-design.md`.
 
-- [ ] **Gap 2 — Emergent mass + whole-cell conservation.**
+- [x] **Gap 2 — Emergent mass + whole-cell conservation.** DONE (merged #14, macromolecule composition; division-driving deferred).
   Today `MassGrowth` grows mass phenomenologically (exp growth × `growth_fraction`,
   split by fixed dry-weight fractions). Make total mass the **emergent**
   Σ(species count × molecular weight) over the actual molecular inventory
@@ -27,7 +27,7 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   and MWs; the fitted fractions become an emergent *output* to validate against,
   not an input. Depends on Gap 1 (finite pools) being in. Size: L.
 
-- [ ] **Gap 6 — Dynamic metabolism ↔ proteome coupling.**
+- [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
   FBA runs over the real iPS189 network but with static bounds; the original
   updates each reaction's flux bound from **current enzyme copy numbers** every
   tick. Wire metabolic-enzyme protein counts → per-reaction `v_max` bounds each
