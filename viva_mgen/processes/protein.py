@@ -43,6 +43,7 @@ import numpy as np
 from process_bigraph import Process
 
 from viva_mgen import kb
+from .allocation import select_budget, demand_entry
 
 
 # ---------------------------------------------------------------------------
@@ -339,17 +340,21 @@ class ProteinFoldingReproductionProcess(Process):
         "chaperone_rate": {"_type": "float", "_default": 0.002},  # 1/s per chaperone
         "atp_per_fold": {"_type": "float", "_default": 7.0},  # ~7 ATP per GroEL cycle
         "seed": {"_type": "integer", "_default": 14},
+        "consumer_id": {"_type": "string", "_default": "protein_folding"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"unfolded": "map[float]", "chaperone_count": "float", "atp": "float"}
+        return {"unfolded": "map[float]", "chaperone_count": "float", "atp": "float",
+                "alloc__atp": "map[float]"}
 
     def outputs(self):
-        return {"unfolded": "map[float]", "folded": "map[float]", "atp": "float"}
+        return {"unfolded": "map[float]", "folded": "map[float]", "atp": "float",
+                "demand__atp": "map[float]"}
 
     def initial_state(self):
         return {"unfolded": {}, "chaperone_count": 100.0, "atp": 1e6}
@@ -362,13 +367,17 @@ class ProteinFoldingReproductionProcess(Process):
         chap = float(self.config["chaperone_rate"]) * cc
         rate = spont + chap
         if rate <= 0.0:
-            return {"unfolded": {}, "folded": {}, "atp": 0.0}
+            return {"unfolded": {}, "folded": {}, "atp": 0.0,
+                    "demand__atp": demand_entry(self._cid, 0.0)}
         # fraction folded this step (exponential approach); chaperone share needs ATP
         frac = 1.0 - np.exp(-rate * interval)
         chap_share = chap / rate  # fraction of folds that are chaperone-assisted
         cost = float(self.config["atp_per_fold"])
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        atp_cap = min(atp, budget)  # atp still bounds as a floor safety
         folded = {}
         atp_used = 0.0
+        want_n_chap_total = 0
         for g, v in unfolded.items():
             v = float(v)
             if v <= 0.0:
@@ -376,20 +385,23 @@ class ProteinFoldingReproductionProcess(Process):
             n = min(int(v), _stochastic_round(self._rng, v * frac))
             if n <= 0:
                 continue
-            # chaperone-assisted subset costs ATP; throttle by remaining ATP
+            # chaperone-assisted subset costs ATP; throttle by remaining budget
             n_chap = _stochastic_round(self._rng, n * chap_share)
+            want_n_chap_total += n_chap  # unconstrained-by-ATP chaperone-assisted want
             need = n_chap * cost
-            if atp_used + need > atp:
-                n_chap = int(max(0.0, (atp - atp_used) // cost)) if cost > 0 else 0
+            if atp_used + need > atp_cap:
+                n_chap = int(max(0.0, (atp_cap - atp_used) // cost)) if cost > 0 else 0
                 # spontaneous folds still proceed for this species
                 n = min(n, (n - n_chap) + n_chap)
                 need = n_chap * cost
             atp_used += need
             folded[g] = float(n)
+        want_atp = want_n_chap_total * cost
         return {
             "unfolded": {g: -n for g, n in folded.items()},
             "folded": dict(folded),
             "atp": -atp_used,
+            "demand__atp": demand_entry(self._cid, want_atp),
         }
 
 
@@ -430,17 +442,21 @@ class ProteinModificationReproductionProcess(Process):
         "modification_specific_rate": {"_type": "float", "_default": 6.0},  # transforms / enzyme / s
         "atp_per_modification": {"_type": "float", "_default": 1.0},
         "seed": {"_type": "integer", "_default": 15},
+        "consumer_id": {"_type": "string", "_default": "protein_modification"},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
-        return {"unmodified": "map[float]", "modification_enzyme": "float", "atp": "float"}
+        return {"unmodified": "map[float]", "modification_enzyme": "float", "atp": "float",
+                "alloc__atp": "map[float]"}
 
     def outputs(self):
-        return {"unmodified": "map[float]", "modified": "map[float]", "atp": "float"}
+        return {"unmodified": "map[float]", "modified": "map[float]", "atp": "float",
+                "demand__atp": "map[float]"}
 
     def initial_state(self):
         return {"unmodified": {}, "modification_enzyme": 20.0, "atp": 1e6}
@@ -451,7 +467,10 @@ class ProteinModificationReproductionProcess(Process):
         atp = float(state.get("atp", 0.0))
         cost = float(self.config["atp_per_modification"])
         enz_limit = enzyme * float(self.config["modification_specific_rate"]) * interval
-        atp_limit = atp / cost if cost > 0 else float("inf")
+        want_atp = enz_limit * cost  # unconstrained-by-ATP desired modification demand
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        atp_cap = min(atp, budget)  # atp still bounds as a floor safety
+        atp_limit = atp_cap / cost if cost > 0 else float("inf")
         limit = min(enz_limit, atp_limit)
         moved = _enzyme_limited_transform(self._rng, src, limit)
         n_total = sum(moved.values())
@@ -459,6 +478,7 @@ class ProteinModificationReproductionProcess(Process):
             "unmodified": {g: -n for g, n in moved.items()},
             "modified": {g: float(n) for g, n in moved.items()},
             "atp": -float(n_total) * cost,
+            "demand__atp": demand_entry(self._cid, want_atp),
         }
 
 

@@ -31,6 +31,7 @@ from process_bigraph import Process
 
 from ..expression_defaults import DEFAULT_GENES
 from ..kb import karr_process_params
+from .allocation import select_budget, demand_entry
 
 
 def _rnase_rates() -> dict:
@@ -352,6 +353,7 @@ class TRNAAminoacylationReproductionProcess(Process):
         "synthetase_kcat": {"_type": "float", "_default": 20.0},  # charges / synthetase / second
         "atp_per_charge": {"_type": "float", "_default": 1.0},    # 1 ATP per aminoacylation
         "seed": {"_type": "integer", "_default": 3},
+        "consumer_id": {"_type": "string", "_default": "trna_aminoacylation"},
     }
 
     def __init__(self, config=None, core=None):
@@ -359,6 +361,7 @@ class TRNAAminoacylationReproductionProcess(Process):
         self._kcat = float(self.config["synthetase_kcat"])
         self._atp_cost = float(self.config["atp_per_charge"])
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        self._cid = self.config["consumer_id"]
 
     def inputs(self):
         return {
@@ -366,6 +369,7 @@ class TRNAAminoacylationReproductionProcess(Process):
             "amino_acid": "float",
             "atp": "float",
             "synthetase": "float",
+            "alloc__atp": "map[float]",
         }
 
     def outputs(self):
@@ -373,6 +377,7 @@ class TRNAAminoacylationReproductionProcess(Process):
             "free_trna": "map[float]",
             "aminoacylated_trna": "map[float]",
             "atp": "float",
+            "demand__atp": "map[float]",
         }
 
     def initial_state(self):
@@ -382,20 +387,27 @@ class TRNAAminoacylationReproductionProcess(Process):
         free = {k: float(v) for k, v in (state.get("free_trna", {}) or {}).items() if float(v) > 0}
         total_free = sum(free.values())
         if total_free <= 0:
-            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0}
+            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0,
+                    "demand__atp": demand_entry(self._cid, 0.0)}
 
         amino_acid = float(state.get("amino_acid", 0.0))
         atp = float(state.get("atp", 0.0))
         synthetase = float(state.get("synthetase", 0.0))
+        budget = select_budget(state.get("alloc__atp", {}), self._cid)
 
         # Aggregate reaction limit = min over the co-substrate availabilities
-        # (free tRNA, amino acid, ATP, synthetase·kcat·Δt) — the reduced form of
-        # the MATLAB greedy loop's reactionLimits (min across species columns).
+        # (free tRNA, amino acid, synthetase·kcat·Δt) — the reduced form of
+        # the MATLAB greedy loop's reactionLimits (min across species columns),
+        # BEFORE the ATP/budget clamp — this is the pre-clamp desired charge count.
         enzyme_limit = synthetase * self._kcat * interval
-        atp_limit = atp / self._atp_cost if self._atp_cost > 0 else atp
-        n_total = int(np.floor(min(total_free, amino_acid, atp_limit, enzyme_limit)))
+        n_desired = min(total_free, amino_acid, enzyme_limit)
+        want_atp = n_desired * self._atp_cost
+        atp_cap = min(atp, budget)  # atp still bounds as a floor safety
+        atp_limit = atp_cap / self._atp_cost if self._atp_cost > 0 else atp_cap
+        n_total = int(np.floor(min(n_desired, atp_limit)))
         if n_total <= 0:
-            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0}
+            return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0,
+                    "demand__atp": demand_entry(self._cid, want_atp)}
 
         # Partition the charged total across species proportional to free-tRNA
         # counts (multinomial) — the stochastic weighted pick over species.
@@ -418,4 +430,5 @@ class TRNAAminoacylationReproductionProcess(Process):
             "free_trna": consumed,
             "aminoacylated_trna": produced,
             "atp": -charged * self._atp_cost,
+            "demand__atp": demand_entry(self._cid, want_atp),
         }
