@@ -81,6 +81,18 @@ _EMPTY_MAP_STORES = {
     "alloc__atp", "alloc__gtp", "alloc__ntp", "alloc__amino_acid",
 }
 
+# demand__<pool> stores are additive map[float]; a consumer's {cid: want} delta
+# is DROPPED if cid isn't already a key. Pre-seed each pool's known consumer ids
+# at 0.0 so their additive demand deltas land. (GTP/NTP/amino_acid consumers
+# arrive in later tasks; only ATP's consumers are wired so far.)
+_POOL_CONSUMERS = {
+    "atp": ["supercoiling", "dna_repair", "protein_folding",
+            "protein_modification", "trna_aminoacylation"],
+    "gtp": [],
+    "ntp": [],
+    "amino_acid": [],
+}
+
 # store keys that hold list[float] (chromosome polymerase positions)
 _LIST_STORES = {"rna_pol_positions", "dna_pol_positions"}
 
@@ -221,6 +233,9 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
     def _init_value(key):
         if key in _LIST_STORES:
             return []
+        if key.startswith("demand__"):
+            pool = key[len("demand__"):]
+            return {cid: 0.0 for cid in _POOL_CONSUMERS.get(pool, [])}
         if key in _MAP_STORES:
             return ({} if key in _EMPTY_MAP_STORES
                     else {g: 0.0 for g in DEFAULT_GENES})

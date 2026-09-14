@@ -100,6 +100,7 @@ class AllocatorProcess(Process):
         for p in self._pools:
             s[p] = "float"
             s["alloc__" + p] = "overwrite[map[float]]"
+            s["demand__" + p] = "map[float]"
         return s
 
     def initial_state(self):
@@ -117,4 +118,9 @@ class AllocatorProcess(Process):
             out["alloc__" + p] = allocate(supply, demands, prio.get(p))
             # replenish the pool by this tick's production (bounded by cap)
             out[p] = min(production, max(0.0, cap - level))
+            # Zero out exactly what was read this tick, so the additive
+            # demand__<pool> store tracks only the latest tick's wants rather
+            # than accumulating forever. A consumer's same-tick demand_entry()
+            # delta lands alongside this zeroing delta, netting to its latest want.
+            out["demand__" + p] = {k: -float(v) for k, v in demands.items()}
         return out

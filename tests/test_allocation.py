@@ -71,6 +71,31 @@ def test_metabolism_emits_precursor_supply():
     assert "ntp_production" in out and "amino_acid_production" in out
 
 
+def test_allocator_demand_output_negates_input_no_accumulation(core):
+    """Controller ruling: demand__<pool> stores are additive map[float]; without a
+    zeroing delta a constant per-tick want would accumulate without bound. The
+    allocator must zero exactly what it read, so a re-posted constant demand
+    yields the SAME allocation next tick, not a doubled one."""
+    proc = AllocatorProcess(config={"pools": ["atp"]}, core=core)
+    assert proc.outputs()["demand__atp"] == "map[float]"
+
+    state = {"atp": 100.0, "atp_production": 0.0, "demand__atp": {"a": 10.0}}
+    out1 = proc.update(state, 1.0)
+    # the allocator's demand__atp output negates exactly what it read
+    assert out1["demand__atp"] == {"a": -10.0}
+    alloc1 = out1["alloc__atp"]
+
+    # simulate the additive store: zeroing delta + consumer re-posting the same
+    # want this tick nets to the SAME value, not a sum of two ticks' wants
+    stored_demand = 10.0 + out1["demand__atp"]["a"] + 10.0
+    assert stored_demand == 10.0  # no accumulation
+
+    out2 = proc.update({"atp": 100.0, "atp_production": 0.0,
+                        "demand__atp": {"a": stored_demand}}, 1.0)
+    assert out2["alloc__atp"] == alloc1  # identical allocation, not doubled
+    assert out2["demand__atp"] == {"a": -10.0}
+
+
 def test_composite_builds_and_runs_with_allocator():
     from viva_mgen.composites.mgen import build_mgen
     from viva_mgen.core import build_core
@@ -82,3 +107,60 @@ def test_composite_builds_and_runs_with_allocator():
     comp.run(3.0)
     budget = comp.state["cell"]["budget"]
     assert "alloc__atp" in budget and "alloc__gtp" in budget
+
+
+# NOTE: the brief's worked example instantiates via
+# ``Cls.__new__(Cls); Process.__init__(proc, {}, core=None)`` — the installed
+# process_bigraph/bigraph-schema version in this venv now requires a real
+# core (raises "must provide a core" for core=None), unrelated to this task's
+# changes. These tests build the real process via its normal constructor with
+# the module ``core`` fixture instead; the assertions are unchanged from the brief.
+
+def test_atp_consumer_respects_budget(core):
+    from viva_mgen.processes.dna import DNASupercoilingReproductionProcess as S
+    proc = S(config={"consumer_id": "supercoiling", "initial_sigma": 0.0}, core=core)
+    st = {"gyrase": 1000.0, "atp": 1e9,
+          "alloc__atp": {"supercoiling": 4.0}}   # budget = 4 ATP -> 2 acts
+    out = proc.update(st, 1.0)
+    assert out["atp"] >= -4.0            # never spend more than the 4-ATP budget
+    assert "demand__atp" in out and out["demand__atp"]["supercoiling"] > 0
+
+
+def test_dna_repair_respects_atp_budget(core):
+    from viva_mgen.processes.dna import DNARepairReproductionProcess as R
+    proc = R(config={"consumer_id": "dna_repair"}, core=core)
+    st = {"lesions": 1000.0, "repair_enzyme": 1000.0, "atp": 1e9,
+          "alloc__atp": {"dna_repair": 4.0}}   # budget = 4 ATP, 4 ATP/repair -> 1 repair
+    out = proc.update(st, 1.0)
+    assert out["atp"] >= -4.0
+    assert "demand__atp" in out and out["demand__atp"]["dna_repair"] > 0
+
+
+def test_protein_folding_respects_atp_budget(core):
+    from viva_mgen.processes.protein import ProteinFoldingReproductionProcess as F
+    proc = F(config={"consumer_id": "protein_folding", "seed": 0}, core=core)
+    st = {"unfolded": {"g1": 1000.0}, "chaperone_count": 1000.0, "atp": 1e9,
+          "alloc__atp": {"protein_folding": 7.0}}   # budget = 7 ATP, 7 ATP/fold -> 1 chap fold
+    out = proc.update(st, 1.0)
+    assert out["atp"] >= -7.0
+    assert "demand__atp" in out and out["demand__atp"]["protein_folding"] > 0
+
+
+def test_protein_modification_respects_atp_budget(core):
+    from viva_mgen.processes.protein import ProteinModificationReproductionProcess as M
+    proc = M(config={"consumer_id": "protein_modification", "seed": 0}, core=core)
+    st = {"unmodified": {"g1": 1000.0}, "modification_enzyme": 1000.0, "atp": 1e9,
+          "alloc__atp": {"protein_modification": 4.0}}   # budget = 4 ATP, 1 ATP/mod -> 4 mods
+    out = proc.update(st, 1.0)
+    assert out["atp"] >= -4.0
+    assert "demand__atp" in out and out["demand__atp"]["protein_modification"] > 0
+
+
+def test_trna_aminoacylation_respects_atp_budget(core):
+    from viva_mgen.processes.rna import TRNAAminoacylationReproductionProcess as T
+    proc = T(config={"consumer_id": "trna_aminoacylation", "seed": 0}, core=core)
+    st = {"free_trna": {"t1": 1000.0}, "amino_acid": 1e9, "atp": 1e9, "synthetase": 1000.0,
+          "alloc__atp": {"trna_aminoacylation": 4.0}}   # budget = 4 ATP, 1 ATP/charge -> 4 charges
+    out = proc.update(st, 1.0)
+    assert out["atp"] >= -4.0
+    assert "demand__atp" in out and out["demand__atp"]["trna_aminoacylation"] > 0
