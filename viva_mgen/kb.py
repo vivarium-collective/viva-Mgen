@@ -215,6 +215,31 @@ def load_metabolic_demand() -> dict:
         return json.load(f)
 
 
+@functools.lru_cache(maxsize=1)
+def load_protein_maturation() -> dict:
+    """gene_id -> {signal_type, met_cleavage, signal_length} from
+    datasets/karr_protein_maturation.json (see scripts/extract_kb_maturation.py)."""
+    path = dataset_path("karr_protein_maturation.json")
+    if not path.is_file():
+        return {}
+    with open(path) as f:
+        return json.load(f).get("maturation", {})
+
+
+@functools.lru_cache(maxsize=1)
+def maturation_by_panel_key() -> dict:
+    """Same, re-keyed by the expression-panel key (symbol-or-id) so the protein
+    maturation processes (which use panel-keyed maps) can classify each protein."""
+    mat = load_protein_maturation()
+    out = {}
+    for g in load_genes():
+        gid = g["gene_id"]
+        if gid in mat:
+            key = (g.get("symbol") or "").strip() or gid
+            out[key] = mat[gid]
+    return out
+
+
 def gene_essentiality_reference() -> dict:
     """Map normalized gene id -> reference essentiality (bool), where known."""
     out = {}

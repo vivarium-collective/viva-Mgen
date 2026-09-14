@@ -51,6 +51,11 @@ _FILES = [
      "the 5 genuine M. genitalium TFs (MG_127/MG_236/MG_101 monomers, MG_205/MG_428 dimers) "
      "with their true per-edge activity fold-changes (>1 activates, <1 represses). Consumed "
      "by the TranscriptionalRegulation submodel."),
+    ("protein-maturation", "datasets/karr_protein_maturation.json", "knowledge-base",
+     "Per-protein maturation classification decoded from the Karr 2012 KB: "
+     "signal-sequence type (14 lipoproteins, 20 secretory), N-terminal Met-cleavage "
+     "flag (35 proteins), signal length. Routes the protein-maturation submodels to "
+     "the correct protein subsets."),
     ("ips189-network", "datasets/ips189.sbml.xml", "knowledge-base"),
     ("gene-list", "datasets/genes.csv", "knowledge-base"),
     ("observed-gene-expression", "datasets/karr_gene_expression.csv", "knowledge-base",
