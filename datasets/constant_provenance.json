@@ -3,9 +3,9 @@
   "n_constants": 83,
   "by_tier": {
     "real_kb": 11,
-    "real_supplement": 0,
-    "order_of_magnitude": 72,
-    "irreducible": 0
+    "real_supplement": 1,
+    "order_of_magnitude": 61,
+    "irreducible": 10
   },
   "constants": {
     "MetabolismFbaReproductionProcess": {
@@ -43,9 +43,9 @@
       },
       "cell_cycle_length_s": {
         "value": 32400.0,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "real_supplement",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr 2012 SI, Figure 2A: mean predicted/observed doubling time tau = 9.0 h (32,400 s) \u2014 matches the existing default exactly; see constants.py CELL_CYCLE_LENGTH_S."
       },
       "density_g_per_ml": {
         "value": 1.1,
@@ -157,21 +157,21 @@
     "DNADamageReproductionProcess": {
       "base_rate": {
         "value": 0.001,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB DNADamage parameter dict is empty; SI silent. The original places damage at vulnerable-motif sites with per-site/per-motif probabilities, not one lumped spontaneous rate. Would need the full Data S1 site-specific lesion-rate table (unavailable here)."
       },
       "agent_rate": {
         "value": 0.01,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Same matrix gap as base_rate: a per-agent, per-site dose-response damage-rate table (radiation/reactive-species) is needed, which the Karr KB (empty) and this SI (silent) do not provide."
       },
       "n_bins": {
         "value": 580.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Chromosome-lesion-map spatial resolution (bin count), an engineering discretization choice rather than a measured kinetic constant; not applicable to KB/SI sourcing."
       }
     },
     "DNARepairReproductionProcess": {
@@ -249,15 +249,15 @@
     "RNAModificationReproductionProcess": {
       "modification_rate": {
         "value": 0.4,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB RNAModification parameter dict is empty; SI silent. The original covers 13 modification enzymes over 86 base modifications with per-species rates \u2014 a matrix this reduced single-pool model cannot recover from a scalar. Would need the full Data S1 RNA-modification kinetics table (unavailable here)."
       },
       "enzyme_kcat": {
         "value": 2.0,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Same matrix gap as modification_rate: one lumped enzyme kcat stands in for 13 distinct modification enzymes' kcats, which the Karr KB dict (empty) and this SI (silent) do not provide."
       }
     },
     "RNAProcessingReproductionProcess": {
@@ -271,63 +271,63 @@
     "TRNAAminoacylationReproductionProcess": {
       "synthetase_kcat": {
         "value": 20.0,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB tRNAAminoacylation parameter dict is empty; SI silent. One lumped synthetase kcat stands in for 20 amino acids x 37 tRNA/tmRNA reactions with distinct per-synthetase kcats (e.g. GlnRS vs glutamyl/methionyl transferases) \u2014 a matrix, not a scalar. Would need the full Data S1 synthetase-kinetics table (unavailable here)."
       },
       "atp_per_charge": {
         "value": 1.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "1 ATP per aminoacylation (ATP -> AMP + PPi) is textbook aminoacyl-tRNA-synthetase stoichiometry, not a Karr KB or SI value; kept as a defensible physiological estimate."
       }
     },
     "ProteinActivationReproductionProcess": {
       "default_k": {
         "value": 1.0,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB ProteinActivation parameter dict is empty; SI silent. The original's evaluateActivationRules is a per-protein Boolean/metabolite-threshold rule table (regulator_k is meant to carry it per-protein but defaults empty); this scalar fallback cannot recover that per-rule table. Would need the full Data S1 activation-rule table (unavailable here)."
       },
       "hill_n": {
         "value": 2.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Hill coefficient of 2 is a conventional default for a cooperative-binding approximation of a Boolean rule; not a Karr KB or SI value."
       }
     },
     "ProteinFoldingReproductionProcess": {
       "spontaneous_rate": {
         "value": 0.05,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB ProteinFolding parameter dict is empty (kb.karr_process_params); the SI (16-page main text + Fig S1/S2, no Data S1 parameter appendix in this repo) states no per-protein folding rate. The original assigns each protein its own folding rate via the notFolding-set Gillespie loop \u2014 a per-protein table, not a scalar. Would need the full Data S1 folding-kinetics table (unavailable here)."
       },
       "chaperone_rate": {
         "value": 0.002,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Same as spontaneous_rate: KB ProteinFolding dict empty, SI silent, and the original's chaperone-substrate specificity is per-protein, not a single rate. Would need the full Data S1 chaperone-kinetics table (unavailable here)."
       },
       "atp_per_fold": {
         "value": 7.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "~7 ATP per GroEL/GroES folding cycle is an established chaperonin-ATPase turnover estimate from the general chaperonin literature, not a Karr KB or SI value; kept as a defensible physiological estimate."
       }
     },
     "ProteinModificationReproductionProcess": {
       "modification_specific_rate": {
         "value": 6.0,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB ProteinModification parameter dict is empty; SI silent. The original runs an enzyme+substrate Gillespie loop over specific phosphorylation/lipoylation reactions with per-enzyme specific rates \u2014 a matrix, not a scalar. Would need the full Data S1 per-enzyme modification-rate table (unavailable here)."
       },
       "atp_per_modification": {
         "value": 1.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "1 ATP per phosphoryl-transfer reaction is standard kinase stoichiometry, not a Karr KB or SI value; kept as a defensible physiological estimate."
       }
     },
     "ProteinProcessingIIReproductionProcess": {
@@ -377,15 +377,15 @@
         "value": 2.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "~2 GTP per subunit-assembly event (one GTPase assembly-factor turnover) is a defensible physiological estimate; not in the Karr KB (empty dict) or this SI."
       }
     },
     "TerminalOrganelleAssemblyReproductionProcess": {
       "threshold": {
         "value": 1.0,
-        "source_tier": "order_of_magnitude",
+        "source_tier": "irreducible",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Karr KB TerminalOrganelleAssembly parameter dict is empty; SI silent. The presence-at-threshold gate stands in for the full per-reaction localization stoichiometry matrix (protein copy-number thresholds per localization step), which neither the KB nor this SI provides."
       }
     },
     "CytokinesisReproductionProcess": {
@@ -445,13 +445,13 @@
         "value": 4.0,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "The original HostInteraction rule is a Boolean AND (no continuous parameter exists to source); this Hill exponent is a free modeling choice softening that rule, not a value the KB or SI could supply."
       },
       "half_max_fraction": {
         "value": 0.7,
         "source_tier": "order_of_magnitude",
         "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "note": "Same as cooperativity: the original Boolean rule has no continuous half-max parameter to source from KB/SI; this is a free modeling choice."
       }
     },
     "ChromosomeDynamicsReproductionProcess": {

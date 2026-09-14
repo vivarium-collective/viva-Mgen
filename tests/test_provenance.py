@@ -33,3 +33,21 @@ def test_no_contradiction():
                 assert rec["kb_match"] is True
             if rec["source_tier"] == "irreducible":
                 assert rec["kb_match"] is False
+
+
+def test_provenance_dataset_consistent():
+    import json
+    from pathlib import Path
+    d = json.loads(Path("datasets/constant_provenance.json").read_text())
+    assert sum(d["by_tier"].values()) == d["n_constants"]
+    # at least some constants are real_kb and the audit ran over many processes
+    assert d["by_tier"]["real_kb"] > 0 and d["n_constants"] > 20
+
+
+def test_curated_overrides_valid():
+    from viva_mgen.provenance import _CURATED, SOURCE_TIERS, audit_constants
+    a = audit_constants()
+    for (cls, const), rec in _CURATED.items():
+        assert rec["source_tier"] in SOURCE_TIERS and rec["note"]
+        # curated entries must reference real audited constants
+        assert cls in a and const in a[cls]
