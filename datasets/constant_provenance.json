@@ -1,0 +1,564 @@
+{
+  "source": "viva_mgen.provenance.audit_constants() \u2014 kinetic-constant provenance vs Karr 2012 KB + supplement",
+  "n_constants": 83,
+  "by_tier": {
+    "real_kb": 11,
+    "real_supplement": 1,
+    "order_of_magnitude": 61,
+    "irreducible": 10
+  },
+  "constants": {
+    "MetabolismFbaReproductionProcess": {
+      "ntp_base_supply": {
+        "value": 1000000.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "amino_acid_base_supply": {
+        "value": 1000000.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "enzyme_coupling_floor": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "enzyme_coupling_cap": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "MassGrowthReproductionProcess": {
+      "initial_mass_fg": {
+        "value": 3.93,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "cell_cycle_length_s": {
+        "value": 32400.0,
+        "source_tier": "real_supplement",
+        "kb_match": false,
+        "note": "Karr 2012 SI, Figure 2A: mean predicted/observed doubling time tau = 9.0 h (32,400 s) \u2014 matches the existing default exactly; see constants.py CELL_CYCLE_LENGTH_S."
+      },
+      "density_g_per_ml": {
+        "value": 1.1,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TranscriptionReproductionProcess": {
+      "rna_pol_reference": {
+        "value": 100.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TranslationReproductionProcess": {
+      "gtp_per_protein": {
+        "value": 600.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ReplicationReproductionProcess": {
+      "genome_length_bp": {
+        "value": 580070.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dnaA_threshold": {
+        "value": 30.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dnaA_synthesis_rate": {
+        "value": 0.0020833333333333333,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_dnaA": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dntp_synthesis_rate": {
+        "value": 37.25322715304091,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "init_synth_fraction": {
+        "value": 0.08,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dna_pol_rate": {
+        "value": 200.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "2x KB dnaPolymeraseElongationRate (100)"
+      },
+      "initial_dntp": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ChromosomeCondensationReproductionProcess": {
+      "bind_rate": {
+        "value": 0.001,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_fraction": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ChromosomeSegregationReproductionProcess": {
+      "complete_threshold": {
+        "value": 0.999,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "segregation_rate": {
+        "value": 0.0002584647195657793,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_fraction": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "DNADamageReproductionProcess": {
+      "base_rate": {
+        "value": 0.001,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB DNADamage parameter dict is empty; SI silent. The original places damage at vulnerable-motif sites with per-site/per-motif probabilities, not one lumped spontaneous rate. Would need the full Data S1 site-specific lesion-rate table (unavailable here)."
+      },
+      "agent_rate": {
+        "value": 0.01,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Same matrix gap as base_rate: a per-agent, per-site dose-response damage-rate table (radiation/reactive-species) is needed, which the Karr KB (empty) and this SI (silent) do not provide."
+      },
+      "n_bins": {
+        "value": 580.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "Chromosome-lesion-map spatial resolution (bin count), an engineering discretization choice rather than a measured kinetic constant; not applicable to KB/SI sourcing."
+      }
+    },
+    "DNARepairReproductionProcess": {
+      "repair_rate": {
+        "value": 0.01,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "atp_per_repair": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "DNASupercoilingReproductionProcess": {
+      "setpoint": {
+        "value": -0.06,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "gyrase_rate": {
+        "value": 1.2,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB gyraseActivityRate"
+      },
+      "atp_per_act": {
+        "value": 2.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB gyraseATPCost"
+      },
+      "relaxed_bp_per_turn": {
+        "value": 10.5,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "genome_length_bp": {
+        "value": 580070.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_sigma": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ReplicationInitiationReproductionProcess": {
+      "complex_threshold": {
+        "value": 30.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "recruit_rate": {
+        "value": 0.0023148148148148147,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_complex": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "RNAModificationReproductionProcess": {
+      "modification_rate": {
+        "value": 0.4,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB RNAModification parameter dict is empty; SI silent. The original covers 13 modification enzymes over 86 base modifications with per-species rates \u2014 a matrix this reduced single-pool model cannot recover from a scalar. Would need the full Data S1 RNA-modification kinetics table (unavailable here)."
+      },
+      "enzyme_kcat": {
+        "value": 2.0,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Same matrix gap as modification_rate: one lumped enzyme kcat stands in for 13 distinct modification enzymes' kcats, which the Karr KB dict (empty) and this SI (silent) do not provide."
+      }
+    },
+    "RNAProcessingReproductionProcess": {
+      "processing_rate": {
+        "value": 3.1683399999999997,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TRNAAminoacylationReproductionProcess": {
+      "synthetase_kcat": {
+        "value": 20.0,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB tRNAAminoacylation parameter dict is empty; SI silent. One lumped synthetase kcat stands in for 20 amino acids x 37 tRNA/tmRNA reactions with distinct per-synthetase kcats (e.g. GlnRS vs glutamyl/methionyl transferases) \u2014 a matrix, not a scalar. Would need the full Data S1 synthetase-kinetics table (unavailable here)."
+      },
+      "atp_per_charge": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "1 ATP per aminoacylation (ATP -> AMP + PPi) is textbook aminoacyl-tRNA-synthetase stoichiometry, not a Karr KB or SI value; kept as a defensible physiological estimate."
+      }
+    },
+    "ProteinActivationReproductionProcess": {
+      "default_k": {
+        "value": 1.0,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB ProteinActivation parameter dict is empty; SI silent. The original's evaluateActivationRules is a per-protein Boolean/metabolite-threshold rule table (regulator_k is meant to carry it per-protein but defaults empty); this scalar fallback cannot recover that per-rule table. Would need the full Data S1 activation-rule table (unavailable here)."
+      },
+      "hill_n": {
+        "value": 2.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "Hill coefficient of 2 is a conventional default for a cooperative-binding approximation of a Boolean rule; not a Karr KB or SI value."
+      }
+    },
+    "ProteinFoldingReproductionProcess": {
+      "spontaneous_rate": {
+        "value": 0.05,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB ProteinFolding parameter dict is empty (kb.karr_process_params); the SI (16-page main text + Fig S1/S2, no Data S1 parameter appendix in this repo) states no per-protein folding rate. The original assigns each protein its own folding rate via the notFolding-set Gillespie loop \u2014 a per-protein table, not a scalar. Would need the full Data S1 folding-kinetics table (unavailable here)."
+      },
+      "chaperone_rate": {
+        "value": 0.002,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Same as spontaneous_rate: KB ProteinFolding dict empty, SI silent, and the original's chaperone-substrate specificity is per-protein, not a single rate. Would need the full Data S1 chaperone-kinetics table (unavailable here)."
+      },
+      "atp_per_fold": {
+        "value": 7.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "~7 ATP per GroEL/GroES folding cycle is an established chaperonin-ATPase turnover estimate from the general chaperonin literature, not a Karr KB or SI value; kept as a defensible physiological estimate."
+      }
+    },
+    "ProteinModificationReproductionProcess": {
+      "modification_specific_rate": {
+        "value": 6.0,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB ProteinModification parameter dict is empty; SI silent. The original runs an enzyme+substrate Gillespie loop over specific phosphorylation/lipoylation reactions with per-enzyme specific rates \u2014 a matrix, not a scalar. Would need the full Data S1 per-enzyme modification-rate table (unavailable here)."
+      },
+      "atp_per_modification": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "1 ATP per phosphoryl-transfer reaction is standard kinase stoichiometry, not a Karr KB or SI value; kept as a defensible physiological estimate."
+      }
+    },
+    "ProteinProcessingIIReproductionProcess": {
+      "peptidase_specific_rate": {
+        "value": 11.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB lipoproteinSignalPeptidaseSpecificRate"
+      },
+      "transferase_specific_rate": {
+        "value": 0.0165,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB lipoproteinDiacylglycerylTransferaseSpecificRate"
+      }
+    },
+    "ProteinProcessingIReproductionProcess": {
+      "deformylase_specific_rate": {
+        "value": 38.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB deformylaseSpecificRate"
+      },
+      "aminopeptidase_specific_rate": {
+        "value": 6.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB methionineAminoPeptidaseSpecificRate"
+      }
+    },
+    "ProteinTranslocationReproductionProcess": {
+      "translocase_specific_rate": {
+        "value": 2710000000000.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB translocaseSpecificRate"
+      },
+      "gtp_per_monomer": {
+        "value": 2.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB SRP_GTPUsedPerMonomer"
+      }
+    },
+    "RibosomeAssemblyReproductionProcess": {
+      "gtp_per_complex": {
+        "value": 2.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "~2 GTP per subunit-assembly event (one GTPase assembly-factor turnover) is a defensible physiological estimate; not in the Karr KB (empty dict) or this SI."
+      }
+    },
+    "TerminalOrganelleAssemblyReproductionProcess": {
+      "threshold": {
+        "value": 1.0,
+        "source_tier": "irreducible",
+        "kb_match": false,
+        "note": "Karr KB TerminalOrganelleAssembly parameter dict is empty; SI silent. The presence-at-threshold gate stands in for the full per-reaction localization stoichiometry matrix (protein copy-number thresholds per localization step), which neither the KB nor this SI provides."
+      }
+    },
+    "CytokinesisReproductionProcess": {
+      "initial_cell_width_nm": {
+        "value": 200.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "contraction_rate_nm_per_s": {
+        "value": 0.051692943913155855,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "replication_complete_threshold": {
+        "value": 0.999,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "ring_subunits_for_full_rate": {
+        "value": 320.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "FtsZPolymerizationReproductionProcess": {
+      "activation_rate": {
+        "value": 1.1,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB activationFwd"
+      },
+      "dissociation_rate": {
+        "value": 0.01,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "KB activationRev"
+      },
+      "initial_ftsz_gtp": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_ring": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "HostInteractionReproductionProcess": {
+      "cooperativity": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "The original HostInteraction rule is a Boolean AND (no continuous parameter exists to source); this Hill exponent is a free modeling choice softening that rule, not a value the KB or SI could supply."
+      },
+      "half_max_fraction": {
+        "value": 0.7,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "Same as cooperativity: the original Boolean rule has no continuous half-max parameter to source from KB/SI; this is a free modeling choice."
+      }
+    },
+    "ChromosomeDynamicsReproductionProcess": {
+      "genome_length_bp": {
+        "value": 580070.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_bins": {
+        "value": 580.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_rna_pol": {
+        "value": 50.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "rna_pol_rate_bp": {
+        "value": 50.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dna_pol_rate_bp": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_smc": {
+        "value": 280.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_ssb": {
+        "value": 30.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_gyrase": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_topo": {
+        "value": 10.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_dnab": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_dnan": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_tf": {
+        "value": 12.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "struct_turnover_per_s": {
+        "value": 0.008,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "struct_bind_tau_s": {
+        "value": 1200.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "rna_gene_span_bins": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "struct_collision_frac": {
+        "value": 0.12,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "AllocatorProcess": {
+      "pool_cap": {
+        "value": 1000000000.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    }
+  }
+}

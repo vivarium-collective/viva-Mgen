@@ -363,7 +363,8 @@ class DNADamageReproductionProcess(Process):
         "reactant/product stoichiometry is delegated to the metabolite pools. Lesions are now tracked "
         "per-site on the shared chromosome structure (lesion_map) that damage adds to and repair "
         "clears from the same sites — the first consumer of the unified per-site chromosome "
-        "(remaining DNA submodels staged)."
+        "(remaining DNA submodels staged). Constant provenance recorded in the gap-#5 audit "
+        "(docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {

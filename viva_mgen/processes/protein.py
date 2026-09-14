@@ -428,7 +428,8 @@ class ProteinFoldingReproductionProcess(Process):
         "order-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\n"
         "coordination is delegated to the metabolite pools. Consumption is arbitrated by the\n"
         "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\n"
-        "ATP budget from the finite metabolism-replenished pool."
+        "ATP budget from the finite metabolism-replenished pool. Constant provenance recorded in\n"
+        "the gap-#5 audit (docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {
@@ -533,7 +534,8 @@ class ProteinModificationReproductionProcess(Process):
         "ProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\n"
         "the per-reaction cofactor stoichiometry is delegated to the metabolite pools. Consumption\n"
         "is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each\n"
-        "tick at its allocated ATP budget from the finite metabolism-replenished pool."
+        "tick at its allocated ATP budget from the finite metabolism-replenished pool. Constant\n"
+        "provenance recorded in the gap-#5 audit (docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {
@@ -608,7 +610,8 @@ class ProteinActivationReproductionProcess(Process):
         "out: active_fraction (overwrite[map[float]], current per-protein value).\n"
         "Fidelity: the equilibrium active/inactive partition is faithful; the KB's activation rules\n"
         "are per-protein boolean/metabolite logic, approximated here by a shared Hill law driven by\n"
-        "one aggregate regulator level (the per-rule stimulus set is not carried on this panel)."
+        "one aggregate regulator level (the per-rule stimulus set is not carried on this panel).\n"
+        "Constant provenance recorded in the gap-#5 audit (docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {
@@ -972,7 +975,8 @@ class TerminalOrganelleAssemblyReproductionProcess(Process):
         "Contract — config: required order + threshold. in: adhesin_proteins (map). "
         "out: terminal_organelle_fraction (overwrite[float], current value 0..1).\n"
         "Fidelity: the ordered-dependency assembly is faithful; the presence-at-threshold gate stands\n"
-        "in for the full per-reaction localization stoichiometry matrix (not carried on this panel)."
+        "in for the full per-reaction localization stoichiometry matrix (not carried on this panel).\n"
+        "Constant provenance recorded in the gap-#5 audit (docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {

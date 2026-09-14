@@ -38,7 +38,7 @@ DRY_MASS_FRACTIONS = {
 }
 
 # --- cell-cycle timing (states.Time), seconds ----------------------------
-CELL_CYCLE_LENGTH_S = 32400.0          # ~9.0 h — the model's mean doubling time
+CELL_CYCLE_LENGTH_S = 32400.0          # Karr 2012 SI Figure 2A: mean doubling time tau = 9.0 h (32,400 s)
 REPLICATION_INITIATION_DURATION_S = 12960.0
 REPLICATION_DURATION_S = 15571.0
 CYTOKINESIS_DURATION_S = 3869.0

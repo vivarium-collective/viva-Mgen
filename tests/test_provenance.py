@@ -1,0 +1,53 @@
+from viva_mgen.provenance import audit_constants, SOURCE_TIERS
+
+def test_audit_covers_processes_and_shape():
+    a = audit_constants()
+    assert len(a) >= 10
+    for proc, consts in a.items():
+        for name, rec in consts.items():
+            assert set(rec) >= {"value", "source_tier", "kb_match", "note"}
+            assert rec["source_tier"] in SOURCE_TIERS
+
+def test_real_kb_classification():
+    a = audit_constants()
+    # DNASupercoiling gyrase_rate 1.2 is in karr_parameters.json -> real_kb
+    assert a["DNASupercoilingReproductionProcess"]["gyrase_rate"]["source_tier"] == "real_kb"
+    # ProteinFolding spontaneous_rate has no KB entry -> not real_kb
+    assert a["ProteinFoldingReproductionProcess"]["spontaneous_rate"]["source_tier"] != "real_kb"
+
+def test_no_value_coincidence_false_positives():
+    a = audit_constants()
+    # These previously false-positived as real_kb via value-coincidence against
+    # ANY numeric value in the process's whole KB dict, not the constant they
+    # were actually meant to represent.
+    assert a["MetabolismFbaReproductionProcess"]["enzyme_coupling_cap"]["source_tier"] != "real_kb"
+    assert a["ReplicationReproductionProcess"]["dnaA_threshold"]["source_tier"] != "real_kb"
+    assert a["DNARepairReproductionProcess"]["atp_per_repair"]["source_tier"] != "real_kb"
+    assert a["DNASupercoilingReproductionProcess"]["initial_sigma"]["source_tier"] != "real_kb"
+
+def test_no_contradiction():
+    a = audit_constants()
+    for consts in a.values():
+        for rec in consts.values():
+            if rec["source_tier"] == "real_kb":
+                assert rec["kb_match"] is True
+            if rec["source_tier"] == "irreducible":
+                assert rec["kb_match"] is False
+
+
+def test_provenance_dataset_consistent():
+    import json
+    from pathlib import Path
+    d = json.loads(Path("datasets/constant_provenance.json").read_text())
+    assert sum(d["by_tier"].values()) == d["n_constants"]
+    # at least some constants are real_kb and the audit ran over many processes
+    assert d["by_tier"]["real_kb"] > 0 and d["n_constants"] > 20
+
+
+def test_curated_overrides_valid():
+    from viva_mgen.provenance import _CURATED, SOURCE_TIERS, audit_constants
+    a = audit_constants()
+    for (cls, const), rec in _CURATED.items():
+        assert rec["source_tier"] in SOURCE_TIERS and rec["note"]
+        # curated entries must reference real audited constants
+        assert cls in a and const in a[cls]
