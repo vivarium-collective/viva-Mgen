@@ -30,3 +30,20 @@ def test_emergent_composition_protein_dominant_and_sums():
     assert comp["total"] > 0
     assert abs((comp["RNA"]+comp["protein"]+comp["DNA"]+comp["metabolite"]) - comp["total"]) < 1e-30
     assert comp["protein"] == max(comp["RNA"], comp["protein"], comp["DNA"], comp["metabolite"])
+
+
+def test_composite_emits_emergent_macromolecule_mass():
+    from viva_mgen.composites.mgen import build_mgen
+    from viva_mgen.core import build_core
+    from process_bigraph import Composite
+    core = build_core()
+    doc = build_mgen(core=core)
+    comp = Composite({"state": doc}, core=core)
+    comp.run(3.0)
+    phys = comp.state["cell"]["physiology"]
+    assert phys["emergent_mass"] > 0.0
+    fr = phys["emergent_mass_fractions"]
+    assert set(fr.keys()) == {"RNA", "protein", "DNA"}
+    s = sum(fr.values())
+    assert abs(s - 1.0) < 1e-6 or s == 0.0
+    assert "metabolite" not in fr
