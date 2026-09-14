@@ -8,7 +8,7 @@ resolved. In the original this emerges from the ``Chromosome`` state
 (``proteinBoundSites``, ``polymerizedRegions``) plus the RNA-polymerase and
 replisome position tracking in the Transcription/Replication submodels.
 
-This is a reduced but genuinely coordinate-resolved model (the earlier viva-Mgen
+This is a genuinely coordinate-resolved model (the earlier viva-Mgen
 transcription/replication submodels are aspatial): the genome is binned; RNA
 polymerases initiate at gene start sites and elongate; two replisomes advance
 bidirectionally from oriC; structural proteins occupy sites; and when a moving
@@ -18,10 +18,11 @@ reproducing Fig 3's occupancy map (A), chromosome-exploration kinetics (B),
 polymerase position traces (D), collision-frequency matrix (E), and the
 collisions-vs-binding-density relationship (F).
 
-Gene positions are assigned from M. genitalium locus-tag order (MG_### tags run
-sequentially along the G37 chromosome), a genuine approximation of the true
-coordinates (which live in the paper's genome annotation, not the pieces of the
-knowledge base loadable here).
+Gene positions are the REAL per-gene start coordinates on the 580,070 bp G37
+chromosome, decoded natively from the knowledge base into
+``datasets/karr_gene_expression.csv`` (kb.load_gene_expression); the rRNA
+initiation hotspot of Fig 3A is placed at the real 16S/23S/5S operon locus
+(~170–175 kb). Binning at n_bins resolution is the only spatial approximation.
 """
 
 from __future__ import annotations
@@ -30,26 +31,46 @@ import numpy as np
 from process_bigraph import Process
 
 from .. import constants as C
-from ..kb import load_genes
+from ..kb import load_gene_expression, load_genes
 
 # structural / DNA-binding proteins tracked for the Fig-3E collision matrix
 _STRUCTURAL = ("SMC", "SSB", "GyrAB", "Topo IV", "DnaA", "Fur", "HrcA")
 
 
-def _gene_bins(n_bins: int) -> np.ndarray:
-    """Bin index of each modelled gene, from MG_### locus-tag order along G37."""
+def _gene_bins(n_bins: int, genome_length_bp: float) -> np.ndarray:
+    """Bin index of each modelled gene from its REAL start coordinate on the
+    580,070 bp G37 chromosome (decoded from the KB into karr_gene_expression.csv).
+    Falls back to locus-tag order only if coordinates are unavailable."""
+    expr = load_gene_expression()
+    starts = [d["start_coordinate"] for d in expr.values()
+              if d.get("start_coordinate") is not None]
+    if starts:
+        frac = np.array(sorted(starts), dtype=float) / float(genome_length_bp)
+        return np.clip((frac * (n_bins - 1)).astype(int), 0, n_bins - 1)
+    # fallback: MG_### locus-tag order along G37
     nums = []
     for g in load_genes():
-        gid = g["gene_id"]
-        digits = "".join(ch for ch in gid if ch.isdigit())
+        digits = "".join(ch for ch in g["gene_id"] if ch.isdigit())
         if digits:
             nums.append(int(digits))
     if not nums:
         return np.arange(n_bins)
     nums = np.array(sorted(nums), dtype=float)
-    # locus number -> genome fraction -> bin
-    frac = nums / nums.max()
-    return np.clip((frac * (n_bins - 1)).astype(int), 0, n_bins - 1)
+    return np.clip((nums / nums.max() * (n_bins - 1)).astype(int), 0, n_bins - 1)
+
+
+def _rrna_bins(n_bins: int, genome_length_bp: float) -> list:
+    """Bin indices covering the real rRNA operon (16S/23S/5S) from the KB
+    coordinates — the highly-transcribed RNA-pol initiation hotspot of Fig 3A."""
+    expr = load_gene_expression()
+    bins = set()
+    for d in expr.values():
+        if d.get("rna_type") == "rRNA" and d.get("start_coordinate") is not None:
+            s = int(d["start_coordinate"] / genome_length_bp * (n_bins - 1))
+            e = int((d.get("end_coordinate") or d["start_coordinate"])
+                    / genome_length_bp * (n_bins - 1))
+            bins.update(range(max(0, s), min(n_bins, e + 1)))
+    return sorted(bins)
 
 
 class ChromosomeDynamicsReproductionProcess(Process):
@@ -77,23 +98,24 @@ class ChromosomeDynamicsReproductionProcess(Process):
     """
 
     description = (
-        "Chromosome DNA-protein interactions — reduced coordinate-resolved reproduction "
+        "Chromosome DNA-protein interactions — coordinate-resolved reproduction "
         "of the dynamics behind Karr 2012 Fig 3.\n"
-        "The 580,070 bp chromosome is binned; RNA polymerases initiate at gene sites "
-        "(locus-tag-ordered positions, rRNA hotspot weighted) and elongate at "
-        "~50 nt/s; two replisomes initiate at oriC and advance OUTWARD, symmetrically, "
-        "to terC (reported as signed positions ±off from oriC — a V, as in Fig 4D); "
-        "the full DNA-binding-protein panel of Fig 4E occupies sites (SMC, SSB, GyrAB, "
-        "Topo IV, DnaB, DnaN, DnaA, and the Fur/GntR/HrcA/LuxR transcription factors); "
+        "The 580,070 bp chromosome is binned; RNA polymerases initiate at REAL per-gene "
+        "start coordinates (KB-decoded, rRNA operon hotspot at its real ~170 kb locus) and "
+        "elongate at ~50 nt/s; two replisomes initiate at oriC and advance OUTWARD, "
+        "symmetrically, to terC (reported as signed positions ±off from oriC — a V, as in "
+        "Fig 4D); the full DNA-binding-protein panel of Fig 4E occupies sites (SMC, SSB, "
+        "GyrAB, Topo IV, DnaB, DnaN, DnaA, and the Fur/GntR/HrcA/LuxR transcription factors); "
         "and whenever a protein binds an already-occupied bin a binding×unbinding "
         "COLLISION is recorded by protein pair (RNA pol yields to the fork).\n"
         "Contract — in: rna_polymerase (available RNA pols), replication_active (0/1). "
         "out (snapshots): occupancy (bin→bound-time), fraction_explored, "
         "percent_rnap/dnap_explored, rna_pol_positions, dna_pol_positions, collisions "
         "(pair→count), n_collisions, dna_binding_density.\n"
-        "Fidelity: REDUCED — binned genome, approximate (locus-ordered) gene coordinates, "
-        "representative protein counts; the aspatial transcription/replication submodels "
-        "do not provide coordinates, so this process supplies the spatial layer."
+        "Fidelity: FAITHFUL gene coordinates (real KB per-gene loci + real rRNA operon "
+        "position) and bidirectional oriC→terC fork geometry; the spatial approximation is the "
+        "genome binning (n_bins), and structural-protein counts are representative. This process "
+        "supplies the spatial layer the aspatial transcription/replication submodels lack."
     )
 
     config_schema = {
@@ -135,12 +157,16 @@ class ChromosomeDynamicsReproductionProcess(Process):
         self._rng = np.random.default_rng(int(self.config["seed"]))
         self.nb = int(self.config["n_bins"])
         self.bp_per_bin = self.config["genome_length_bp"] / self.nb
-        self.gene_bins = _gene_bins(self.nb)
-        # highly-transcribed rRNA-like hotspot: a small contiguous region gets
-        # extra RNA-pol initiation weight (the paper's rRNA operon in Fig 3A)
+        self.gene_bins = _gene_bins(self.nb, self.config["genome_length_bp"])
+        # highly-transcribed rRNA hotspot: the REAL rRNA operon bins (16S/23S/5S,
+        # KB coordinates ~170–175 kb) get extra RNA-pol initiation weight (Fig 3A)
         self._init_weight = np.ones(self.nb)
-        rr = int(0.15 * self.nb)
-        self._init_weight[rr:rr + 6] = 25.0
+        rrna = _rrna_bins(self.nb, self.config["genome_length_bp"])
+        if not rrna:  # fallback if coordinates unavailable
+            rr = int(0.15 * self.nb)
+            rrna = list(range(rr, rr + 6))
+        for b in rrna:
+            self._init_weight[b] = 25.0
         self.oriC = 0
         self.terC = self.nb // 2
         # state

@@ -154,9 +154,11 @@ def load_gene_expression() -> dict:
     """Map gene_id -> genuine per-gene knowledge-base parameters from
     ``datasets/karr_gene_expression.csv`` (decoded natively from the KB by
     :mod:`viva_mgen.kb_decode`; see scripts/extract_kb_genes.py):
-    ``{rna_type, length_nt, direction, half_life_min, synthesis_rate,
-    expression_32C, expression_37C, expression_43C, expression_mean}``.
-    Expression is the Weiner et al. 2003 profile. Empty dict if the file is absent."""
+    ``{rna_type, start_coordinate, end_coordinate, length_nt, direction,
+    half_life_min, synthesis_rate, expression_32C, expression_37C,
+    expression_43C, expression_mean}``. Coordinates are the real per-gene loci
+    on the 580,070 bp G37 chromosome (1-based bp). Expression is the Weiner et al.
+    2003 profile. Empty dict if the file is absent."""
     path = dataset_path("karr_gene_expression.csv")
     out: dict = {}
     if not path.is_file():
@@ -170,6 +172,8 @@ def load_gene_expression() -> dict:
                     return None
             out[row["gene_id"]] = {
                 "rna_type": (row.get("rna_type") or "").strip(),
+                "start_coordinate": _f("start_coordinate"),
+                "end_coordinate": _f("end_coordinate"),
                 "length_nt": _f("length_nt"),
                 "direction": _f("direction"),
                 "half_life_min": _f("half_life_min"),
