@@ -38,6 +38,19 @@ _FILES = [
      "the metabolic requirement the ParCa hands to metabolism (Karr FitConstants "
      "forward coupling). Computed from the decoded genome + per-gene synthesis rates; "
      "M. genitalium's AT-rich genome shows in the ~62%% A+U ribonucleotide demand."),
+    ("complex-stoichiometry", "datasets/karr_complexes.json", "knowledge-base",
+     "Real macromolecular-complex subunit stoichiometry for all 201 M. genitalium "
+     "protein complexes, decoded natively from the Karr 2012 knowledge-base MCOS .mat "
+     "(see viva_mgen.kb_decode.decode_protein_complexes + scripts/extract_kb_complexes.py): "
+     "each complex's true integer subunit counts (e.g. DNA_GYRASE = 2 GyrB + 2 GyrA; the "
+     "30S ribosomal subunit = 20 r-proteins + 16S rRNA; 50S = 32 r-proteins + 23S + 5S). "
+     "Consumed by the complexation and ribosome-assembly submodels."),
+    ("tf-regulation", "datasets/karr_tf_regulation.json", "knowledge-base",
+     "Real transcription-factor regulatory network decoded from the KB TranscriptionUnit "
+     "objects (viva_mgen.kb_decode.decode_transcription_regulation): 52 genes regulated by "
+     "the 5 genuine M. genitalium TFs (MG_127/MG_236/MG_101 monomers, MG_205/MG_428 dimers) "
+     "with their true per-edge activity fold-changes (>1 activates, <1 represses). Consumed "
+     "by the TranscriptionalRegulation submodel."),
     ("ips189-network", "datasets/ips189.sbml.xml", "knowledge-base"),
     ("gene-list", "datasets/genes.csv", "knowledge-base"),
     ("observed-gene-expression", "datasets/karr_gene_expression.csv", "knowledge-base",
