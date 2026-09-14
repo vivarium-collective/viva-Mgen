@@ -2,9 +2,9 @@
   "source": "viva_mgen.provenance.audit_constants() \u2014 kinetic-constant provenance vs Karr 2012 KB + supplement",
   "n_constants": 83,
   "by_tier": {
-    "real_kb": 14,
+    "real_kb": 11,
     "real_supplement": 0,
-    "order_of_magnitude": 69,
+    "order_of_magnitude": 72,
     "irreducible": 0
   },
   "constants": {
@@ -29,9 +29,9 @@
       },
       "enzyme_coupling_cap": {
         "value": 1.0,
-        "source_tier": "real_kb",
-        "kb_match": true,
-        "note": "value present in karr_parameters.json[Metabolism]"
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
       }
     },
     "MassGrowthReproductionProcess": {
@@ -79,9 +79,9 @@
       },
       "dnaA_threshold": {
         "value": 30.0,
-        "source_tier": "real_kb",
-        "kb_match": true,
-        "note": "value present in karr_parameters.json[Replication]"
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
       },
       "dnaA_synthesis_rate": {
         "value": 0.0020833333333333333,
@@ -109,9 +109,9 @@
       },
       "dna_pol_rate": {
         "value": 200.0,
-        "source_tier": "order_of_magnitude",
-        "kb_match": false,
-        "note": "physiological estimate; not in KB parameters.json"
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "2x KB dnaPolymeraseElongationRate (100)"
       },
       "initial_dntp": {
         "value": 0.0,
@@ -183,9 +183,9 @@
       },
       "atp_per_repair": {
         "value": 4.0,
-        "source_tier": "real_kb",
-        "kb_match": true,
-        "note": "value present in karr_parameters.json[DNARepair]"
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
       }
     },
     "DNASupercoilingReproductionProcess": {
@@ -199,13 +199,13 @@
         "value": 1.2,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[DNASupercoiling]"
+        "note": "KB gyraseActivityRate"
       },
       "atp_per_act": {
         "value": 2.0,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[DNASupercoiling]"
+        "note": "KB gyraseATPCost"
       },
       "relaxed_bp_per_turn": {
         "value": 10.5,
@@ -221,9 +221,9 @@
       },
       "initial_sigma": {
         "value": 0.0,
-        "source_tier": "real_kb",
-        "kb_match": true,
-        "note": "value present in karr_parameters.json[DNASupercoiling]"
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
       }
     },
     "ReplicationInitiationReproductionProcess": {
@@ -335,13 +335,13 @@
         "value": 11.0,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[ProteinProcessingII]"
+        "note": "KB lipoproteinSignalPeptidaseSpecificRate"
       },
       "transferase_specific_rate": {
         "value": 0.0165,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[ProteinProcessingII]"
+        "note": "KB lipoproteinDiacylglycerylTransferaseSpecificRate"
       }
     },
     "ProteinProcessingIReproductionProcess": {
@@ -349,13 +349,13 @@
         "value": 38.0,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[ProteinProcessingI]"
+        "note": "KB deformylaseSpecificRate"
       },
       "aminopeptidase_specific_rate": {
         "value": 6.0,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[ProteinProcessingI]"
+        "note": "KB methionineAminoPeptidaseSpecificRate"
       }
     },
     "ProteinTranslocationReproductionProcess": {
@@ -363,13 +363,13 @@
         "value": 2710000000000.0,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[ProteinTranslocation]"
+        "note": "KB translocaseSpecificRate"
       },
       "gtp_per_monomer": {
         "value": 2.0,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[ProteinTranslocation]"
+        "note": "KB SRP_GTPUsedPerMonomer"
       }
     },
     "RibosomeAssemblyReproductionProcess": {
@@ -419,13 +419,13 @@
         "value": 1.1,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[FtsZPolymerization]"
+        "note": "KB activationFwd"
       },
       "dissociation_rate": {
         "value": 0.01,
         "source_tier": "real_kb",
         "kb_match": true,
-        "note": "value present in karr_parameters.json[FtsZPolymerization]"
+        "note": "KB activationRev"
       },
       "initial_ftsz_gtp": {
         "value": 0.0,

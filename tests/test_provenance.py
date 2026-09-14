@@ -15,6 +15,16 @@ def test_real_kb_classification():
     # ProteinFolding spontaneous_rate has no KB entry -> not real_kb
     assert a["ProteinFoldingReproductionProcess"]["spontaneous_rate"]["source_tier"] != "real_kb"
 
+def test_no_value_coincidence_false_positives():
+    a = audit_constants()
+    # These previously false-positived as real_kb via value-coincidence against
+    # ANY numeric value in the process's whole KB dict, not the constant they
+    # were actually meant to represent.
+    assert a["MetabolismFbaReproductionProcess"]["enzyme_coupling_cap"]["source_tier"] != "real_kb"
+    assert a["ReplicationReproductionProcess"]["dnaA_threshold"]["source_tier"] != "real_kb"
+    assert a["DNARepairReproductionProcess"]["atp_per_repair"]["source_tier"] != "real_kb"
+    assert a["DNASupercoilingReproductionProcess"]["initial_sigma"]["source_tier"] != "real_kb"
+
 def test_no_contradiction():
     a = audit_constants()
     for consts in a.values():

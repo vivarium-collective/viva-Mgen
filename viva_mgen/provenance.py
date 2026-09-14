@@ -8,42 +8,34 @@ from __future__ import annotations
 import math
 
 from .processes import all_process_classes
-from . import kb
 
 SOURCE_TIERS = ("real_kb", "real_supplement", "order_of_magnitude", "irreducible")
 
-# Map process CLASS name -> its karr_parameters.json process key.
-_KB_KEY = {
-    "MetabolismFbaReproductionProcess": "Metabolism",
-    "MassGrowthReproductionProcess": "",  # mass constants live in states, handled as order_of_magnitude/real via constants.py
-    "TranscriptionReproductionProcess": "Transcription",
-    "TranslationReproductionProcess": "Translation",
-    "RnaDecayReproductionProcess": "RNADecay",
-    "ProteinDecayReproductionProcess": "ProteinDecay",
-    "ReplicationReproductionProcess": "Replication",
-    "ReplicationInitiationReproductionProcess": "ReplicationInitiation",
-    "DNASupercoilingReproductionProcess": "DNASupercoiling",
-    "ChromosomeCondensationReproductionProcess": "ChromosomeCondensation",
-    "ChromosomeSegregationReproductionProcess": "ChromosomeSegregation",
-    "DNADamageReproductionProcess": "DNADamage",
-    "DNARepairReproductionProcess": "DNARepair",
-    "TranscriptionalRegulationReproductionProcess": "TranscriptionalRegulation",
-    "RNAProcessingReproductionProcess": "RNAProcessing",
-    "RNAModificationReproductionProcess": "RNAModification",
-    "TRNAAminoacylationReproductionProcess": "tRNAAminoacylation",
-    "ProteinProcessingIReproductionProcess": "ProteinProcessingI",
-    "ProteinTranslocationReproductionProcess": "ProteinTranslocation",
-    "ProteinProcessingIIReproductionProcess": "ProteinProcessingII",
-    "ProteinFoldingReproductionProcess": "ProteinFolding",
-    "ProteinModificationReproductionProcess": "ProteinModification",
-    "ProteinActivationReproductionProcess": "ProteinActivation",
-    "MacromolecularComplexationReproductionProcess": "MacromolecularComplexation",
-    "RibosomeAssemblyReproductionProcess": "RibosomeAssembly",
-    "TerminalOrganelleAssemblyReproductionProcess": "TerminalOrganelleAssembly",
-    "FtsZPolymerizationReproductionProcess": "FtsZPolymerization",
-    "CytokinesisReproductionProcess": "Cytokinesis",
-    "HostInteractionReproductionProcess": "HostInteraction",
-    "ChromosomeDynamicsReproductionProcess": "",
+# Explicit per-constant -> KB-key map: (class_name, constant) -> (kb_param_key,
+# expected_value, note). A constant is classified real_kb ONLY if it appears here
+# AND its config default equals expected_value (within tolerance) — this replaces
+# the earlier value-coincidence match (any config default that happened to equal
+# ANY numeric value in the process's whole KB dict), which produced false
+# positives such as MetabolismFbaReproductionProcess.enzyme_coupling_cap=1.0
+# coinciding with an unrelated KB 1.0, DNASupercoilingReproductionProcess.initial_sigma
+# =0.0 matching any zero in the dict, ReplicationReproductionProcess.dnaA_threshold=30.0
+# coinciding with ssbComplexSpacing, and DNARepairReproductionProcess.atp_per_repair=4.0
+# coinciding with an unrelated NER incision-margin value. expected_value may be a
+# documented transform of the raw KB value (see dna_pol_rate below); the transform
+# is spelled out in the note. Entries are only added when the process source has a
+# clear code-comment citation tying the constant to a specific real KB value.
+_REAL_KB = {
+    ("DNASupercoilingReproductionProcess", "gyrase_rate"): ("gyraseActivityRate", 1.2, "KB gyraseActivityRate"),
+    ("DNASupercoilingReproductionProcess", "atp_per_act"): ("gyraseATPCost", 2.0, "KB gyraseATPCost"),
+    ("ProteinProcessingIReproductionProcess", "deformylase_specific_rate"): ("deformylaseSpecificRate", 38.0, "KB deformylaseSpecificRate"),
+    ("ProteinProcessingIReproductionProcess", "aminopeptidase_specific_rate"): ("methionineAminoPeptidaseSpecificRate", 6.0, "KB methionineAminoPeptidaseSpecificRate"),
+    ("ProteinProcessingIIReproductionProcess", "peptidase_specific_rate"): ("lipoproteinSignalPeptidaseSpecificRate", 11.0, "KB lipoproteinSignalPeptidaseSpecificRate"),
+    ("ProteinProcessingIIReproductionProcess", "transferase_specific_rate"): ("lipoproteinDiacylglycerylTransferaseSpecificRate", 0.0165, "KB lipoproteinDiacylglycerylTransferaseSpecificRate"),
+    ("ProteinTranslocationReproductionProcess", "translocase_specific_rate"): ("translocaseSpecificRate", 2.71e12, "KB translocaseSpecificRate"),
+    ("ProteinTranslocationReproductionProcess", "gtp_per_monomer"): ("SRP_GTPUsedPerMonomer", 2.0, "KB SRP_GTPUsedPerMonomer"),
+    ("FtsZPolymerizationReproductionProcess", "activation_rate"): ("activationFwd", 1.1, "KB activationFwd"),
+    ("FtsZPolymerizationReproductionProcess", "dissociation_rate"): ("activationRev", 0.01, "KB activationRev"),
+    ("ReplicationReproductionProcess", "dna_pol_rate"): ("dnaPolymeraseElongationRate", 200.0, "2x KB dnaPolymeraseElongationRate (100)"),
 }
 
 # Curated overrides: {(class_name, constant): {"source_tier": ..., "note": ...}}.
@@ -56,23 +48,11 @@ def _is_number(x):
     return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
 
 
-def _kb_values(proc_key):
-    if not proc_key:
-        return set()
-    d = kb.karr_process_params(proc_key) or {}
-    out = set()
-    for v in d.values():
-        if _is_number(v):
-            out.add(round(float(v), 12))
-    return out
-
-
 def audit_constants() -> dict:
     classes = all_process_classes()
     out: dict = {}
     for cname, cls in classes.items():
         schema = getattr(cls, "config_schema", {}) or {}
-        kb_vals = _kb_values(_KB_KEY.get(cname, ""))
         consts = {}
         for key, spec in schema.items():
             if not isinstance(spec, dict):
@@ -82,15 +62,17 @@ def audit_constants() -> dict:
                 continue
             if key in ("seed",):
                 continue
-            match = round(float(default), 12) in kb_vals
+            default = float(default)
+            entry = _REAL_KB.get((cname, key))
+            match = entry is not None and abs(default - entry[1]) < 1e-9 * (abs(entry[1]) or 1)
             cur = _CURATED.get((cname, key))
             if match:
-                tier, note = "real_kb", f"value present in karr_parameters.json[{_KB_KEY.get(cname)}]"
+                tier, note = "real_kb", entry[2]
             elif cur:
                 tier, note = cur["source_tier"], cur["note"]
             else:
                 tier, note = "order_of_magnitude", "physiological estimate; not in KB parameters.json"
-            consts[key] = {"value": float(default), "source_tier": tier,
+            consts[key] = {"value": default, "source_tier": tier,
                            "kb_match": bool(match), "note": note}
         if consts:
             out[cname] = consts
