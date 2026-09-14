@@ -580,7 +580,7 @@ the cycle, and read out the dry-mass composition at division.
       
       <div class="ctr-meta">
         <div class="ctr-meta-row"><span class="ctr-meta-k">Model</span> <code>baseline</code></div>
-        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">The population median doubling time is ≈8.9 h, matching measured M. genitalium (Fig 2A/B).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Dry mass doubles over one cell cycle (Fig 2B).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Protein is the dominant dry-mass component (~62–75%), matching Morowitz 1962 (Fig 2C).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">RNA is a small dry-mass fraction (~5–15%), consistent with Fig 2C.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">DNA content doubles 1→2 over the cycle as the chromosome replicates (Fig 2D).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Single-cell mRNA is low-copy (~0–2 per gene), bursty (Fig 2G).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Across cells, mRNA and protein copy numbers are uncorrelated (Fig 2H).</span></div>
+        <div class="ctr-meta-row"><span class="ctr-meta-k">Measures</span> <span class="ctr-meta-item">The population median doubling time is ≈8.9 h, matching measured M. genitalium (Fig 2A/B).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Dry mass doubles over one cell cycle (Fig 2B).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Protein is the dominant dry-mass component (~62–75%), matching Morowitz 1962 (Fig 2C).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">RNA is a small dry-mass fraction (~5–15%), consistent with Fig 2C.</span><span class="ctr-dot">·</span><span class="ctr-meta-item">DNA content doubles 1→2 over the cycle as the chromosome replicates (Fig 2D).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Single-cell mRNA is low-copy (~0–2 per gene), bursty (Fig 2G).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Across cells, mRNA and protein copy numbers are uncorrelated (Fig 2H).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Emergent protein fraction of macromolecular dry mass ≈ 0.70 (Karr 2012 composition).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Emergent DNA fraction of macromolecular dry mass ≈ 0.19 (Karr 2012 composition).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Emergent RNA fraction of macromolecular dry mass ≈ 0.11 (Karr 2012 composition).</span><span class="ctr-dot">·</span><span class="ctr-meta-item">Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).</span></div>
       </div>
       
     </div>
@@ -1299,6 +1299,162 @@ pass_if: {"high": 0.4, "low": 0.0, "op": "range", "provenance": {"kind": "experi
       
     </li>
     
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-emergent-mass-protein-fraction"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="emergent-mass-protein-fraction"
+        data-classification="secondary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-secondary">secondary</span>
+        <strong style="font-size: 0.9em;">emergent-mass-protein-fraction</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Emergent protein fraction of macromolecular dry mass ≈ 0.70 (Karr 2012 composition).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "emergent_protein_fraction", "kind": "derived_scalar"}
+pass_if: {"high": 0.8, "low": 0.55, "op": "range", "provenance": {"kind": "experiment", "note": "Karr 2012 cell composition: protein 0.62 of total dry mass; emergent \u03a3(species\u00d7MW), macromolecule-renormalized target \u22480.70."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-emergent-mass-dna-fraction"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="emergent-mass-dna-fraction"
+        data-classification="secondary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-secondary">secondary</span>
+        <strong style="font-size: 0.9em;">emergent-mass-dna-fraction</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Emergent DNA fraction of macromolecular dry mass ≈ 0.19 (Karr 2012 composition).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "emergent_dna_fraction", "kind": "derived_scalar"}
+pass_if: {"high": 0.35, "low": 0.1, "op": "range", "provenance": {"kind": "experiment", "note": "Karr 2012 cell composition: DNA 0.169 of total dry mass (0.192 renormalized over protein+DNA+RNA); emergent \u03a3(species\u00d7MW)."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-emergent-mass-rna-fraction"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="emergent-mass-rna-fraction"
+        data-classification="secondary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-secondary">secondary</span>
+        <strong style="font-size: 0.9em;">emergent-mass-rna-fraction</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Emergent RNA fraction of macromolecular dry mass ≈ 0.11 (Karr 2012 composition).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "emergent_rna_fraction", "kind": "derived_scalar"}
+pass_if: {"high": 0.25, "low": 0.05, "op": "range", "provenance": {"kind": "experiment", "note": "Karr 2012 cell composition: RNA 0.093 of total dry mass (0.106 renormalized over protein+DNA+RNA); emergent \u03a3(species\u00d7MW)."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    <li class="expected-behavior-item" id="bt-single-cell-mrna-variation"
+        data-test-kind="behavioral"
+        
+        data-pytest-node="single-cell-mrna-variation"
+        data-classification="secondary"
+        data-result="pending"
+        style="margin: 0 0 10px 0; padding: 10px 12px; border-left: 4px solid #cbd5e1; background: #f8fafc; border-radius: 4px;">
+      
+        
+      <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+        <span class="bt-result" style="font-size: 0.75em; font-family: monospace; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569">⏳ pending</span>
+        <span class="classification-pill classification-secondary">secondary</span>
+        <strong style="font-size: 0.9em;">single-cell-mrna-variation</strong>
+        
+        <span class="muted" style="font-size:0.78em">requires: <code>baseline</code></span>
+        
+      </div>
+      <div style="margin-top: 6px; font-size: 0.95em;">Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).</div>
+      
+      
+      <details style="margin-top: 6px; font-size: 0.82em;">
+        <summary class="muted" style="cursor: pointer;">Assertion</summary>
+        
+        <pre style="background:#fff; padding:8px; margin:4px 0 0 0; border:1px solid #e2e8f0; border-radius:3px; overflow-x:auto;">measure: {"field": "single_cell_mrna_cv", "kind": "derived_scalar"}
+pass_if: {"high": 1.5, "low": 0.001, "op": "range", "provenance": {"kind": "experiment", "note": "Karr 2012 Fig 2 single-cell distributions."}}</pre>
+      </details>
+      
+      
+      
+      
+    </li>
+    
   </ul>
   
   </div>
@@ -1357,7 +1513,7 @@ pass_if: {"high": 0.4, "low": 0.0, "op": "range", "provenance": {"kind": "experi
     
     <p class="muted small verdict-frozen-indicator" style="margin:0 0 8px 0"
        title="Content digest (sha256, sorted-key canonical JSON) of the frozen verdict payload — a locked record, not a live recompute.">
-      <span class="frozen-glyph">🔒</span> frozen 2026-09-14 08:25 UTC ·
+      <span class="frozen-glyph">🔒</span> frozen 2026-09-14 12:30 UTC ·
       <code style="font-family:ui-monospace,monospace">b49283edbe</code>
     </p>
     
@@ -1510,7 +1666,7 @@ gene-disruption studies build on.
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "0ac5e24f87848ba94b87a6d8d5bc45f5bbe1caf9", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/0ac5e24f87848ba94b87a6d8d5bc45f5bbe1caf9", "branch": "main", "generated_at": "2026-09-14 08:27 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "e17143e9611312348028e0951d0e6c70752f4e54", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/e17143e9611312348028e0951d0e6c70752f4e54", "branch": "main", "generated_at": "2026-09-14 12:31 UTC"} };</script>
 <script src="/viva-Mgen/dashboard/assets/data-source.js"></script>
 <script>
 window._studyName = "fig2-growth";

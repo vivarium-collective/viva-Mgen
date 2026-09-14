@@ -419,6 +419,10 @@ _save_viz('fig2-growth', 'fig2-h-mrna-protein', _render_one('', {}, RUNS_DB, STU
 # | dna-doubles-in-s-phase | kind=derived_scalar field=dna_fold_change | op range low 1.8 high 2.2 provenance {'kind': 'model', 'note': 'Single-cell DNA content steps from 1× to 2× during S-phase (Karr 2012 Fig 2D). Test DNA fold-change ≈2 over the cycle.'} |
 # | mrna-low-copy-bursty | kind=derived_scalar field=mean_mrna_per_gene | op range low 0.0 high 2.5 provenance {'kind': 'experiment', 'note': 'mRNA is present at low, discrete copy numbers (0–2 per gene) due to short half-lives and bursty synthesis (Karr 2012 Fig 2G). Test mean mRNA per gene ≤2.5.'} |
 # | mrna-protein-decoupled | kind=derived_scalar field=mrna_protein_abs_corr | op range low 0.0 high 0.4 provenance {'kind': 'experiment', 'note': 'Single-cell mRNA (transient, bursty) and protein (cumulative, long-lived) copy numbers are decoupled — no correlation across a population (Karr 2012 Fig 2H). Test |Pearson r| < 0.4.'} |
+# | emergent-mass-protein-fraction | kind=derived_scalar field=emergent_protein_fraction | op range low 0.55 high 0.8 provenance {'kind': 'experiment', 'note': 'Karr 2012 cell composition: protein 0.62 of total dry mass; emergent Σ(species×MW), macromolecule-renormalized target ≈0.70.'} |
+# | emergent-mass-dna-fraction | kind=derived_scalar field=emergent_dna_fraction | op range low 0.1 high 0.35 provenance {'kind': 'experiment', 'note': 'Karr 2012 cell composition: DNA 0.169 of total dry mass (0.192 renormalized over protein+DNA+RNA); emergent Σ(species×MW).'} |
+# | emergent-mass-rna-fraction | kind=derived_scalar field=emergent_rna_fraction | op range low 0.05 high 0.25 provenance {'kind': 'experiment', 'note': 'Karr 2012 cell composition: RNA 0.093 of total dry mass (0.106 renormalized over protein+DNA+RNA); emergent Σ(species×MW).'} |
+# | single-cell-mrna-variation | kind=derived_scalar field=single_cell_mrna_cv | op range low 0.001 high 1.5 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 2 single-cell distributions.'} |
 
 # ## Study: Fig 3 — Chromosome DNA-protein interactions (viva-Mgen) (`fig3-expression`)
 #
