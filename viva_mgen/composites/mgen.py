@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from process_bigraph.composite_generator import composite_generator
 
-from ..chromosome_state import empty_lesion_map
+from ..chromosome_state import N_CHROMOSOME_BINS, empty_lesion_map
 from ..expression_defaults import DEFAULT_GENES, reference_protein_counts
 from ..processes import all_process_classes
 
@@ -252,7 +252,7 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
             pool = key[len("demand__"):]
             return {cid: 0.0 for cid in _POOL_CONSUMERS.get(pool, [])}
         if key == "lesion_map":
-            return empty_lesion_map(580)
+            return empty_lesion_map(N_CHROMOSOME_BINS)
         if key in _MAP_STORES:
             return ({} if key in _EMPTY_MAP_STORES
                     else {g: 0.0 for g in DEFAULT_GENES})

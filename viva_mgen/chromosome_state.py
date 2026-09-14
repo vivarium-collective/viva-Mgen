@@ -7,6 +7,10 @@ docs/superpowers/specs/2026-09-14-unified-chromosome-design.md).
 """
 from __future__ import annotations
 
+# Default bin resolution of the shared chromosome structure, matching
+# ChromosomeDynamics' n_bins.
+N_CHROMOSOME_BINS = 580
+
 
 def empty_lesion_map(n_bins: int) -> dict:
     """Pre-seeded all-zero lesion map (so additive map[float] deltas land)."""

@@ -29,7 +29,7 @@ import numpy as np
 from process_bigraph import Process
 
 from .. import constants as C
-from ..chromosome_state import add_lesions, repair_sites, n_lesions
+from ..chromosome_state import N_CHROMOSOME_BINS, add_lesions, repair_sites, n_lesions
 from .allocation import select_budget, demand_entry
 
 
@@ -370,7 +370,7 @@ class DNADamageReproductionProcess(Process):
         "base_rate": {"_type": "float", "_default": 1.0e-3},  # spontaneous lesions / s
         "agent_rate": {"_type": "float", "_default": 1.0e-2},  # lesions / s / unit agent
         "seed": {"_type": "integer", "_default": 3},
-        "n_bins": {"_type": "integer", "_default": 580},
+        "n_bins": {"_type": "integer", "_default": N_CHROMOSOME_BINS},
     }
 
     def __init__(self, config=None, core=None):
