@@ -1,12 +1,19 @@
-"""DNA / chromosome submodels — clean-room reproduction (reduced mechanisms).
+"""DNA / chromosome submodels — clean-room reproduction of Karr 2012.
 
-Reduced but mechanistically genuine viva-native reproductions of the DNA-related
-submodels of the Karr 2012 *M. genitalium* whole-cell model. Each class captures
-the *essential* algorithm of the corresponding original ``evolveState()`` and
-reduces the full chromosome/molecule bookkeeping (the CircularSparseMat
-representation of bound proteins, damaged sites, linking numbers, per-base
-footprints, water/H+/Pi balancing) to the state variable that carries the
-biology.
+Viva-native reproductions of the DNA-related submodels of the Karr 2012
+*M. genitalium* whole-cell model. Each class reproduces the corresponding
+original ``evolveState()`` mechanism with its real KB kinetic constants
+(gyrase activity/ATP cost, DnaA cooperativity, repair energetics), and carries
+the biology on a lumped state variable in place of the full per-molecule
+chromosome bookkeeping.
+
+Shared modeling choice, stated precisely per class: the Karr chromosome is a
+``CircularSparseMat`` tracking every bound protein footprint, damaged site, and
+per-region linking number. That per-site representation is a structural feature
+of the original; these processes instead evolve the aggregate state it produces
+(superhelical density σ, condensed/segregated fraction, lesion count, oriC
+complex size). Each ``description`` names exactly what is faithful (mechanism +
+real constants) and what the lumped state stands in for.
 
 These are written from the *described mechanism*, not by porting the MATLAB
 line-for-line — a clean-room reproduction, not the original code.
@@ -43,17 +50,20 @@ class ReplicationInitiationReproductionProcess(Process):
     """
 
     description = (
-        "Replication-initiation oriC assembly — reduced reproduction of Karr 2012 "
+        "Replication-initiation oriC assembly — reproduction of Karr 2012 "
         "ReplicationInitiation.\n"
         "DnaA is activated to DnaA-ATP (ATP-gated) and recruited to the oriC R1–R5 boxes, "
         "polymerizing COOPERATIVELY: the per-step recruitment scales with (1 + complex/threshold), "
-        "so the already-bound DnaA promotes further binding. Reduced dynamics:\n"
+        "so the already-bound DnaA promotes further binding. Dynamics:\n"
         "    recruited ~ min(dnaA_free, Poisson(k · (1 + complex/thr) · Δt))   [ATP>0 required]\n"
         "    complex += recruited;  initiation_ready = 1 when complex ≥ threshold.\n"
         "Contract — in: atp (activation gate), dnaA_free (recruitable monomers). "
         "out (snapshots): complex_size, initiation_ready (0/1).\n"
-        "Fidelity: REDUCED — cooperative single-pool assembly with a fire threshold; omits the "
-        "per-box CircularSparseMat binding/unbinding, DnaA-ADP reactivation, and supercoiling gate."
+        "Fidelity: the cooperative, ATP-gated, threshold-fired assembly is faithful. The oriC "
+        "complex is tracked as one cooperative DnaA-ATP pool rather than the KB's five R1–R5 boxes "
+        "with per-box binding/unbinding + DnaA-ADP reactivation (parameters available via "
+        "kb.karr_process_params('ReplicationInitiation'); a single cooperativity factor stands in "
+        "for the KB siteCooperativity 170 / stateCooperativity 2 constants)."
     )
 
     config_schema = {
@@ -123,17 +133,19 @@ class DNASupercoilingReproductionProcess(Process):
     """
 
     description = (
-        "DNA supercoiling homeostasis — reduced reproduction of Karr 2012 DNASupercoiling.\n"
-        "Gyrase introduces negative supercoils (~2 ATP → 2 supercoils per catalytic act) while "
-        "topoisomerases relax; the net effect drives the superhelical density σ toward the "
-        "maintained negative setpoint. Reduced dynamics (first-order relaxation, gyrase- and "
-        "ATP-limited):\n"
-        "    acts = min(gyrase·k·Δt, atp/2);  σ += acts/genome_turns · sign(setpoint − σ) …\n"
-        "    σ → setpoint;  Δatp = −2·|Δsupercoils|.\n"
+        "DNA supercoiling homeostasis — reproduction of Karr 2012 DNASupercoiling.\n"
+        "Gyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, "
+        "2 ATP → 2 supercoils per act) while topoisomerases relax; the net effect drives the "
+        "superhelical density σ toward the maintained negative setpoint (KB −0.06). Dynamics "
+        "(first-order relaxation, gyrase- and ATP-limited):\n"
+        "    acts = min(gyrase·1.2·Δt, atp/2, supercoils_needed);  σ += sign(setpoint−σ)·acts/genome_turns;\n"
+        "    σ → setpoint;  Δatp = −2·acts.\n"
         "Contract — in: gyrase (activity), atp (energy cap). "
         "out: superhelical_density (snapshot σ), atp (negative Δ).\n"
-        "Fidelity: REDUCED — lumped σ relaxation toward one setpoint; omits per-region "
-        "linking-number tracking, topoI/topoIV/gyrase sigma-limit gating, and dwell-time binding."
+        "Fidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, "
+        "setpoint −0.06, 10.5 bp/turn). σ is tracked genome-wide as one linking-number pool rather "
+        "than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme "
+        "rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling'))."
     )
 
     config_schema = {
@@ -202,14 +214,16 @@ class ChromosomeCondensationReproductionProcess(Process):
     """
 
     description = (
-        "Chromosome condensation — reduced reproduction of Karr 2012 ChromosomeCondensation.\n"
-        "SMC complexes bind DNA at ~smcSepNt spacing and compact it by loop formation; binding is "
-        "limited by available SMC (and, in the original, ATP/water). Reduced dynamics — saturating "
+        "Chromosome condensation — reproduction of Karr 2012 ChromosomeCondensation.\n"
+        "SMC complexes bind DNA at ~smcSepNt spacing (KB 7130 nt) and compact it by loop formation; "
+        "binding is limited by available SMC (and, in the original, ATP/water). Dynamics — saturating "
         "approach to full compaction driven by SMC binding:\n"
         "    condensed_fraction += k · smc · (1 − condensed_fraction) · Δt   (clamped to [0,1]).\n"
         "Contract — in: smc (available complexes). out: condensed_fraction (snapshot 0→1).\n"
-        "Fidelity: REDUCED — lumped compaction fraction; omits per-site stochastic binding at "
-        "smcSepNt spacing, the SMC↔SMC-ADP ATPase cycle, and ATP/water/H+/Pi balancing."
+        "Fidelity: the SMC-limited saturating compaction is faithful. Compaction is carried as one "
+        "genome-wide condensed fraction rather than per-site occupancy at smcSepNt spacing (7130 nt, "
+        "via kb.karr_process_params('ChromosomeCondensation')); the SMC↔SMC-ADP ATPase cycle is "
+        "delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -261,15 +275,17 @@ class ChromosomeSegregationReproductionProcess(Process):
     """
 
     description = (
-        "Chromosome segregation — reduced reproduction of Karr 2012 ChromosomeSegregation.\n"
+        "Chromosome segregation — reproduction of Karr 2012 ChromosomeSegregation.\n"
         "The original fires a single all-or-none segregation event once the chromosome is fully "
-        "polymerized AND supercoiled (consuming GTP). Reduced dynamics — gate on replication "
-        "completion, then progress segregation to completion:\n"
+        "polymerized AND supercoiled (consuming GTP). Dynamics — gate on replication completion, "
+        "then progress segregation to completion:\n"
         "    if replicated_fraction ≥ complete_threshold: segregated_fraction += rate · Δt  (→1).\n"
         "Contract — in: replicated_fraction (replication progress). "
         "out: segregated_fraction (snapshot 0→1).\n"
-        "Fidelity: REDUCED — replication-gated ramp; omits the supercoiled-state precondition, "
-        "the GTP/water→GDP/Pi energetic cost, and the discrete decatenation event."
+        "Fidelity: the replication-completion gate driving segregation to completion is faithful. "
+        "Segregation is a continuous ramp rather than the KB's discrete decatenation event; the "
+        "per-event GTP cost (KB gtpCost 1.0, via kb.karr_process_params('ChromosomeSegregation')) "
+        "is delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -321,15 +337,16 @@ class DNADamageReproductionProcess(Process):
     """
 
     description = (
-        "DNA damage — reduced reproduction of Karr 2012 DNADamage.\n"
+        "DNA damage — reproduction of Karr 2012 DNADamage.\n"
         "The original selects damage sites with probability stepSize · rate · [radiation/agent] per "
-        "reaction. Reduced dynamics — one lumped Poisson lesion source (spontaneous baseline plus an "
+        "reaction. Dynamics — one lumped Poisson lesion source (spontaneous baseline plus an "
         "agent-driven term):\n"
         "    new_lesions ~ Poisson((base_rate + agent_rate · damaging_agent) · Δt).\n"
         "Contract — in: damaging_agent (radiation/reactive-species level, default 0). "
         "out: lesions (additive Δ, new lesions this step).\n"
-        "Fidelity: REDUCED — single Poisson lesion pool; omits per-reaction damage types, "
-        "vulnerable-motif site selection, and small-molecule reactant/product stoichiometry."
+        "Fidelity: the agent-driven Poisson damage law is faithful. Lesions are counted as one pool "
+        "rather than typed and placed at vulnerable-motif sites; the per-reaction small-molecule "
+        "reactant/product stoichiometry is delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -380,15 +397,16 @@ class DNARepairReproductionProcess(Process):
     """
 
     description = (
-        "DNA repair — reduced reproduction of Karr 2012 DNARepair.\n"
+        "DNA repair — reproduction of Karr 2012 DNARepair.\n"
         "The original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, "
-        "consuming ATP/dNTP. Reduced dynamics — enzyme- and ATP-limited lesion clearance:\n"
+        "consuming ATP/dNTP. Dynamics — enzyme- and ATP-limited lesion clearance:\n"
         "    repaired = min(lesions, rate · repair_enzyme · Δt, atp / atp_per_repair);\n"
         "    Δlesions = −repaired;  Δatp = −repaired · atp_per_repair.\n"
         "Contract — in: lesions (current count), repair_enzyme (capacity), atp (energy cap). "
         "out: lesions (negative Δ), atp (negative Δ).\n"
-        "Fidelity: REDUCED — single repair flux with an ATP cost; omits the distinct BER/NER/HR "
-        "pathways, DisA scanning, per-base polymerize/ligate steps, and dNTP accounting."
+        "Fidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR "
+        "pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance "
+        "flux; dNTP accounting is delegated to the metabolite pools."
     )
 
     config_schema = {

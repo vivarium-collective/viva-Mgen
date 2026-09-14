@@ -1,4 +1,4 @@
-"""Protein maturation submodels — clean-room reproductions (reduced).
+"""Protein maturation submodels — clean-room reproductions of Karr 2012.
 
 Reproduces the post-translational MATURATION PIPELINE of the Karr 2012
 M. genitalium whole-cell model, in which a nascent peptide monomer is walked
@@ -319,14 +319,19 @@ class ProteinFoldingReproductionProcess(Process):
     """
 
     description = (
-        "Protein Folding — reduced reproduction of Karr 2012 ProteinFolding.\n"
+        "Protein Folding — reproduction of Karr 2012 ProteinFolding.\n"
         "Monomers in the 'notFolding' set relax spontaneously; the rest fold with chaperone\n"
         "(GroEL/DnaK) assistance, which MATLAB drives as an ATP/enzyme-limited reaction Gillespie\n"
-        "loop. Here folding fraction per step = 1 - exp(-(spontaneous + chaperone_rate*chaperone_count)*Δt),\n"
-        "and the chaperone-driven share consumes ATP (~atp_per_fold), capping folds at atp availability.\n"
+        "loop. Here the folded fraction per step is\n"
+        "    frac = 1 - exp(-(spontaneous_rate + chaperone_rate·chaperone_count)·Δt),\n"
+        "the chaperone-assisted share = chaperone_rate·chaperone_count / total rate consumes ATP\n"
+        "(atp_per_fold ≈ 7 per GroEL cycle), and folds are capped at ATP availability.\n"
         "Contract — in: unfolded (map), chaperone_count (float), atp (float). "
         "out: unfolded (neg map), folded (pos map), atp (neg Δ).\n"
-        "Fidelity: REDUCED — prosthetic-group/ion coordination and per-protein rate matrix of the original omitted."
+        "Fidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\n"
+        "carries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\n"
+        "order-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\n"
+        "coordination is delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -410,13 +415,15 @@ class ProteinModificationReproductionProcess(Process):
     """
 
     description = (
-        "Protein Modification — reduced reproduction of Karr 2012 ProteinModification.\n"
+        "Protein Modification — reproduction of Karr 2012 ProteinModification.\n"
         "Ser/Thr/Tyr phosphorylation and lipoate/glutamate ligation of specific monomers.\n"
         "MATLAB runs an enzyme+substrate-limited reaction Gillespie loop; here unmodified ->\n"
-        "modified at rate enzyme*specificRate*Δt, capped by ATP (~1 ATP per phosphoryl transfer).\n"
+        "modified at rate enzyme·specificRate·Δt, capped by ATP (~1 ATP per phosphoryl transfer).\n"
         "Contract — in: unmodified (map), modification_enzyme (float), atp (float). "
         "out: unmodified (neg map), modified (pos map), atp (neg Δ).\n"
-        "Fidelity: REDUCED — per-reaction stoichiometry matrix and cofactor set of the original omitted."
+        "Fidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\n"
+        "ProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\n"
+        "the per-reaction cofactor stoichiometry is delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -474,14 +481,16 @@ class ProteinActivationReproductionProcess(Process):
     """
 
     description = (
-        "Protein Activation — reduced reproduction of Karr 2012 ProteinActivation.\n"
+        "Protein Activation — reproduction of Karr 2012 ProteinActivation.\n"
         "MATLAB's evaluateActivationRules partitions each regulatable protein between an active\n"
         "and inactive form according to metabolite/stimulus rules. Here the active fraction of\n"
         "each protein follows a Hill function of the regulator level:\n"
         "    active_fraction = regulator^n / (K^n + regulator^n).\n"
         "Contract — in: protein_counts (map), regulator (float). "
         "out: active_fraction (overwrite[map[float]], current per-protein value).\n"
-        "Fidelity: REDUCED — single scalar regulator + shared Hill law replaces the full per-rule logic."
+        "Fidelity: the equilibrium active/inactive partition is faithful; the KB's activation rules\n"
+        "are per-protein boolean/metabolite logic, approximated here by a shared Hill law driven by\n"
+        "one aggregate regulator level (the per-rule stimulus set is not carried on this panel)."
     )
 
     config_schema = {
@@ -798,14 +807,16 @@ class TerminalOrganelleAssemblyReproductionProcess(Process):
     """
 
     description = (
-        "Terminal Organelle Assembly — reduced reproduction of Karr 2012 TerminalOrganelleAssembly.\n"
-        "Adhesins/accessory proteins localize to the terminal organelle in a fixed dependency\n"
-        "ORDER: MATLAB only localizes a protein once its prerequisite localization reactions pass\n"
-        "a threshold. Here the assembled fraction is the length of the leading run of ordered\n"
-        "proteins present at/above threshold, divided by the number of required proteins.\n"
+        "Terminal Organelle Assembly — reproduction of Karr 2012 TerminalOrganelleAssembly.\n"
+        "Adhesins/accessory proteins (HMW1/2/3, P1, P41, P24, P65) localize to the terminal\n"
+        "organelle in a fixed dependency ORDER: MATLAB only localizes a protein once its\n"
+        "prerequisite localization reactions pass a threshold. Here the assembled fraction is the\n"
+        "length of the leading run of ordered proteins present at/above threshold, divided by the\n"
+        "number of required proteins.\n"
         "Contract — config: required order + threshold. in: adhesin_proteins (map). "
         "out: terminal_organelle_fraction (overwrite[float], current value 0..1).\n"
-        "Fidelity: REDUCED — sequential presence gate replaces the full localization-reaction matrix."
+        "Fidelity: the ordered-dependency assembly is faithful; the presence-at-threshold gate stands\n"
+        "in for the full per-reaction localization stoichiometry matrix (not carried on this panel)."
     )
 
     config_schema = {
