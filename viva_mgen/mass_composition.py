@@ -7,9 +7,9 @@ docs/superpowers/specs/2026-09-14-emergent-mass-design.md.
 """
 from __future__ import annotations
 
-from .constants import GENOME_LENGTH_BP
+from .constants import GENOME_LENGTH_BP, AVOGADRO
 
-_N_A = 6.022e23        # Avogadro
+_N_A = AVOGADRO        # Avogadro
 _RNA_NT_MW = 340.0     # avg ribonucleotide-monophosphate MW in a chain (g/mol)
 _AA_MW = 110.0         # avg amino-acid residue MW in a chain (g/mol)
 _BP_MW = 660.0         # avg base-pair MW, both strands (g/mol)
@@ -49,5 +49,8 @@ def emergent_composition(rna_counts, protein_counts, chromosome_copy, pools, len
     prot = protein_mass_g(protein_counts, lengths)
     dna = dna_mass_g(chromosome_copy)
     met = metabolite_mass_g(pools)
+    # "total" is the INCLUSIVE sum (RNA+protein+DNA+metabolite). Callers validating
+    # against Karr's macromolecule fractions should sum RNA+protein+DNA themselves
+    # (as the mass process does), NOT use "total".
     return {"RNA": rna, "protein": prot, "DNA": dna, "metabolite": met,
             "total": rna + prot + dna + met}

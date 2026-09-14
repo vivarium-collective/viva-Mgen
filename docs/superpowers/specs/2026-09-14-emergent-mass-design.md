@@ -43,7 +43,7 @@ Pure functions computing per-species dry mass in grams from counts + real MWs:
 - `protein_mass_g(protein_counts: dict) -> float` — Σ_g count·(length_nt[g]/3)·`_AA_MW`(≈110) / N_A.
 - `dna_mass_g(chromosome_copy: float) -> float` — `chromosome_copy`·`GENOME_LENGTH_BP`·`_BP_MW`(≈660, both strands) / N_A.
 - `metabolite_mass_g(pools: dict) -> float` — Σ pool_count·MW / N_A for the tracked metabolite pools (atp/gtp/ntp/amino_acid) with representative MWs (ATP 507, GTP 523, NTP≈500 avg, amino acid≈110).
-- `emergent_composition(rna_counts, protein_counts, chromosome_copy, pools) -> dict` — returns `{RNA, protein, DNA, metabolite: grams}` and `total`.
+- `emergent_composition(rna_counts, protein_counts, chromosome_copy, pools) -> dict` — returns `{RNA, protein, DNA, metabolite: grams}` and an inclusive `total` (RNA+protein+DNA+metabolite). Callers validating against Karr's macromolecule fractions sum RNA+protein+DNA themselves rather than using `total` — see ruling below.
 
 Constants (`_AA_MW`, `_BP_MW`, `_N_A=6.022e23`) live in this module or `constants.py`; `_RNA_NT_MW` is reused from where it already is (parca) or duplicated as a named constant here — one source, cited.
 
@@ -51,22 +51,23 @@ Constants (`_AA_MW`, `_BP_MW`, `_N_A=6.022e23`) live in this module or `constant
 
 `MassGrowthReproductionProcess` gains:
 - inputs (read-only sensors): `rna_counts` (map), `protein_counts` (map), `chromosome_copy` (float), and the metabolite pools `atp`/`gtp`/`ntp`/`amino_acid` (floats).
-- outputs (overwrite observables): `emergent_mass` (float, fg) and `emergent_mass_fractions` (map[float]: RNA/protein/DNA/metabolite fraction of the emergent total).
+- outputs (overwrite observables): `emergent_mass` (float, fg; RNA+protein+DNA only) and `emergent_mass_fractions` (map[float]: RNA/protein/DNA fraction of `emergent_mass`, summing to 1). The free-metabolite pool is reported separately as `metabolite_mass` (float, fg) — a non-validated diagnostic, NOT included in `emergent_mass`/`emergent_mass_fractions`, because current pool sizes are uncalibrated allocation placeholders rather than a fitted target.
 - The existing `mass`/`volume`/`division`/`mass_fractions` behavior is UNCHANGED (growth-law still drives division).
-- `update()` computes the emergent composition from the sensor inputs and emits the two new observables each tick.
+- `update()` computes the emergent composition from the sensor inputs and emits the three new observables each tick: `emergent_mass`/`emergent_mass_fractions` from RNA+protein+DNA, and `metabolite_mass` separately.
 
 ### 3. Composite wiring + emit
 
-- Add `emergent_mass` and `emergent_mass_fractions` to `_EMIT` and to the mass node's ports (they resolve to `physiology`/`metabolism` group stores; add `_STORE_GROUP` entries: `emergent_mass`→physiology, `emergent_mass_fractions`→physiology, as `_EMPTY_MAP_STORES` for the map).
+- Add `emergent_mass`, `emergent_mass_fractions`, and `metabolite_mass` to `_EMIT` and to the mass node's ports (they resolve to `physiology`/`metabolism` group stores; add `_STORE_GROUP` entries: `emergent_mass`→physiology, `emergent_mass_fractions`→physiology, `metabolite_mass`→physiology, as `_EMPTY_MAP_STORES` for the map).
 - The mass node already exists; it just gains the sensor inputs + observable outputs. The sensor inputs wire to the existing `rna_counts`/`protein_counts`/`chromosome_copy`/pool stores (read-only; mass emits no delta to them).
 
 ### 4. Validation test
 
 `tests/test_emergent_mass.py`:
 - Unit: `rna_mass_g`/`protein_mass_g`/`dna_mass_g` give known values for hand-set counts (e.g. one 300-nt gene at count 1 → 300·340/N_A g).
-- Composition: `emergent_composition` on a representative inventory yields fractions whose ORDERING and rough magnitudes match Karr (protein dominant, then RNA/DNA) — assert protein fraction is the largest.
+- Composition: `emergent_composition` on a representative inventory yields fractions (over RNA/protein/DNA only, excluding metabolite) whose ORDERING and rough magnitudes match Karr (protein dominant, then RNA/DNA) — assert protein fraction is the largest.
 - DNA sanity: `dna_mass_g(1.0)` ≈ 0.6–0.7 fg (matches the Karr DNA dry-mass fraction 0.1688 × 3.93 fg ≈ 0.66 fg), confirming `_BP_MW` is right.
-- Integration: build the composite, run a few ticks, assert `emergent_mass` > 0 and `emergent_mass_fractions` sums to ≈1.0 and protein is the largest component.
+- Integration: build the composite, run a few ticks, assert `emergent_mass` > 0 (RNA+protein+DNA only) and `emergent_mass_fractions` — keyed only `{RNA, protein, DNA}`, no `metabolite` — sums to ≈1.0 with protein the largest component; `metabolite_mass` is emitted separately and is not part of the validated total/fractions.
+- Zero-total: `emergent_composition` with an all-empty/zero inventory returns all components 0.0 and `total` 0.0, documenting the input the process's divide-by-zero fraction guard handles.
 
 ## Data flow
 
@@ -82,7 +83,7 @@ MassGrowthReproductionProcess.update():
 
 ## Edge cases
 
-- Empty inventory (tick 0): emergent_mass ≈ DNA-only (chromosome_copy=1); fractions still sum to 1 (guard divide-by-zero → all-zero fractions if total is 0).
+- Empty inventory (tick 0): `emergent_mass` (RNA+protein+DNA) ≈ DNA-only (chromosome_copy=1); `emergent_mass_fractions` still sum to 1 (guard divide-by-zero → all-zero fractions if `emergent_mass` is 0).
 - A gene in `rna_counts`/`protein_counts` with no length in `gene_lengths()`: fall back to an average length (1000 nt) rather than dropping it.
 
 ## Out of scope (v1)
@@ -94,6 +95,11 @@ MassGrowthReproductionProcess.update():
 
 Mass composition is now **computed from the real molecular inventory with real
 MWs** and validated against Karr's fitted fractions, rather than asserted. The
-`MassGrowth` `description` fidelity line is updated to say the emergent
-composition is reported + validated, and that the growth-law total still drives
-division pending synthesis calibration.
+validated `emergent_mass`/`emergent_mass_fractions` cover RNA+protein+DNA only —
+the macromolecules Karr's fitted fractions actually target. The free-metabolite
+pool is reported separately as `metabolite_mass`, a non-validated diagnostic
+excluded from the total, since current pool sizes are uncalibrated allocation
+placeholders rather than a fitted target. The `MassGrowth` `description`
+fidelity line is updated to say the emergent macromolecule composition is
+reported + validated, and that the growth-law total still drives division
+pending synthesis calibration.

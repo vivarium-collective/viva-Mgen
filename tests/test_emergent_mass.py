@@ -32,6 +32,20 @@ def test_emergent_composition_protein_dominant_and_sums():
     assert comp["protein"] == max(comp["RNA"], comp["protein"], comp["DNA"], comp["metabolite"])
 
 
+def test_emergent_composition_zero_total():
+    # all-empty/zero inventory: every component and total are 0.0. Documents
+    # the zero-total input that the mass process's fraction divide-by-zero
+    # guard (in mass.py's update()) handles.
+    comp = emergent_composition(
+        rna_counts={}, protein_counts={}, chromosome_copy=0.0,
+        pools={}, lengths={})
+    assert comp["RNA"] == 0.0
+    assert comp["protein"] == 0.0
+    assert comp["DNA"] == 0.0
+    assert comp["metabolite"] == 0.0
+    assert comp["total"] == 0.0
+
+
 def test_composite_emits_emergent_macromolecule_mass():
     from viva_mgen.composites.mgen import build_mgen
     from viva_mgen.core import build_core
