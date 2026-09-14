@@ -42,27 +42,24 @@ def all_process_classes() -> dict:
     return out
 
 
-def _condense_card_descriptions() -> None:
-    """Keep loom node cards readable.
+def _alias_full_descriptions() -> None:
+    """Expose each process's full multi-line ``description`` verbatim.
 
-    The loom renders a process's ``description`` on its node card with
-    ``white-space: nowrap`` and a fixed card width, so a multi-paragraph
-    description spills out of the card and over its neighbours. Each process is
-    authored with a rich, multi-line description (summary + mechanism + contract
-    + fidelity); we preserve that verbatim as ``full_description`` (still the
-    class/module docstrings for developers) and expose only its concise first
-    line as the card ``description`` that ``Edge.describe()`` — and therefore the
-    loom — surfaces. Idempotent: only condenses a class's own multi-line
-    ``description``.
+    The loom's contract renderer (bigraph_schema.contract.resolve_contract →
+    ProcessContract.from_description) already splits a multi-line ``description``
+    into a one-line SUMMARY (shown on the card), the governing EQUATIONS (rendered
+    as KaTeX at the contract zoom tier), and the full prose (revealed at the full
+    zoom tier / on click). So the whole authored description — mechanism, the
+    ``Contract — in:/out:`` line, and the fidelity note — must reach the loom
+    intact; we do NOT truncate it. ``full_description`` is kept as an alias for
+    any developer/tooling that wants the verbatim text in one field.
     """
     for cls in all_process_classes().values():
         desc = cls.__dict__.get("description")
-        if not isinstance(desc, str) or "\n" not in desc:
-            continue
-        cls.full_description = desc
-        cls.description = next((ln.strip() for ln in desc.splitlines() if ln.strip()), desc)
+        if isinstance(desc, str) and desc.strip():
+            cls.full_description = desc
 
 
-_condense_card_descriptions()
+_alias_full_descriptions()
 
 __all__ = sorted(all_process_classes().keys())
