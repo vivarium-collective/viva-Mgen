@@ -61,3 +61,23 @@ def test_coupling_reference_covers_most_model_genes():
     model_gene_ids = {normalize_gene_id(g.id) for g in p._model.genes}
     overlap = model_gene_ids & set(p._ref_norm.keys())
     assert len(overlap) >= 80   # most of the 126 model genes should be gate-able
+
+
+def test_composite_runs_with_enzyme_coupling():
+    from viva_mgen.composites.mgen import build_mgen
+    from viva_mgen.core import build_core
+    from process_bigraph import Composite
+    core = build_core()
+    doc = build_mgen(core=core, enzyme_coupling=True)
+    comp = Composite({"state": doc}, core=core)
+    comp.run(3.0)
+    assert comp.state["cell"]["metabolism"]["feasible"] in (0.0, 1.0)
+
+
+def test_composite_default_has_coupling_off():
+    from viva_mgen.composites.mgen import build_mgen
+    from viva_mgen.core import build_core
+    doc = build_mgen(core=build_core())
+    # metabolism node config must default enzyme_coupling False (non-regression)
+    met = doc["metabolism"]["config"]
+    assert met.get("enzyme_coupling", False) is False

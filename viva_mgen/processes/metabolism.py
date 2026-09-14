@@ -75,7 +75,13 @@ class MetabolismFbaReproductionProcess(Process):
         "(summed GTP-linked kinase/transport flux: NDPK1/NDPK2 nucleoside-diphosphate "
         "kinases, GK1 guanylate kinase, GTPtp transport), feasible ∈ {0,1}.\n"
         "Fidelity: FULL — the genuine published reconstruction the WCM's metabolism "
-        "submodel was built on."
+        "submodel was built on.\n"
+        "Reaction bounds can also be dynamically gated by the live proteome relative to "
+        "a steady-state reference (enzyme_coupling) — the graded generalization of the "
+        "discrete gene knockout above, scaling each gene-associated reaction's bound by "
+        "its enzyme's current abundance over the reference instead of an all-or-nothing "
+        "cut. Off by default pending birth-proteome seeding; the absolute kcat·[enzyme] "
+        "form awaits the KB kcats (gap #5)."
     )
 
     config_schema = {
