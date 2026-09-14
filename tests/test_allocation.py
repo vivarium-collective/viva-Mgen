@@ -219,3 +219,31 @@ def test_gtp_consumer_respects_budget(core):
     out = proc.update(st, 1.0)
     assert out["gtp"] >= -3.0
     assert out["demand__gtp"]["ftsz"] >= 0.0
+
+
+# --- NTP + amino-acid consumers (Task 6) ---
+
+def test_transcription_respects_ntp_budget(core):
+    from viva_mgen.processes.transcription import TranscriptionReproductionProcess as T
+    # a strong synthesis rate over a long gene so the unconstrained Poisson
+    # expectation (want) is far above the tiny budget, and fails without the clamp.
+    proc = T(config={"consumer_id": "transcription", "synthesis_rates": {"g1": 50.0},
+                      "gene_lengths": {"g1": 1200.0}, "seed": 0}, core=core)
+    st = {"ntp": 1e9, "rna_pol": 100.0, "alloc__ntp": {"transcription": 500.0}}
+    out = proc.update(st, 1.0)
+    assert -out["ntp"] <= 500.0 + 1e-6
+    assert "demand__ntp" in out and out["demand__ntp"]["transcription"] > 500.0
+
+
+def test_trna_aminoacylation_respects_amino_acid_budget(core):
+    from viva_mgen.processes.rna import TRNAAminoacylationReproductionProcess as T
+    proc = T(config={"consumer_id": "trna_aminoacylation", "seed": 0}, core=core)
+    # amino_acid pool itself is abundant; the allocator's amino_acid budget is
+    # the binding constraint (1 AA per charge -> budget caps charges at 4).
+    st = {"free_trna": {"t1": 1000.0}, "amino_acid": 1e9, "atp": 1e9, "synthetase": 1000.0,
+          "alloc__atp": {"trna_aminoacylation": 1e9},
+          "alloc__amino_acid": {"trna_aminoacylation": 4.0}}
+    out = proc.update(st, 1.0)
+    charged = sum(v for v in out["aminoacylated_trna"].values())
+    assert charged <= 4.0 + 1e-6
+    assert "demand__amino_acid" in out and out["demand__amino_acid"]["trna_aminoacylation"] > 4.0

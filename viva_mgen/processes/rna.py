@@ -370,6 +370,7 @@ class TRNAAminoacylationReproductionProcess(Process):
             "atp": "float",
             "synthetase": "float",
             "alloc__atp": "map[float]",
+            "alloc__amino_acid": "map[float]",
         }
 
     def outputs(self):
@@ -378,6 +379,7 @@ class TRNAAminoacylationReproductionProcess(Process):
             "aminoacylated_trna": "map[float]",
             "atp": "float",
             "demand__atp": "map[float]",
+            "demand__amino_acid": "map[float]",
         }
 
     def initial_state(self):
@@ -388,12 +390,14 @@ class TRNAAminoacylationReproductionProcess(Process):
         total_free = sum(free.values())
         if total_free <= 0:
             return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0,
-                    "demand__atp": demand_entry(self._cid, 0.0)}
+                    "demand__atp": demand_entry(self._cid, 0.0),
+                    "demand__amino_acid": demand_entry(self._cid, 0.0)}
 
         amino_acid = float(state.get("amino_acid", 0.0))
         atp = float(state.get("atp", 0.0))
         synthetase = float(state.get("synthetase", 0.0))
         budget = select_budget(state.get("alloc__atp", {}), self._cid)
+        aa_budget = select_budget(state.get("alloc__amino_acid", {}), self._cid)
 
         # Aggregate reaction limit = min over the co-substrate availabilities
         # (free tRNA, amino acid, synthetase·kcat·Δt) — the reduced form of
@@ -402,12 +406,15 @@ class TRNAAminoacylationReproductionProcess(Process):
         enzyme_limit = synthetase * self._kcat * interval
         n_desired = min(total_free, amino_acid, enzyme_limit)
         want_atp = n_desired * self._atp_cost
+        want_aa = n_desired
+        aa_cap = min(amino_acid, aa_budget)  # amino_acid still bounds as a floor safety
         atp_cap = min(atp, budget)  # atp still bounds as a floor safety
         atp_limit = atp_cap / self._atp_cost if self._atp_cost > 0 else atp_cap
-        n_total = int(np.floor(min(n_desired, atp_limit)))
+        n_total = int(np.floor(min(total_free, aa_cap, atp_limit, enzyme_limit)))
         if n_total <= 0:
             return {"free_trna": {}, "aminoacylated_trna": {}, "atp": 0.0,
-                    "demand__atp": demand_entry(self._cid, want_atp)}
+                    "demand__atp": demand_entry(self._cid, want_atp),
+                    "demand__amino_acid": demand_entry(self._cid, want_aa)}
 
         # Partition the charged total across species proportional to free-tRNA
         # counts (multinomial) — the stochastic weighted pick over species.
@@ -431,4 +438,5 @@ class TRNAAminoacylationReproductionProcess(Process):
             "aminoacylated_trna": produced,
             "atp": -charged * self._atp_cost,
             "demand__atp": demand_entry(self._cid, want_atp),
+            "demand__amino_acid": demand_entry(self._cid, want_aa),
         }
