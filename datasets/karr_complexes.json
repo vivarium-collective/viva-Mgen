@@ -1,0 +1,973 @@
+{
+  "source": "Karr et al. 2012 knowledgeBase.mat (ProteinComplex subunit composition)",
+  "n_complexes_total": 201,
+  "monomer_only_complexes": {
+    "DNA_GYRASE": {
+      "MG_003_MONOMER": 2.0,
+      "MG_004_MONOMER": 2.0
+    },
+    "DNA_POLYMERASE_CORE": {
+      "MG_031_MONOMER": 1.0,
+      "MG_261_MONOMER": 1.0
+    },
+    "DNA_POLYMERASE_GAMMA_COMPLEX": {
+      "MG_007_MONOMER": 1.0,
+      "MG_315_MONOMER": 1.0,
+      "MG_419_MONOMER": 4.0
+    },
+    "MG_001_DIMER": {
+      "MG_001_MONOMER": 2.0
+    },
+    "MG_005_DIMER": {
+      "MG_005_MONOMER": 2.0
+    },
+    "MG_006_DIMER": {
+      "MG_006_MONOMER": 2.0
+    },
+    "MG_008_379_TETRAMER": {
+      "MG_008_MONOMER": 2.0,
+      "MG_379_MONOMER": 2.0
+    },
+    "MG_013_DIMER": {
+      "MG_013_MONOMER": 2.0
+    },
+    "MG_014_015_DIMER": {
+      "MG_014_MONOMER": 1.0,
+      "MG_015_MONOMER": 1.0
+    },
+    "MG_019_DIMER": {
+      "MG_019_MONOMER": 2.0
+    },
+    "MG_021_DIMER": {
+      "MG_021_MONOMER": 2.0
+    },
+    "MG_023_DIMER": {
+      "MG_023_MONOMER": 2.0
+    },
+    "MG_029_DIMER": {
+      "MG_029_MONOMER": 2.0
+    },
+    "MG_030_TRIMER": {
+      "MG_030_MONOMER": 3.0
+    },
+    "MG_033_TETRAMER": {
+      "MG_033_MONOMER": 4.0
+    },
+    "MG_034_DIMER": {
+      "MG_034_MONOMER": 2.0
+    },
+    "MG_035_DIMER": {
+      "MG_035_MONOMER": 2.0
+    },
+    "MG_036_DIMER": {
+      "MG_036_MONOMER": 2.0
+    },
+    "MG_038_TETRAMER": {
+      "MG_038_MONOMER": 4.0
+    },
+    "MG_039_DIMER": {
+      "MG_039_MONOMER": 2.0
+    },
+    "MG_040_119_120_121_PENTAMER": {
+      "MG_040_MONOMER": 1.0,
+      "MG_119_MONOMER": 2.0,
+      "MG_120_MONOMER": 1.0,
+      "MG_121_MONOMER": 1.0
+    },
+    "MG_041_062_429_PENTAMER": {
+      "MG_041_MONOMER": 1.0,
+      "MG_062_MONOMER": 2.0,
+      "MG_429_MONOMER": 2.0
+    },
+    "MG_041_069_429_PENTAMER": {
+      "MG_041_MONOMER": 1.0,
+      "MG_069_MONOMER": 2.0,
+      "MG_429_MONOMER": 2.0
+    },
+    "MG_042_043_044_045_PENTAMER": {
+      "MG_042_MONOMER": 2.0,
+      "MG_043_MONOMER": 1.0,
+      "MG_044_MONOMER": 1.0,
+      "MG_045_MONOMER": 1.0
+    },
+    "MG_046_DIMER": {
+      "MG_046_MONOMER": 2.0
+    },
+    "MG_047_TETRAMER": {
+      "MG_047_MONOMER": 4.0
+    },
+    "MG_049_HEXAMER": {
+      "MG_049_MONOMER": 6.0
+    },
+    "MG_051_DIMER": {
+      "MG_051_MONOMER": 2.0
+    },
+    "MG_052_DIMER": {
+      "MG_052_MONOMER": 2.0
+    },
+    "MG_053_TRIMER": {
+      "MG_053_MONOMER": 3.0
+    },
+    "MG_055_170_277_464_476_20MER": {
+      "MG_055_MONOMER": 4.0,
+      "MG_476_MONOMER": 4.0,
+      "MG_170_MONOMER": 4.0,
+      "MG_277_MONOMER": 4.0,
+      "MG_464_MONOMER": 4.0
+    },
+    "MG_058_HEXAMER": {
+      "MG_058_MONOMER": 6.0
+    },
+    "MG_063_DIMER": {
+      "MG_063_MONOMER": 2.0
+    },
+    "MG_064_065_TETRAMER": {
+      "MG_064_MONOMER": 2.0,
+      "MG_065_MONOMER": 2.0
+    },
+    "MG_066_DIMER": {
+      "MG_066_MONOMER": 2.0
+    },
+    "MG_072_DIMER": {
+      "MG_072_MONOMER": 2.0
+    },
+    "MG_073_206_421_TETRAMER": {
+      "MG_073_MONOMER": 1.0,
+      "MG_206_MONOMER": 1.0,
+      "MG_421_MONOMER": 2.0
+    },
+    "MG_077_078_079_080_321_PENTAMER": {
+      "MG_077_MONOMER": 1.0,
+      "MG_078_MONOMER": 1.0,
+      "MG_079_MONOMER": 1.0,
+      "MG_080_MONOMER": 1.0,
+      "MG_321_MONOMER": 1.0
+    },
+    "MG_084_TETRAMER": {
+      "MG_084_MONOMER": 4.0
+    },
+    "MG_085_HEXAMER": {
+      "MG_085_MONOMER": 6.0
+    },
+    "MG_089_DIMER": {
+      "MG_089_MONOMER": 2.0
+    },
+    "MG_091_TETRAMER": {
+      "MG_091_MONOMER": 4.0
+    },
+    "MG_094_HEXAMER": {
+      "MG_094_MONOMER": 6.0
+    },
+    "MG_098_099_100_TRIMER": {
+      "MG_098_MONOMER": 1.0,
+      "MG_099_MONOMER": 1.0,
+      "MG_100_MONOMER": 1.0
+    },
+    "MG_102_DIMER": {
+      "MG_102_MONOMER": 2.0
+    },
+    "MG_105_OCTAMER": {
+      "MG_105_MONOMER": 8.0
+    },
+    "MG_106_DIMER": {
+      "MG_106_MONOMER": 2.0
+    },
+    "MG_107_DIMER": {
+      "MG_107_MONOMER": 2.0
+    },
+    "MG_109_DIMER": {
+      "MG_109_MONOMER": 2.0
+    },
+    "MG_111_DIMER": {
+      "MG_111_MONOMER": 2.0
+    },
+    "MG_112_DIMER": {
+      "MG_112_MONOMER": 2.0
+    },
+    "MG_113_DIMER": {
+      "MG_113_MONOMER": 2.0
+    },
+    "MG_114_DIMER": {
+      "MG_114_MONOMER": 2.0
+    },
+    "MG_118_DIMER": {
+      "MG_118_MONOMER": 2.0
+    },
+    "MG_123_DIMER": {
+      "MG_123_MONOMER": 2.0
+    },
+    "MG_124_MONOMER_ox": {
+      "MG_124_MONOMER": 1.0
+    },
+    "MG_126_DIMER": {
+      "MG_126_MONOMER": 2.0
+    },
+    "MG_127_MONOMER_ox": {
+      "MG_127_MONOMER": 1.0
+    },
+    "MG_128_HEXAMER": {
+      "MG_128_MONOMER": 6.0
+    },
+    "MG_132_DIMER": {
+      "MG_132_MONOMER": 2.0
+    },
+    "MG_136_DIMER": {
+      "MG_136_MONOMER": 2.0
+    },
+    "MG_137_DIMER": {
+      "MG_137_MONOMER": 2.0
+    },
+    "MG_139_DIMER": {
+      "MG_139_MONOMER": 2.0
+    },
+    "MG_179_180_181_TETRAMER": {
+      "MG_179_MONOMER": 1.0,
+      "MG_180_MONOMER": 1.0,
+      "MG_181_MONOMER": 2.0
+    },
+    "MG_182_DIMER": {
+      "MG_182_MONOMER": 2.0
+    },
+    "MG_184_DIMER": {
+      "MG_184_MONOMER": 2.0
+    },
+    "MG_186_187_188_189_PENTAMER": {
+      "MG_186_MONOMER": 2.0,
+      "MG_187_MONOMER": 1.0,
+      "MG_188_MONOMER": 1.0,
+      "MG_189_MONOMER": 1.0
+    },
+    "MG_194_195_TETRAMER": {
+      "MG_194_MONOMER": 2.0,
+      "MG_195_MONOMER": 2.0
+    },
+    "MG_201_DIMER": {
+      "MG_201_MONOMER": 2.0
+    },
+    "MG_203_204_TETRAMER": {
+      "MG_203_MONOMER": 2.0,
+      "MG_204_MONOMER": 2.0
+    },
+    "MG_205_DIMER": {
+      "MG_205_MONOMER": 2.0
+    },
+    "MG_208_DIMER": {
+      "MG_208_MONOMER": 2.0
+    },
+    "MG_213_214_298_6MER": {
+      "MG_213_MONOMER": 2.0,
+      "MG_214_MONOMER": 2.0,
+      "MG_298_MONOMER": 2.0
+    },
+    "MG_215_TETRAMER": {
+      "MG_215_MONOMER": 4.0
+    },
+    "MG_216_TETRAMER": {
+      "MG_216_MONOMER": 4.0
+    },
+    "MG_221_OCTAMER": {
+      "MG_221_MONOMER": 8.0
+    },
+    "MG_224_MONOMER_GDP": {
+      "MG_224_MONOMER": 1.0
+    },
+    "MG_224_MONOMER_GTP": {
+      "MG_224_MONOMER": 1.0
+    },
+    "MG_225_DIMER": {
+      "MG_225_MONOMER": 2.0
+    },
+    "MG_226_DIMER": {
+      "MG_226_MONOMER": 2.0
+    },
+    "MG_227_DIMER": {
+      "MG_227_MONOMER": 2.0
+    },
+    "MG_228_TETRAMER": {
+      "MG_228_MONOMER": 4.0
+    },
+    "MG_229_231_TETRAMER": {
+      "MG_229_MONOMER": 2.0,
+      "MG_231_MONOMER": 2.0
+    },
+    "MG_239_HEXAMER": {
+      "MG_239_MONOMER": 6.0
+    },
+    "MG_240_HEXAMER": {
+      "MG_240_MONOMER": 6.0
+    },
+    "MG_244_DIMER": {
+      "MG_244_MONOMER": 2.0
+    },
+    "MG_251_DIMER": {
+      "MG_251_MONOMER": 2.0
+    },
+    "MG_252_DIMER": {
+      "MG_252_MONOMER": 2.0
+    },
+    "MG_259_TETRAMER": {
+      "MG_259_MONOMER": 4.0
+    },
+    "MG_265_DIMER": {
+      "MG_265_MONOMER": 2.0
+    },
+    "MG_271_272_273_274_192MER": {
+      "MG_271_MONOMER": 12.0,
+      "MG_272_MONOMER": 60.0,
+      "MG_273_MONOMER": 60.0,
+      "MG_274_MONOMER": 60.0
+    },
+    "MG_275_TETRAMER": {
+      "MG_275_MONOMER": 4.0
+    },
+    "MG_276_DIMER": {
+      "MG_276_MONOMER": 2.0
+    },
+    "MG_278_DIMER": {
+      "MG_278_MONOMER": 2.0
+    },
+    "MG_283_DIMER": {
+      "MG_283_MONOMER": 2.0
+    },
+    "MG_287_MONOMER_ACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_ddcaACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_hdeACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_myrsACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_ocdcaACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_octeACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_palmACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_287_MONOMER_tdeACP": {
+      "MG_287_MONOMER": 1.0
+    },
+    "MG_289_290_291_PENTAMER": {
+      "MG_289_MONOMER": 1.0,
+      "MG_290_MONOMER": 2.0,
+      "MG_291_MONOMER": 2.0
+    },
+    "MG_292_TETRAMER": {
+      "MG_292_MONOMER": 4.0
+    },
+    "MG_293_DIMER": {
+      "MG_293_MONOMER": 2.0
+    },
+    "MG_295_MONOMER_ox": {
+      "MG_295_MONOMER": 1.0
+    },
+    "MG_299_DIMER": {
+      "MG_299_MONOMER": 2.0
+    },
+    "MG_301_TETRAMER": {
+      "MG_301_MONOMER": 4.0
+    },
+    "MG_302_303_304_TETRAMER": {
+      "MG_302_MONOMER": 2.0,
+      "MG_303_MONOMER": 1.0,
+      "MG_304_MONOMER": 1.0
+    },
+    "MG_316_DIMER": {
+      "MG_316_MONOMER": 2.0
+    },
+    "MG_322_323_TETRAMER": {
+      "MG_322_MONOMER": 2.0,
+      "MG_323_MONOMER": 2.0
+    },
+    "MG_333_DIMER": {
+      "MG_333_MONOMER": 2.0
+    },
+    "MG_336_DIMER": {
+      "MG_336_MONOMER": 2.0
+    },
+    "MG_346_DIMER": {
+      "MG_346_MONOMER": 2.0
+    },
+    "MG_347_DIMER": {
+      "MG_347_MONOMER": 2.0
+    },
+    "MG_349_HEXAMER": {
+      "MG_349_MONOMER": 6.0
+    },
+    "MG_351_HEXAMER": {
+      "MG_351_MONOMER": 6.0
+    },
+    "MG_352_DIMER": {
+      "MG_352_MONOMER": 2.0
+    },
+    "MG_353_DIMER": {
+      "MG_353_MONOMER": 2.0
+    },
+    "MG_355_HEXAMER": {
+      "MG_355_MONOMER": 6.0
+    },
+    "MG_357_DIMER": {
+      "MG_357_MONOMER": 2.0
+    },
+    "MG_358_359_10MER": {
+      "MG_358_MONOMER": 4.0,
+      "MG_359_MONOMER": 6.0
+    },
+    "MG_367_DIMER": {
+      "MG_367_MONOMER": 2.0
+    },
+    "MG_368_DIMER": {
+      "MG_368_MONOMER": 2.0
+    },
+    "MG_369_DIMER": {
+      "MG_369_MONOMER": 2.0
+    },
+    "MG_372_DIMER": {
+      "MG_372_MONOMER": 2.0
+    },
+    "MG_375_DIMER": {
+      "MG_375_MONOMER": 2.0
+    },
+    "MG_376_HEXAMER": {
+      "MG_376_MONOMER": 6.0
+    },
+    "MG_382_TETRAMER": {
+      "MG_382_MONOMER": 4.0
+    },
+    "MG_383_DIMER": {
+      "MG_383_MONOMER": 2.0
+    },
+    "MG_385_DIMER": {
+      "MG_385_MONOMER": 2.0
+    },
+    "MG_390_DIMER": {
+      "MG_390_MONOMER": 2.0
+    },
+    "MG_391_HEXAMER": {
+      "MG_391_MONOMER": 6.0
+    },
+    "MG_392_393_21MER": {
+      "MG_392_MONOMER": 14.0,
+      "MG_393_MONOMER": 7.0
+    },
+    "MG_394_TETRAMER": {
+      "MG_394_MONOMER": 4.0
+    },
+    "MG_396_DIMER": {
+      "MG_396_MONOMER": 2.0
+    },
+    "MG_398_399_400_401_402_403_404_405_22MER": {
+      "MG_398_MONOMER": 1.0,
+      "MG_399_MONOMER": 3.0,
+      "MG_400_MONOMER": 1.0,
+      "MG_401_MONOMER": 3.0,
+      "MG_402_MONOMER": 1.0,
+      "MG_403_MONOMER": 2.0,
+      "MG_404_MONOMER": 10.0,
+      "MG_405_MONOMER": 1.0
+    },
+    "MG_407_DIMER": {
+      "MG_407_MONOMER": 2.0
+    },
+    "MG_409_DIMER": {
+      "MG_409_MONOMER": 2.0
+    },
+    "MG_410_411_412_PENTAMER": {
+      "MG_410_MONOMER": 2.0,
+      "MG_411_MONOMER": 2.0,
+      "MG_412_MONOMER": 1.0
+    },
+    "MG_425_DIMER": {
+      "MG_425_MONOMER": 2.0
+    },
+    "MG_427_DIMER": {
+      "MG_427_MONOMER": 2.0
+    },
+    "MG_428_DIMER": {
+      "MG_428_MONOMER": 2.0
+    },
+    "MG_431_DIMER": {
+      "MG_431_MONOMER": 2.0
+    },
+    "MG_433_DIMER": {
+      "MG_433_MONOMER": 2.0
+    },
+    "MG_434_HEXAMER": {
+      "MG_434_MONOMER": 6.0
+    },
+    "MG_437_DIMER": {
+      "MG_437_MONOMER": 2.0
+    },
+    "MG_445_DIMER": {
+      "MG_445_MONOMER": 2.0
+    },
+    "MG_451_DIMER": {
+      "MG_451_MONOMER": 2.0
+    },
+    "MG_453_TETRAMER": {
+      "MG_453_MONOMER": 4.0
+    },
+    "MG_454_DIMER": {
+      "MG_454_MONOMER": 2.0
+    },
+    "MG_455_DIMER": {
+      "MG_455_MONOMER": 2.0
+    },
+    "MG_457_HEXAMER": {
+      "MG_457_MONOMER": 6.0
+    },
+    "MG_458_TETRAMER": {
+      "MG_458_MONOMER": 4.0
+    },
+    "MG_460_TETRAMER": {
+      "MG_460_MONOMER": 4.0
+    },
+    "MG_467_468_526_TETRAMER": {
+      "MG_467_MONOMER": 1.0,
+      "MG_468_MONOMER": 2.0,
+      "MG_526_MONOMER": 1.0
+    },
+    "MG_469_1MER_ADP": {
+      "MG_469_MONOMER": 1.0
+    },
+    "MG_469_1MER_ATP": {
+      "MG_469_MONOMER": 1.0
+    },
+    "MG_482_DIMER": {
+      "MG_482_MONOMER": 2.0
+    },
+    "RNA_POLYMERASE": {
+      "MG_022_MONOMER": 1.0,
+      "MG_177_MONOMER": 2.0,
+      "MG_340_MONOMER": 1.0,
+      "MG_341_MONOMER": 1.0
+    }
+  },
+  "rna_or_subcomplex_complexes": {
+    "DNA_POLYMERASE_2CORE_BETA_CLAMP_GAMMA_COMPLEX_PRIMASE": {
+      "monomers": {
+        "MG_001_MONOMER": 2.0,
+        "MG_250_MONOMER": 1.0
+      },
+      "complexs": {
+        "DNA_POLYMERASE_CORE": 2.0,
+        "DNA_POLYMERASE_GAMMA_COMPLEX": 1.0
+      }
+    },
+    "DNA_POLYMERASE_CORE_BETA_CLAMP_GAMMA_COMPLEX": {
+      "monomers": {
+        "MG_001_MONOMER": 2.0
+      },
+      "complexs": {
+        "DNA_POLYMERASE_CORE": 1.0,
+        "DNA_POLYMERASE_GAMMA_COMPLEX": 1.0
+      }
+    },
+    "DNA_POLYMERASE_CORE_BETA_CLAMP_PRIMASE": {
+      "monomers": {
+        "MG_001_MONOMER": 2.0,
+        "MG_250_MONOMER": 1.0
+      },
+      "complexs": {
+        "DNA_POLYMERASE_CORE": 1.0
+      }
+    },
+    "DNA_POLYMERASE_HOLOENZYME": {
+      "monomers": {
+        "MG_001_MONOMER": 2.0
+      },
+      "complexs": {
+        "DNA_POLYMERASE_CORE": 2.0,
+        "DNA_POLYMERASE_GAMMA_COMPLEX": 1.0
+      }
+    },
+    "MG_0001_048": {
+      "monomers": {
+        "MG_048_MONOMER": 1.0
+      },
+      "rnas": {
+        "MG_0001": 1.0
+      }
+    },
+    "MG_0003_465": {
+      "monomers": {
+        "MG_465_MONOMER": 1.0
+      },
+      "rnas": {
+        "MG_0003": 1.0
+      }
+    },
+    "MG_091_OCTAMER": {
+      "monomers": {},
+      "complexs": {
+        "MG_091_TETRAMER": 2.0
+      }
+    },
+    "MG_102_DIMER_ox": {
+      "monomers": {},
+      "complexs": {
+        "MG_102_DIMER": 1.0
+      }
+    },
+    "MG_213_214_298_6MER_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_213_214_298_6MER": 1.0
+      }
+    },
+    "MG_224_2MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_MONOMER_GTP": 2.0
+      }
+    },
+    "MG_224_3MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_2MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_224_4MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_3MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_224_5MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_4MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_224_6MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_5MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_224_7MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_6MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_224_8MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_7MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_224_9MER_GDP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_9MER_GTP": 1.0
+      }
+    },
+    "MG_224_9MER_GTP": {
+      "monomers": {},
+      "complexs": {
+        "MG_224_8MER_GTP": 1.0,
+        "MG_224_MONOMER_GTP": 1.0
+      }
+    },
+    "MG_229_231_TETRAMER_ox": {
+      "monomers": {},
+      "complexs": {
+        "MG_229_231_TETRAMER": 1.0
+      }
+    },
+    "MG_271_272_273_274_192MER_ox": {
+      "monomers": {},
+      "complexs": {
+        "MG_271_272_273_274_192MER": 1.0
+      }
+    },
+    "MG_427_DIMER_ox": {
+      "monomers": {},
+      "complexs": {
+        "MG_427_DIMER": 1.0
+      }
+    },
+    "MG_454_DIMER_ox": {
+      "monomers": {},
+      "complexs": {
+        "MG_454_DIMER": 1.0
+      }
+    },
+    "MG_469_2MER_1ATP_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ADP": 1.0,
+        "MG_469_1MER_ATP": 1.0
+      }
+    },
+    "MG_469_2MER_ATP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ATP": 2.0
+      }
+    },
+    "MG_469_3MER_2ATP_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ADP": 1.0,
+        "MG_469_2MER_ATP": 1.0
+      }
+    },
+    "MG_469_3MER_ATP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ATP": 1.0,
+        "MG_469_2MER_ATP": 1.0
+      }
+    },
+    "MG_469_4MER_3ATP_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ADP": 1.0,
+        "MG_469_3MER_ATP": 1.0
+      }
+    },
+    "MG_469_4MER_ATP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ATP": 1.0,
+        "MG_469_3MER_ATP": 1.0
+      }
+    },
+    "MG_469_5MER_4ATP_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ADP": 1.0,
+        "MG_469_4MER_ATP": 1.0
+      }
+    },
+    "MG_469_5MER_ATP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ATP": 1.0,
+        "MG_469_4MER_ATP": 1.0
+      }
+    },
+    "MG_469_6MER_5ATP_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ADP": 1.0,
+        "MG_469_5MER_ATP": 1.0
+      }
+    },
+    "MG_469_6MER_ATP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ATP": 1.0,
+        "MG_469_5MER_ATP": 1.0
+      }
+    },
+    "MG_469_7MER_6ATP_ADP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ADP": 1.0,
+        "MG_469_6MER_ATP": 1.0
+      }
+    },
+    "MG_469_7MER_ATP": {
+      "monomers": {},
+      "complexs": {
+        "MG_469_1MER_ATP": 1.0,
+        "MG_469_6MER_ATP": 1.0
+      }
+    },
+    "REPLISOME": {
+      "monomers": {
+        "MG_001_MONOMER": 4.0,
+        "MG_250_MONOMER": 1.0
+      },
+      "complexs": {
+        "DNA_POLYMERASE_CORE": 2.0,
+        "DNA_POLYMERASE_GAMMA_COMPLEX": 1.0,
+        "MG_094_HEXAMER": 1.0
+      }
+    },
+    "RIBOSOME_30S": {
+      "monomers": {
+        "MG_070_MONOMER": 1.0,
+        "MG_087_MONOMER": 1.0,
+        "MG_088_MONOMER": 1.0,
+        "MG_090_MONOMER": 1.0,
+        "MG_092_MONOMER": 1.0,
+        "MG_150_MONOMER": 1.0,
+        "MG_155_MONOMER": 1.0,
+        "MG_157_MONOMER": 1.0,
+        "MG_160_MONOMER": 1.0,
+        "MG_164_MONOMER": 1.0,
+        "MG_165_MONOMER": 1.0,
+        "MG_168_MONOMER": 1.0,
+        "MG_175_MONOMER": 1.0,
+        "MG_176_MONOMER": 1.0,
+        "MG_481_MONOMER": 1.0,
+        "MG_311_MONOMER": 1.0,
+        "MG_522_MONOMER": 1.0,
+        "MG_417_MONOMER": 1.0,
+        "MG_424_MONOMER": 1.0,
+        "MG_446_MONOMER": 1.0
+      },
+      "rnas": {
+        "MGrrnA16S": 1.0
+      }
+    },
+    "RIBOSOME_30S_IF3": {
+      "monomers": {
+        "MG_196_MONOMER": 1.0
+      },
+      "complexs": {
+        "RIBOSOME_30S": 1.0
+      }
+    },
+    "RIBOSOME_50S": {
+      "monomers": {
+        "MG_473_MONOMER": 1.0,
+        "MG_081_MONOMER": 1.0,
+        "MG_082_MONOMER": 1.0,
+        "MG_093_MONOMER": 1.0,
+        "MG_151_MONOMER": 1.0,
+        "MG_152_MONOMER": 1.0,
+        "MG_153_MONOMER": 1.0,
+        "MG_154_MONOMER": 1.0,
+        "MG_156_MONOMER": 1.0,
+        "MG_158_MONOMER": 1.0,
+        "MG_159_MONOMER": 1.0,
+        "MG_161_MONOMER": 1.0,
+        "MG_162_MONOMER": 1.0,
+        "MG_163_MONOMER": 1.0,
+        "MG_166_MONOMER": 1.0,
+        "MG_167_MONOMER": 1.0,
+        "MG_169_MONOMER": 1.0,
+        "MG_174_MONOMER": 1.0,
+        "MG_178_MONOMER": 1.0,
+        "MG_197_MONOMER": 1.0,
+        "MG_198_MONOMER": 1.0,
+        "MG_232_MONOMER": 1.0,
+        "MG_234_MONOMER": 1.0,
+        "MG_257_MONOMER": 1.0,
+        "MG_325_MONOMER": 1.0,
+        "MG_361_MONOMER": 1.0,
+        "MG_362_MONOMER": 1.0,
+        "MG_363_MONOMER": 1.0,
+        "MG_418_MONOMER": 1.0,
+        "MG_426_MONOMER": 1.0,
+        "MG_444_MONOMER": 1.0,
+        "MG_466_MONOMER": 1.0
+      },
+      "rnas": {
+        "MGrrnA23S": 1.0,
+        "MGrrnA5S": 1.0
+      }
+    },
+    "RIBOSOME_70S": {
+      "monomers": {},
+      "complexs": {
+        "RIBOSOME_30S": 1.0,
+        "RIBOSOME_50S": 1.0
+      }
+    },
+    "RNA_POLYMERASE_HOLOENZYME": {
+      "monomers": {
+        "MG_249_MONOMER": 1.0
+      },
+      "complexs": {
+        "RNA_POLYMERASE": 1.0
+      }
+    }
+  },
+  "ribosome": {
+    "RIBOSOME_30S": {
+      "monomers": {
+        "MG_070_MONOMER": 1.0,
+        "MG_087_MONOMER": 1.0,
+        "MG_088_MONOMER": 1.0,
+        "MG_090_MONOMER": 1.0,
+        "MG_092_MONOMER": 1.0,
+        "MG_150_MONOMER": 1.0,
+        "MG_155_MONOMER": 1.0,
+        "MG_157_MONOMER": 1.0,
+        "MG_160_MONOMER": 1.0,
+        "MG_164_MONOMER": 1.0,
+        "MG_165_MONOMER": 1.0,
+        "MG_168_MONOMER": 1.0,
+        "MG_175_MONOMER": 1.0,
+        "MG_176_MONOMER": 1.0,
+        "MG_481_MONOMER": 1.0,
+        "MG_311_MONOMER": 1.0,
+        "MG_522_MONOMER": 1.0,
+        "MG_417_MONOMER": 1.0,
+        "MG_424_MONOMER": 1.0,
+        "MG_446_MONOMER": 1.0
+      },
+      "complexs": {},
+      "rnas": {
+        "MGrrnA16S": 1.0
+      }
+    },
+    "RIBOSOME_50S": {
+      "monomers": {
+        "MG_473_MONOMER": 1.0,
+        "MG_081_MONOMER": 1.0,
+        "MG_082_MONOMER": 1.0,
+        "MG_093_MONOMER": 1.0,
+        "MG_151_MONOMER": 1.0,
+        "MG_152_MONOMER": 1.0,
+        "MG_153_MONOMER": 1.0,
+        "MG_154_MONOMER": 1.0,
+        "MG_156_MONOMER": 1.0,
+        "MG_158_MONOMER": 1.0,
+        "MG_159_MONOMER": 1.0,
+        "MG_161_MONOMER": 1.0,
+        "MG_162_MONOMER": 1.0,
+        "MG_163_MONOMER": 1.0,
+        "MG_166_MONOMER": 1.0,
+        "MG_167_MONOMER": 1.0,
+        "MG_169_MONOMER": 1.0,
+        "MG_174_MONOMER": 1.0,
+        "MG_178_MONOMER": 1.0,
+        "MG_197_MONOMER": 1.0,
+        "MG_198_MONOMER": 1.0,
+        "MG_232_MONOMER": 1.0,
+        "MG_234_MONOMER": 1.0,
+        "MG_257_MONOMER": 1.0,
+        "MG_325_MONOMER": 1.0,
+        "MG_361_MONOMER": 1.0,
+        "MG_362_MONOMER": 1.0,
+        "MG_363_MONOMER": 1.0,
+        "MG_418_MONOMER": 1.0,
+        "MG_426_MONOMER": 1.0,
+        "MG_444_MONOMER": 1.0,
+        "MG_466_MONOMER": 1.0
+      },
+      "complexs": {},
+      "rnas": {
+        "MGrrnA23S": 1.0,
+        "MGrrnA5S": 1.0
+      }
+    },
+    "RIBOSOME_70S": {
+      "monomers": {},
+      "complexs": {
+        "RIBOSOME_30S": 1.0,
+        "RIBOSOME_50S": 1.0
+      },
+      "rnas": {}
+    }
+  }
+}

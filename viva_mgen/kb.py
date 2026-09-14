@@ -100,6 +100,26 @@ def load_karr_parameters() -> dict:
         return json.load(f)
 
 
+@functools.lru_cache(maxsize=1)
+def load_karr_complexes() -> dict:
+    """Load ``datasets/karr_complexes.json`` — the **real** ProteinComplex subunit
+    stoichiometry decoded from the Karr 2012 knowledge base.
+
+    Returns a dict with ``monomer_only_complexes`` ({complex: {monomer: n}}),
+    ``rna_or_subcomplex_complexes`` (full composition), and ``ribosome`` (the
+    30S/50S/70S subunit breakdown). Regenerate with
+    ``scripts/extract_kb_complexes.py``.
+    """
+    path = dataset_path("karr_complexes.json")
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"Karr complex stoichiometry not found at {path}. Regenerate with "
+            "scripts/extract_kb_complexes.py from knowledgeBase.mat."
+        )
+    with open(path) as f:
+        return json.load(f)
+
+
 def karr_process_params(process_name: str) -> dict:
     """Return one process's real Karr 2012 constant dict (empty dict if absent).
 
