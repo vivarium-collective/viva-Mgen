@@ -212,6 +212,54 @@ _COEF_FIELD = {
 }
 
 
+def decode_transcription_regulation(mat_path: Path) -> dict:
+    """Real transcription-factor regulatory network from the KB.
+
+    Each TranscriptionUnit stores the protein-monomer (and complex) transcription
+    factors regulating it, their activity fold-changes, and the genes it transcribes.
+    Returns ``{gene_id: {tf_id: fold_change_at_full_activity}}`` — the genuine
+    TF→gene edges (fold_change > 1 activates, < 1 represses).
+    """
+    cells = _read_subsystem_cells(mat_path)
+    by = _objects_by_class(cells)
+    tus = by.get("TranscriptionUnit", [])
+    monomers = by.get("ProteinMonomer", [])
+    complexes = by.get("ProteinComplex", [])
+    genes = by.get("Gene", [])
+
+    def _id(lst, i):
+        v = _scalar(lst[i - 1].get("wholeCellModelID")) if 0 < i <= len(lst) else None
+        return str(v) if v is not None else None
+
+    out: dict = {}
+    for p in tus:
+        gene_idxs = _ref_indices(p.get("genes"))
+        gene_ids = [g for g in (_id(genes, i) for i in gene_idxs) if g]
+        if not gene_ids:
+            continue
+        edges: dict = {}
+        for tf_field, act_field, lst in (
+            ("transcriptionFactorProteinMonomers",
+             "transcriptionFactorProteinMonomerActivitys", monomers),
+            ("transcriptionFactorProteinComplexs",
+             "transcriptionFactorProteinComplexActivitys", complexes),
+        ):
+            tf_idxs = _ref_indices(p.get(tf_field))
+            if not tf_idxs:
+                continue
+            acts = np.asarray(p.get(act_field)).ravel()
+            for k, i in enumerate(tf_idxs):
+                tf = _id(lst, i)
+                if tf is None:
+                    continue
+                fc = float(acts[k]) if k < acts.size else 1.0
+                edges[tf] = fc
+        if edges:
+            for g in gene_ids:
+                out.setdefault(g, {}).update(edges)
+    return out
+
+
 def _floats(v):
     return [float(x) for x in np.asarray(v).ravel()]
 

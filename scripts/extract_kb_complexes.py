@@ -18,11 +18,31 @@ from pathlib import Path
 from viva_mgen import kb_decode as k
 
 DEFAULT_MAT = Path.home() / "code/WholeCell-reference/data/knowledgeBase.mat"
-OUT = Path(__file__).resolve().parents[1] / "datasets" / "karr_complexes.json"
+DATASETS = Path(__file__).resolve().parents[1] / "datasets"
+OUT = DATASETS / "karr_complexes.json"
+OUT_TF = DATASETS / "karr_tf_regulation.json"
+
+
+def _write_tf_regulation(mat: Path) -> None:
+    reg = k.decode_transcription_regulation(mat)
+    payload = {
+        "source": "Karr et al. 2012 knowledgeBase.mat (TranscriptionUnit TF regulation)",
+        "note": "gene_id -> {transcription_factor_id: fold_change_at_full_activity}; "
+                ">1 activates, <1 represses.",
+        "n_regulated_genes": len(reg),
+        "regulation": {g: {str(tf): float(fc) for tf, fc in edges.items()}
+                       for g, edges in sorted(reg.items())},
+    }
+    OUT_TF.write_text(json.dumps(payload, indent=2))
+    print(f"wrote {OUT_TF}")
+    print(f"  {len(reg)} genes regulated by TFs")
+    tfs = {tf for edges in reg.values() for tf in edges}
+    print(f"  {len(tfs)} distinct transcription factors: {sorted(tfs)}")
 
 
 def main() -> None:
     mat = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_MAT
+    _write_tf_regulation(mat)
     raw = k.decode_protein_complexes(mat)
 
     # Complexes assembled purely from protein monomers → the general

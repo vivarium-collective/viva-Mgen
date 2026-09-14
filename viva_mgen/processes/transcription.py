@@ -1,12 +1,15 @@
-"""Transcription submodel — clean-room reproduction (reduced).
+"""Transcription submodel — clean-room reproduction of Karr 2012.
 
 Reproduces the stochastic RNA-synthesis mechanism of the Karr 2012
 ``Transcription`` submodel: RNA polymerase binds transcription units and
 synthesizes mRNA, consuming NTPs and releasing pyrophosphate. The original is a
-full RNA-polymerase state machine over all transcription units; this reduced
-version keeps the essential stochastic (Poisson) synthesis on a representative
-gene panel (see :mod:`viva_mgen.expression_defaults`), sufficient for the
-single-cell burst dynamics of Fig 2G/2H.
+full RNA-polymerase state machine over all transcription units; this version
+keeps the essential stochastic (Poisson) single-molecule synthesis over the FULL
+M. genitalium gene set (~522 genes, see :mod:`viva_mgen.expression_defaults`),
+with per-gene rates fitted by the native ParCa from the real observed expression
+profile — sufficient for the single-cell burst dynamics of Fig 2G/2H. The
+reduction is the RNA-polymerase state machine itself (initiation/elongation/
+termination are collapsed into one propensity), not the gene coverage.
 """
 
 from __future__ import annotations
@@ -18,7 +21,7 @@ from ..expression_defaults import synthesis_rates, gene_lengths
 
 
 class TranscriptionReproductionProcess(Process):
-    """Stochastic mRNA synthesis on a representative gene panel.
+    """Stochastic mRNA synthesis over the full M. genitalium gene set.
 
     Inputs
     ------
@@ -36,16 +39,18 @@ class TranscriptionReproductionProcess(Process):
     """
 
     description = (
-        "Stochastic transcription — reduced reproduction of Karr 2012 Transcription.\n"
-        "For each gene g on the representative panel, new mRNA per step is a Poisson draw\n"
+        "Stochastic transcription — reproduction of Karr 2012 Transcription.\n"
+        "For every gene g in the full M. genitalium gene set (~522 genes), new mRNA per step is a\n"
+        "Poisson draw\n"
         "    n_g ~ Poisson(k_g · (RNApol / RNApol_ref) · Δt)\n"
-        "capped by NTP supply (each transcript consumes length_g NTP; PPi released). Keeps the "
-        "essential stochastic single-molecule synthesis mechanism of the full RNA-polymerase "
-        "state machine.\n"
+        "capped by NTP supply (each transcript consumes length_g NTP; PPi released). Per-gene\n"
+        "rates k_g are ParCa-fitted from the real observed expression profile.\n"
         "Contract — in: ntp (pool, molecules), rna_pol (available polymerase count). "
         "out: rna_counts (per-gene mRNA Δ, additive map), ntp (Δ consumed, negative).\n"
-        "Fidelity: REDUCED — a 6-gene representative panel with representative rates, not all "
-        "~480 genes; reproduces the qualitative bursty-mRNA behaviour of Fig 2G."
+        "Fidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\n"
+        "reduction is the RNA-polymerase state machine — initiation/elongation/termination are\n"
+        "collapsed into a single Poisson propensity scaled by available polymerase; reproduces the\n"
+        "bursty-mRNA behaviour of Fig 2G."
     )
 
     config_schema = {

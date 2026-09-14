@@ -120,6 +120,22 @@ def load_karr_complexes() -> dict:
         return json.load(f)
 
 
+@functools.lru_cache(maxsize=1)
+def load_tf_regulation() -> dict:
+    """Load ``datasets/karr_tf_regulation.json`` — the **real** transcription-factor
+    regulatory network decoded from the KB TranscriptionUnit objects.
+
+    Returns ``{gene_id: {tf_id: fold_change_at_full_activity}}`` (fold > 1 activates,
+    < 1 represses). Empty dict if the file is absent. Regenerate with
+    ``scripts/extract_kb_complexes.py``.
+    """
+    path = dataset_path("karr_tf_regulation.json")
+    if not path.is_file():
+        return {}
+    with open(path) as f:
+        return json.load(f).get("regulation", {})
+
+
 def karr_process_params(process_name: str) -> dict:
     """Return one process's real Karr 2012 constant dict (empty dict if absent).
 
