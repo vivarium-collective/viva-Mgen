@@ -146,7 +146,9 @@ class DNASupercoilingReproductionProcess(Process):
         "Fidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, "
         "setpoint −0.06, 10.5 bp/turn). σ is tracked genome-wide as one linking-number pool rather "
         "than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme "
-        "rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling'))."
+        "rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')). "
+        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): "
+        "capped each tick at its allocated ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
@@ -413,7 +415,9 @@ class DNARepairReproductionProcess(Process):
         "out: lesions (negative Δ), atp (negative Δ).\n"
         "Fidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR "
         "pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance "
-        "flux; dNTP accounting is delegated to the metabolite pools."
+        "flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the "
+        "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated "
+        "ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {

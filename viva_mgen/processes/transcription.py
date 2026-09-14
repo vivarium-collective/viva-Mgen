@@ -51,7 +51,9 @@ class TranscriptionReproductionProcess(Process):
         "Fidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\n"
         "reduction is the RNA-polymerase state machine — initiation/elongation/termination are\n"
         "collapsed into a single Poisson propensity scaled by available polymerase; reproduces the\n"
-        "bursty-mRNA behaviour of Fig 2G."
+        "bursty-mRNA behaviour of Fig 2G. Consumption is arbitrated by the whole-cell resource\n"
+        "allocator (Karr hybrid partitioning): capped each tick at its allocated NTP budget from the\n"
+        "finite metabolism-replenished pool."
     )
 
     config_schema = {

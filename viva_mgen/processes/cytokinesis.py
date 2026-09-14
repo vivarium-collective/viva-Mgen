@@ -69,7 +69,9 @@ class FtsZPolymerizationReproductionProcess(Process):
         "Fidelity: FAITHFUL activation/dissociation constants (real KB activationFwd/Rev). The "
         "reduction is the assembly detail: a two-state free⇌ring relaxation stands in for the "
         "explicit nucleation/elongation/exchange mass-action multimers (their bimolecular fwd/rev "
-        "constants are in different units and available via kb.karr_process_params('FtsZPolymerization'))."
+        "constants are in different units and available via kb.karr_process_params('FtsZPolymerization')). "
+        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): "
+        "capped each tick at its allocated GTP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {

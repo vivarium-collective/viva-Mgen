@@ -192,7 +192,9 @@ class ProteinTranslocationReproductionProcess(Process):
         "out: process_i_done (neg map), translocated (pos map), gtp (neg Δ).\n"
         "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); "
         "the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated "
-        "to the metabolite pools."
+        "to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator "
+        "(Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite "
+        "metabolism-replenished pool."
     )
 
     config_schema = {
@@ -341,7 +343,9 @@ class ProteinFoldingReproductionProcess(Process):
         "Fidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\n"
         "carries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\n"
         "order-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\n"
-        "coordination is delegated to the metabolite pools."
+        "coordination is delegated to the metabolite pools. Consumption is arbitrated by the\n"
+        "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\n"
+        "ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
@@ -444,7 +448,9 @@ class ProteinModificationReproductionProcess(Process):
         "out: unmodified (neg map), modified (pos map), atp (neg Δ).\n"
         "Fidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\n"
         "ProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\n"
-        "the per-reaction cofactor stoichiometry is delegated to the metabolite pools."
+        "the per-reaction cofactor stoichiometry is delegated to the metabolite pools. Consumption\n"
+        "is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each\n"
+        "tick at its allocated ATP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
@@ -720,7 +726,9 @@ class RibosomeAssemblyReproductionProcess(Process):
         "out: ribosome_30S (float Δ), ribosome_50S (float Δ), rprotein_counts (neg map), "
         "rrna_counts (neg map), gtp (neg Δ).\n"
         "Fidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); "
-        "water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere)."
+        "water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere). "
+        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): "
+        "capped each tick at its allocated GTP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {

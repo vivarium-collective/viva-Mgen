@@ -9,6 +9,13 @@ repair chain, and FtsZ→cytokinesis + host interaction) through shared
 cell-variable stores. Every figure-study reuses THIS composite, differing only
 in the parameters it passes and the observables it measures — mirroring the
 Karr 2012 model's own "one whole-cell model, many analyses" design.
+
+The AllocatorProcess (node "allocator") is the whole-cell resource-integration
+layer: it replenishes the shared ATP/GTP/NTP/amino-acid pools from metabolism's
+per-tick production and partitions each finite pool across its competing
+consumer processes every tick (Karr hybrid partitioning — proportional
+scale-back under scarcity, full grant under surplus), so no single consumer
+can starve its siblings.
 """
 
 from __future__ import annotations

@@ -51,7 +51,9 @@ class TranslationReproductionProcess(Process):
         "Fidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\n"
         "reduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\n"
         "mRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA↔protein decoupling\n"
-        "and the translation share of the Fig 5 energy budget."
+        "and the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\n"
+        "whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\n"
+        "GTP budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {

@@ -346,7 +346,10 @@ class TRNAAminoacylationReproductionProcess(Process):
         "Fidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\n"
         "tRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\n"
         "value; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA × 37\n"
-        "tRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases."
+        "tRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.\n"
+        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning):\n"
+        "capped each tick at its allocated ATP and amino_acid budgets from the finite\n"
+        "metabolism-replenished pools."
     )
 
     config_schema = {
