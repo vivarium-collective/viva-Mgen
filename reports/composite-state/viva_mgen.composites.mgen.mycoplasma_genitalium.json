@@ -2287,7 +2287,7 @@
           "process_i_done"
         ]
       },
-      "doc": "Protein Processing I \u2014 reproduction of Karr 2012 ProteinProcessingI.\nPeptide deformylase (MG_106) deformylates the N-terminal fMet and methionine\naminopeptidase (MG_172) cleaves the N-terminal Met of nascent peptides. Both steps\nare required, so a monomer is 'done' only when both enzymes have acted; MATLAB caps\neach transform at enzyme*specificRate*\u0394t shared proportionally across waiting\nmonomers, so the throughput is limited by the slower enzyme,\n    limit = min(deformylase*38.0, aminopeptidase*6.0) * \u0394t   [1/s, real KB rates].\nContract \u2014 in: nascent (per-gene, map), deformylase (MG_106 count, float), aminopeptidase (MG_172 count, float). out: nascent (\u0394 consumed, neg map), process_i_done (\u0394 produced, pos map).\nFidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s\u207b\u00b9, two-enzyme sequential limit); water/formate/methionine byproducts delegated to the metabolite pools.",
+      "doc": "Protein Processing I \u2014 reproduction of Karr 2012 ProteinProcessingI.\nPeptide deformylase (MG_106) deformylates the N-terminal fMet of every nascent\nmonomer; methionine aminopeptidase (MG_172) additionally cleaves the N-terminal Met\nfor the REAL KB met-cleavage subset (per-protein classification decoded from the\nknowledge base, met_cleavage_genes). MATLAB caps each transform at\nenzyme*specificRate*\u0394t shared proportionally across waiting monomers:\n    all nascent:      limit = deformylase*38.0*\u0394t\n    met_cleavage set: additionally capped by aminopeptidase*6.0*\u0394t, shared across\n                      just that subset.\nEvery monomer still advances nascent -> process_i_done each step; proteins outside\nthe met-cleavage set are deformylated and pass through without consuming\naminopeptidase capacity.\nContract \u2014 config: met_cleavage_genes (list[string], default = real KB met-cleavage\nclassification). in: nascent (per-gene, map), deformylase (MG_106 count, float), aminopeptidase (MG_172 count, float). out: nascent (\u0394 consumed, neg map), process_i_done (\u0394 produced, pos map).\nFidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s\u207b\u00b9) AND real\nper-protein met-cleavage routing (35/~482 genes, decoded from the KB signal panel); water/formate/methionine byproducts delegated to the metabolite pools.",
       "config_schema": {
         "deformylase_specific_rate": {
           "_type": "float",
@@ -2297,6 +2297,10 @@
           "_type": "float",
           "_default": 6.0
         },
+        "met_cleavage_genes": {
+          "_type": "list[string]",
+          "_default": []
+        },
         "seed": {
           "_type": "integer",
           "_default": 11
@@ -2304,12 +2308,14 @@
       },
       "_contract": {
         "summary": "Protein Processing I \u2014 reproduction of Karr 2012 ProteinProcessingI.",
-        "description": "Peptide deformylase (MG_106) deformylates the N-terminal fMet and methionine\naminopeptidase (MG_172) cleaves the N-terminal Met of nascent peptides. Both steps\nare required, so a monomer is 'done' only when both enzymes have acted; MATLAB caps\neach transform at enzyme*specificRate*\u0394t shared proportionally across waiting\nmonomers, so the throughput is limited by the slower enzyme,\nContract \u2014 in: nascent (per-gene, map), deformylase (MG_106 count, float), aminopeptidase (MG_172 count, float). out: nascent (\u0394 consumed, neg map), process_i_done (\u0394 produced, pos map).\nFidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s\u207b\u00b9, two-enzyme sequential limit); water/formate/methionine byproducts delegated to the metabolite pools.",
+        "description": "Peptide deformylase (MG_106) deformylates the N-terminal fMet of every nascent\nmonomer; methionine aminopeptidase (MG_172) additionally cleaves the N-terminal Met\nfor the REAL KB met-cleavage subset (per-protein classification decoded from the\nknowledge base, met_cleavage_genes). MATLAB caps each transform at\nenzyme*specificRate*\u0394t shared proportionally across waiting monomers:\nmet_cleavage set: additionally capped by aminopeptidase*6.0*\u0394t, shared across\njust that subset.\nEvery monomer still advances nascent -> process_i_done each step; proteins outside\nthe met-cleavage set are deformylated and pass through without consuming\naminopeptidase capacity.\nclassification). in: nascent (per-gene, map), deformylase (MG_106 count, float), aminopeptidase (MG_172 count, float). out: nascent (\u0394 consumed, neg map), process_i_done (\u0394 produced, pos map).\nFidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s\u207b\u00b9) AND real",
         "inputs": {},
         "outputs": {},
         "config": {},
         "math": [
-          "limit = min(deformylase*38.0, aminopeptidase*6.0) * \u0394t   [1/s, real KB rates]."
+          "all nascent:      limit = deformylase*38.0*\u0394t",
+          "Contract \u2014 config: met_cleavage_genes (list[string], default = real KB met-cleavage",
+          "per-protein met-cleavage routing (35/~482 genes, decoded from the KB signal panel); water/formate/methionine byproducts delegated to the metabolite pools."
         ],
         "symbols": {},
         "assumptions": [],
@@ -2379,7 +2385,7 @@
           "demand__gtp"
         ]
       },
-      "doc": "Protein Translocation \u2014 reproduction of Karr 2012 ProteinTranslocation.\nIntegral-membrane/lipo/secreted proteins are pushed through the SecYEG pore by the\nSecA translocase, recognised via the GTP-driven signal recognition particle. In the\nreal KB the translocase specific rate (2.71e12 s\u207b\u00b9) is effectively non-limiting, so\nthe bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):\n    limit = min(translocase*2.71e12, gtp/2.0) * \u0394t,\nso process_i_done -> translocated proceeds up to the GTP available, consuming 2 GTP/monomer.\nContract \u2014 in: process_i_done (map), translocase (float), gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg \u0394).\nFidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool.",
+      "doc": "Protein Translocation \u2014 reproduction of Karr 2012 ProteinTranslocation.\nOnly the REAL KB secretory + lipoprotein subset (translocated_genes, per-protein\nsignal-type classification decoded from the knowledge base) is pushed through the\nSecYEG pore by the SecA translocase, recognised via the GTP-driven signal recognition\nparticle. In the real KB the translocase specific rate (2.71e12 s\u207b\u00b9) is effectively\nnon-limiting, so the bottleneck is GTP through SRP recognition\n(SRP_GTPUsedPerMonomer = 2.0, real KB):\n    limit = min(translocase*2.71e12, gtp/2.0) * \u0394t,\napplied only to the secretory/lipoprotein subset, consuming 2 GTP/monomer. Every OTHER\nprotein in process_i_done (cytoplasmic, no signal peptide) passes straight through to\ntranslocated with no translocase/GTP gate, so the pipeline never stalls on\nnon-substrates.\nContract \u2014 config: translocated_genes (list[string], default = real KB\nsecretory+lipoprotein classification). in: process_i_done (map), translocase (float), gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg \u0394).\nFidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0) AND\nreal per-protein substrate routing (20 secretory + 14 lipoprotein genes, decoded from the\nKB signal panel); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths\nand is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell\nresource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP\nbudget from the finite metabolism-replenished pool.",
       "config_schema": {
         "translocase_specific_rate": {
           "_type": "float",
@@ -2388,6 +2394,10 @@
         "gtp_per_monomer": {
           "_type": "float",
           "_default": 2.0
+        },
+        "translocated_genes": {
+          "_type": "list[string]",
+          "_default": []
         },
         "seed": {
           "_type": "integer",
@@ -2400,14 +2410,15 @@
       },
       "_contract": {
         "summary": "Protein Translocation \u2014 reproduction of Karr 2012 ProteinTranslocation.",
-        "description": "Integral-membrane/lipo/secreted proteins are pushed through the SecYEG pore by the\nSecA translocase, recognised via the GTP-driven signal recognition particle. In the\nreal KB the translocase specific rate (2.71e12 s\u207b\u00b9) is effectively non-limiting, so\nso process_i_done -> translocated proceeds up to the GTP available, consuming 2 GTP/monomer.\nContract \u2014 in: process_i_done (map), translocase (float), gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg \u0394).",
+        "description": "Only the REAL KB secretory + lipoprotein subset (translocated_genes, per-protein\nsignal-type classification decoded from the knowledge base) is pushed through the\nSecYEG pore by the SecA translocase, recognised via the GTP-driven signal recognition\nparticle. In the real KB the translocase specific rate (2.71e12 s\u207b\u00b9) is effectively\nnon-limiting, so the bottleneck is GTP through SRP recognition\napplied only to the secretory/lipoprotein subset, consuming 2 GTP/monomer. Every OTHER\nprotein in process_i_done (cytoplasmic, no signal peptide) passes straight through to\ntranslocated with no translocase/GTP gate, so the pipeline never stalls on\nnon-substrates.\nsecretory+lipoprotein classification). in: process_i_done (map), translocase (float), gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg \u0394).\nreal per-protein substrate routing (20 secretory + 14 lipoprotein genes, decoded from the\nKB signal panel); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths\nand is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell\nresource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP\nbudget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
         "math": [
-          "the bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):",
+          "(SRP_GTPUsedPerMonomer = 2.0, real KB):",
           "limit = min(translocase*2.71e12, gtp/2.0) * \u0394t,",
-          "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool."
+          "Contract \u2014 config: translocated_genes (list[string], default = real KB",
+          "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0) AND"
         ],
         "symbols": {},
         "assumptions": [],
@@ -2446,6 +2457,11 @@
           "cell",
           "proteome",
           "signal_peptidase"
+        ],
+        "diacylglyceryl_transferase": [
+          "cell",
+          "proteome",
+          "diacylglyceryl_transferase"
         ]
       },
       "outputs": {
@@ -2460,11 +2476,19 @@
           "processed_ii"
         ]
       },
-      "doc": "Protein Processing II \u2014 reproduction of Karr 2012 ProteinProcessingII.\nAfter translocation, signal peptidase II (LspA/MG_210) cleaves the type-II signal\nsequence (and, for the lipoprotein subset, diacylglyceryl transferase Lgt/MG_086\nlipidates the cysteine first). MATLAB caps cleavages at peptidase*specificRate*\u0394t\nshared proportionally; here translocated -> processed_ii is limited by the peptidase\nat its real KB rate,\n    limit = signal_peptidase * 11.0 * \u0394t   [1/s, real KB rate].\nContract \u2014 in: translocated (map), signal_peptidase (LspA count, float). out: translocated (neg map), processed_ii (pos map).\nFidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s\u207b\u00b9). The lipoprotein-specific\nLgt transfer (KB rate 0.0165 s\u207b\u00b9) is not applied as a global throttle because this panel\ndoes not carry the per-protein lipoprotein classification; PG160/byproducts are delegated\nto the metabolite pools.",
+      "doc": "Protein Processing II \u2014 reproduction of Karr 2012 ProteinProcessingII.\nAfter translocation, signal peptidase II (LspA/MG_210) cleaves the type-II signal\nsequence for every translocated monomer; for the REAL KB lipoprotein subset\n(lipoprotein_genes, per-protein signal-type classification decoded from the\nknowledge base), diacylglyceryl transferase (Lgt/MG_086) additionally lipidates the\ncysteine. MATLAB caps each transform at enzyme*specificRate*\u0394t shared proportionally:\n    all translocated:  limit = signal_peptidase * 11.0 * \u0394t\n    lipoprotein set:   additionally capped by diacylglyceryl_transferase * 0.0165 * \u0394t,\n                       shared across just that subset.\nNon-lipoproteins are limited only by the peptidase; the lipoprotein subset is further\nthrottled by the (much slower) Lgt step, so it clears more slowly but is never dropped \u2014\nun-transferred lipoprotein mass simply remains in 'translocated' for a later tick.\nContract \u2014 config: lipoprotein_genes (list[string], default = real KB lipoprotein\nclassification). in: translocated (map), signal_peptidase (LspA count, float), diacylglyceryl_transferase (Lgt count, float). out: translocated (neg map), processed_ii (pos map).\nFidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s\u207b\u00b9) AND the lipoprotein-specific\nLgt transfer (real KB rate 0.0165 s\u207b\u00b9), now applied as a per-protein throttle to the real\nKB lipoprotein subset (14/~482 genes, decoded from the KB signal panel) rather than as a\nglobal rate; PG160/byproducts are delegated to the metabolite pools.",
       "config_schema": {
         "peptidase_specific_rate": {
           "_type": "float",
           "_default": 11.0
+        },
+        "transferase_specific_rate": {
+          "_type": "float",
+          "_default": 0.0165
+        },
+        "lipoprotein_genes": {
+          "_type": "list[string]",
+          "_default": []
         },
         "seed": {
           "_type": "integer",
@@ -2473,12 +2497,14 @@
       },
       "_contract": {
         "summary": "Protein Processing II \u2014 reproduction of Karr 2012 ProteinProcessingII.",
-        "description": "After translocation, signal peptidase II (LspA/MG_210) cleaves the type-II signal\nsequence (and, for the lipoprotein subset, diacylglyceryl transferase Lgt/MG_086\nlipidates the cysteine first). MATLAB caps cleavages at peptidase*specificRate*\u0394t\nshared proportionally; here translocated -> processed_ii is limited by the peptidase\nat its real KB rate,\nContract \u2014 in: translocated (map), signal_peptidase (LspA count, float). out: translocated (neg map), processed_ii (pos map).\nFidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s\u207b\u00b9). The lipoprotein-specific\nLgt transfer (KB rate 0.0165 s\u207b\u00b9) is not applied as a global throttle because this panel\ndoes not carry the per-protein lipoprotein classification; PG160/byproducts are delegated\nto the metabolite pools.",
+        "description": "After translocation, signal peptidase II (LspA/MG_210) cleaves the type-II signal\nsequence for every translocated monomer; for the REAL KB lipoprotein subset\n(lipoprotein_genes, per-protein signal-type classification decoded from the\nknowledge base), diacylglyceryl transferase (Lgt/MG_086) additionally lipidates the\ncysteine. MATLAB caps each transform at enzyme*specificRate*\u0394t shared proportionally:\nlipoprotein set:   additionally capped by diacylglyceryl_transferase * 0.0165 * \u0394t,\nshared across just that subset.\nNon-lipoproteins are limited only by the peptidase; the lipoprotein subset is further\nthrottled by the (much slower) Lgt step, so it clears more slowly but is never dropped \u2014\nun-transferred lipoprotein mass simply remains in 'translocated' for a later tick.\nclassification). in: translocated (map), signal_peptidase (LspA count, float), diacylglyceryl_transferase (Lgt count, float). out: translocated (neg map), processed_ii (pos map).\nFidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s\u207b\u00b9) AND the lipoprotein-specific\nLgt transfer (real KB rate 0.0165 s\u207b\u00b9), now applied as a per-protein throttle to the real\nglobal rate; PG160/byproducts are delegated to the metabolite pools.",
         "inputs": {},
         "outputs": {},
         "config": {},
         "math": [
-          "limit = signal_peptidase * 11.0 * \u0394t   [1/s, real KB rate]."
+          "all translocated:  limit = signal_peptidase * 11.0 * \u0394t",
+          "Contract \u2014 config: lipoprotein_genes (list[string], default = real KB lipoprotein",
+          "KB lipoprotein subset (14/~482 genes, decoded from the KB signal panel) rather than as a"
         ],
         "symbols": {},
         "assumptions": [],
@@ -2491,7 +2517,8 @@
       },
       "_inputs": {
         "translocated": "map[float]",
-        "signal_peptidase": "float"
+        "signal_peptidase": "float",
+        "diacylglyceryl_transferase": "float"
       },
       "_outputs": {
         "translocated": "map[float]",
@@ -6101,6 +6128,7 @@
           "groEL": 0.0
         },
         "signal_peptidase": 20.0,
+        "diacylglyceryl_transferase": 40.0,
         "processed_ii": {
           "dnaN": 0.0,
           "MG_002": 0.0,

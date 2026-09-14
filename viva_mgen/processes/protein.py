@@ -108,30 +108,44 @@ class ProteinProcessingIReproductionProcess(Process):
 
     description = (
         "Protein Processing I — reproduction of Karr 2012 ProteinProcessingI.\n"
-        "Peptide deformylase (MG_106) deformylates the N-terminal fMet and methionine\n"
-        "aminopeptidase (MG_172) cleaves the N-terminal Met of nascent peptides. Both steps\n"
-        "are required, so a monomer is 'done' only when both enzymes have acted; MATLAB caps\n"
-        "each transform at enzyme*specificRate*Δt shared proportionally across waiting\n"
-        "monomers, so the throughput is limited by the slower enzyme,\n"
-        "    limit = min(deformylase*38.0, aminopeptidase*6.0) * Δt   [1/s, real KB rates].\n"
-        "Contract — in: nascent (per-gene, map), deformylase (MG_106 count, float), "
+        "Peptide deformylase (MG_106) deformylates the N-terminal fMet of every nascent\n"
+        "monomer; methionine aminopeptidase (MG_172) additionally cleaves the N-terminal Met\n"
+        "for the REAL KB met-cleavage subset (per-protein classification decoded from the\n"
+        "knowledge base, met_cleavage_genes). MATLAB caps each transform at\n"
+        "enzyme*specificRate*Δt shared proportionally across waiting monomers:\n"
+        "    all nascent:      limit = deformylase*38.0*Δt\n"
+        "    met_cleavage set: additionally capped by aminopeptidase*6.0*Δt, shared across\n"
+        "                      just that subset.\n"
+        "Every monomer still advances nascent -> process_i_done each step; proteins outside\n"
+        "the met-cleavage set are deformylated and pass through without consuming\n"
+        "aminopeptidase capacity.\n"
+        "Contract — config: met_cleavage_genes (list[string], default = real KB met-cleavage\n"
+        "classification). in: nascent (per-gene, map), deformylase (MG_106 count, float), "
         "aminopeptidase (MG_172 count, float). "
         "out: nascent (Δ consumed, neg map), process_i_done (Δ produced, pos map).\n"
-        "Fidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s⁻¹, "
-        "two-enzyme sequential limit); water/formate/methionine byproducts delegated to the "
-        "metabolite pools."
+        "Fidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s⁻¹) AND real\n"
+        "per-protein met-cleavage routing (35/~482 genes, decoded from the KB signal panel); "
+        "water/formate/methionine byproducts delegated to the metabolite pools."
     )
 
     config_schema = {
         # real Karr KB ProteinProcessingI specific rates (transforms / enzyme / s)
         "deformylase_specific_rate": {"_type": "float", "_default": 38.0},
         "aminopeptidase_specific_rate": {"_type": "float", "_default": 6.0},
+        # genes requiring N-terminal Met cleavage (real KB classification when empty)
+        "met_cleavage_genes": {"_type": "list[string]", "_default": []},
         "seed": {"_type": "integer", "_default": 11},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        # .get(...) rather than [...]: bigraph_schema's config-fill can drop an
+        # empty-list-default key when other config fields are explicitly overridden
+        met = list(self.config.get("met_cleavage_genes") or [])
+        if not met:
+            met = [g for g, v in kb.maturation_by_panel_key().items() if v["met_cleavage"]]
+        self._met_cleavage_genes = set(met)
 
     def inputs(self):
         return {"nascent": "map[float]", "deformylase": "float", "aminopeptidase": "float"}
@@ -146,13 +160,21 @@ class ProteinProcessingIReproductionProcess(Process):
         nascent = dict(state.get("nascent", {}) or {})
         deformylase = float(state.get("deformylase", 0.0))
         aminopep = float(state.get("aminopeptidase", 0.0))
-        # both steps required → throughput limited by the slower enzyme
-        # MATLAB: <enzyme>Limit = enzymes * specificRate * stepSizeSec
-        limit = min(
-            deformylase * float(self.config["deformylase_specific_rate"]),
-            aminopep * float(self.config["aminopeptidase_specific_rate"]),
-        ) * interval
-        moved = _enzyme_limited_transform(self._rng, nascent, limit)
+        # deformylase acts on ALL nascent monomers this step
+        def_limit = deformylase * float(self.config["deformylase_specific_rate"]) * interval
+        moved = _enzyme_limited_transform(self._rng, nascent, def_limit)
+
+        # aminopeptidase ADDITIONALLY gates only the real-KB met-cleavage subset,
+        # shared proportionally across just that subset; non-substrates already
+        # moved above by the deformylase limit are left untouched
+        met_moved = {g: n for g, n in moved.items() if g in self._met_cleavage_genes}
+        if met_moved:
+            amino_limit = aminopep * float(self.config["aminopeptidase_specific_rate"]) * interval
+            capped = _enzyme_limited_transform(self._rng, met_moved, amino_limit)
+            for g in met_moved:
+                moved[g] = capped.get(g, 0)
+            moved = {g: n for g, n in moved.items() if n > 0}
+
         return {
             "nascent": {g: -n for g, n in moved.items()},
             "process_i_done": {g: float(n) for g, n in moved.items()},
@@ -182,25 +204,34 @@ class ProteinTranslocationReproductionProcess(Process):
 
     description = (
         "Protein Translocation — reproduction of Karr 2012 ProteinTranslocation.\n"
-        "Integral-membrane/lipo/secreted proteins are pushed through the SecYEG pore by the\n"
-        "SecA translocase, recognised via the GTP-driven signal recognition particle. In the\n"
-        "real KB the translocase specific rate (2.71e12 s⁻¹) is effectively non-limiting, so\n"
-        "the bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):\n"
+        "Only the REAL KB secretory + lipoprotein subset (translocated_genes, per-protein\n"
+        "signal-type classification decoded from the knowledge base) is pushed through the\n"
+        "SecYEG pore by the SecA translocase, recognised via the GTP-driven signal recognition\n"
+        "particle. In the real KB the translocase specific rate (2.71e12 s⁻¹) is effectively\n"
+        "non-limiting, so the bottleneck is GTP through SRP recognition\n"
+        "(SRP_GTPUsedPerMonomer = 2.0, real KB):\n"
         "    limit = min(translocase*2.71e12, gtp/2.0) * Δt,\n"
-        "so process_i_done -> translocated proceeds up to the GTP available, consuming 2 GTP/monomer.\n"
-        "Contract — in: process_i_done (map), translocase (float), gtp (float). "
-        "out: process_i_done (neg map), translocated (pos map), gtp (neg Δ).\n"
-        "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); "
-        "the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated "
-        "to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator "
-        "(Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite "
-        "metabolism-replenished pool."
+        "applied only to the secretory/lipoprotein subset, consuming 2 GTP/monomer. Every OTHER\n"
+        "protein in process_i_done (cytoplasmic, no signal peptide) passes straight through to\n"
+        "translocated with no translocase/GTP gate, so the pipeline never stalls on\n"
+        "non-substrates.\n"
+        "Contract — config: translocated_genes (list[string], default = real KB\n"
+        "secretory+lipoprotein classification). in: process_i_done (map), translocase (float), "
+        "gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg Δ).\n"
+        "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0) AND\n"
+        "real per-protein substrate routing (20 secretory + 14 lipoprotein genes, decoded from the\n"
+        "KB signal panel); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths\n"
+        "and is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell\n"
+        "resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP\n"
+        "budget from the finite metabolism-replenished pool."
     )
 
     config_schema = {
         # real Karr KB ProteinTranslocation constants
         "translocase_specific_rate": {"_type": "float", "_default": 2.71e12},  # monomers / enzyme / s (non-limiting)
         "gtp_per_monomer": {"_type": "float", "_default": 2.0},  # SRP_GTPUsedPerMonomer
+        # genes requiring translocation (real KB secretory+lipoprotein set when empty)
+        "translocated_genes": {"_type": "list[string]", "_default": []},
         "seed": {"_type": "integer", "_default": 12},
         "consumer_id": {"_type": "string", "_default": "translocation"},
     }
@@ -209,6 +240,13 @@ class ProteinTranslocationReproductionProcess(Process):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
         self._cid = self.config["consumer_id"]
+        # .get(...) rather than [...]: bigraph_schema's config-fill can drop an
+        # empty-list-default key when other config fields are explicitly overridden
+        genes = list(self.config.get("translocated_genes") or [])
+        if not genes:
+            genes = [g for g, v in kb.maturation_by_panel_key().items()
+                     if v["signal_type"] in ("secretory", "lipoprotein")]
+        self._translocated_genes = set(genes)
 
     def inputs(self):
         return {"process_i_done": "map[float]", "translocase": "float", "gtp": "float",
@@ -227,15 +265,28 @@ class ProteinTranslocationReproductionProcess(Process):
         gtp = float(state.get("gtp", 0.0))
         gtp_per = float(self.config["gtp_per_monomer"])
         budget = select_budget(state.get("alloc__gtp", {}), self._cid)
+
+        # only the real KB secretory+lipoprotein subset is gated by translocase/GTP
+        substrate_src = {g: v for g, v in src.items() if g in self._translocated_genes}
+        passthrough_src = {g: v for g, v in src.items() if g not in self._translocated_genes}
+
         # capacity limited by translocase kinetics AND by GTP available for SRP
         enz_limit = translocase * float(self.config["translocase_specific_rate"]) * interval
-        total_src = sum(v for v in src.values() if v > 0.0)
+        total_src = sum(v for v in substrate_src.values() if v > 0.0)
         want_n = min(enz_limit, total_src)  # unconstrained-by-GTP desired transforms
         want_gtp = want_n * gtp_per
         gtp_limit = min(gtp, budget) / gtp_per if gtp_per > 0 else 0.0  # gtp still bounds as a floor safety
         limit = min(enz_limit, gtp_limit)
-        moved = _enzyme_limited_transform(self._rng, src, limit)
+        moved = _enzyme_limited_transform(self._rng, substrate_src, limit)
         n_total = sum(moved.values())
+
+        # non-substrates (cytoplasmic proteins) pass straight through — no
+        # translocase/GTP gate, so the pipeline never stalls on them
+        for g, v in passthrough_src.items():
+            v = int(v)
+            if v > 0:
+                moved[g] = moved.get(g, 0) + v
+
         return {
             "process_i_done": {g: -n for g, n in moved.items()},
             "translocated": {g: float(n) for g, n in moved.items()},
@@ -266,43 +317,75 @@ class ProteinProcessingIIReproductionProcess(Process):
     description = (
         "Protein Processing II — reproduction of Karr 2012 ProteinProcessingII.\n"
         "After translocation, signal peptidase II (LspA/MG_210) cleaves the type-II signal\n"
-        "sequence (and, for the lipoprotein subset, diacylglyceryl transferase Lgt/MG_086\n"
-        "lipidates the cysteine first). MATLAB caps cleavages at peptidase*specificRate*Δt\n"
-        "shared proportionally; here translocated -> processed_ii is limited by the peptidase\n"
-        "at its real KB rate,\n"
-        "    limit = signal_peptidase * 11.0 * Δt   [1/s, real KB rate].\n"
-        "Contract — in: translocated (map), signal_peptidase (LspA count, float). "
+        "sequence for every translocated monomer; for the REAL KB lipoprotein subset\n"
+        "(lipoprotein_genes, per-protein signal-type classification decoded from the\n"
+        "knowledge base), diacylglyceryl transferase (Lgt/MG_086) additionally lipidates the\n"
+        "cysteine. MATLAB caps each transform at enzyme*specificRate*Δt shared proportionally:\n"
+        "    all translocated:  limit = signal_peptidase * 11.0 * Δt\n"
+        "    lipoprotein set:   additionally capped by diacylglyceryl_transferase * 0.0165 * Δt,\n"
+        "                       shared across just that subset.\n"
+        "Non-lipoproteins are limited only by the peptidase; the lipoprotein subset is further\n"
+        "throttled by the (much slower) Lgt step, so it clears more slowly but is never dropped —\n"
+        "un-transferred lipoprotein mass simply remains in 'translocated' for a later tick.\n"
+        "Contract — config: lipoprotein_genes (list[string], default = real KB lipoprotein\n"
+        "classification). in: translocated (map), signal_peptidase (LspA count, float), "
+        "diacylglyceryl_transferase (Lgt count, float). "
         "out: translocated (neg map), processed_ii (pos map).\n"
-        "Fidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s⁻¹). The lipoprotein-specific\n"
-        "Lgt transfer (KB rate 0.0165 s⁻¹) is not applied as a global throttle because this panel\n"
-        "does not carry the per-protein lipoprotein classification; PG160/byproducts are delegated\n"
-        "to the metabolite pools."
+        "Fidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s⁻¹) AND the lipoprotein-specific\n"
+        "Lgt transfer (real KB rate 0.0165 s⁻¹), now applied as a per-protein throttle to the real\n"
+        "KB lipoprotein subset (14/~482 genes, decoded from the KB signal panel) rather than as a\n"
+        "global rate; PG160/byproducts are delegated to the metabolite pools."
     )
 
     config_schema = {
         # real Karr KB ProteinProcessingII signal-peptidase rate (transforms / enzyme / s)
         "peptidase_specific_rate": {"_type": "float", "_default": 11.0},
+        # real Karr KB Lgt (diacylglyceryl transferase) specific rate (transforms / enzyme / s)
+        "transferase_specific_rate": {"_type": "float", "_default": 0.0165},
+        # genes requiring lipoprotein anchoring (real KB classification when empty)
+        "lipoprotein_genes": {"_type": "list[string]", "_default": []},
         "seed": {"_type": "integer", "_default": 13},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
         self._rng = np.random.default_rng(int(self.config["seed"]))
+        # .get(...) rather than [...]: bigraph_schema's config-fill can drop an
+        # empty-list-default key when other config fields are explicitly overridden
+        lipo = list(self.config.get("lipoprotein_genes") or [])
+        if not lipo:
+            lipo = [g for g, v in kb.maturation_by_panel_key().items()
+                    if v["signal_type"] == "lipoprotein"]
+        self._lipoprotein_genes = set(lipo)
 
     def inputs(self):
-        return {"translocated": "map[float]", "signal_peptidase": "float"}
+        return {"translocated": "map[float]", "signal_peptidase": "float",
+                "diacylglyceryl_transferase": "float"}
 
     def outputs(self):
         return {"translocated": "map[float]", "processed_ii": "map[float]"}
 
     def initial_state(self):
-        return {"translocated": {}, "signal_peptidase": 40.0}
+        return {"translocated": {}, "signal_peptidase": 40.0, "diacylglyceryl_transferase": 40.0}
 
     def update(self, state, interval):
         src = dict(state.get("translocated", {}) or {})
         enzyme = float(state.get("signal_peptidase", 0.0))
         limit = enzyme * float(self.config["peptidase_specific_rate"]) * interval
         moved = _enzyme_limited_transform(self._rng, src, limit)
+
+        # Lgt transferase ADDITIONALLY gates only the real-KB lipoprotein subset,
+        # shared proportionally across just that subset; non-lipoproteins already
+        # moved above by the peptidase limit are left untouched
+        lipo_moved = {g: n for g, n in moved.items() if g in self._lipoprotein_genes}
+        if lipo_moved:
+            transferase = float(state.get("diacylglyceryl_transferase", 0.0))
+            trans_limit = transferase * float(self.config["transferase_specific_rate"]) * interval
+            capped = _enzyme_limited_transform(self._rng, lipo_moved, trans_limit)
+            for g in lipo_moved:
+                moved[g] = capped.get(g, 0)
+            moved = {g: n for g, n in moved.items() if n > 0}
+
         return {
             "translocated": {g: -n for g, n in moved.items()},
             "processed_ii": {g: float(n) for g, n in moved.items()},

@@ -1,0 +1,2419 @@
+{
+  "source": "Karr 2012 knowledgeBase.mat (ProteinMonomer signal/Met classification)",
+  "n_proteins": 482,
+  "n_lipoprotein": 14,
+  "n_secretory": 20,
+  "n_met_cleavage": 35,
+  "maturation": {
+    "MG_001": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_002": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_003": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_004": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_005": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_006": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_007": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_008": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_009": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_010": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_011": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_012": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_013": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_014": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_015": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_018": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_019": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_020": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_021": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_022": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_023": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_024": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_025": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_026": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_027": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_028": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_029": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_030": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_031": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_032": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 29.0
+    },
+    "MG_033": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_034": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_035": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_036": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_037": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_038": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_039": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_040": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 33.0
+    },
+    "MG_041": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_042": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_043": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_044": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_045": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 26.0
+    },
+    "MG_046": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_047": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_048": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_049": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_050": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_051": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_052": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_053": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_054": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_055": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_056": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_057": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_058": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_059": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_060": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_061": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_062": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_063": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_064": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_065": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_066": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_067": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 22.0
+    },
+    "MG_068": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 23.0
+    },
+    "MG_069": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_070": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_071": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_072": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_073": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_074": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 23.0
+    },
+    "MG_075": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 9.0
+    },
+    "MG_076": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_077": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_078": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_079": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_080": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_081": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_082": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_083": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_084": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_085": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_086": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_087": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_088": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_089": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_090": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_091": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_092": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_093": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_094": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_095": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 22.0
+    },
+    "MG_096": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 33.0
+    },
+    "MG_097": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_098": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_099": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_100": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_101": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_102": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_103": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_104": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_105": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_106": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_107": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_108": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_109": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_110": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_111": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_112": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_113": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_114": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_115": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_116": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_117": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_118": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_119": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_120": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_121": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_122": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_123": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_124": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_125": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_126": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_127": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_128": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_129": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 23.0
+    },
+    "MG_130": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_131": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_132": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_133": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_134": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_135": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_136": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_137": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_138": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_139": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_140": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_141": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_142": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_143": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_144": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_145": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_146": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 30.0
+    },
+    "MG_147": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_148": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_149": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 23.0
+    },
+    "MG_150": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_151": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_152": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_153": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_154": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_155": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_156": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_157": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_158": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_159": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_160": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_161": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_162": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_163": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_164": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_165": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_166": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_167": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_168": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_169": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_170": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_171": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_172": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_173": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_174": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_175": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_176": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_177": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_178": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_179": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_180": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_181": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_182": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_183": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_184": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_185": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 22.0
+    },
+    "MG_186": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 24.0
+    },
+    "MG_187": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_188": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_189": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_190": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_191": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_192": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_194": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_195": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_196": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_197": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_198": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_199": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_200": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_201": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_202": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_203": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_204": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_205": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_206": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_207": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_208": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_209": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_210": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_211": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_212": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_213": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_214": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_215": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_216": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_217": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_218": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_219": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_220": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 37.0
+    },
+    "MG_221": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_222": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_223": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_224": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_225": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_226": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_227": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_228": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_229": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_230": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_231": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_232": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_233": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_234": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_235": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_236": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_237": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_238": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_239": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_240": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_241": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_242": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_243": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_244": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_245": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_246": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_247": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_248": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_249": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_250": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_251": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_252": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_253": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_254": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_255": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_256": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_257": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_258": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_259": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_260": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 22.0
+    },
+    "MG_261": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_262": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_263": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_264": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_265": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_266": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_267": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_268": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_269": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_270": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_271": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_272": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_273": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_274": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_275": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_276": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_277": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_278": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_279": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_280": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_281": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 42.0
+    },
+    "MG_282": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_283": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_284": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_285": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_286": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 30.0
+    },
+    "MG_287": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_288": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_289": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 27.0
+    },
+    "MG_290": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_291": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_292": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_293": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_294": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_295": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_296": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_297": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_298": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_299": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_300": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_301": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_302": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_303": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_304": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_305": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_306": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_307": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 26.0
+    },
+    "MG_308": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_309": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 27.0
+    },
+    "MG_310": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 64.0
+    },
+    "MG_311": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_312": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_313": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_314": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_315": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_316": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_317": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_318": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_319": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_320": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_321": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 26.0
+    },
+    "MG_322": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_323": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_324": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_325": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_326": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_327": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 22.0
+    },
+    "MG_328": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_329": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_330": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_331": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_332": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_333": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_334": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_335": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_336": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_337": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_338": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 26.0
+    },
+    "MG_339": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_340": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_341": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_342": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_343": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_344": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 33.0
+    },
+    "MG_345": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_346": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_347": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_348": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 27.0
+    },
+    "MG_349": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_350": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_351": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_352": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_353": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_354": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_355": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_356": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_357": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_358": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_359": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_360": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_361": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_362": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_363": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_364": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_365": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_366": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_367": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_368": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_369": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_370": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_371": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_372": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_373": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_374": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_375": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_376": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_377": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_378": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_379": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_380": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_381": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_382": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_383": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_384": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_385": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_386": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_387": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_388": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_389": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 26.0
+    },
+    "MG_390": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_391": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_392": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_393": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_394": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_395": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 26.0
+    },
+    "MG_396": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_397": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 21.0
+    },
+    "MG_398": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_399": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_400": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_401": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_402": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_403": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_404": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_405": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_406": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_407": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_408": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_409": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_410": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_411": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_412": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 32.0
+    },
+    "MG_414": {
+      "signal_type": "secretory",
+      "met_cleavage": false,
+      "signal_length": 23.0
+    },
+    "MG_417": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_418": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_419": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_421": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_422": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_423": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_424": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_425": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_426": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_427": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_428": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_429": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_430": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_431": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_432": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_433": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_434": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_435": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_437": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_438": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_439": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 20.0
+    },
+    "MG_440": {
+      "signal_type": "lipoprotein",
+      "met_cleavage": false,
+      "signal_length": 9.0
+    },
+    "MG_441": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_442": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_443": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_444": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_445": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_446": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_447": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_448": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_449": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_450": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_451": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_452": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_453": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_454": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_455": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_456": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_457": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_458": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_459": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_460": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_461": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_462": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_463": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_464": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_465": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_466": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_467": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_468": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_469": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_470": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_473": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_474": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_476": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_477": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_478": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_480": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_481": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_482": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_491": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_494": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_498": {
+      "signal_type": null,
+      "met_cleavage": true,
+      "signal_length": 0.0
+    },
+    "MG_505": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_515": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_516": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_517": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_521": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_522": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_524": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_525": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    },
+    "MG_526": {
+      "signal_type": null,
+      "met_cleavage": false,
+      "signal_length": 0.0
+    }
+  }
+}

@@ -212,6 +212,34 @@ _COEF_FIELD = {
 }
 
 
+def decode_protein_maturation(mat_path: Path) -> dict:
+    """Per-protein maturation classification from the KB ProteinMonomer objects:
+    {gene_id: {"signal_type": None|"secretory"|"lipoprotein",
+               "met_cleavage": bool, "signal_length": float}}.
+    Gene id is the monomer's MG_###_MONOMER stripped of the _MONOMER suffix."""
+    cells = _read_subsystem_cells(mat_path)
+    by = _objects_by_class(cells)
+    out = {}
+    for p in by.get("ProteinMonomer", []):
+        wid = _scalar(p.get("wholeCellModelID"))
+        if wid is None:
+            continue
+        gid = str(wid)
+        if gid.endswith("_MONOMER"):
+            gid = gid[: -len("_MONOMER")]
+        sst = _scalar(p.get("signalSequenceType"))
+        sst = str(sst) if sst is not None and str(sst) != "None" else None
+        met = _scalar(p.get("nTerminalMethionineCleavage"))
+        try:
+            slen = float(_scalar(p.get("signalSequenceLength")) or 0.0)
+        except (TypeError, ValueError):
+            slen = 0.0
+        out[gid] = {"signal_type": sst,
+                    "met_cleavage": bool(met and float(met) > 0),
+                    "signal_length": slen}
+    return out
+
+
 def decode_transcription_regulation(mat_path: Path) -> dict:
     """Real transcription-factor regulatory network from the KB.
 

@@ -160,6 +160,7 @@ _STORE_GROUP = {
     "chaperone_count": "proteome", "deformylase": "proteome",
     "aminopeptidase": "proteome",
     "translocase": "proteome", "signal_peptidase": "proteome",
+    "diacylglyceryl_transferase": "proteome",
     "protein_modification_enzyme": "proteome",
     # ribosome — assembly of the translation machinery
     "ribosome_30S": "ribosome", "ribosome_50S": "ribosome",
@@ -190,7 +191,8 @@ _FLOAT_INIT = {
     "mass": 3.93, "growth_fraction": 1.0, "feasible": 1.0, "chromosome_copy": 1.0,
     "dnaA_free": 50.0, "gyrase": 20.0, "smc": 30.0, "damaging_agent": 0.0,
     "repair_enzyme": 20.0, "deformylase": 20.0, "aminopeptidase": 20.0, "translocase": 20.0,
-    "signal_peptidase": 20.0, "chaperone_count": 50.0, "rna_modification_enzyme": 20.0,
+    "signal_peptidase": 20.0, "diacylglyceryl_transferase": 40.0,
+    "chaperone_count": 50.0, "rna_modification_enzyme": 20.0,
     "protein_modification_enzyme": 20.0, "regulator": 1.0, "synthetase": 30.0,
     "assembly_factor": 20.0, "ftsz_monomer": 500.0, "septum_diameter": 200.0,
     "replication_active": 1.0,
