@@ -84,6 +84,10 @@ class MetabolismFbaReproductionProcess(Process):
         "disrupted_genes": {"_type": "list[string]", "_default": []},
         # reaction_id -> multiplicative scale on its flux upper bound (Fig 7)
         "reaction_bound_scale": {"_type": "map[float]", "_default": {}},
+        # base precursor supply per tick (molecules), scaled by growth_fraction —
+        # the metabolism->transcription/translation precursor coupling.
+        "ntp_base_supply": {"_type": "float", "_default": 1.0e6},
+        "amino_acid_base_supply": {"_type": "float", "_default": 1.0e6},
     }
 
     def __init__(self, config=None, core=None):
@@ -103,6 +107,8 @@ class MetabolismFbaReproductionProcess(Process):
             "atp_production": "overwrite[float]",
             "gtp_production": "overwrite[float]",
             "feasible": "overwrite[float]",
+            "ntp_production": "overwrite[float]",
+            "amino_acid_production": "overwrite[float]",
         }
 
     def initial_state(self):
@@ -145,10 +151,15 @@ class MetabolismFbaReproductionProcess(Process):
         if sol.status == "optimal":
             for rid in ("NDPK1", "NDPK2", "GK1", "GTPtp"):
                 gtp += abs(self._flux(sol, rid))
+        gf = growth / self._wt if self._wt else 0.0
+        ntp_prod = float(self.config["ntp_base_supply"]) * gf
+        aa_prod = float(self.config["amino_acid_base_supply"]) * gf
         return {
             "growth_rate": growth,
-            "growth_fraction": growth / self._wt if self._wt else 0.0,
+            "growth_fraction": gf,
             "atp_production": atp,
             "gtp_production": gtp,
             "feasible": 1.0 if growth > 1e-6 else 0.0,
+            "ntp_production": ntp_prod,
+            "amino_acid_production": aa_prod,
         }

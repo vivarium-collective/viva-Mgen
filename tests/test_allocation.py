@@ -62,3 +62,10 @@ def test_allocator_replenishes_and_partitions(core):
     assert out["alloc__atp"]["a"] == 10.0 and out["alloc__atp"]["b"] == 20.0
     # pool replenished by production this tick (consumers draw it down elsewhere)
     assert out["atp"] == 25.0
+
+
+def test_metabolism_emits_precursor_supply():
+    from viva_mgen.processes.metabolism import MetabolismFbaReproductionProcess
+    out = MetabolismFbaReproductionProcess.outputs(
+        MetabolismFbaReproductionProcess.__new__(MetabolismFbaReproductionProcess))
+    assert "ntp_production" in out and "amino_acid_production" in out
