@@ -343,6 +343,41 @@
           "cell",
           "physiology",
           "mass"
+        ],
+        "rna_counts": [
+          "cell",
+          "transcriptome",
+          "rna_counts"
+        ],
+        "protein_counts": [
+          "cell",
+          "proteome",
+          "protein_counts"
+        ],
+        "chromosome_copy": [
+          "cell",
+          "genome",
+          "chromosome_copy"
+        ],
+        "atp": [
+          "cell",
+          "metabolism",
+          "atp"
+        ],
+        "gtp": [
+          "cell",
+          "metabolism",
+          "gtp"
+        ],
+        "ntp": [
+          "cell",
+          "metabolism",
+          "ntp"
+        ],
+        "amino_acid": [
+          "cell",
+          "metabolism",
+          "amino_acid"
         ]
       },
       "outputs": {
@@ -365,9 +400,24 @@
           "cell",
           "division",
           "division"
+        ],
+        "emergent_mass": [
+          "cell",
+          "physiology",
+          "emergent_mass"
+        ],
+        "emergent_mass_fractions": [
+          "cell",
+          "physiology",
+          "emergent_mass_fractions"
+        ],
+        "metabolite_mass": [
+          "cell",
+          "physiology",
+          "metabolite_mass"
         ]
       },
-      "doc": "Cell mass & growth accounting \u2014 reproduction of Karr 2012 CellMass/CellGeometry.\nIntegrates the metabolism submodel's calibrated growth into total dry mass by exponential growth over each interval:\n    \u0394mass = mass \u00b7 (exp(\u03bc \u00b7 growth_fraction \u00b7 \u0394t) \u2212 1),   \u03bc = ln2 / T_cycle\nwith T_cycle = 32400 s (\u2248 9 h) the model's fitted cell-cycle length, so unperturbed growth (growth_fraction = 1) doubles the cell in ~9 h. Dry mass is partitioned into the fitted dry-weight fractions (protein 0.620, DNA 0.169, RNA 0.093, lipid 0.057, \u2026); volume follows from wet mass and cell density; division fires at 2\u00d7 birth mass.\nContract \u2014 in: growth_fraction (unit-free growth from metabolism), mass (current dry fg). out: mass (additive \u0394, fg), mass_fractions (per-component fg snapshot), volume (fL snapshot), division \u2208 {0,1}.\nFidelity: FAITHFUL growth/composition phenotype \u2014 real fitted constants (dry-weight 3.93e-15 g, T_cycle 32400 s, component fractions, cell density). This is the calibrated growth-law form: mass follows metabolism-driven exponential growth partitioned by the fitted fractions, rather than being summed emergently from every species count \u00d7 MW.",
+      "doc": "Cell mass & growth accounting \u2014 reproduction of Karr 2012 CellMass/CellGeometry.\nIntegrates the metabolism submodel's calibrated growth into total dry mass by exponential growth over each interval:\n    \u0394mass = mass \u00b7 (exp(\u03bc \u00b7 growth_fraction \u00b7 \u0394t) \u2212 1),   \u03bc = ln2 / T_cycle\nwith T_cycle = 32400 s (\u2248 9 h) the model's fitted cell-cycle length, so unperturbed growth (growth_fraction = 1) doubles the cell in ~9 h. Dry mass is partitioned into the fitted dry-weight fractions (protein 0.620, DNA 0.169, RNA 0.093, lipid 0.057, \u2026); volume follows from wet mass and cell density; division fires at 2\u00d7 birth mass.\nContract \u2014 in: growth_fraction (unit-free growth from metabolism), mass (current dry fg). out: mass (additive \u0394, fg), mass_fractions (per-component fg snapshot), volume (fL snapshot), division \u2208 {0,1}.\nFidelity: FAITHFUL growth/composition phenotype \u2014 real fitted constants (dry-weight 3.93e-15 g, T_cycle 32400 s, component fractions, cell density). This is the calibrated growth-law form: mass follows metabolism-driven exponential growth partitioned by the fitted fractions, rather than being summed emergently from every species count \u00d7 MW. In addition, the emergent macromolecular dry-mass composition (\u03a3 species\u00d7MW over RNA/protein/DNA, from the real molecular inventory) is now computed and emitted (emergent_mass/emergent_mass_fractions) for validation against Karr's fitted fractions; the free-metabolite pool mass is emitted separately as a non-validated diagnostic (metabolite_mass), since current pool sizes are allocation-dynamics placeholders rather than calibrated copy numbers; the growth-law total above still drives division, pending synthesis calibration that would let the emergent total itself close the loop.",
       "config_schema": {
         "initial_mass_fg": {
           "_type": "float",
@@ -384,7 +434,7 @@
       },
       "_contract": {
         "summary": "Cell mass & growth accounting \u2014 reproduction of Karr 2012 CellMass/CellGeometry.",
-        "description": "Integrates the metabolism submodel's calibrated growth into total dry mass by exponential growth over each interval:\nContract \u2014 in: growth_fraction (unit-free growth from metabolism), mass (current dry fg). out: mass (additive \u0394, fg), mass_fractions (per-component fg snapshot), volume (fL snapshot), division \u2208 {0,1}.\nFidelity: FAITHFUL growth/composition phenotype \u2014 real fitted constants (dry-weight 3.93e-15 g, T_cycle 32400 s, component fractions, cell density). This is the calibrated growth-law form: mass follows metabolism-driven exponential growth partitioned by the fitted fractions, rather than being summed emergently from every species count \u00d7 MW.",
+        "description": "Integrates the metabolism submodel's calibrated growth into total dry mass by exponential growth over each interval:\nContract \u2014 in: growth_fraction (unit-free growth from metabolism), mass (current dry fg). out: mass (additive \u0394, fg), mass_fractions (per-component fg snapshot), volume (fL snapshot), division \u2208 {0,1}.\nFidelity: FAITHFUL growth/composition phenotype \u2014 real fitted constants (dry-weight 3.93e-15 g, T_cycle 32400 s, component fractions, cell density). This is the calibrated growth-law form: mass follows metabolism-driven exponential growth partitioned by the fitted fractions, rather than being summed emergently from every species count \u00d7 MW. In addition, the emergent macromolecular dry-mass composition (\u03a3 species\u00d7MW over RNA/protein/DNA, from the real molecular inventory) is now computed and emitted (emergent_mass/emergent_mass_fractions) for validation against Karr's fitted fractions; the free-metabolite pool mass is emitted separately as a non-validated diagnostic (metabolite_mass), since current pool sizes are allocation-dynamics placeholders rather than calibrated copy numbers; the growth-law total above still drives division, pending synthesis calibration that would let the emergent total itself close the loop.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -403,13 +453,23 @@
       },
       "_inputs": {
         "growth_fraction": "float",
-        "mass": "float"
+        "mass": "float",
+        "rna_counts": "map[float]",
+        "protein_counts": "map[float]",
+        "chromosome_copy": "float",
+        "atp": "float",
+        "gtp": "float",
+        "ntp": "float",
+        "amino_acid": "float"
       },
       "_outputs": {
         "mass": "float",
         "mass_fractions": "overwrite[map[float]]",
         "volume": "overwrite[float]",
-        "division": "overwrite[float]"
+        "division": "overwrite[float]",
+        "emergent_mass": "overwrite[float]",
+        "emergent_mass_fractions": "overwrite[map[float]]",
+        "metabolite_mass": "overwrite[float]"
       }
     },
     "transcription": {
@@ -3366,18 +3426,12 @@
         "growth_fraction": 1.0,
         "mass": 3.93,
         "volume": 0.0,
+        "emergent_mass": 0.0,
+        "emergent_mass_fractions": {},
+        "metabolite_mass": 0.0,
         "phase_code": 0.0
       },
-      "division": {
-        "division": 0.0,
-        "ftsz_monomer": 500.0,
-        "ftsz_ring_filaments": 0.0,
-        "septum_diameter": 200.0,
-        "contraction_progress": 0.0,
-        "divided": 0.0
-      },
       "transcriptome": {
-        "rna_pol": 100.0,
         "rna_counts": {
           "dnaN": 0.0,
           "MG_002": 0.0,
@@ -3902,6 +3956,7 @@
           "HMW2": 0.0,
           "groEL": 0.0
         },
+        "rna_pol": 100.0,
         "tf_activity": {
           "dnaN": 0.0,
           "MG_002": 0.0,
@@ -13349,9 +13404,9 @@
         }
       },
       "genome": {
+        "chromosome_copy": 1.0,
         "replicated_fraction": 0.0,
         "dnaA_complex": 0.0,
-        "chromosome_copy": 1.0,
         "initiation_duration": 0.0,
         "replication_duration": 0.0,
         "dnaA_free": 50.0,
@@ -13375,6 +13430,14 @@
         "rna_pol_positions": [],
         "dna_pol_positions": [],
         "collisions": {}
+      },
+      "division": {
+        "division": 0.0,
+        "ftsz_monomer": 500.0,
+        "ftsz_ring_filaments": 0.0,
+        "septum_diameter": 200.0,
+        "contraction_progress": 0.0,
+        "divided": 0.0
       },
       "ribosome": {
         "rprotein_counts": {
@@ -14966,6 +15029,9 @@
           "mass": "float",
           "mass_fractions": "map[float]",
           "growth_fraction": "float",
+          "emergent_mass": "float",
+          "emergent_mass_fractions": "map[float]",
+          "metabolite_mass": "float",
           "growth_rate": "float",
           "volume": "float",
           "division": "float",
@@ -15015,6 +15081,21 @@
           "cell",
           "physiology",
           "growth_fraction"
+        ],
+        "emergent_mass": [
+          "cell",
+          "physiology",
+          "emergent_mass"
+        ],
+        "emergent_mass_fractions": [
+          "cell",
+          "physiology",
+          "emergent_mass_fractions"
+        ],
+        "metabolite_mass": [
+          "cell",
+          "physiology",
+          "metabolite_mass"
         ],
         "growth_rate": [
           "cell",
@@ -15198,6 +15279,9 @@
         "mass": "float",
         "mass_fractions": "map[float]",
         "growth_fraction": "float",
+        "emergent_mass": "float",
+        "emergent_mass_fractions": "map[float]",
+        "metabolite_mass": "float",
         "growth_rate": "float",
         "volume": "float",
         "division": "float",
@@ -15245,6 +15329,9 @@
       "cell/genome/replicated_fraction",
       "cell/metabolism/dntp_pool",
       "cell/metabolism/mass_fractions",
+      "cell/physiology/emergent_mass",
+      "cell/physiology/emergent_mass_fractions",
+      "cell/physiology/metabolite_mass",
       "cell/division/division",
       "cell/metabolism/feasible",
       "cell/transcriptome/rna_counts",

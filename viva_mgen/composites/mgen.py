@@ -75,7 +75,7 @@ _MAP_STORES = {
     "process_i_done", "translocated", "processed_ii", "unfolded", "folded",
     "unmodified", "modified", "monomers", "complexes", "active_fraction",
     "free_trna", "aminoacylated_trna", "rprotein_counts", "rrna_counts",
-    "adhesin_proteins", "occupancy", "collisions",
+    "adhesin_proteins", "occupancy", "collisions", "emergent_mass_fractions",
     "demand__atp", "demand__gtp", "demand__ntp", "demand__amino_acid",
     "alloc__atp", "alloc__gtp", "alloc__ntp", "alloc__amino_acid",
 }
@@ -84,6 +84,7 @@ _MAP_STORES = {
 # than the default per-gene {gene: 0.0} dict
 _EMPTY_MAP_STORES = {
     "occupancy", "collisions", "mass_fractions", "fold_change", "active_fraction",
+    "emergent_mass_fractions",
     "demand__atp", "demand__gtp", "demand__ntp", "demand__amino_acid",
     "alloc__atp", "alloc__gtp", "alloc__ntp", "alloc__amino_acid",
 }
@@ -112,6 +113,8 @@ _STORE_GROUP = {
     # whole-cell physiology / growth state
     "mass": "physiology", "volume": "physiology", "growth_rate": "physiology",
     "growth_fraction": "physiology", "phase_code": "physiology",
+    "emergent_mass": "physiology", "emergent_mass_fractions": "physiology",
+    "metabolite_mass": "physiology",
     # metabolism — energy carriers, precursor pools, biomass, FBA status
     "atp": "metabolism", "gtp": "metabolism", "ntp": "metabolism",
     "amino_acid": "metabolism", "dntp_pool": "metabolism",
@@ -194,6 +197,8 @@ _FLOAT_INIT = {
 # observables the RAM emitter captures (study-measured + integration readouts)
 _EMIT = {
     "mass": "float", "mass_fractions": "map[float]", "growth_fraction": "float",
+    "emergent_mass": "float", "emergent_mass_fractions": "map[float]",
+    "metabolite_mass": "float",
     "growth_rate": "float", "volume": "float", "division": "float",
     "atp_production": "float", "gtp_production": "float", "feasible": "float",
     "rna_counts": "map[float]", "protein_counts": "map[float]",
