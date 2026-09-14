@@ -25,6 +25,203 @@
     }
   },
   "state": {
+    "allocator": {
+      "_type": "process",
+      "address": "local:viva_mgen.processes.allocation.AllocatorProcess",
+      "config": {},
+      "interval": 1.0,
+      "inputs": {
+        "atp": [
+          "cell",
+          "metabolism",
+          "atp"
+        ],
+        "atp_production": [
+          "cell",
+          "metabolism",
+          "atp_production"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
+        ],
+        "gtp": [
+          "cell",
+          "metabolism",
+          "gtp"
+        ],
+        "gtp_production": [
+          "cell",
+          "metabolism",
+          "gtp_production"
+        ],
+        "demand__gtp": [
+          "cell",
+          "budget",
+          "demand__gtp"
+        ],
+        "ntp": [
+          "cell",
+          "metabolism",
+          "ntp"
+        ],
+        "ntp_production": [
+          "cell",
+          "metabolism",
+          "ntp_production"
+        ],
+        "demand__ntp": [
+          "cell",
+          "budget",
+          "demand__ntp"
+        ],
+        "amino_acid": [
+          "cell",
+          "metabolism",
+          "amino_acid"
+        ],
+        "amino_acid_production": [
+          "cell",
+          "metabolism",
+          "amino_acid_production"
+        ],
+        "demand__amino_acid": [
+          "cell",
+          "budget",
+          "demand__amino_acid"
+        ]
+      },
+      "outputs": {
+        "atp": [
+          "cell",
+          "metabolism",
+          "atp"
+        ],
+        "alloc__atp": [
+          "cell",
+          "budget",
+          "alloc__atp"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
+        ],
+        "gtp": [
+          "cell",
+          "metabolism",
+          "gtp"
+        ],
+        "alloc__gtp": [
+          "cell",
+          "budget",
+          "alloc__gtp"
+        ],
+        "demand__gtp": [
+          "cell",
+          "budget",
+          "demand__gtp"
+        ],
+        "ntp": [
+          "cell",
+          "metabolism",
+          "ntp"
+        ],
+        "alloc__ntp": [
+          "cell",
+          "budget",
+          "alloc__ntp"
+        ],
+        "demand__ntp": [
+          "cell",
+          "budget",
+          "demand__ntp"
+        ],
+        "amino_acid": [
+          "cell",
+          "metabolism",
+          "amino_acid"
+        ],
+        "alloc__amino_acid": [
+          "cell",
+          "budget",
+          "alloc__amino_acid"
+        ],
+        "demand__amino_acid": [
+          "cell",
+          "budget",
+          "demand__amino_acid"
+        ]
+      },
+      "doc": "Central resource allocator \u2014 reproduction of Karr 2012 hybrid partitioning.\nRuns first each tick: for each finite pool, available supply = pool level + this tick's metabolic production; partitions it among consumers' demands (demand__<pool>) by proportional allocation with a priority-weight hook, publishes grants (alloc__<pool>), and replenishes the pool by production.\nContract \u2014 per pool P: in <P> (level, float), <P>_production (production, float), demand__<P> (consumer->want, map). out <P> (replenish delta, float), alloc__<P> (consumer->grant, overwrite map).\nFidelity: FAITHFUL to Karr's demand->allocate->run arbitration (proportional partition + priority hook); one-tick pipeline lag at dt=1 s.",
+      "config_schema": {
+        "pools": {
+          "_type": "list[string]",
+          "_default": [
+            "atp",
+            "gtp",
+            "ntp",
+            "amino_acid"
+          ]
+        },
+        "priorities": {
+          "_type": "map[map[float]]",
+          "_default": {}
+        },
+        "pool_cap": {
+          "_type": "float",
+          "_default": 1000000000.0
+        }
+      },
+      "_contract": {
+        "summary": "Central resource allocator \u2014 reproduction of Karr 2012 hybrid partitioning.",
+        "description": "Contract \u2014 per pool P: in <P> (level, float), <P>_production (production, float), demand__<P> (consumer->want, map). out <P> (replenish delta, float), alloc__<P> (consumer->grant, overwrite map).",
+        "inputs": {},
+        "outputs": {},
+        "config": {},
+        "math": [
+          "Runs first each tick: for each finite pool, available supply = pool level + this tick's metabolic production; partitions it among consumers' demands (demand__<pool>) by proportional allocation with a priority-weight hook, publishes grants (alloc__<pool>), and replenishes the pool by production.",
+          "Fidelity: FAITHFUL to Karr's demand->allocate->run arbitration (proportional partition + priority hook); one-tick pipeline lag at dt=1 s."
+        ],
+        "symbols": {},
+        "assumptions": [],
+        "references": [],
+        "face": {
+          "inputs": {},
+          "outputs": {}
+        },
+        "amendments": []
+      },
+      "_inputs": {
+        "atp": "float",
+        "atp_production": "float",
+        "demand__atp": "map[float]",
+        "gtp": "float",
+        "gtp_production": "float",
+        "demand__gtp": "map[float]",
+        "ntp": "float",
+        "ntp_production": "float",
+        "demand__ntp": "map[float]",
+        "amino_acid": "float",
+        "amino_acid_production": "float",
+        "demand__amino_acid": "map[float]"
+      },
+      "_outputs": {
+        "atp": "float",
+        "alloc__atp": "overwrite[map[float]]",
+        "demand__atp": "map[float]",
+        "gtp": "float",
+        "alloc__gtp": "overwrite[map[float]]",
+        "demand__gtp": "map[float]",
+        "ntp": "float",
+        "alloc__ntp": "overwrite[map[float]]",
+        "demand__ntp": "map[float]",
+        "amino_acid": "float",
+        "alloc__amino_acid": "overwrite[map[float]]",
+        "demand__amino_acid": "map[float]"
+      }
+    },
     "metabolism": {
       "_type": "process",
       "address": "local:viva_mgen.processes.metabolism.MetabolismFbaReproductionProcess",
@@ -65,6 +262,16 @@
           "cell",
           "metabolism",
           "feasible"
+        ],
+        "ntp_production": [
+          "cell",
+          "metabolism",
+          "ntp_production"
+        ],
+        "amino_acid_production": [
+          "cell",
+          "metabolism",
+          "amino_acid_production"
         ]
       },
       "doc": "Flux-balance-analysis metabolism \u2014 reproduction of the Karr 2012 Metabolism submodel.\nEach 1 s step it maximizes the iPS189 biomass objective\n    max c\u1d40v   s.t.   S\u00b7v = 0,   lb \u2264 v \u2264 ub\nover the published Suthers 2009 M. genitalium reconstruction (351 reactions, 346 metabolites, 126 genes; solved with COBRA). Gene disruptions (Fig 6) knock out the disrupted genes' reactions; a kinetic-parameter change (Fig 7) scales a reaction's flux bound as a kcat/Vmax proxy. Both use a reverting model context so the cached network is never mutated.\nContract \u2014 in: nutrient_scale (carbon-uptake multiplier a sibling can throttle). out: growth_rate (biomass flux, raw iPS189 units), growth_fraction (growth_rate \u00f7 wild-type, the calibrated unit-free growth the mass submodel integrates), atp_production (ATP-synthase ATPS4r flux), gtp_production (summed GTP-linked kinase/transport flux: NDPK1/NDPK2 nucleoside-diphosphate kinases, GK1 guanylate kinase, GTPtp transport), feasible \u2208 {0,1}.\nFidelity: FULL \u2014 the genuine published reconstruction the WCM's metabolism submodel was built on.",
@@ -80,6 +287,14 @@
         "reaction_bound_scale": {
           "_type": "map[float]",
           "_default": {}
+        },
+        "ntp_base_supply": {
+          "_type": "float",
+          "_default": 1000000.0
+        },
+        "amino_acid_base_supply": {
+          "_type": "float",
+          "_default": 1000000.0
         }
       },
       "_contract": {
@@ -108,7 +323,9 @@
         "growth_fraction": "overwrite[float]",
         "atp_production": "overwrite[float]",
         "gtp_production": "overwrite[float]",
-        "feasible": "overwrite[float]"
+        "feasible": "overwrite[float]",
+        "ntp_production": "overwrite[float]",
+        "amino_acid_production": "overwrite[float]"
       }
     },
     "mass": {
@@ -212,6 +429,11 @@
           "cell",
           "transcriptome",
           "rna_pol"
+        ],
+        "alloc__ntp": [
+          "cell",
+          "budget",
+          "alloc__ntp"
         ]
       },
       "outputs": {
@@ -224,9 +446,14 @@
           "cell",
           "metabolism",
           "ntp"
+        ],
+        "demand__ntp": [
+          "cell",
+          "budget",
+          "demand__ntp"
         ]
       },
-      "doc": "Stochastic transcription \u2014 reproduction of Karr 2012 Transcription.\nFor every gene g in the full M. genitalium gene set (~522 genes), new mRNA per step is a\nPoisson draw\n    n_g ~ Poisson(k_g \u00b7 (RNApol / RNApol_ref) \u00b7 \u0394t)\ncapped by NTP supply (each transcript consumes length_g NTP; PPi released). Per-gene\nrates k_g are ParCa-fitted from the real observed expression profile.\nContract \u2014 in: ntp (pool, molecules), rna_pol (available polymerase count). out: rna_counts (per-gene mRNA \u0394, additive map), ntp (\u0394 consumed, negative).\nFidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\nreduction is the RNA-polymerase state machine \u2014 initiation/elongation/termination are\ncollapsed into a single Poisson propensity scaled by available polymerase; reproduces the\nbursty-mRNA behaviour of Fig 2G.",
+      "doc": "Stochastic transcription \u2014 reproduction of Karr 2012 Transcription.\nFor every gene g in the full M. genitalium gene set (~522 genes), new mRNA per step is a\nPoisson draw\n    n_g ~ Poisson(k_g \u00b7 (RNApol / RNApol_ref) \u00b7 \u0394t)\ncapped by NTP supply (each transcript consumes length_g NTP; PPi released). Per-gene\nrates k_g are ParCa-fitted from the real observed expression profile.\nContract \u2014 in: ntp (pool, molecules), rna_pol (available polymerase count). out: rna_counts (per-gene mRNA \u0394, additive map), ntp (\u0394 consumed, negative).\nFidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\nreduction is the RNA-polymerase state machine \u2014 initiation/elongation/termination are\ncollapsed into a single Poisson propensity scaled by available polymerase; reproduces the\nbursty-mRNA behaviour of Fig 2G. Consumption is arbitrated by the whole-cell resource\nallocator (Karr hybrid partitioning): capped each tick at its allocated NTP budget from the\nfinite metabolism-replenished pool.",
       "config_schema": {
         "synthesis_rates": {
           "_type": "map[float]",
@@ -243,11 +470,15 @@
         "seed": {
           "_type": "integer",
           "_default": 0
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "transcription"
         }
       },
       "_contract": {
         "summary": "Stochastic transcription \u2014 reproduction of Karr 2012 Transcription.",
-        "description": "capped by NTP supply (each transcript consumes length_g NTP; PPi released). Per-gene\nrates k_g are ParCa-fitted from the real observed expression profile.\nContract \u2014 in: ntp (pool, molecules), rna_pol (available polymerase count). out: rna_counts (per-gene mRNA \u0394, additive map), ntp (\u0394 consumed, negative).\nreduction is the RNA-polymerase state machine \u2014 initiation/elongation/termination are\nbursty-mRNA behaviour of Fig 2G.",
+        "description": "capped by NTP supply (each transcript consumes length_g NTP; PPi released). Per-gene\nrates k_g are ParCa-fitted from the real observed expression profile.\nContract \u2014 in: ntp (pool, molecules), rna_pol (available polymerase count). out: rna_counts (per-gene mRNA \u0394, additive map), ntp (\u0394 consumed, negative).\nreduction is the RNA-polymerase state machine \u2014 initiation/elongation/termination are\nbursty-mRNA behaviour of Fig 2G. Consumption is arbitrated by the whole-cell resource\nallocator (Karr hybrid partitioning): capped each tick at its allocated NTP budget from the\nfinite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -269,11 +500,13 @@
       },
       "_inputs": {
         "ntp": "float",
-        "rna_pol": "float"
+        "rna_pol": "float",
+        "alloc__ntp": "map[float]"
       },
       "_outputs": {
         "rna_counts": "map[float]",
-        "ntp": "float"
+        "ntp": "float",
+        "demand__ntp": "map[float]"
       }
     },
     "translation": {
@@ -293,6 +526,11 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "alloc__gtp": [
+          "cell",
+          "budget",
+          "alloc__gtp"
         ]
       },
       "outputs": {
@@ -305,9 +543,14 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "demand__gtp": [
+          "cell",
+          "budget",
+          "demand__gtp"
         ]
       },
-      "doc": "Stochastic translation \u2014 reproduction of Karr 2012 Translation.\nFor every gene g in the full M. genitalium gene set (~522 genes), new protein per step is\nPoisson in the current mRNA copy number\n    n_g ~ Poisson(r_g \u00b7 mRNA_g \u00b7 \u0394t)\ncapped by GTP supply (~2 GTP per peptide bond, \u2248 gtp_per_protein per chain). Per-gene\nrates r_g are ParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nFidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget.",
+      "doc": "Stochastic translation \u2014 reproduction of Karr 2012 Translation.\nFor every gene g in the full M. genitalium gene set (~522 genes), new protein per step is\nPoisson in the current mRNA copy number\n    n_g ~ Poisson(r_g \u00b7 mRNA_g \u00b7 \u0394t)\ncapped by GTP supply (~2 GTP per peptide bond, \u2248 gtp_per_protein per chain). Per-gene\nrates r_g are ParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nFidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nGTP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "translation_rates": {
           "_type": "map[float]",
@@ -320,11 +563,15 @@
         "seed": {
           "_type": "integer",
           "_default": 1
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "translation"
         }
       },
       "_contract": {
         "summary": "Stochastic translation \u2014 reproduction of Karr 2012 Translation.",
-        "description": "rates r_g are ParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget.",
+        "description": "rates r_g are ParCa-fitted.\nContract \u2014 in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). out: protein_counts (per-gene protein \u0394, additive map), gtp (\u0394 consumed, negative).\nreduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\nmRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA\u2194protein decoupling\nand the translation share of the Fig 5 energy budget. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nGTP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -346,11 +593,13 @@
       },
       "_inputs": {
         "rna_counts": "map[float]",
-        "gtp": "float"
+        "gtp": "float",
+        "alloc__gtp": "map[float]"
       },
       "_outputs": {
         "protein_counts": "map[float]",
-        "gtp": "float"
+        "gtp": "float",
+        "demand__gtp": "map[float]"
       }
     },
     "rna_decay": {
@@ -689,6 +938,11 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "alloc__atp": [
+          "cell",
+          "budget",
+          "alloc__atp"
         ]
       },
       "outputs": {
@@ -701,9 +955,14 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
         ]
       },
-      "doc": "DNA supercoiling homeostasis \u2014 reproduction of Karr 2012 DNASupercoiling.\nGyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\n    acts = min(gyrase\u00b71.2\u00b7\u0394t, atp/2, supercoils_needed);  \u03c3 += sign(setpoint\u2212\u03c3)\u00b7acts/genome_turns;\n    \u03c3 \u2192 setpoint;  \u0394atp = \u22122\u00b7acts.\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is tracked genome-wide as one linking-number pool rather than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')).",
+      "doc": "DNA supercoiling homeostasis \u2014 reproduction of Karr 2012 DNASupercoiling.\nGyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\n    acts = min(gyrase\u00b71.2\u00b7\u0394t, atp/2, supercoils_needed);  \u03c3 += sign(setpoint\u2212\u03c3)\u00b7acts/genome_turns;\n    \u03c3 \u2192 setpoint;  \u0394atp = \u22122\u00b7acts.\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is tracked genome-wide as one linking-number pool rather than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "setpoint": {
           "_type": "float",
@@ -728,11 +987,15 @@
         "initial_sigma": {
           "_type": "float",
           "_default": 0.0
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "supercoiling"
         }
       },
       "_contract": {
         "summary": "DNA supercoiling homeostasis \u2014 reproduction of Karr 2012 DNASupercoiling.",
-        "description": "Gyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is tracked genome-wide as one linking-number pool rather than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')).",
+        "description": "Gyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is tracked genome-wide as one linking-number pool rather than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -751,11 +1014,13 @@
       },
       "_inputs": {
         "gyrase": "float",
-        "atp": "float"
+        "atp": "float",
+        "alloc__atp": "map[float]"
       },
       "_outputs": {
         "superhelical_density": "overwrite[float]",
-        "atp": "float"
+        "atp": "float",
+        "demand__atp": "map[float]"
       }
     },
     "condensation": {
@@ -954,6 +1219,11 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "alloc__atp": [
+          "cell",
+          "budget",
+          "alloc__atp"
         ]
       },
       "outputs": {
@@ -966,9 +1236,14 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
         ]
       },
-      "doc": "DNA repair \u2014 reproduction of Karr 2012 DNARepair.\nThe original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\n    repaired = min(lesions, rate \u00b7 repair_enzyme \u00b7 \u0394t, atp / atp_per_repair);\n    \u0394lesions = \u2212repaired;  \u0394atp = \u2212repaired \u00b7 atp_per_repair.\nContract \u2014 in: lesions (current count), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools.",
+      "doc": "DNA repair \u2014 reproduction of Karr 2012 DNARepair.\nThe original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\n    repaired = min(lesions, rate \u00b7 repair_enzyme \u00b7 \u0394t, atp / atp_per_repair);\n    \u0394lesions = \u2212repaired;  \u0394atp = \u2212repaired \u00b7 atp_per_repair.\nContract \u2014 in: lesions (current count), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "repair_rate": {
           "_type": "float",
@@ -977,11 +1252,15 @@
         "atp_per_repair": {
           "_type": "float",
           "_default": 4.0
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "dna_repair"
         }
       },
       "_contract": {
         "summary": "DNA repair \u2014 reproduction of Karr 2012 DNARepair.",
-        "description": "The original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\nContract \u2014 in: lesions (current count), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools.",
+        "description": "The original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\nContract \u2014 in: lesions (current count), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -1001,11 +1280,13 @@
       "_inputs": {
         "lesions": "float",
         "repair_enzyme": "float",
-        "atp": "float"
+        "atp": "float",
+        "alloc__atp": "map[float]"
       },
       "_outputs": {
         "lesions": "float",
-        "atp": "float"
+        "atp": "float",
+        "demand__atp": "map[float]"
       }
     },
     "transcriptional_regulation": {
@@ -1235,6 +1516,16 @@
           "cell",
           "transcriptome",
           "synthetase"
+        ],
+        "alloc__atp": [
+          "cell",
+          "budget",
+          "alloc__atp"
+        ],
+        "alloc__amino_acid": [
+          "cell",
+          "budget",
+          "alloc__amino_acid"
         ]
       },
       "outputs": {
@@ -1252,9 +1543,24 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "amino_acid": [
+          "cell",
+          "metabolism",
+          "amino_acid"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
+        ],
+        "demand__amino_acid": [
+          "cell",
+          "budget",
+          "demand__amino_acid"
         ]
       },
-      "doc": "tRNA aminoacylation \u2014 reproduction of Karr 2012 tRNAAminoacylation.\nAminoacyl-tRNA synthetases conjugate amino acids to free tRNAs at a cost of 1 ATP each\n(ATP -> AMP + PPi). The total number charged this step is\n    N = floor( min( sum(free_tRNA), amino_acid, atp, synthetase \u00b7 kcat \u00b7 \u0394t ) )\ndistributed across species by multinomial draw proportional to free-tRNA counts, then\nfree_trna -> aminoacylated_trna and atp decremented by N. Mirrors evolveState's greedy\nreactionLimits loop (min over synthetase/AA/ATP availability, weighted stochastic pick),\nas one aggregate limit + multinomial partition.\nContract \u2014 in: free_trna (count map), amino_acid, atp, synthetase (pools/counts). out: free_trna (negative \u0394), aminoacylated_trna (positive \u0394), atp (negative \u0394).\nORDERING: runs BEFORE Translation (charged tRNAs feed the ribosome same-tick).\nFidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\ntRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\nvalue; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA \u00d7 37\ntRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.",
+      "doc": "tRNA aminoacylation \u2014 reproduction of Karr 2012 tRNAAminoacylation.\nAminoacyl-tRNA synthetases conjugate amino acids to free tRNAs at a cost of 1 ATP each\n(ATP -> AMP + PPi). The total number charged this step is\n    N = floor( min( sum(free_tRNA), amino_acid, atp, synthetase \u00b7 kcat \u00b7 \u0394t ) )\ndistributed across species by multinomial draw proportional to free-tRNA counts, then\nfree_trna -> aminoacylated_trna and atp decremented by N. Mirrors evolveState's greedy\nreactionLimits loop (min over synthetase/AA/ATP availability, weighted stochastic pick),\nas one aggregate limit + multinomial partition.\nContract \u2014 in: free_trna (count map), amino_acid, atp, synthetase (pools/counts). out: free_trna (negative \u0394), aminoacylated_trna (positive \u0394), atp (negative \u0394).\nORDERING: runs BEFORE Translation (charged tRNAs feed the ribosome same-tick).\nFidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\ntRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\nvalue; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA \u00d7 37\ntRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.\nConsumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning):\ncapped each tick at its allocated ATP and amino_acid budgets from the finite\nmetabolism-replenished pools.",
       "config_schema": {
         "synthetase_kcat": {
           "_type": "float",
@@ -1267,11 +1573,15 @@
         "seed": {
           "_type": "integer",
           "_default": 3
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "trna_aminoacylation"
         }
       },
       "_contract": {
         "summary": "tRNA aminoacylation \u2014 reproduction of Karr 2012 tRNAAminoacylation.",
-        "description": "Aminoacyl-tRNA synthetases conjugate amino acids to free tRNAs at a cost of 1 ATP each\n(ATP -> AMP + PPi). The total number charged this step is\ndistributed across species by multinomial draw proportional to free-tRNA counts, then\nfree_trna -> aminoacylated_trna and atp decremented by N. Mirrors evolveState's greedy\nreactionLimits loop (min over synthetase/AA/ATP availability, weighted stochastic pick),\nas one aggregate limit + multinomial partition.\nContract \u2014 in: free_trna (count map), amino_acid, atp, synthetase (pools/counts). out: free_trna (negative \u0394), aminoacylated_trna (positive \u0394), atp (negative \u0394).\nORDERING: runs BEFORE Translation (charged tRNAs feed the ribosome same-tick).\nFidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\ntRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\nvalue; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA \u00d7 37\ntRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.",
+        "description": "Aminoacyl-tRNA synthetases conjugate amino acids to free tRNAs at a cost of 1 ATP each\n(ATP -> AMP + PPi). The total number charged this step is\ndistributed across species by multinomial draw proportional to free-tRNA counts, then\nfree_trna -> aminoacylated_trna and atp decremented by N. Mirrors evolveState's greedy\nreactionLimits loop (min over synthetase/AA/ATP availability, weighted stochastic pick),\nas one aggregate limit + multinomial partition.\nContract \u2014 in: free_trna (count map), amino_acid, atp, synthetase (pools/counts). out: free_trna (negative \u0394), aminoacylated_trna (positive \u0394), atp (negative \u0394).\nORDERING: runs BEFORE Translation (charged tRNAs feed the ribosome same-tick).\nFidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\ntRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\nvalue; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA \u00d7 37\ntRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.\nConsumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning):\ncapped each tick at its allocated ATP and amino_acid budgets from the finite\nmetabolism-replenished pools.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -1291,12 +1601,17 @@
         "free_trna": "map[float]",
         "amino_acid": "float",
         "atp": "float",
-        "synthetase": "float"
+        "synthetase": "float",
+        "alloc__atp": "map[float]",
+        "alloc__amino_acid": "map[float]"
       },
       "_outputs": {
         "free_trna": "map[float]",
         "aminoacylated_trna": "map[float]",
-        "atp": "float"
+        "atp": "float",
+        "amino_acid": "float",
+        "demand__atp": "map[float]",
+        "demand__amino_acid": "map[float]"
       }
     },
     "protein_processing_i": {
@@ -1396,6 +1711,11 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "alloc__gtp": [
+          "cell",
+          "budget",
+          "alloc__gtp"
         ]
       },
       "outputs": {
@@ -1413,9 +1733,14 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "demand__gtp": [
+          "cell",
+          "budget",
+          "demand__gtp"
         ]
       },
-      "doc": "Protein Translocation \u2014 reproduction of Karr 2012 ProteinTranslocation.\nIntegral-membrane/lipo/secreted proteins are pushed through the SecYEG pore by the\nSecA translocase, recognised via the GTP-driven signal recognition particle. In the\nreal KB the translocase specific rate (2.71e12 s\u207b\u00b9) is effectively non-limiting, so\nthe bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):\n    limit = min(translocase*2.71e12, gtp/2.0) * \u0394t,\nso process_i_done -> translocated proceeds up to the GTP available, consuming 2 GTP/monomer.\nContract \u2014 in: process_i_done (map), translocase (float), gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg \u0394).\nFidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated to the metabolite pools.",
+      "doc": "Protein Translocation \u2014 reproduction of Karr 2012 ProteinTranslocation.\nIntegral-membrane/lipo/secreted proteins are pushed through the SecYEG pore by the\nSecA translocase, recognised via the GTP-driven signal recognition particle. In the\nreal KB the translocase specific rate (2.71e12 s\u207b\u00b9) is effectively non-limiting, so\nthe bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):\n    limit = min(translocase*2.71e12, gtp/2.0) * \u0394t,\nso process_i_done -> translocated proceeds up to the GTP available, consuming 2 GTP/monomer.\nContract \u2014 in: process_i_done (map), translocase (float), gtp (float). out: process_i_done (neg map), translocated (pos map), gtp (neg \u0394).\nFidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "translocase_specific_rate": {
           "_type": "float",
@@ -1428,6 +1753,10 @@
         "seed": {
           "_type": "integer",
           "_default": 12
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "translocation"
         }
       },
       "_contract": {
@@ -1439,7 +1768,7 @@
         "math": [
           "the bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):",
           "limit = min(translocase*2.71e12, gtp/2.0) * \u0394t,",
-          "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated to the metabolite pools."
+          "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool."
         ],
         "symbols": {},
         "assumptions": [],
@@ -1453,12 +1782,14 @@
       "_inputs": {
         "process_i_done": "map[float]",
         "translocase": "float",
-        "gtp": "float"
+        "gtp": "float",
+        "alloc__gtp": "map[float]"
       },
       "_outputs": {
         "process_i_done": "map[float]",
         "translocated": "map[float]",
-        "gtp": "float"
+        "gtp": "float",
+        "demand__gtp": "map[float]"
       }
     },
     "protein_processing_ii": {
@@ -1548,6 +1879,11 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "alloc__atp": [
+          "cell",
+          "budget",
+          "alloc__atp"
         ]
       },
       "outputs": {
@@ -1565,9 +1901,14 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
         ]
       },
-      "doc": "Protein Folding \u2014 reproduction of Karr 2012 ProteinFolding.\nMonomers in the 'notFolding' set relax spontaneously; the rest fold with chaperone\n(GroEL/DnaK) assistance, which MATLAB drives as an ATP/enzyme-limited reaction Gillespie\nloop. Here the folded fraction per step is\n    frac = 1 - exp(-(spontaneous_rate + chaperone_rate\u00b7chaperone_count)\u00b7\u0394t),\nthe chaperone-assisted share = chaperone_rate\u00b7chaperone_count / total rate consumes ATP\n(atp_per_fold \u2248 7 per GroEL cycle), and folds are capped at ATP availability.\nContract \u2014 in: unfolded (map), chaperone_count (float), atp (float). out: unfolded (neg map), folded (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\ncarries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\norder-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\ncoordination is delegated to the metabolite pools.",
+      "doc": "Protein Folding \u2014 reproduction of Karr 2012 ProteinFolding.\nMonomers in the 'notFolding' set relax spontaneously; the rest fold with chaperone\n(GroEL/DnaK) assistance, which MATLAB drives as an ATP/enzyme-limited reaction Gillespie\nloop. Here the folded fraction per step is\n    frac = 1 - exp(-(spontaneous_rate + chaperone_rate\u00b7chaperone_count)\u00b7\u0394t),\nthe chaperone-assisted share = chaperone_rate\u00b7chaperone_count / total rate consumes ATP\n(atp_per_fold \u2248 7 per GroEL cycle), and folds are capped at ATP availability.\nContract \u2014 in: unfolded (map), chaperone_count (float), atp (float). out: unfolded (neg map), folded (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\ncarries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\norder-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\ncoordination is delegated to the metabolite pools. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nATP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "spontaneous_rate": {
           "_type": "float",
@@ -1584,11 +1925,15 @@
         "seed": {
           "_type": "integer",
           "_default": 14
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "protein_folding"
         }
       },
       "_contract": {
         "summary": "Protein Folding \u2014 reproduction of Karr 2012 ProteinFolding.",
-        "description": "Monomers in the 'notFolding' set relax spontaneously; the rest fold with chaperone\n(GroEL/DnaK) assistance, which MATLAB drives as an ATP/enzyme-limited reaction Gillespie\nloop. Here the folded fraction per step is\nContract \u2014 in: unfolded (map), chaperone_count (float), atp (float). out: unfolded (neg map), folded (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\ncarries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\norder-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\ncoordination is delegated to the metabolite pools.",
+        "description": "Monomers in the 'notFolding' set relax spontaneously; the rest fold with chaperone\n(GroEL/DnaK) assistance, which MATLAB drives as an ATP/enzyme-limited reaction Gillespie\nloop. Here the folded fraction per step is\nContract \u2014 in: unfolded (map), chaperone_count (float), atp (float). out: unfolded (neg map), folded (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\ncarries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\norder-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\ncoordination is delegated to the metabolite pools. Consumption is arbitrated by the\nwhole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated\nATP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -1609,12 +1954,14 @@
       "_inputs": {
         "unfolded": "map[float]",
         "chaperone_count": "float",
-        "atp": "float"
+        "atp": "float",
+        "alloc__atp": "map[float]"
       },
       "_outputs": {
         "unfolded": "map[float]",
         "folded": "map[float]",
-        "atp": "float"
+        "atp": "float",
+        "demand__atp": "map[float]"
       }
     },
     "protein_modification": {
@@ -1637,6 +1984,11 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "alloc__atp": [
+          "cell",
+          "budget",
+          "alloc__atp"
         ]
       },
       "outputs": {
@@ -1654,9 +2006,14 @@
           "cell",
           "metabolism",
           "atp"
+        ],
+        "demand__atp": [
+          "cell",
+          "budget",
+          "demand__atp"
         ]
       },
-      "doc": "Protein Modification \u2014 reproduction of Karr 2012 ProteinModification.\nSer/Thr/Tyr phosphorylation and lipoate/glutamate ligation of specific monomers.\nMATLAB runs an enzyme+substrate-limited reaction Gillespie loop; here unmodified ->\nmodified at rate enzyme\u00b7specificRate\u00b7\u0394t, capped by ATP (~1 ATP per phosphoryl transfer).\nContract \u2014 in: unmodified (map), modification_enzyme (float), atp (float). out: unmodified (neg map), modified (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\nProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\nthe per-reaction cofactor stoichiometry is delegated to the metabolite pools.",
+      "doc": "Protein Modification \u2014 reproduction of Karr 2012 ProteinModification.\nSer/Thr/Tyr phosphorylation and lipoate/glutamate ligation of specific monomers.\nMATLAB runs an enzyme+substrate-limited reaction Gillespie loop; here unmodified ->\nmodified at rate enzyme\u00b7specificRate\u00b7\u0394t, capped by ATP (~1 ATP per phosphoryl transfer).\nContract \u2014 in: unmodified (map), modification_enzyme (float), atp (float). out: unmodified (neg map), modified (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\nProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\nthe per-reaction cofactor stoichiometry is delegated to the metabolite pools. Consumption\nis arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each\ntick at its allocated ATP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "modification_specific_rate": {
           "_type": "float",
@@ -1669,11 +2026,15 @@
         "seed": {
           "_type": "integer",
           "_default": 15
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "protein_modification"
         }
       },
       "_contract": {
         "summary": "Protein Modification \u2014 reproduction of Karr 2012 ProteinModification.",
-        "description": "Ser/Thr/Tyr phosphorylation and lipoate/glutamate ligation of specific monomers.\nMATLAB runs an enzyme+substrate-limited reaction Gillespie loop; here unmodified ->\nContract \u2014 in: unmodified (map), modification_enzyme (float), atp (float). out: unmodified (neg map), modified (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\nProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\nthe per-reaction cofactor stoichiometry is delegated to the metabolite pools.",
+        "description": "Ser/Thr/Tyr phosphorylation and lipoate/glutamate ligation of specific monomers.\nMATLAB runs an enzyme+substrate-limited reaction Gillespie loop; here unmodified ->\nContract \u2014 in: unmodified (map), modification_enzyme (float), atp (float). out: unmodified (neg map), modified (pos map), atp (neg \u0394).\nFidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\nProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\nthe per-reaction cofactor stoichiometry is delegated to the metabolite pools. Consumption\nis arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each\ntick at its allocated ATP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -1692,12 +2053,14 @@
       "_inputs": {
         "unmodified": "map[float]",
         "modification_enzyme": "float",
-        "atp": "float"
+        "atp": "float",
+        "alloc__atp": "map[float]"
       },
       "_outputs": {
         "unmodified": "map[float]",
         "modified": "map[float]",
-        "atp": "float"
+        "atp": "float",
+        "demand__atp": "map[float]"
       }
     },
     "protein_activation": {
@@ -2405,6 +2768,11 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "alloc__gtp": [
+          "cell",
+          "budget",
+          "alloc__gtp"
         ]
       },
       "outputs": {
@@ -2432,9 +2800,14 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "demand__gtp": [
+          "cell",
+          "budget",
+          "demand__gtp"
         ]
       },
-      "doc": "Ribosome Assembly \u2014 reproduction of Karr 2012 RibosomeAssembly.\n30S/50S subunits assemble from ribosomal proteins + rRNA, requiring GTPase assembly\nfactors and GTP. Subunit composition is the REAL Karr KB: the 30S from its 20\nr-protein monomers + 16S rRNA (MGrrnA16S), the 50S from its 32 r-protein monomers +\n23S + 5S rRNA (MGrrnA23S, MGrrnA5S). MATLAB forms newComplexs = floor(min(gtp/\ngtpPerComplex, water/.., RNAs, monomers)) gated on assembly enzymes; here each subunit\nforms at\n    n = floor(min(limiting r-protein, limiting rRNA, assembly_factor, gtp/gtp_per_complex))\nconsuming its subunits and GTP.\nContract \u2014 in: rprotein_counts (map), rrna_counts (map), assembly_factor (float), gtp (float). out: ribosome_30S (float \u0394), ribosome_50S (float \u0394), rprotein_counts (neg map), rrna_counts (neg map), gtp (neg \u0394).\nFidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere).",
+      "doc": "Ribosome Assembly \u2014 reproduction of Karr 2012 RibosomeAssembly.\n30S/50S subunits assemble from ribosomal proteins + rRNA, requiring GTPase assembly\nfactors and GTP. Subunit composition is the REAL Karr KB: the 30S from its 20\nr-protein monomers + 16S rRNA (MGrrnA16S), the 50S from its 32 r-protein monomers +\n23S + 5S rRNA (MGrrnA23S, MGrrnA5S). MATLAB forms newComplexs = floor(min(gtp/\ngtpPerComplex, water/.., RNAs, monomers)) gated on assembly enzymes; here each subunit\nforms at\n    n = floor(min(limiting r-protein, limiting rRNA, assembly_factor, gtp/gtp_per_complex))\nconsuming its subunits and GTP.\nContract \u2014 in: rprotein_counts (map), rrna_counts (map), assembly_factor (float), gtp (float). out: ribosome_30S (float \u0394), ribosome_50S (float \u0394), rprotein_counts (neg map), rrna_counts (neg map), gtp (neg \u0394).\nFidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "gtp_per_complex": {
           "_type": "float",
@@ -2443,11 +2816,15 @@
         "seed": {
           "_type": "integer",
           "_default": 18
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "ribosome_assembly"
         }
       },
       "_contract": {
         "summary": "Ribosome Assembly \u2014 reproduction of Karr 2012 RibosomeAssembly.",
-        "description": "30S/50S subunits assemble from ribosomal proteins + rRNA, requiring GTPase assembly\nfactors and GTP. Subunit composition is the REAL Karr KB: the 30S from its 20\nr-protein monomers + 16S rRNA (MGrrnA16S), the 50S from its 32 r-protein monomers +\ngtpPerComplex, water/.., RNAs, monomers)) gated on assembly enzymes; here each subunit\nforms at\nconsuming its subunits and GTP.\nContract \u2014 in: rprotein_counts (map), rrna_counts (map), assembly_factor (float), gtp (float). out: ribosome_30S (float \u0394), ribosome_50S (float \u0394), rprotein_counts (neg map), rrna_counts (neg map), gtp (neg \u0394).\nFidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere).",
+        "description": "30S/50S subunits assemble from ribosomal proteins + rRNA, requiring GTPase assembly\nfactors and GTP. Subunit composition is the REAL Karr KB: the 30S from its 20\nr-protein monomers + 16S rRNA (MGrrnA16S), the 50S from its 32 r-protein monomers +\ngtpPerComplex, water/.., RNAs, monomers)) gated on assembly enzymes; here each subunit\nforms at\nconsuming its subunits and GTP.\nContract \u2014 in: rprotein_counts (map), rrna_counts (map), assembly_factor (float), gtp (float). out: ribosome_30S (float \u0394), ribosome_50S (float \u0394), rprotein_counts (neg map), rrna_counts (neg map), gtp (neg \u0394).\nFidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -2468,14 +2845,16 @@
         "rprotein_counts": "map[float]",
         "rrna_counts": "map[float]",
         "assembly_factor": "float",
-        "gtp": "float"
+        "gtp": "float",
+        "alloc__gtp": "map[float]"
       },
       "_outputs": {
         "ribosome_30S": "float",
         "ribosome_50S": "float",
         "rprotein_counts": "map[float]",
         "rrna_counts": "map[float]",
-        "gtp": "float"
+        "gtp": "float",
+        "demand__gtp": "map[float]"
       }
     },
     "terminal_organelle_assembly": {
@@ -2558,6 +2937,11 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "alloc__gtp": [
+          "cell",
+          "budget",
+          "alloc__gtp"
         ]
       },
       "outputs": {
@@ -2570,9 +2954,14 @@
           "cell",
           "metabolism",
           "gtp"
+        ],
+        "demand__gtp": [
+          "cell",
+          "budget",
+          "demand__gtp"
         ]
       },
-      "doc": "FtsZ polymerization \u2014 reproduction of Karr 2012 FtsZPolymerization (Surovtsev 2008 kinetic scheme).\nFtsZ is a CONSERVED pool partitioned between free subunits and the assembled Z-ring. GTP-driven activation moves FtsZ free\u2192ring at k_on (real KB activationFwd 1.1 /s) and dissociation returns it ring\u2192free at k_off (real KB activationRev 0.01 /s). The step is the exact closed-form two-state relaxation of the conserved pool over \u0394t:\n    ring_eq = total \u00b7 k_on/(k_on+k_off);  ring(t+\u0394t) = ring_eq + (ring\u2212ring_eq)\u00b7e^(\u2212(k_on+k_off)\u0394t),\ncosting 1 GTP per net new ring subunit and capping growth at available GTP. Because k_on \u226b k_off the ring reaches \u2248 the full pool and drives the septum closed.\nContract \u2014 in (sensors): ftsz_monomer, gtp. out: ftsz_ring_filaments (Z-ring subunit count snapshot), gtp (negative delta, consumed).\nFidelity: FAITHFUL activation/dissociation constants (real KB activationFwd/Rev). The reduction is the assembly detail: a two-state free\u21ccring relaxation stands in for the explicit nucleation/elongation/exchange mass-action multimers (their bimolecular fwd/rev constants are in different units and available via kb.karr_process_params('FtsZPolymerization')).",
+      "doc": "FtsZ polymerization \u2014 reproduction of Karr 2012 FtsZPolymerization (Surovtsev 2008 kinetic scheme).\nFtsZ is a CONSERVED pool partitioned between free subunits and the assembled Z-ring. GTP-driven activation moves FtsZ free\u2192ring at k_on (real KB activationFwd 1.1 /s) and dissociation returns it ring\u2192free at k_off (real KB activationRev 0.01 /s). The step is the exact closed-form two-state relaxation of the conserved pool over \u0394t:\n    ring_eq = total \u00b7 k_on/(k_on+k_off);  ring(t+\u0394t) = ring_eq + (ring\u2212ring_eq)\u00b7e^(\u2212(k_on+k_off)\u0394t),\ncosting 1 GTP per net new ring subunit and capping growth at available GTP. Because k_on \u226b k_off the ring reaches \u2248 the full pool and drives the septum closed.\nContract \u2014 in (sensors): ftsz_monomer, gtp. out: ftsz_ring_filaments (Z-ring subunit count snapshot), gtp (negative delta, consumed).\nFidelity: FAITHFUL activation/dissociation constants (real KB activationFwd/Rev). The reduction is the assembly detail: a two-state free\u21ccring relaxation stands in for the explicit nucleation/elongation/exchange mass-action multimers (their bimolecular fwd/rev constants are in different units and available via kb.karr_process_params('FtsZPolymerization')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool.",
       "config_schema": {
         "activation_rate": {
           "_type": "float",
@@ -2589,11 +2978,15 @@
         "initial_ring": {
           "_type": "float",
           "_default": 0.0
+        },
+        "consumer_id": {
+          "_type": "string",
+          "_default": "ftsz"
         }
       },
       "_contract": {
         "summary": "FtsZ polymerization \u2014 reproduction of Karr 2012 FtsZPolymerization (Surovtsev 2008 kinetic scheme).",
-        "description": "FtsZ is a CONSERVED pool partitioned between free subunits and the assembled Z-ring. GTP-driven activation moves FtsZ free\u2192ring at k_on (real KB activationFwd 1.1 /s) and dissociation returns it ring\u2192free at k_off (real KB activationRev 0.01 /s). The step is the exact closed-form two-state relaxation of the conserved pool over \u0394t:\nContract \u2014 in (sensors): ftsz_monomer, gtp. out: ftsz_ring_filaments (Z-ring subunit count snapshot), gtp (negative delta, consumed).\nFidelity: FAITHFUL activation/dissociation constants (real KB activationFwd/Rev). The reduction is the assembly detail: a two-state free\u21ccring relaxation stands in for the explicit nucleation/elongation/exchange mass-action multimers (their bimolecular fwd/rev constants are in different units and available via kb.karr_process_params('FtsZPolymerization')).",
+        "description": "FtsZ is a CONSERVED pool partitioned between free subunits and the assembled Z-ring. GTP-driven activation moves FtsZ free\u2192ring at k_on (real KB activationFwd 1.1 /s) and dissociation returns it ring\u2192free at k_off (real KB activationRev 0.01 /s). The step is the exact closed-form two-state relaxation of the conserved pool over \u0394t:\nContract \u2014 in (sensors): ftsz_monomer, gtp. out: ftsz_ring_filaments (Z-ring subunit count snapshot), gtp (negative delta, consumed).\nFidelity: FAITHFUL activation/dissociation constants (real KB activationFwd/Rev). The reduction is the assembly detail: a two-state free\u21ccring relaxation stands in for the explicit nucleation/elongation/exchange mass-action multimers (their bimolecular fwd/rev constants are in different units and available via kb.karr_process_params('FtsZPolymerization')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated GTP budget from the finite metabolism-replenished pool.",
         "inputs": {},
         "outputs": {},
         "config": {},
@@ -2612,11 +3005,13 @@
       },
       "_inputs": {
         "ftsz_monomer": "float",
-        "gtp": "float"
+        "gtp": "float",
+        "alloc__gtp": "map[float]"
       },
       "_outputs": {
         "ftsz_ring_filaments": "overwrite[float]",
-        "gtp": "float"
+        "gtp": "float",
+        "demand__gtp": "map[float]"
       }
     },
     "cytokinesis": {
@@ -2926,18 +3321,45 @@
     },
     "cell": {
       "metabolism": {
-        "nutrient_scale": 1.0,
+        "atp": 1000000.0,
         "atp_production": 0.0,
+        "gtp": 1000000.0,
         "gtp_production": 0.0,
+        "ntp": 1000000.0,
+        "ntp_production": 0.0,
+        "amino_acid": 1000000.0,
+        "amino_acid_production": 0.0,
+        "nutrient_scale": 1.0,
         "feasible": 1.0,
         "mass_fractions": {},
-        "ntp": 100000000.0,
-        "gtp": 1000000000.0,
         "dntp_synthesis_scale": 1.0,
         "dntp_pool": 0.0,
-        "dntp_at_replication_start": 0.0,
-        "atp": 1000000000.0,
-        "amino_acid": 100000000.0
+        "dntp_at_replication_start": 0.0
+      },
+      "budget": {
+        "demand__atp": {
+          "supercoiling": 0.0,
+          "dna_repair": 0.0,
+          "protein_folding": 0.0,
+          "protein_modification": 0.0,
+          "trna_aminoacylation": 0.0
+        },
+        "demand__gtp": {
+          "translation": 0.0,
+          "translocation": 0.0,
+          "ribosome_assembly": 0.0,
+          "ftsz": 0.0
+        },
+        "demand__ntp": {
+          "transcription": 0.0
+        },
+        "demand__amino_acid": {
+          "trna_aminoacylation": 0.0
+        },
+        "alloc__atp": {},
+        "alloc__gtp": {},
+        "alloc__ntp": {},
+        "alloc__amino_acid": {}
       },
       "physiology": {
         "growth_rate": 0.0,

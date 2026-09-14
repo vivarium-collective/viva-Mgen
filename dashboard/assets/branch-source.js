@@ -117,12 +117,19 @@
     // download reads as progress, never a dead spinner (hardening for external users).
     var controller = new AbortController();
     var t0 = Date.now();
+    function _elapsed() { return Math.round((Date.now() - t0) / 1000); }
     function _msg() {
-      var s = Math.round((Date.now() - t0) / 1000);
-      return "Loading build " + simulatorId + " — downloading its workspace (" + s + "s; cached builds are instant)…";
+      return "Loading build " + simulatorId + " — downloading its workspace (" + _elapsed()
+        + "s; a big workspace can take a few minutes; cached builds are instant)…";
     }
-    _setBusy(_msg(), function () { controller.abort(); });
-    var ticker = setInterval(function () { _setBusy(_msg(), function () { controller.abort(); }); }, 1000);
+    // Tick the BUTTON text too (not just the banner) so a slow download reads as
+    // live progress with a running clock, never a frozen "Loading…" spinner.
+    function _tick() {
+      _setBusy(_msg(), function () { controller.abort(); });
+      if (btn) btn.textContent = "Loading… " + _elapsed() + "s (Cancel below)";
+    }
+    _tick();
+    var ticker = setInterval(_tick, 1000);
     var deadline = setTimeout(function () { controller.abort(); }, 610000);  // 600s server cap + buffer
     function _cleanup() { clearInterval(ticker); clearTimeout(deadline); }
     try {
@@ -132,14 +139,14 @@
         signal: controller.signal,
       });
     } catch (e) {
-      _cleanup(); _setBusy(""); if (btn) { btn.disabled = false; btn.textContent = "Switch"; }
+      _cleanup(); _setBusy(""); if (btn) { btn.disabled = false; btn.textContent = "Run from hosted"; }
       alert(e && e.name === "AbortError"
         ? "Switch cancelled or timed out — the workspace download took too long. The remote endpoint may be slow or unreachable."
         : "Switch failed: network error");
       return;
     }
     _cleanup();
-    if (btn) { btn.disabled = false; btn.textContent = "Switch"; }
+    if (btn) { btn.disabled = false; btn.textContent = "Run from hosted"; }
     if (!r.ok) _setBusy("");
     _afterSwitch(r);
   }
@@ -273,7 +280,7 @@
     host.appendChild(_el("h3", "viv-bs-title", "Source"));
     // One-line scope cue so the two cards read as distinct jobs: this card is
     // "where the tab runs"; the GitHub card below is "sync & collaborate".
-    var _sub = _el("div", "viv-bs-subtitle", "Where this tab runs — pick a local workspace or a remote build.");
+    var _sub = _el("div", "viv-bs-subtitle", "Where this workspace runs — a local checkout or a hosted build.");
     _sub.style.cssText = "color:#93a1b5; font-size:12px; margin:-4px 0 12px";
     host.appendChild(_sub);
 
@@ -294,7 +301,7 @@
     ["local", "remote"].forEach(function (s) {
       var label = RO
         ? (s === "local" ? "Workspaces" : "sms-api builds")
-        : (s === "local" ? "Local" : "Remote");
+        : (s === "local" ? "Local" : "Hosted");
       var b = _el("button", "viv-bs-toggle" + (state.scope === s ? " active" : ""), label);
       b.addEventListener("click", function () { state.scope = s; state.repo = null; state.branch = null; state.newBranch = ""; state.showAllBuilds = false; refresh(); });
       scopeGroup.appendChild(b);
@@ -422,10 +429,16 @@
     // build downloads its workspace the first time (a few minutes; cached builds
     // are instant); a local workspace switches in-process. Distinct from "Open in
     // new tab" (which leaves this tab untouched).
-    var switchHereBtn = _el("button", "viv-bs-action", "Switch here"); switchHereBtn.id = "viv-bs-switch-here";
-    switchHereBtn.title = "Switch THIS tab to the selected source. A remote build downloads its "
-      + "workspace the first time (a few minutes; cached builds are instant); a local workspace "
-      + "switches in place. Use “Open in new tab” to keep this tab as it is.";
+    var remoteScope = state.scope === "remote";
+
+    var switchHereBtn = _el("button", "viv-bs-action", remoteScope ? "Run from hosted" : "Switch here");
+    switchHereBtn.id = "viv-bs-switch-here";
+    switchHereBtn.title = remoteScope
+      ? "Switch THIS tab to the selected remote build — downloads its ENTIRE workspace (hundreds of "
+        + "MB, up to a few minutes) the first time. You do NOT need this to view results; prefer "
+        + "“Open in new tab” unless you specifically need this tab to run that build's code."
+      : "Switch THIS tab to the selected source (a local workspace switches in place). Use “Open in "
+        + "new tab” to keep this tab as it is.";
     switchHereBtn.addEventListener("click", function () {
       var s = state.selected || {};
       if (s.simulator_id != null) _switchRemote(s.simulator_id, switchHereBtn);
@@ -433,18 +446,30 @@
       else if (s.name) _openEntry(s);   // catalog workspace with no local path → spawn by name (new tab)
       else alert("Nothing to switch to — pick a repo/branch with a build or workspace.");
     });
-    actions.appendChild(switchHereBtn);
 
     var openBtn = _el("button", "viv-bs-action", "Open in new tab"); openBtn.id = "viv-bs-open";
     openBtn.title = "Open the selected source in a NEW browser tab, leaving this tab unchanged "
-      + "(each tab stays bound to its own source).";
+      + "(each tab stays bound to its own source) — instant, and doesn't download anything.";
     openBtn.addEventListener("click", function () {
       var s = state.selected || {};
       // build → /?build=, catalog workspace → /?workspace=, path-only → in-place fallback.
       if (s.path || s.name || s.simulator_id != null) _openEntry(s);
       else alert("Nothing to open — pick a repo/branch with a build or workspace.");
     });
-    actions.appendChild(openBtn);
+
+    // For a REMOTE build, "Open in new tab" is instant + non-destructive, while
+    // "Switch here" downloads the whole workspace and re-points this tab — so
+    // emphasize Open (first, tinted) and de-emphasize Switch. A local workspace
+    // switch is cheap, so there Switch here stays first.
+    if (remoteScope) {
+      openBtn.style.cssText = "font-weight:600; border-color:#4bb3ae; color:#0d6e6b; background:#ecfdf9";
+      switchHereBtn.style.cssText = "opacity:.6";
+      actions.appendChild(openBtn);
+      actions.appendChild(switchHereBtn);
+    } else {
+      actions.appendChild(switchHereBtn);
+      actions.appendChild(openBtn);
+    }
 
     // Commit + Push moved to the GitHub card below (that card owns git sync;
     // this card owns "where the tab runs"). See index.html.j2 #viv-git-actions.
@@ -535,6 +560,23 @@
     // current workspace doesn't need a filter box (it read as idle noise).
     var search = null;
     if (matches.length > 1 || (state.filter || "").trim()) {
+      // Section header — the list below is the browsable CATALOG (every
+      // registered build / known workspace), conceptually distinct from the
+      // Repo/Branch/Commit picker + actions above, which point THIS tab. The
+      // picker changes where this workspace runs; the list is what exists.
+      var _listHead = _el("div", "viv-bs-list-head");
+      _listHead.style.cssText = "margin-top:16px; padding-top:12px; border-top:1px solid #eef1f4";
+      var _lTitle = _el("div", "viv-bs-list-title",
+        state.scope === "remote" ? "Registered builds" : "Known workspaces");
+      _lTitle.style.cssText = "font-size:11px; font-weight:700; letter-spacing:.05em; "
+        + "text-transform:uppercase; color:#64748b";
+      var _lSub = _el("div", "viv-bs-list-sub", state.scope === "remote"
+        ? "Every hosted build registered on sms-api — browse the history. Open ↗ explores one in a new tab; Run from hosted re-points THIS tab to it."
+        : "Local checkouts known to this workbench. Open ↗ for a new tab; Switch here re-points THIS tab.");
+      _lSub.style.cssText = "font-size:12px; color:#94a3b8; margin:2px 0 8px";
+      _listHead.appendChild(_lTitle); _listHead.appendChild(_lSub);
+      host.appendChild(_listHead);
+
       search = _el("input", "viv-bs-search");
       search.type = "search";
       search.placeholder = state.scope === "remote"
@@ -630,25 +672,29 @@
         // tab. Every source in the history is thus directly actionable without
         // re-selecting it in the pickers above. The current source shows a badge
         // instead of Switch (you're already on it).
+        // List = browse the catalog, so Open ↗ (new tab, non-destructive) is the
+        // primary row action; Switch here (re-points THIS tab, downloads a remote
+        // build's workspace) is secondary. The current source shows a badge.
         var acts = _el("div", "viv-bs-row-actions");
         acts.style.cssText = "flex:0 0 auto; display:flex; align-items:center; gap:6px";
+        var op = _rowBtn("Open ↗", "Open this source in a NEW tab, leaving this one unchanged", "primary");
+        op.addEventListener("click", function (e) { e.stopPropagation(); _openEntry(m); });
         if (m.current) {
           acts.appendChild(_rowTag("current ✓"));
+          acts.appendChild(op);
         } else {
-          var sw = _rowBtn("Switch here", "Switch THIS tab to this source in place"
-            + (isRemote ? " — downloads its workspace the first time (cached builds are instant)" : ""),
-            "primary");
+          var sw = _rowBtn(isRemote ? "Run from hosted" : "Switch here",
+            "Switch THIS tab to this source in place"
+            + (isRemote ? " — downloads the hosted build's workspace the first time (a few minutes; cached builds are instant). You don't need this to view results." : ""));
           sw.addEventListener("click", function (e) {
             e.stopPropagation();
             if (isRemote) _switchRemote(m.simulator_id, sw);
             else if (m.path) _switchLocal(m.path);
             else if (m.name) _openEntry(m);   // catalog workspace, no local path → new tab
           });
+          acts.appendChild(op);
           acts.appendChild(sw);
         }
-        var op = _rowBtn("Open ↗", "Open this source in a NEW tab, leaving this one unchanged");
-        op.addEventListener("click", function (e) { e.stopPropagation(); _openEntry(m); });
-        acts.appendChild(op);
         if (state.scope === "local" && !m.current && m.path) {
           var x = _el("button", "viv-bs-forget", "✕"); x.title = "Forget this workspace";
           x.addEventListener("click", function (e) { e.stopPropagation(); _forget(m.path, li); });

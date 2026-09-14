@@ -1472,17 +1472,17 @@ a.viv-bs-commit:hover { text-decoration: underline; }
     :root[data-theme="dark"] .viv-source-help > summary { color:var(--text) }
     :root[data-theme="dark"] .viv-help-cols code, :root[data-theme="dark"] .viv-source-help code { background:var(--field) }
   </style>
-  <details id="viv-source-help" class="viv-source-help" open>
+  <details id="viv-source-help" class="viv-source-help">
     <summary>How this page works</summary>
     <div class="viv-source-help-body">
-      <p>This page controls <strong>where this browser tab runs</strong> and how your work <strong>syncs with GitHub</strong> — two separate jobs, one per card below.</p>
+      <p>This page controls <strong>where this workspace runs</strong> and how your work <strong>syncs with GitHub</strong> — two separate jobs, one per card below.</p>
       <div class="viv-help-cols">
         <div>
-          <h4>Source — where this tab runs</h4>
+          <h4>Source — where this workspace runs</h4>
           <ul>
-            <li><strong>Local</strong> is a workspace checked out on this machine; <strong>Remote</strong> is a build registered on the GovCloud sms-api server.</li>
-            <li>Pick a <strong>Repo / Branch / Commit</strong> (or build), then <strong>Switch here</strong> to re-point <em>this</em> tab to it, or <strong>Open ↗</strong> to open it in a new tab. A remote build downloads its workspace the first time (a minute or two); cached builds are instant.</li>
-            <li><strong>Build via sms-api</strong> registers a branch's current HEAD as a new remote build. <strong>Reproduce locally</strong> gives you a command to recreate this exact source on your own machine.</li>
+            <li><strong>Local</strong> is a workspace checked out on this machine; <strong>Hosted</strong> is a build registered on the GovCloud sms-api server.</li>
+            <li>Pick a <strong>Repo / Branch / Commit</strong> (or build), then <strong>Open ↗</strong> to open it in a new tab (instant, non-destructive), or <strong>Run from hosted</strong> to re-point <em>this</em> tab to it — that downloads the hosted build's workspace the first time (a minute or two; cached builds are instant). You don't need to run from hosted to view results.</li>
+            <li><strong>Build via sms-api</strong> registers a branch's current HEAD as a new hosted build. <strong>Reproduce locally</strong> gives you a command to recreate this exact source on your own machine.</li>
             <li>In the build list, chips flag which build is <strong>in workspace ✓</strong>, on your <strong>workspace commit</strong>, or the <strong>latest</strong>.</li>
           </ul>
         </div>
@@ -2261,7 +2261,7 @@ Nothing on <code id="pr-base-display-2">main</code> changes until someone presse
      DataSource global that renderers call to fetch narrative data.
      local-server mode (default) fetches from the same-origin /api/* endpoints.
      Hosted mode (sub-projects #2/#3) will set a different config here. -->
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "a8446d611964e4e0d43425aa124d767ac63ebfbd", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/a8446d611964e4e0d43425aa124d767ac63ebfbd", "branch": "main", "generated_at": "2026-09-14 03:50 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "3a8e171da8fef949f8f7077d5620b526f4b1b6a4", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/3a8e171da8fef949f8f7077d5620b526f4b1b6a4", "branch": "main", "generated_at": "2026-09-14 05:58 UTC"} };</script>
 <!-- Derive the global URL prefix from the (possibly publish-injected) config.
      Many renderers prefix workspace-root-absolute links (/studies/, /api/)
      with window.__BASE_PATH__ so they resolve when the read-only bundle is
