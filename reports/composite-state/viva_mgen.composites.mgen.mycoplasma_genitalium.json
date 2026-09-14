@@ -1760,6 +1760,11 @@
           "cell",
           "genome",
           "damaging_agent"
+        ],
+        "lesion_map": [
+          "cell",
+          "genome",
+          "lesion_map"
         ]
       },
       "outputs": {
@@ -1814,7 +1819,8 @@
         "amendments": []
       },
       "_inputs": {
-        "damaging_agent": "float"
+        "damaging_agent": "float",
+        "lesion_map": "map[float]"
       },
       "_outputs": {
         "lesions": "float",
@@ -1827,11 +1833,6 @@
       "config": {},
       "interval": 1.0,
       "inputs": {
-        "lesions": [
-          "cell",
-          "genome",
-          "lesions"
-        ],
         "repair_enzyme": [
           "cell",
           "genome",
@@ -1875,7 +1876,7 @@
           "lesion_map"
         ]
       },
-      "doc": "DNA repair \u2014 reproduction of Karr 2012 DNARepair.\nThe original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\n    repaired = min(lesions, rate \u00b7 repair_enzyme \u00b7 \u0394t, atp / atp_per_repair);\n    \u0394lesions = \u2212repaired;  \u0394atp = \u2212repaired \u00b7 atp_per_repair.\nContract \u2014 in: lesions (current count), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool. Lesions are now tracked per-site on the shared chromosome structure (lesion_map) that damage adds to and repair clears from the same sites \u2014 the first consumer of the unified per-site chromosome (remaining DNA submodels staged).",
+      "doc": "DNA repair \u2014 reproduction of Karr 2012 DNARepair.\nThe original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\n    present = n_lesions(lesion_map);\n    repaired = min(present, rate \u00b7 repair_enzyme \u00b7 \u0394t, atp / atp_per_repair);\n    lesion_map -= repaired sites (weighted-random selection);  \u0394lesions = \u2212repaired;  \u0394atp = \u2212repaired \u00b7 atp_per_repair.\nContract \u2014 in: lesion_map (per-site counts, source of truth for repair demand), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394), lesion_map (negative per-site \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool. Lesions are now tracked per-site on the shared chromosome structure (lesion_map) that damage adds to and repair clears from the same sites \u2014 the first consumer of the unified per-site chromosome (remaining DNA submodels staged).",
       "config_schema": {
         "repair_rate": {
           "_type": "float",
@@ -1896,13 +1897,14 @@
       },
       "_contract": {
         "summary": "DNA repair \u2014 reproduction of Karr 2012 DNARepair.",
-        "description": "The original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\nContract \u2014 in: lesions (current count), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool. Lesions are now tracked per-site on the shared chromosome structure (lesion_map) that damage adds to and repair clears from the same sites \u2014 the first consumer of the unified per-site chromosome (remaining DNA submodels staged).",
+        "description": "The original dispatches BER/NER/HR + polymerize + ligate subroutines over damaged sites, consuming ATP/dNTP. Dynamics \u2014 enzyme- and ATP-limited lesion clearance:\nContract \u2014 in: lesion_map (per-site counts, source of truth for repair demand), repair_enzyme (capacity), atp (energy cap). out: lesions (negative \u0394), atp (negative \u0394), lesion_map (negative per-site \u0394).\nFidelity: the enzyme- and ATP-limited repair flux is faithful. The distinct BER/NER/HR pathways, DisA scanning, and per-base polymerize/ligate steps are lumped into one clearance flux; dNTP accounting is delegated to the metabolite pools. Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget from the finite metabolism-replenished pool. Lesions are now tracked per-site on the shared chromosome structure (lesion_map) that damage adds to and repair clears from the same sites \u2014 the first consumer of the unified per-site chromosome (remaining DNA submodels staged).",
         "inputs": {},
         "outputs": {},
         "config": {},
         "math": [
-          "repaired = min(lesions, rate \u00b7 repair_enzyme \u00b7 \u0394t, atp / atp_per_repair);",
-          "\u0394lesions = \u2212repaired;  \u0394atp = \u2212repaired \u00b7 atp_per_repair."
+          "present = n_lesions(lesion_map);",
+          "repaired = min(present, rate \u00b7 repair_enzyme \u00b7 \u0394t, atp / atp_per_repair);",
+          "lesion_map -= repaired sites (weighted-random selection);  \u0394lesions = \u2212repaired;  \u0394atp = \u2212repaired \u00b7 atp_per_repair."
         ],
         "symbols": {},
         "assumptions": [],
@@ -1914,7 +1916,6 @@
         "amendments": []
       },
       "_inputs": {
-        "lesions": "float",
         "repair_enzyme": "float",
         "atp": "float",
         "alloc__atp": "map[float]",
@@ -13996,7 +13997,6 @@
         "condensed_fraction": 0.0,
         "segregated_fraction": 0.0,
         "damaging_agent": 0.0,
-        "lesions": 0.0,
         "lesion_map": {
           "0": 0.0,
           "1": 0.0,
@@ -14579,6 +14579,7 @@
           "578": 0.0,
           "579": 0.0
         },
+        "lesions": 0.0,
         "repair_enzyme": 20.0,
         "replication_active": 1.0,
         "fraction_explored": 0.0,
