@@ -11,7 +11,9 @@ def test_run_ensemble_independent_cells():
 
 
 def test_cells_diverge():
-    ens = run_ensemble(n_cells=3, duration=10.0)
+    # 60 s so enough transcription events accumulate for the seeds to diverge at
+    # the calibrated (reduced) mRNA-synthesis rate — see MRNA_SYNTHESIS_SCALE.
+    ens = run_ensemble(n_cells=3, duration=60.0)
     # total mRNA at the last common step differs across at least two cells (stochastic)
     def total_rna(rows):
         rc = rows[-1].get("rna_counts", {})

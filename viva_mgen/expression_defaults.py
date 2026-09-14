@@ -84,8 +84,56 @@ except Exception:  # noqa: BLE001 — fall back to the named panel if genes.csv 
 DEFAULT_GENES = list(REPRESENTATIVE_GENES.keys())
 
 
+# Whole-cell stable-RNA synthesis calibration. In the emergent inventory the RNA
+# mass is dominated by the STABLE RNAs — rRNA (~73%) and tRNA (~19%); real mRNA is
+# only ~9%. Those stable species have no packaging/charging sink here (rRNA is not
+# consumed into ribosomes, tRNA not sequestered while charged), and their
+# half-lives (rRNA ~20 h, tRNA ~45 min) exceed the ~9 h cycle, so they accumulate
+# roughly linearly instead of reaching a bounded steady state — overshooting the
+# real cell's stable-RNA content ~2.7×. This factor rescales rRNA/tRNA synthesis
+# (a proxy for that missing sink) so the emergent protein:DNA:RNA dry-mass
+# fractions land on Karr's ~0.70:0.19:0.11 (fig2 report-card bands). mRNA synthesis
+# is left at full rate, so gene-expression timing (fig3 t50/t90) and the mRNA pool
+# feeding translation are unchanged. Fitted jointly with metabolism.gtp_base_supply.
+# See docs/FIDELITY_GAPS.md gap #2.
+STABLE_RNA_SYNTHESIS_SCALE = 0.37
+
+
+# A gene PRODUCT that is itself a stable RNA — the tRNA charged for translation,
+# the rRNA of the ribosome, or the SRP 4.5S RNA. Matched on the product name so
+# that PROTEINS acting on those RNAs (…-tRNA synthetase, 23S rRNA methyltransferase,
+# peptidyl-tRNA hydrolase) are NOT caught — their mRNAs stay mRNAs. (parca.rna_type
+# substring-matches "trna"/"rrna" and so misclassifies those proteins; do not use
+# it here.)
+import re as _re
+_TRNA_RE = _re.compile(r"\btrna-[a-z]", _re.I)                # "tRNA-ALA (GCA, ...)"
+_RRNA_RE = _re.compile(r"ribosomal rrna", _re.I)             # "16S ribosomal rRNA"
+_SRNA_RE = _re.compile(r"scrna|\b4\.5s rna\b", _re.I)  # the 4.5S SRP RNA, not the SRP protein (ffh)
+
+
+def _stable_rna_keys() -> frozenset:
+    """Panel keys whose gene product is a stable RNA (rRNA/tRNA/SRP RNA). Cached;
+    empty if the gene table is unreadable."""
+    cached = getattr(_stable_rna_keys, "_cache", None)
+    if cached is not None:
+        return cached
+    keys = set()
+    try:
+        from .kb import load_genes
+        for g in load_genes():
+            name = g.get("name") or ""
+            if _TRNA_RE.search(name) or _RRNA_RE.search(name) or _SRNA_RE.search(name):
+                keys.add((g.get("symbol") or "").strip() or g["gene_id"])
+    except Exception:  # noqa: BLE001 — no gene table: scale nothing (mRNA-only panel)
+        keys = set()
+    _stable_rna_keys._cache = frozenset(keys)
+    return _stable_rna_keys._cache
+
+
 def synthesis_rates() -> dict:
-    return {g: v[0] for g, v in REPRESENTATIVE_GENES.items()}
+    stable = _stable_rna_keys()
+    return {g: v[0] * (STABLE_RNA_SYNTHESIS_SCALE if g in stable else 1.0)
+            for g, v in REPRESENTATIVE_GENES.items()}
 
 
 def mrna_decay_rates() -> dict:
