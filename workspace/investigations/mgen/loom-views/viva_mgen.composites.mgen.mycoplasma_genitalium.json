@@ -1,0 +1,288 @@
+{
+  "mode": "tree-grid",
+  "positions": {
+    "metabolism": {
+      "x": 3628,
+      "y": 1676,
+      "w": 661,
+      "h": 443
+    },
+    "mass": {
+      "x": 9424,
+      "y": 0
+    },
+    "transcription": {
+      "x": 8136,
+      "y": 3352
+    },
+    "translation": {
+      "x": 9424,
+      "y": 3352
+    },
+    "rna_decay": {
+      "x": 4272,
+      "y": 3352
+    },
+    "protein_decay": {
+      "x": 4916,
+      "y": 1676,
+      "pc": 159
+    },
+    "replication": {
+      "x": 8780,
+      "y": 1676
+    },
+    "replication_initiation": {
+      "x": 9424,
+      "y": 1676
+    },
+    "supercoiling": {
+      "x": 6848,
+      "y": 3352
+    },
+    "condensation": {
+      "x": 4916,
+      "y": 0
+    },
+    "segregation": {
+      "x": 6204,
+      "y": 3352
+    },
+    "dna_damage": {
+      "x": 6204,
+      "y": 0
+    },
+    "dna_repair": {
+      "x": 6848,
+      "y": 0
+    },
+    "transcriptional_regulation": {
+      "x": 8780,
+      "y": 3352
+    },
+    "rna_processing": {
+      "x": 5560,
+      "y": 3352
+    },
+    "rna_modification": {
+      "x": 4916,
+      "y": 3352
+    },
+    "trna_aminoacylation": {
+      "x": 3628,
+      "y": 5028
+    },
+    "protein_processing_i": {
+      "x": 6848,
+      "y": 1676
+    },
+    "protein_translocation": {
+      "x": 8136,
+      "y": 1676
+    },
+    "protein_processing_ii": {
+      "x": 7492,
+      "y": 1676
+    },
+    "protein_folding": {
+      "x": 5560,
+      "y": 1676
+    },
+    "protein_modification": {
+      "x": 6204,
+      "y": 1676
+    },
+    "protein_activation": {
+      "x": 4272,
+      "y": 1676,
+      "pc": 148
+    },
+    "complexation": {
+      "x": 4272,
+      "y": 0
+    },
+    "ribosome_assembly": {
+      "x": 3628,
+      "y": 3352
+    },
+    "terminal_organelle_assembly": {
+      "x": 7492,
+      "y": 3352
+    },
+    "ftsz": {
+      "x": 8136,
+      "y": 0
+    },
+    "cytokinesis": {
+      "x": 5560,
+      "y": 0
+    },
+    "host_interaction": {
+      "x": 8780,
+      "y": 0
+    },
+    "chromosome": {
+      "x": 3628,
+      "y": 0
+    },
+    "cell": {
+      "x": 1215.0218072503292,
+      "y": 101.59723261352929
+    },
+    "cell.metabolism": {
+      "x": 1115.0218072503292,
+      "y": 281.5972326135293
+    },
+    "cell.metabolism.nutrient_scale": {
+      "x": 532.5,
+      "y": 360
+    },
+    "cell.metabolism.atp_production": {
+      "x": 782.5,
+      "y": 360
+    },
+    "cell.metabolism.gtp_production": {
+      "x": 1032.5,
+      "y": 360
+    },
+    "cell.metabolism.feasible": {
+      "x": 512.5,
+      "y": 566
+    },
+    "cell.metabolism.mass_fractions": {
+      "x": 692.5,
+      "y": 566
+    },
+    "cell.metabolism.ntp": {
+      "x": 942.5,
+      "y": 566
+    },
+    "cell.metabolism.gtp": {
+      "x": 1122.5,
+      "y": 566
+    },
+    "cell.metabolism.dntp_synthesis_scale": {
+      "x": 647.5,
+      "y": 772
+    },
+    "cell.metabolism.dntp_pool": {
+      "x": 987.5,
+      "y": 772
+    },
+    "cell.metabolism.dntp_at_replication_start": {
+      "x": 536.5,
+      "y": 978
+    },
+    "cell.metabolism.atp": {
+      "x": 908.5,
+      "y": 978
+    },
+    "cell.metabolism.amino_acid": {
+      "x": 1088.5,
+      "y": 978
+    },
+    "cell.physiology": {
+      "x": 1305.0218072503292,
+      "y": 281.5972326135293
+    },
+    "cell.division": {
+      "x": 959.4678833423607,
+      "y": 463.3901407162302
+    },
+    "cell.division.division": {
+      "x": 510,
+      "y": 360
+    },
+    "cell.division.ftsz_monomer": {
+      "x": 690,
+      "y": 360
+    },
+    "cell.division.ftsz_ring_filaments": {
+      "x": 415,
+      "y": 566
+    },
+    "cell.division.septum_diameter": {
+      "x": 740,
+      "y": 566
+    },
+    "cell.division.contraction_progress": {
+      "x": 450,
+      "y": 772
+    },
+    "cell.division.divided": {
+      "x": 790,
+      "y": 772
+    },
+    "cell.transcriptome": {
+      "x": 1277.5218072503292,
+      "y": 461.5972326135293
+    },
+    "cell.proteome": {
+      "x": 1035.0218072503292,
+      "y": 641.5972326135293
+    },
+    "cell.genome": {
+      "x": 1215.0218072503292,
+      "y": 641.5972326135293
+    },
+    "cell.ribosome": {
+      "x": 1703.4020009148824,
+      "y": 593.1887138406053
+    },
+    "cell.ribosome.rprotein_counts": {
+      "x": 422.5,
+      "y": 360
+    },
+    "cell.ribosome.rprotein_counts.HMW2": {
+      "x": 440,
+      "y": 1260
+    },
+    "cell.ribosome.rprotein_counts.dnaA": {
+      "x": 620,
+      "y": 1260
+    },
+    "cell.ribosome.rprotein_counts.ftsZ": {
+      "x": 440,
+      "y": 1466
+    },
+    "cell.ribosome.rprotein_counts.rpoD": {
+      "x": 620,
+      "y": 1466
+    },
+    "cell.ribosome.rprotein_counts.tuf": {
+      "x": 440,
+      "y": 1672
+    },
+    "cell.ribosome.rprotein_counts.groEL": {
+      "x": 620,
+      "y": 1672
+    },
+    "cell.ribosome.rrna_counts": {
+      "x": 721.5652539513169,
+      "y": 505.2255563187721
+    },
+    "cell.ribosome.assembly_factor": {
+      "x": 415,
+      "y": 540
+    },
+    "cell.ribosome.ribosome_30S": {
+      "x": 680,
+      "y": 540
+    },
+    "cell.ribosome.ribosome_50S": {
+      "x": 547.5,
+      "y": 746
+    },
+    "cell.envelope": {
+      "x": 1215.0218072503292,
+      "y": 821.5972326135293
+    },
+    "emitter": {
+      "x": 7492,
+      "y": 0
+    }
+  },
+  "collapsed": [],
+  "hidden": [],
+  "detail": null
+}

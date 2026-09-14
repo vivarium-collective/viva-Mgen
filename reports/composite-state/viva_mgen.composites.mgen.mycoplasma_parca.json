@@ -1,0 +1,199 @@
+{
+  "id": "viva_mgen.composites.mgen.mycoplasma_parca",
+  "name": "mycoplasma_parca",
+  "description": "Parameter calculator (ParCa) \u2014 the native reproduction of Karr 2012 FitConstants. Computes the per-gene expression/decay/synthesis panel from the real observed knowledge-base data, fits it under the RNA-mass / DnaA-FtsZ-held / net-supercoiling constraints, and verifies the expression\u2194metabolism feasibility closure. The upstream study whose fitted parameters the seven figure studies consume.",
+  "parameters": {
+    "seed": {
+      "type": "integer",
+      "default": 0,
+      "description": "Stochastic seed"
+    }
+  },
+  "state": {
+    "parameter_calculator": {
+      "_type": "process",
+      "address": "local:viva_mgen.processes.parameter_calculator.ParameterCalculatorReproductionProcess",
+      "config": {
+        "seed": 0
+      },
+      "interval": 1.0,
+      "inputs": {},
+      "outputs": {
+        "n_genes": [
+          "parca",
+          "n_genes"
+        ],
+        "median_mrna_synthesis_rate": [
+          "parca",
+          "median_mrna_synthesis_rate"
+        ],
+        "mrna_halflife_min_mean": [
+          "parca",
+          "mrna_halflife_min_mean"
+        ],
+        "rrna_halflife_min": [
+          "parca",
+          "rrna_halflife_min"
+        ],
+        "nmp_au_fraction": [
+          "parca",
+          "nmp_au_fraction"
+        ],
+        "closed_loop_feasible": [
+          "parca",
+          "closed_loop_feasible"
+        ],
+        "nmp_supply_flux": [
+          "parca",
+          "nmp_supply_flux"
+        ],
+        "aa_supply_flux": [
+          "parca",
+          "aa_supply_flux"
+        ],
+        "growth_baseline": [
+          "parca",
+          "growth_baseline"
+        ]
+      },
+      "doc": "Parameter calculator (ParCa) \u2014 reproduction of Karr 2012 FitConstants.\nComputes the per-gene expression/decay/synthesis panel from the real observed knowledge-base data, fits it under the FitConstants linear constraints (RNA-mass balance, DnaA/FtsZ expression held, net-supercoiling zero), and closes the expression\u2194metabolism loop against the iPS189 FBA network.\nContract \u2014 in: none (reads the decoded knowledge-base datasets). out (snapshots): n_genes, median_mrna_synthesis_rate, mrna_halflife_min_mean, rrna_halflife_min, nmp_au_fraction, closed_loop_feasible, nmp_supply_flux, aa_supply_flux, growth_baseline.\nFidelity: genuine inputs (natively-decoded real KB data) + the FitConstants initialization and analytic QP + the metabolic-feasibility closure; the nonlinear metabolism resource coupling and heuristic refinement are the reduced part.",
+      "config_schema": {
+        "seed": {
+          "_type": "integer",
+          "_default": 0
+        }
+      },
+      "_contract": {
+        "summary": "Parameter calculator (ParCa) \u2014 reproduction of Karr 2012 FitConstants.",
+        "description": "Computes the per-gene expression/decay/synthesis panel from the real observed knowledge-base data, fits it under the FitConstants linear constraints (RNA-mass balance, DnaA/FtsZ expression held, net-supercoiling zero), and closes the expression\u2194metabolism loop against the iPS189 FBA network.\nContract \u2014 in: none (reads the decoded knowledge-base datasets). out (snapshots): n_genes, median_mrna_synthesis_rate, mrna_halflife_min_mean, rrna_halflife_min, nmp_au_fraction, closed_loop_feasible, nmp_supply_flux, aa_supply_flux, growth_baseline.\nFidelity: genuine inputs (natively-decoded real KB data) + the FitConstants initialization and analytic QP + the metabolic-feasibility closure; the nonlinear metabolism resource coupling and heuristic refinement are the reduced part.",
+        "inputs": {},
+        "outputs": {},
+        "config": {},
+        "math": [],
+        "symbols": {},
+        "assumptions": [],
+        "references": [],
+        "face": {
+          "inputs": {},
+          "outputs": {}
+        },
+        "amendments": []
+      },
+      "_inputs": {},
+      "_outputs": {
+        "n_genes": "overwrite[float]",
+        "median_mrna_synthesis_rate": "overwrite[float]",
+        "mrna_halflife_min_mean": "overwrite[float]",
+        "rrna_halflife_min": "overwrite[float]",
+        "nmp_au_fraction": "overwrite[float]",
+        "closed_loop_feasible": "overwrite[float]",
+        "nmp_supply_flux": "overwrite[float]",
+        "aa_supply_flux": "overwrite[float]",
+        "growth_baseline": "overwrite[float]"
+      }
+    },
+    "parca": {
+      "n_genes": 0.0,
+      "median_mrna_synthesis_rate": 0.0,
+      "mrna_halflife_min_mean": 0.0,
+      "rrna_halflife_min": 0.0,
+      "nmp_au_fraction": 0.0,
+      "closed_loop_feasible": 0.0,
+      "nmp_supply_flux": 0.0,
+      "aa_supply_flux": 0.0,
+      "growth_baseline": 0.0
+    },
+    "emitter": {
+      "_type": "step",
+      "address": "local:RAMEmitter",
+      "config": {
+        "emit": {
+          "parca": {
+            "n_genes": "float",
+            "median_mrna_synthesis_rate": "float",
+            "mrna_halflife_min_mean": "float",
+            "rrna_halflife_min": "float",
+            "nmp_au_fraction": "float",
+            "closed_loop_feasible": "float",
+            "nmp_supply_flux": "float",
+            "aa_supply_flux": "float",
+            "growth_baseline": "float"
+          }
+        }
+      },
+      "inputs": {
+        "parca": [
+          "parca"
+        ]
+      },
+      "doc": "Store historical states in memory.\n\n``subsample`` records only every Nth composite tick (default 1 =\nevery tick). Use this for long runs or composites with heavy\nstate (large fields, many agents) to keep RAM bounded \u2014 the\nsaved time-series still reflects the simulation's true cadence\nvia each row's ``global_time`` field.\n\n``max_len`` optionally bounds ``history`` to the most recent N\nrecorded rows (a ring buffer): once the cap is reached each new\nrecord drops the oldest. Default ``None`` = unbounded (the\nhistorical behaviour \u2014 consumers such as v2ecoli that read the\nfull ``history`` are unaffected unless they opt in). ``max_len``\ncounts *recorded* rows (i.e. post-``subsample``).",
+      "_contract": {
+        "summary": "type(object) -> the object's type",
+        "description": "type(name, bases, dict, **kwds) -> a new type",
+        "inputs": {},
+        "outputs": {},
+        "config": {},
+        "math": [],
+        "symbols": {},
+        "assumptions": [],
+        "references": [],
+        "face": {
+          "inputs": {},
+          "outputs": {}
+        },
+        "amendments": []
+      },
+      "_inputs": {
+        "parca": {
+          "n_genes": "float",
+          "median_mrna_synthesis_rate": "float",
+          "mrna_halflife_min_mean": "float",
+          "rrna_halflife_min": "float",
+          "nmp_au_fraction": "float",
+          "closed_loop_feasible": "float",
+          "nmp_supply_flux": "float",
+          "aa_supply_flux": "float",
+          "growth_baseline": "float"
+        }
+      },
+      "_outputs": {
+        "results": "node"
+      }
+    },
+    "_declared_emit_paths": [
+      "parca/n_genes",
+      "parca/median_mrna_synthesis_rate",
+      "parca/mrna_halflife_min_mean",
+      "parca/closed_loop_feasible",
+      "parca/nmp_supply_flux",
+      "parca/aa_supply_flux",
+      "parca"
+    ]
+  },
+  "schema": {},
+  "overrides": {},
+  "requires": {},
+  "tags": [],
+  "visualizations": [],
+  "analyses": [],
+  "emitters": [
+    {
+      "address": "local:ParquetEmitter",
+      "paths": [
+        "parca/n_genes",
+        "parca/median_mrna_synthesis_rate",
+        "parca/mrna_halflife_min_mean",
+        "parca/closed_loop_feasible",
+        "parca/nmp_supply_flux",
+        "parca/aa_supply_flux"
+      ]
+    }
+  ],
+  "kind": "generator",
+  "module": "viva_mgen.composites.mgen",
+  "default_n_steps": null,
+  "svg": null,
+  "wiring_status": "ready",
+  "run_kind": "temporal",
+  "notice": null
+}
