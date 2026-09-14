@@ -1133,7 +1133,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         <button class="registry-tab"        data-kind="emitter"       onclick="_setRegistryTab('emitter')">Emitters <span class="count-badge" id="registry-emitter-count"></span></button>
         <button class="registry-tab"        data-kind="visualization" onclick="_setRegistryTab('visualization')">Visualizations <span class="count-badge" id="registry-visualization-count"></span></button>
         <button class="registry-tab"        data-kind="analysis"      onclick="_setRegistryTab('analysis')">Analyses <span class="count-badge" id="registry-analysis-count"></span></button>
-        <button class="registry-tab"        data-kind="report_card"   onclick="_setRegistryTab('report_card')">Report Cards <span class="count-badge" id="registry-report_card-count"></span></button>
+        <button class="registry-tab"        data-kind="report_card"   onclick="_setRegistryTab('report_card')">Tests <span class="count-badge" id="registry-report_card-count"></span></button>
         <button class="registry-tab"        data-kind="type"          onclick="_setRegistryTab('type')">Types <span class="count-badge" id="registry-type-count"></span></button>
         <button class="icon-btn" onclick="_loadRegistry(true)" title="Refresh registry" aria-label="Refresh registry" style="margin-left:auto;align-self:center">&#8635;</button>
       </div>
@@ -2261,7 +2261,7 @@ Nothing on <code id="pr-base-display-2">main</code> changes until someone presse
      DataSource global that renderers call to fetch narrative data.
      local-server mode (default) fetches from the same-origin /api/* endpoints.
      Hosted mode (sub-projects #2/#3) will set a different config here. -->
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "e17143e9611312348028e0951d0e6c70752f4e54", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/e17143e9611312348028e0951d0e6c70752f4e54", "branch": "main", "generated_at": "2026-09-14 12:31 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-Mgen", basePath: "/viva-Mgen/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-Mgen/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-Mgen", "repo_url": "https://github.com/vivarium-collective/viva-Mgen", "commit": "0d5feb3b3097cce472a570ee7f6a8fabd0382a63", "commit_url": "https://github.com/vivarium-collective/viva-Mgen/commit/0d5feb3b3097cce472a570ee7f6a8fabd0382a63", "branch": "main", "generated_at": "2026-09-14 14:30 UTC"} };</script>
 <!-- Derive the global URL prefix from the (possibly publish-injected) config.
      Many renderers prefix workspace-root-absolute links (/studies/, /api/)
      with window.__BASE_PATH__ so they resolve when the read-only bundle is
