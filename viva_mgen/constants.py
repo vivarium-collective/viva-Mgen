@@ -2,11 +2,14 @@
 whole-cell model's ``data/parameters.json`` (states.Mass / states.Time /
 states.Metabolite) and the *M. genitalium* genome.
 
-These are the *real* fitted values from the published model — the one part of
-the original knowledge base that is pure-JSON-loadable (the reaction/species/
-kcat tables are locked inside undecodable MATLAB MCOS objects; the metabolic
-network is supplied instead by the published Suthers 2009 iPS189
-reconstruction, see :mod:`viva_mgen.kb`).
+These are the *real* fitted values from the published model. The knowledge base
+itself (the MATLAB MCOS object graph in ``knowledgeBase.mat``) is decoded
+natively by :mod:`viva_mgen.kb_decode` — gene expression, half-lives,
+coordinates, complex stoichiometry, and the TF regulatory network all come from
+there. Per-process kinetic constants that the KB does carry are in
+``datasets/karr_parameters.json`` (see :mod:`viva_mgen.kb`); the metabolic
+network is the published Suthers 2009 iPS189 reconstruction, which is the same
+reconstruction the original metabolism submodel was built on.
 """
 
 from __future__ import annotations

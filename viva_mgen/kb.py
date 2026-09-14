@@ -100,6 +100,42 @@ def load_karr_parameters() -> dict:
         return json.load(f)
 
 
+@functools.lru_cache(maxsize=1)
+def load_karr_complexes() -> dict:
+    """Load ``datasets/karr_complexes.json`` — the **real** ProteinComplex subunit
+    stoichiometry decoded from the Karr 2012 knowledge base.
+
+    Returns a dict with ``monomer_only_complexes`` ({complex: {monomer: n}}),
+    ``rna_or_subcomplex_complexes`` (full composition), and ``ribosome`` (the
+    30S/50S/70S subunit breakdown). Regenerate with
+    ``scripts/extract_kb_complexes.py``.
+    """
+    path = dataset_path("karr_complexes.json")
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"Karr complex stoichiometry not found at {path}. Regenerate with "
+            "scripts/extract_kb_complexes.py from knowledgeBase.mat."
+        )
+    with open(path) as f:
+        return json.load(f)
+
+
+@functools.lru_cache(maxsize=1)
+def load_tf_regulation() -> dict:
+    """Load ``datasets/karr_tf_regulation.json`` — the **real** transcription-factor
+    regulatory network decoded from the KB TranscriptionUnit objects.
+
+    Returns ``{gene_id: {tf_id: fold_change_at_full_activity}}`` (fold > 1 activates,
+    < 1 represses). Empty dict if the file is absent. Regenerate with
+    ``scripts/extract_kb_complexes.py``.
+    """
+    path = dataset_path("karr_tf_regulation.json")
+    if not path.is_file():
+        return {}
+    with open(path) as f:
+        return json.load(f).get("regulation", {})
+
+
 def karr_process_params(process_name: str) -> dict:
     """Return one process's real Karr 2012 constant dict (empty dict if absent).
 
@@ -134,9 +170,11 @@ def load_gene_expression() -> dict:
     """Map gene_id -> genuine per-gene knowledge-base parameters from
     ``datasets/karr_gene_expression.csv`` (decoded natively from the KB by
     :mod:`viva_mgen.kb_decode`; see scripts/extract_kb_genes.py):
-    ``{rna_type, length_nt, direction, half_life_min, synthesis_rate,
-    expression_32C, expression_37C, expression_43C, expression_mean}``.
-    Expression is the Weiner et al. 2003 profile. Empty dict if the file is absent."""
+    ``{rna_type, start_coordinate, end_coordinate, length_nt, direction,
+    half_life_min, synthesis_rate, expression_32C, expression_37C,
+    expression_43C, expression_mean}``. Coordinates are the real per-gene loci
+    on the 580,070 bp G37 chromosome (1-based bp). Expression is the Weiner et al.
+    2003 profile. Empty dict if the file is absent."""
     path = dataset_path("karr_gene_expression.csv")
     out: dict = {}
     if not path.is_file():
@@ -150,6 +188,8 @@ def load_gene_expression() -> dict:
                     return None
             out[row["gene_id"]] = {
                 "rna_type": (row.get("rna_type") or "").strip(),
+                "start_coordinate": _f("start_coordinate"),
+                "end_coordinate": _f("end_coordinate"),
                 "length_nt": _f("length_nt"),
                 "direction": _f("direction"),
                 "half_life_min": _f("half_life_min"),

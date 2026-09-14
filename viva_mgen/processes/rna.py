@@ -1,12 +1,16 @@
-"""RNA maturation & regulation submodels — clean-room reproduction (reduced).
+"""RNA maturation & regulation submodels — clean-room reproduction of Karr 2012.
 
 Clean-room viva-native reproductions of four RNA-handling submodels of the Karr
 2012 *M. genitalium* whole-cell model, each written as a
 :class:`process_bigraph.Process`. They mirror the essential mechanism of the
-corresponding MATLAB submodel (``evolveState``) at reduced fidelity — the
-qualitative flux is genuine, but the exhaustive per-species reaction/stoichiometry
-matrices and knowledge-base kinetic constants of the originals are collapsed to
-representative rates.
+corresponding MATLAB submodel (``evolveState``). Where the knowledge base
+carries kinetic constants they are used (RNAProcessing's per-RNase specific
+rates); where it does not (RNAModification, tRNAAminoacylation,
+TranscriptionalRegulation all have empty parameter dicts), the mechanism is
+faithful but rate constants are order-of-magnitude values. Each class's
+``description`` states which case it is. The per-species reaction/stoichiometry
+matrices and metabolite byproduct accounting are delegated to the metabolite
+pools.
 
 Submodels reproduced (original → class):
 - ``TranscriptionalRegulation.m`` → :class:`TranscriptionalRegulationReproductionProcess`
@@ -26,6 +30,20 @@ import numpy as np
 from process_bigraph import Process
 
 from ..expression_defaults import DEFAULT_GENES
+from ..kb import karr_process_params
+
+
+def _rnase_rates() -> dict:
+    """Real Karr KB per-RNase specific rates (1/s) for RNAProcessing:
+    RNase III, RNase P, RNase J, DeaD, RsgA."""
+    p = karr_process_params("RNAProcessing")
+    return {
+        "RNAseIII": p.get("enzymeSpecificRate_RNAseIII", 7.7),
+        "RNAseP": p.get("enzymeSpecificRate_RNAseP", 6.0),
+        "RNAseJ": p.get("enzymeSpecificRate_RNAseJ", 0.37),
+        "DeaD": p.get("enzymeSpecificRate_DeaD", 1.48),
+        "RsgA": p.get("enzymeSpecificRate_RsgA", 0.2917),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -47,17 +65,22 @@ class TranscriptionalRegulationReproductionProcess(Process):
     """
 
     description = (
-        "Transcriptional regulation — reduced reproduction of Karr 2012 TranscriptionalRegulation.\n"
+        "Transcriptional regulation — reproduction of Karr 2012 TranscriptionalRegulation.\n"
         "TFs bind accessible promoter sites and multiply each transcription unit's RNA-pol binding\n"
-        "probability by a fold change. Reduced mechanism, per gene g:\n"
+        "probability by a fold change. Per gene g:\n"
         "    fold_change_g = prod over regulating TF f of  (fc_{f,g} ** activity_f)\n"
         "mirroring calcBindingProbabilityFoldChange (foldChange = prod of tfActivities;\n"
         "otherFoldChanges = prod(otherActivities .^ (enzymes>0))). An activity of 0 leaves the gene\n"
         "unregulated (fold change 1); an activated TF pushes fc_{f,g}>1, a repressor fc_{f,g}<1.\n"
-        "Contract — in: tf_activity (per-TF fractional activity map). "
-        "out: fold_change (per-gene multiplicative Δ-free fold change, an overwrite sensor map).\n"
-        "Fidelity: REDUCED — a handful of representative TF→gene edges with representative fold\n"
-        "changes, not the full promoter-occupancy / chromosome-accessibility state machine."
+        "The default network is the REAL KB regulatory network: 52 genes regulated by the 5 genuine\n"
+        "M. genitalium TFs (MG_127/MG_236/MG_101 monomers, MG_205/MG_428 dimers) with the true\n"
+        "per-edge fold-changes decoded from the TranscriptionUnit objects.\n"
+        "Contract — config: gene_regulation (default = real KB network). in: tf_activity (per-TF "
+        "fractional activity map). out: fold_change (per-gene multiplicative fold change, an "
+        "overwrite sensor map).\n"
+        "Fidelity: FAITHFUL regulatory network (real KB TF→gene edges + real fold-changes). The\n"
+        "reduction is the promoter-occupancy / chromosome-accessibility state machine, collapsed to\n"
+        "the fold-change law above driven by continuous TF activity."
     )
 
     config_schema = {
@@ -75,15 +98,22 @@ class TranscriptionalRegulationReproductionProcess(Process):
 
     @staticmethod
     def _default_regulation() -> dict:
-        # Representative TF→gene edges on the expression panel: one activator
-        # (rpoD, the sigma factor, boosts broadly) and one repressor (hrcA-like
-        # heat-shock repressor damping the chaperonin groEL).
-        genes = DEFAULT_GENES
-        reg = {g: {"rpoD_sigma": 1.4} for g in genes}
-        if "groEL" in reg:
-            reg["groEL"]["hrcA_repressor"] = 0.3
-        if "ftsZ" in reg:
-            reg["ftsZ"]["ftsZ_activator"] = 1.8
+        """The REAL Karr KB transcription-factor network: 52 genes regulated by 5
+        M. genitalium TFs (MG_127, MG_236, MG_101 monomers; MG_205, MG_428 dimers)
+        with the genuine per-edge fold-changes. Keyed by the expression-panel key
+        (gene symbol when known, else gene id) so it composes with transcription."""
+        from ..kb import load_genes, load_tf_regulation
+        reg_by_id = load_tf_regulation()
+        if not reg_by_id:  # fall back only if the dataset is unavailable
+            return {g: {"rpoD_sigma": 1.0} for g in DEFAULT_GENES}
+        # map gene_id -> panel key (symbol or id), matching expression_defaults
+        panel_key = {}
+        for g in load_genes():
+            panel_key[g["gene_id"]] = (g.get("symbol") or "").strip() or g["gene_id"]
+        reg = {}
+        for gid, edges in reg_by_id.items():
+            key = panel_key.get(gid, gid)
+            reg[key] = dict(edges)
         return reg
 
     def inputs(self):
@@ -130,21 +160,27 @@ class RNAProcessingReproductionProcess(Process):
     """
 
     description = (
-        "RNA processing — reduced reproduction of Karr 2012 RNAProcessing.\n"
+        "RNA processing — reproduction of Karr 2012 RNAProcessing.\n"
         "Ribonucleases (RNase III/P/J, RsgA, DeaD) cleave nascent polycistronic r/t/tmRNA\n"
-        "transcripts into mature species. Reduced mechanism, per nascent species s:\n"
+        "transcripts into mature species. Per nascent species s:\n"
         "    matured_s ~ min(n_s, Poisson(n_s · k_proc · Δt))\n"
         "counts moving nascent_rna → mature_rna. Mirrors evolveState_Helper, which stochastically\n"
-        "matures unprocessedRNAs → processedRNAs up to enzyme/substrate limits; here a single\n"
-        "first-order processing rate stands in for the pooled RNase kcats.\n"
-        "Contract — in: nascent_rna (per-species count map). "
+        "matures unprocessedRNAs → processedRNAs up to enzyme/substrate limits. The pooled rate\n"
+        "k_proc is the mean of the REAL KB per-RNase specific rates (RNase III 7.7, P 6.0, J 0.37,\n"
+        "DeaD 1.48, RsgA 0.29 s⁻¹ → ~3.17 s⁻¹).\n"
+        "Contract — config: processing_rate (default = KB per-RNase mean), rnase_rates (the real\n"
+        "per-RNase map). in: nascent_rna (per-species count map). "
         "out: nascent_rna (negative Δ), mature_rna (positive Δ).\n"
-        "Fidelity: REDUCED — one lumped first-order cleavage rate, no per-enzyme kcat / cofactor\n"
-        "(Mg2+, Zn2+) / ATP-GTP accounting and no intergenic-fragment bookkeeping."
+        "Fidelity: FAITHFUL rate constants (real KB per-RNase kcats). The lumping is species→RNase\n"
+        "assignment (one pooled first-order rate) — the panel does not carry which RNase cleaves\n"
+        "which transcript; cofactor (Mg²⁺/Zn²⁺) / ATP-GTP and intergenic-fragment accounting is\n"
+        "delegated to the metabolite pools."
     )
 
     config_schema = {
-        "processing_rate": {"_type": "float", "_default": 0.5},  # per second, pooled RNase kcat
+        # pooled RNase kcat = mean of the real KB per-RNase specific rates
+        "processing_rate": {"_type": "float", "_default": sum(_rnase_rates().values()) / 5.0},
+        "rnase_rates": {"_type": "map[float]", "_default": _rnase_rates()},
         "seed": {"_type": "integer", "_default": 1},
     }
 
@@ -203,17 +239,19 @@ class RNAModificationReproductionProcess(Process):
     """
 
     description = (
-        "RNA modification — reduced reproduction of Karr 2012 RNAModification.\n"
+        "RNA modification — reproduction of Karr 2012 RNAModification.\n"
         "Modification enzymes formylate / lysidinate / methylate / pseudouridylate / thiolate\n"
-        "specific r/tRNA bases. Reduced mechanism, per species s:\n"
+        "specific r/tRNA bases. Per species s:\n"
         "    modified_s ~ min(n_s, Poisson(n_s · k_mod · Δt)),   sum_s modified_s ≤ enzyme · kcat · Δt\n"
         "moving counts unmodified_rna → modified_rna, with the total capped by enzyme availability.\n"
         "Mirrors evolveState's greedy loop that modifies unmodifiedRNAs → modifiedRNAs while enzyme\n"
         "and substrate limits allow (reactionLimits gated on min over enzymes/substrates).\n"
         "Contract — in: unmodified_rna (count map), modification_enzyme (available enzyme count). "
         "out: unmodified_rna (negative Δ), modified_rna (positive Δ).\n"
-        "Fidelity: REDUCED — a single enzyme pool + one per-species rate stand in for 13 enzymes\n"
-        "over 86 specific base modifications; metabolite substrate/byproduct accounting omitted."
+        "Fidelity: mechanism-faithful (enzyme-budget-limited stochastic modification). The Karr KB\n"
+        "RNAModification parameter dict is empty, so k_mod / kcat are order-of-magnitude values (not\n"
+        "fabricated KB constants); one enzyme pool stands in for the 13 modification enzymes over 86\n"
+        "base modifications, and metabolite substrate/byproduct accounting is delegated to the pools."
     )
 
     config_schema = {
@@ -293,19 +331,21 @@ class TRNAAminoacylationReproductionProcess(Process):
     """
 
     description = (
-        "tRNA aminoacylation — reduced reproduction of Karr 2012 tRNAAminoacylation.\n"
+        "tRNA aminoacylation — reproduction of Karr 2012 tRNAAminoacylation.\n"
         "Aminoacyl-tRNA synthetases conjugate amino acids to free tRNAs at a cost of 1 ATP each\n"
-        "(ATP -> AMP + PPi). Reduced mechanism: the total number charged this step is\n"
+        "(ATP -> AMP + PPi). The total number charged this step is\n"
         "    N = floor( min( sum(free_tRNA), amino_acid, atp, synthetase · kcat · Δt ) )\n"
         "distributed across species by multinomial draw proportional to free-tRNA counts, then\n"
         "free_trna -> aminoacylated_trna and atp decremented by N. Mirrors evolveState's greedy\n"
         "reactionLimits loop (min over synthetase/AA/ATP availability, weighted stochastic pick),\n"
-        "collapsed to one aggregate limit + multinomial partition.\n"
+        "as one aggregate limit + multinomial partition.\n"
         "Contract — in: free_trna (count map), amino_acid, atp, synthetase (pools/counts). "
         "out: free_trna (negative Δ), aminoacylated_trna (positive Δ), atp (negative Δ).\n"
         "ORDERING: runs BEFORE Translation (charged tRNAs feed the ribosome same-tick).\n"
-        "Fidelity: REDUCED — one lumped synthetase pool + generic amino-acid/ATP pools, not 20 AAs\n"
-        "× 37 tRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases."
+        "Fidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\n"
+        "tRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\n"
+        "value; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA × 37\n"
+        "tRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases."
     )
 
     config_schema = {

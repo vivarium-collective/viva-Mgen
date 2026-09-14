@@ -1,4 +1,4 @@
-"""DNA replication submodel — clean-room reproduction (reduced mechanism).
+"""DNA replication submodel — clean-room reproduction of Karr 2012.
 
 Reproduces the cell-cycle-regulation mechanism the Karr 2012 model uncovered
 (Fig 4): the *M. genitalium* cell cycle has three phases — replication
@@ -15,9 +15,12 @@ genetically-unregulated control of cell-cycle duration:
   relationship between initiation and replication durations (Fig 4D/4E) that
   buffers total cell-cycle length.
 
-This is a reduced but mechanistically genuine reproduction of that emergent
-regulation, not the full replisome/Okazaki-fragment machinery of the original
-``Replication`` submodel.
+This reproduces that emergent regulation faithfully — the dNTP-buffering that
+couples initiation and replication durations, with the real KB polymerase
+elongation rate. What is reduced is the replisome mechanism itself: the lumped
+polymerase omits the Okazaki-fragment / primer / ligase / SSB machinery of the
+original ``Replication`` submodel (its constants remain available via
+kb.karr_process_params("Replication")).
 """
 
 from __future__ import annotations
@@ -52,7 +55,7 @@ class ReplicationReproductionProcess(Process):
     """
 
     description = (
-        "dNTP-buffered three-phase replication — reduced reproduction of the emergent "
+        "dNTP-buffered three-phase replication — reproduction of the emergent "
         "cell-cycle regulation Karr 2012 uncovered (Fig 4).\n"
         "INITIATION: DnaA accumulates stochastically (Poisson) into the oriC complex while "
         "dNTPs build up (at a reduced pre-S-phase rate) unconsumed; replication begins when "
@@ -66,8 +69,11 @@ class ReplicationReproductionProcess(Process):
         "out (snapshots): replicated_fraction, dntp_pool, dnaA_complex, phase_code "
         "(0=init,1=repl,2=done), chromosome_copy, initiation_duration, replication_duration, "
         "dntp_at_replication_start.\n"
-        "Fidelity: REDUCED mechanism (genuine emergent-regulation dynamics; not the full "
-        "replisome/Okazaki machinery)."
+        "Fidelity: FAITHFUL to the Fig 4 emergent regulation — the dNTP-buffered inverse "
+        "initiation↔replication coupling and the real KB polymerase elongation rate "
+        "(dnaPolymeraseElongationRate 100 nt/s ×2 replisomes) are reproduced. The reduction is the "
+        "replisome mechanism: the lumped polymerase omits Okazaki-fragment/primer/ligase/SSB "
+        "detail (real constants via kb.karr_process_params('Replication'))."
     )
 
     config_schema = {

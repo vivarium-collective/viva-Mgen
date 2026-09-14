@@ -142,6 +142,124 @@ def _scalar(v):
     return a[0] if a.size else None
 
 
+def _ref_indices(v):
+    """A KB object-reference property value is ``[<class-name array>, <indices>]``
+    where indices are 1-based per-class object indices. Return the int index list
+    (empty when the value is not a reference / is empty)."""
+    a = np.asarray(v)
+    if a.dtype != object or a.size < 2:
+        return []
+    idx = np.asarray(a.ravel()[1]).ravel()
+    return [int(i) for i in idx.tolist()] if idx.size else []
+
+
+def _objects_by_class(cells):
+    """``{class_name: [props, ...]}`` in per-class storage order (1-based indexing
+    into these lists is what object-reference properties point at)."""
+    _classes, objects = _parse_objects(cells)
+    by: dict = {}
+    for cls, props in objects:
+        by.setdefault(cls, []).append(props)
+    return by
+
+
+def decode_protein_complexes(mat_path: Path) -> dict:
+    """Real macromolecular-complex subunit stoichiometry from the KB.
+
+    Returns ``{complex_id: {"monomers": {monomer_id: n}, "complexs": {complex_id: n},
+    "rnas": {rna_id: n}}}`` — the genuine subunit composition (e.g. DNA gyrase =
+    2 GyrB + 2 GyrA), resolving each complex's ``proteinMonomers`` /
+    ``proteinComplexs`` / ``rnas`` references + their coefficients to component ids.
+    """
+    cells = _read_subsystem_cells(mat_path)
+    by = _objects_by_class(cells)
+    monomers = by.get("ProteinMonomer", [])
+    complexes = by.get("ProteinComplex", [])
+    rnas = by.get("Gene", [])   # RNA components reference genes (rRNA/tRNA) by gene index
+
+    def _id(lst, i):
+        v = _scalar(lst[i - 1].get("wholeCellModelID")) if 0 < i <= len(lst) else None
+        return str(v) if v is not None else None
+
+    out: dict = {}
+    for p in complexes:
+        cid = _scalar(p.get("wholeCellModelID"))
+        if cid is None:
+            continue
+        comp = {"monomers": {}, "complexs": {}, "rnas": {}}
+        for field, lst, key in (("proteinMonomers", monomers, "monomers"),
+                                ("proteinComplexs", complexes, "complexs"),
+                                ("rnas", rnas, "rnas")):
+            idxs = _ref_indices(p.get(field))
+            if not idxs:
+                continue
+            coefs = np.asarray(p.get(_COEF_FIELD[field])).ravel()
+            for k, i in enumerate(idxs):
+                sid = _id(lst, i)
+                if sid is None:
+                    continue
+                n = float(coefs[k]) if k < coefs.size else 1.0
+                comp[key][sid] = comp[key].get(sid, 0.0) + n
+        if any(comp.values()):
+            out[cid] = comp
+    return out
+
+
+_COEF_FIELD = {
+    "proteinMonomers": "proteinMonomerCoefficients",
+    "proteinComplexs": "proteinComplexCoefficients",
+    "rnas": "rnaCoefficients",
+}
+
+
+def decode_transcription_regulation(mat_path: Path) -> dict:
+    """Real transcription-factor regulatory network from the KB.
+
+    Each TranscriptionUnit stores the protein-monomer (and complex) transcription
+    factors regulating it, their activity fold-changes, and the genes it transcribes.
+    Returns ``{gene_id: {tf_id: fold_change_at_full_activity}}`` — the genuine
+    TF→gene edges (fold_change > 1 activates, < 1 represses).
+    """
+    cells = _read_subsystem_cells(mat_path)
+    by = _objects_by_class(cells)
+    tus = by.get("TranscriptionUnit", [])
+    monomers = by.get("ProteinMonomer", [])
+    complexes = by.get("ProteinComplex", [])
+    genes = by.get("Gene", [])
+
+    def _id(lst, i):
+        v = _scalar(lst[i - 1].get("wholeCellModelID")) if 0 < i <= len(lst) else None
+        return str(v) if v is not None else None
+
+    out: dict = {}
+    for p in tus:
+        gene_idxs = _ref_indices(p.get("genes"))
+        gene_ids = [g for g in (_id(genes, i) for i in gene_idxs) if g]
+        if not gene_ids:
+            continue
+        edges: dict = {}
+        for tf_field, act_field, lst in (
+            ("transcriptionFactorProteinMonomers",
+             "transcriptionFactorProteinMonomerActivitys", monomers),
+            ("transcriptionFactorProteinComplexs",
+             "transcriptionFactorProteinComplexActivitys", complexes),
+        ):
+            tf_idxs = _ref_indices(p.get(tf_field))
+            if not tf_idxs:
+                continue
+            acts = np.asarray(p.get(act_field)).ravel()
+            for k, i in enumerate(tf_idxs):
+                tf = _id(lst, i)
+                if tf is None:
+                    continue
+                fc = float(acts[k]) if k < acts.size else 1.0
+                edges[tf] = fc
+        if edges:
+            for g in gene_ids:
+                out.setdefault(g, {}).update(edges)
+    return out
+
+
 def _floats(v):
     return [float(x) for x in np.asarray(v).ravel()]
 

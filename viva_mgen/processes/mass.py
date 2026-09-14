@@ -56,7 +56,10 @@ class MassGrowthReproductionProcess(Process):
         "Contract — in: growth_fraction (unit-free growth from metabolism), mass (current dry "
         "fg). out: mass (additive Δ, fg), mass_fractions (per-component fg snapshot), volume "
         "(fL snapshot), division ∈ {0,1}.\n"
-        "Fidelity: FULL for the growth/composition phenotype (fitted constants)."
+        "Fidelity: FAITHFUL growth/composition phenotype — real fitted constants (dry-weight "
+        "3.93e-15 g, T_cycle 32400 s, component fractions, cell density). This is the calibrated "
+        "growth-law form: mass follows metabolism-driven exponential growth partitioned by the "
+        "fitted fractions, rather than being summed emergently from every species count × MW."
     )
 
     config_schema = {

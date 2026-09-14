@@ -1,11 +1,13 @@
-"""RNA and protein decay submodels — clean-room reproduction.
+"""RNA and protein decay submodels — clean-room reproduction of Karr 2012.
 
 Reproduces the Poisson-decay mechanism of the Karr 2012 ``RNADecay`` and
 ``ProteinDecay`` submodels: each RNA / protein species is degraded as a Poisson
-process at its own rate (ln2 / half-life). The original also salvages
-NMPs/amino acids and consumes protease/water; this reduced version keeps the
-species-level Poisson decay that sets steady-state copy numbers (Fig 2G/2H) and
-the balance against synthesis.
+process at its own rate (ln2 / half-life), over the FULL M. genitalium gene set
+(~522 genes). mRNA half-lives are the REAL per-gene KB values (decoded into
+karr_gene_expression.csv); protein decay uses a single representative half-life
+because the KB carries no per-monomer protein half-lives. The original also
+salvages NMPs/amino acids and consumes protease/water; that byproduct accounting
+is delegated to the metabolite pools.
 """
 
 from __future__ import annotations
@@ -65,12 +67,13 @@ class RnaDecayReproductionProcess(_PoissonDecay):
 
     description = (
         "Stochastic mRNA decay — reproduction of Karr 2012 RNADecay.\n"
-        "Each species s degrades as a Poisson process at rate ln2 / half-life:\n"
+        "Each gene's mRNA degrades as a Poisson process at rate λ = ln2 / half-life, using the\n"
+        "REAL per-gene KB half-lives over the full ~522-gene set:\n"
         "    decayed_s ~ min(n_s, Poisson(n_s · λ_s · Δt))\n"
         "setting steady-state copy numbers together with transcription.\n"
         "Contract — in/out: rna_counts (per-gene mRNA; a negative-Δ map).\n"
-        "Fidelity: REDUCED — species-level Poisson decay on the representative panel "
-        "(NMP salvage/water accounting of the original omitted)."
+        "Fidelity: FAITHFUL — real KB per-gene half-lives, full gene set; the NMP-salvage/water\n"
+        "byproduct accounting is delegated to the metabolite pools."
     )
     _PORT = "rna_counts"
 
@@ -92,12 +95,15 @@ class ProteinDecayReproductionProcess(_PoissonDecay):
 
     description = (
         "Stochastic protein decay — reproduction of Karr 2012 ProteinDecay.\n"
-        "Each species s degrades as a Poisson process at rate ln2 / half-life:\n"
+        "Each protein degrades as a Poisson process at rate λ = ln2 / half-life over the full\n"
+        "~522-gene set:\n"
         "    decayed_s ~ min(n_s, Poisson(n_s · λ_s · Δt))\n"
         "balancing translation to set steady-state protein copy numbers.\n"
         "Contract — in/out: protein_counts (per-gene protein; a negative-Δ map).\n"
-        "Fidelity: REDUCED — species-level Poisson decay on the representative panel "
-        "(protease/peptidase + ATP/amino-acid accounting of the original omitted)."
+        "Fidelity: full gene set with species-level Poisson decay. The Karr KB carries no\n"
+        "per-monomer protein half-lives, so a single representative half-life is used (not a\n"
+        "fabricated per-gene KB value); protease/peptidase + ATP/amino-acid byproduct accounting\n"
+        "is delegated to the metabolite pools."
     )
     _PORT = "protein_counts"
 

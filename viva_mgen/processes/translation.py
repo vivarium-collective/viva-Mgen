@@ -1,12 +1,14 @@
-"""Translation submodel — clean-room reproduction (reduced).
+"""Translation submodel — clean-room reproduction of Karr 2012.
 
 Reproduces the stochastic protein-synthesis mechanism of the Karr 2012
 ``Translation`` submodel: ribosomes translate mRNAs into protein monomers,
 consuming GTP (and, in full, aa-tRNAs). The original is a full ribosome state
-machine with tmRNA stalling; this reduced version keeps the essential
-mRNA-proportional Poisson synthesis on the representative gene panel, consuming
-GTP at ~2 per peptide bond, sufficient for the burst dynamics of Fig 2G and the
-translation share of the energy budget (Fig 5).
+machine with tmRNA stalling; this version keeps the essential mRNA-proportional
+Poisson synthesis over the FULL M. genitalium gene set (~522 genes), with
+per-gene rates fitted by the native ParCa, consuming GTP at ~2 per peptide bond
+— sufficient for the burst dynamics of Fig 2G and the translation share of the
+energy budget (Fig 5). The reduction is the ribosome state machine itself, not
+the gene coverage.
 """
 
 from __future__ import annotations
@@ -18,7 +20,7 @@ from ..expression_defaults import translation_rates
 
 
 class TranslationReproductionProcess(Process):
-    """Stochastic protein synthesis proportional to mRNA copy number.
+    """Stochastic protein synthesis proportional to mRNA copy number, full gene set.
 
     Inputs
     ------
@@ -37,14 +39,17 @@ class TranslationReproductionProcess(Process):
     """
 
     description = (
-        "Stochastic translation — reduced reproduction of Karr 2012 Translation.\n"
-        "For each gene g, new protein per step is Poisson in the current mRNA copy number\n"
+        "Stochastic translation — reproduction of Karr 2012 Translation.\n"
+        "For every gene g in the full M. genitalium gene set (~522 genes), new protein per step is\n"
+        "Poisson in the current mRNA copy number\n"
         "    n_g ~ Poisson(r_g · mRNA_g · Δt)\n"
-        "capped by GTP supply (~2 GTP per peptide bond, ≈ gtp_per_protein per chain). Keeps the "
-        "mRNA-proportional, GTP-limited synthesis of the full ribosome state machine.\n"
+        "capped by GTP supply (~2 GTP per peptide bond, ≈ gtp_per_protein per chain). Per-gene\n"
+        "rates r_g are ParCa-fitted.\n"
         "Contract — in: rna_counts (per-gene mRNA copies), gtp (pool, molecules). "
         "out: protein_counts (per-gene protein Δ, additive map), gtp (Δ consumed, negative).\n"
-        "Fidelity: REDUCED — representative panel; drives the Fig 2G/2H mRNA↔protein decoupling "
+        "Fidelity: FAITHFUL gene coverage (all ~522 genes) and ParCa-fitted per-gene rates. The\n"
+        "reduction is the ribosome state machine (elongation/tmRNA stalling collapsed into one\n"
+        "mRNA-proportional, GTP-limited propensity); drives the Fig 2G/2H mRNA↔protein decoupling\n"
         "and the translation share of the Fig 5 energy budget."
     )
 

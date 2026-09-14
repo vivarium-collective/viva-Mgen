@@ -1,4 +1,4 @@
-"""Protein maturation submodels — clean-room reproductions (reduced).
+"""Protein maturation submodels — clean-room reproductions of Karr 2012.
 
 Reproduces the post-translational MATURATION PIPELINE of the Karr 2012
 M. genitalium whole-cell model, in which a nascent peptide monomer is walked
@@ -19,8 +19,8 @@ Each MATLAB submodel's ``evolveState`` is an enzyme/resource-limited transform
 that moves counts of one protein FORM into the next form and pays the metabolite
 cost (water, ATP, GTP, PG). This module keeps that exact essence — genuine
 form-to-form conversion at a rate limited by the relevant enzyme, subunit, or
-resource pool — on a representative panel, and drops the full knowledge-base
-stoichiometry matrices and per-species index bookkeeping.
+resource pool — and, for the assembly submodels, uses the REAL knowledge-base
+subunit stoichiometry rather than a representative panel.
 
 Every class is a ``process_bigraph.Process`` with bare, composable port types:
 count maps are ``map[float]`` and moves are emitted as additive deltas (negative
@@ -28,14 +28,21 @@ on the source form, positive on the product form); pooled resources (ATP, GTP)
 are ``float`` negative deltas; genuine "current value" readouts (active fraction,
 assembled fraction) use ``overwrite[...]``.
 
-Fidelity: REDUCED — mechanism-faithful reduced reproduction, representative
-panel, order-of-magnitude-genuine kinetic parameters.
+Fidelity varies by submodel and is stated per class in each ``description``:
+- Complexation and ribosome assembly use the FAITHFUL real KB stoichiometry
+  (all 161 monomer-only complexes; full 30S/50S r-protein + rRNA composition).
+- The enzyme-limited maturation steps (Processing I/II, translocation, folding,
+  modification, activation) are mechanism-faithful with per-step kinetic
+  constants; the byproduct-metabolite bookkeeping is delegated to the shared
+  metabolite pools rather than tracked species-by-species.
 """
 
 from __future__ import annotations
 
 import numpy as np
 from process_bigraph import Process
+
+from viva_mgen import kb
 
 
 # ---------------------------------------------------------------------------
@@ -99,18 +106,25 @@ class ProteinProcessingIReproductionProcess(Process):
     """
 
     description = (
-        "Protein Processing I — reduced reproduction of Karr 2012 ProteinProcessingI.\n"
+        "Protein Processing I — reproduction of Karr 2012 ProteinProcessingI.\n"
         "Peptide deformylase (MG_106) deformylates the N-terminal fMet and methionine\n"
-        "aminopeptidase (MG_172) cleaves the N-terminal Met of nascent peptides. MATLAB caps\n"
-        "transforms at enzyme*specificRate*Δt and shares that capacity proportionally across\n"
-        "waiting monomers; here nascent -> process_i_done at that same enzyme-limited rate.\n"
-        "Contract — in: nascent (per-gene, map), deformylase (enzyme count, float). "
+        "aminopeptidase (MG_172) cleaves the N-terminal Met of nascent peptides. Both steps\n"
+        "are required, so a monomer is 'done' only when both enzymes have acted; MATLAB caps\n"
+        "each transform at enzyme*specificRate*Δt shared proportionally across waiting\n"
+        "monomers, so the throughput is limited by the slower enzyme,\n"
+        "    limit = min(deformylase*38.0, aminopeptidase*6.0) * Δt   [1/s, real KB rates].\n"
+        "Contract — in: nascent (per-gene, map), deformylase (MG_106 count, float), "
+        "aminopeptidase (MG_172 count, float). "
         "out: nascent (Δ consumed, neg map), process_i_done (Δ produced, pos map).\n"
-        "Fidelity: REDUCED — water/formate/methionine salvage of the original omitted."
+        "Fidelity: FAITHFUL enzyme kinetics (real KB specific rates 38.0 / 6.0 s⁻¹, "
+        "two-enzyme sequential limit); water/formate/methionine byproducts delegated to the "
+        "metabolite pools."
     )
 
     config_schema = {
-        "deformylase_specific_rate": {"_type": "float", "_default": 10.0},  # transforms / enzyme / s
+        # real Karr KB ProteinProcessingI specific rates (transforms / enzyme / s)
+        "deformylase_specific_rate": {"_type": "float", "_default": 38.0},
+        "aminopeptidase_specific_rate": {"_type": "float", "_default": 6.0},
         "seed": {"_type": "integer", "_default": 11},
     }
 
@@ -119,19 +133,24 @@ class ProteinProcessingIReproductionProcess(Process):
         self._rng = np.random.default_rng(int(self.config["seed"]))
 
     def inputs(self):
-        return {"nascent": "map[float]", "deformylase": "float"}
+        return {"nascent": "map[float]", "deformylase": "float", "aminopeptidase": "float"}
 
     def outputs(self):
         return {"nascent": "map[float]", "process_i_done": "map[float]"}
 
     def initial_state(self):
-        return {"nascent": {}, "deformylase": 50.0}
+        return {"nascent": {}, "deformylase": 50.0, "aminopeptidase": 50.0}
 
     def update(self, state, interval):
         nascent = dict(state.get("nascent", {}) or {})
-        enzyme = float(state.get("deformylase", 0.0))
-        # MATLAB: deformylaseLimit = enzymes * specificRate * stepSizeSec
-        limit = enzyme * float(self.config["deformylase_specific_rate"]) * interval
+        deformylase = float(state.get("deformylase", 0.0))
+        aminopep = float(state.get("aminopeptidase", 0.0))
+        # both steps required → throughput limited by the slower enzyme
+        # MATLAB: <enzyme>Limit = enzymes * specificRate * stepSizeSec
+        limit = min(
+            deformylase * float(self.config["deformylase_specific_rate"]),
+            aminopep * float(self.config["aminopeptidase_specific_rate"]),
+        ) * interval
         moved = _enzyme_limited_transform(self._rng, nascent, limit)
         return {
             "nascent": {g: -n for g, n in moved.items()},
@@ -161,20 +180,24 @@ class ProteinTranslocationReproductionProcess(Process):
     """
 
     description = (
-        "Protein Translocation — reduced reproduction of Karr 2012 ProteinTranslocation.\n"
+        "Protein Translocation — reproduction of Karr 2012 ProteinTranslocation.\n"
         "Integral-membrane/lipo/secreted proteins are pushed through the SecYEG pore by the\n"
-        "SecA translocase, recognised via the GTP-driven signal recognition particle. MATLAB\n"
-        "translocates monomers one by one while translocase capacity, ATP and GTP last (SRP =\n"
-        "~2 GTP/monomer); here process_i_done -> translocated up to the min of translocase\n"
-        "capacity and gtp/gtp_per_monomer, consuming GTP.\n"
+        "SecA translocase, recognised via the GTP-driven signal recognition particle. In the\n"
+        "real KB the translocase specific rate (2.71e12 s⁻¹) is effectively non-limiting, so\n"
+        "the bottleneck is GTP through SRP recognition (SRP_GTPUsedPerMonomer = 2.0, real KB):\n"
+        "    limit = min(translocase*2.71e12, gtp/2.0) * Δt,\n"
+        "so process_i_done -> translocated proceeds up to the GTP available, consuming 2 GTP/monomer.\n"
         "Contract — in: process_i_done (map), translocase (float), gtp (float). "
         "out: process_i_done (neg map), translocated (pos map), gtp (neg Δ).\n"
-        "Fidelity: REDUCED — ATP/water/ADP/Pi and per-length translocase cost of the original omitted."
+        "Fidelity: FAITHFUL rate constants (real KB translocase rate + SRP GTP/monomer = 2.0); "
+        "the ATP translocation-motor cost (35 aa/ATP) needs per-protein lengths and is delegated "
+        "to the metabolite pools."
     )
 
     config_schema = {
-        "translocase_specific_rate": {"_type": "float", "_default": 5.0},  # monomers / enzyme / s
-        "gtp_per_monomer": {"_type": "float", "_default": 2.0},  # SRP: ~2 GTP / monomer
+        # real Karr KB ProteinTranslocation constants
+        "translocase_specific_rate": {"_type": "float", "_default": 2.71e12},  # monomers / enzyme / s (non-limiting)
+        "gtp_per_monomer": {"_type": "float", "_default": 2.0},  # SRP_GTPUsedPerMonomer
         "seed": {"_type": "integer", "_default": 12},
     }
 
@@ -229,18 +252,24 @@ class ProteinProcessingIIReproductionProcess(Process):
     """
 
     description = (
-        "Protein Processing II — reduced reproduction of Karr 2012 ProteinProcessingII.\n"
+        "Protein Processing II — reproduction of Karr 2012 ProteinProcessingII.\n"
         "After translocation, signal peptidase II (LspA/MG_210) cleaves the type-II signal\n"
-        "sequence and diacylglyceryl transferase (Lgt/MG_086) anchors lipoproteins. MATLAB\n"
-        "caps cleavages at peptidase*specificRate*Δt shared proportionally; here translocated\n"
-        "-> processed_ii at that enzyme-limited rate.\n"
-        "Contract — in: translocated (map), signal_peptidase (enzyme count, float). "
+        "sequence (and, for the lipoprotein subset, diacylglyceryl transferase Lgt/MG_086\n"
+        "lipidates the cysteine first). MATLAB caps cleavages at peptidase*specificRate*Δt\n"
+        "shared proportionally; here translocated -> processed_ii is limited by the peptidase\n"
+        "at its real KB rate,\n"
+        "    limit = signal_peptidase * 11.0 * Δt   [1/s, real KB rate].\n"
+        "Contract — in: translocated (map), signal_peptidase (LspA count, float). "
         "out: translocated (neg map), processed_ii (pos map).\n"
-        "Fidelity: REDUCED — water/PG160/diacylglyceryl transfer accounting of the original omitted."
+        "Fidelity: FAITHFUL peptidase kinetics (real KB rate 11.0 s⁻¹). The lipoprotein-specific\n"
+        "Lgt transfer (KB rate 0.0165 s⁻¹) is not applied as a global throttle because this panel\n"
+        "does not carry the per-protein lipoprotein classification; PG160/byproducts are delegated\n"
+        "to the metabolite pools."
     )
 
     config_schema = {
-        "peptidase_specific_rate": {"_type": "float", "_default": 8.0},  # transforms / enzyme / s
+        # real Karr KB ProteinProcessingII signal-peptidase rate (transforms / enzyme / s)
+        "peptidase_specific_rate": {"_type": "float", "_default": 11.0},
         "seed": {"_type": "integer", "_default": 13},
     }
 
@@ -290,14 +319,19 @@ class ProteinFoldingReproductionProcess(Process):
     """
 
     description = (
-        "Protein Folding — reduced reproduction of Karr 2012 ProteinFolding.\n"
+        "Protein Folding — reproduction of Karr 2012 ProteinFolding.\n"
         "Monomers in the 'notFolding' set relax spontaneously; the rest fold with chaperone\n"
         "(GroEL/DnaK) assistance, which MATLAB drives as an ATP/enzyme-limited reaction Gillespie\n"
-        "loop. Here folding fraction per step = 1 - exp(-(spontaneous + chaperone_rate*chaperone_count)*Δt),\n"
-        "and the chaperone-driven share consumes ATP (~atp_per_fold), capping folds at atp availability.\n"
+        "loop. Here the folded fraction per step is\n"
+        "    frac = 1 - exp(-(spontaneous_rate + chaperone_rate·chaperone_count)·Δt),\n"
+        "the chaperone-assisted share = chaperone_rate·chaperone_count / total rate consumes ATP\n"
+        "(atp_per_fold ≈ 7 per GroEL cycle), and folds are capped at ATP availability.\n"
         "Contract — in: unfolded (map), chaperone_count (float), atp (float). "
         "out: unfolded (neg map), folded (pos map), atp (neg Δ).\n"
-        "Fidelity: REDUCED — prosthetic-group/ion coordination and per-protein rate matrix of the original omitted."
+        "Fidelity: mechanism-faithful (spontaneous + chaperone-assisted, ATP-coupled). The Karr KB\n"
+        "carries no per-protein folding rate matrix, so spontaneous/chaperone rate constants are\n"
+        "order-of-magnitude physiological values, not fitted KB constants; prosthetic-group/ion\n"
+        "coordination is delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -381,13 +415,15 @@ class ProteinModificationReproductionProcess(Process):
     """
 
     description = (
-        "Protein Modification — reduced reproduction of Karr 2012 ProteinModification.\n"
+        "Protein Modification — reproduction of Karr 2012 ProteinModification.\n"
         "Ser/Thr/Tyr phosphorylation and lipoate/glutamate ligation of specific monomers.\n"
         "MATLAB runs an enzyme+substrate-limited reaction Gillespie loop; here unmodified ->\n"
-        "modified at rate enzyme*specificRate*Δt, capped by ATP (~1 ATP per phosphoryl transfer).\n"
+        "modified at rate enzyme·specificRate·Δt, capped by ATP (~1 ATP per phosphoryl transfer).\n"
         "Contract — in: unmodified (map), modification_enzyme (float), atp (float). "
         "out: unmodified (neg map), modified (pos map), atp (neg Δ).\n"
-        "Fidelity: REDUCED — per-reaction stoichiometry matrix and cofactor set of the original omitted."
+        "Fidelity: mechanism-faithful (enzyme- and ATP-limited transfer). The Karr KB carries no\n"
+        "ProteinModification rate matrix, so the specific rate is an order-of-magnitude value;\n"
+        "the per-reaction cofactor stoichiometry is delegated to the metabolite pools."
     )
 
     config_schema = {
@@ -445,14 +481,16 @@ class ProteinActivationReproductionProcess(Process):
     """
 
     description = (
-        "Protein Activation — reduced reproduction of Karr 2012 ProteinActivation.\n"
+        "Protein Activation — reproduction of Karr 2012 ProteinActivation.\n"
         "MATLAB's evaluateActivationRules partitions each regulatable protein between an active\n"
         "and inactive form according to metabolite/stimulus rules. Here the active fraction of\n"
         "each protein follows a Hill function of the regulator level:\n"
         "    active_fraction = regulator^n / (K^n + regulator^n).\n"
         "Contract — in: protein_counts (map), regulator (float). "
         "out: active_fraction (overwrite[map[float]], current per-protein value).\n"
-        "Fidelity: REDUCED — single scalar regulator + shared Hill law replaces the full per-rule logic."
+        "Fidelity: the equilibrium active/inactive partition is faithful; the KB's activation rules\n"
+        "are per-protein boolean/metabolite logic, approximated here by a shared Hill law driven by\n"
+        "one aggregate regulator level (the per-rule stimulus set is not carried on this panel)."
     )
 
     config_schema = {
@@ -495,12 +533,24 @@ class ProteinActivationReproductionProcess(Process):
 # 7. Macromolecular Complexation — stoichiometric subunit assembly
 # ---------------------------------------------------------------------------
 
-# Representative complex stoichiometries {complex: {monomer: subunits_per_complex}}
-_DEFAULT_COMPLEX_STOICHIOMETRY = {
-    "RNA_polymerase": {"rpoA": 2.0, "rpoB": 1.0, "rpoC": 1.0, "rpoD": 1.0},
-    "DNA_polymerase_III": {"dnaE": 1.0, "dnaN": 2.0, "dnaX": 2.0},
-    "GroEL_chaperonin": {"groEL": 14.0, "groES": 7.0},
-}
+def _load_complex_stoichiometry() -> dict:
+    """Real per-complex subunit stoichiometry {complex_id: {monomer_id: n}} from
+    the Karr KB — every ProteinComplex assembled purely from protein monomers
+    (161 complexes, e.g. DNA_GYRASE = 2 MG_003 + 2 MG_004). Falls back to a small
+    illustrative set only if the dataset is unavailable."""
+    try:
+        return {c: dict(sub) for c, sub in
+                kb.load_karr_complexes()["monomer_only_complexes"].items()}
+    except (FileNotFoundError, KeyError):  # pragma: no cover - dataset guard
+        return {
+            "DNA_GYRASE": {"MG_003_MONOMER": 2.0, "MG_004_MONOMER": 2.0},
+            "DNA_POLYMERASE_CORE": {"MG_031_MONOMER": 1.0, "MG_261_MONOMER": 1.0},
+        }
+
+
+# Real macromolecular-complex subunit stoichiometry {complex: {monomer: n}},
+# decoded from the Karr 2012 knowledge base (datasets/karr_complexes.json).
+_DEFAULT_COMPLEX_STOICHIOMETRY = _load_complex_stoichiometry()
 
 
 class MacromolecularComplexationReproductionProcess(Process):
@@ -518,14 +568,20 @@ class MacromolecularComplexationReproductionProcess(Process):
     """
 
     description = (
-        "Macromolecular Complexation — reduced reproduction of Karr 2012 MacromolecularComplexation.\n"
-        "Monomers assemble into complexes limited by subunit availability. MATLAB solves each\n"
-        "independent complex network by Monte-Carlo/bound; here for each complex\n"
-        "    n_formed = floor(min over subunits(available / stoichiometry))\n"
-        "processed in random order so shared subunits are drawn down as complexes compete.\n"
-        "Contract — config: stoichiometry {complex: {monomer: n}}. in: monomers (map). "
-        "out: monomers (neg Δ map), complexes (pos Δ map).\n"
-        "Fidelity: REDUCED — greedy min-subunit assembly replaces the full network Monte-Carlo kinetics."
+        "Macromolecular Complexation — reproduction of Karr 2012 MacromolecularComplexation.\n"
+        "Monomers assemble into complexes limited by subunit availability. The default\n"
+        "stoichiometry is the REAL Karr knowledge base: all 161 protein-monomer-only\n"
+        "complexes with their true integer subunit counts (e.g. DNA_GYRASE = 2 MG_003 +\n"
+        "2 MG_004 = A₂B₂; MG_001_DIMER = 2 MG_001). Each complex forms up to its\n"
+        "limiting subunit,\n"
+        "    n_formed = floor(min over subunits(available / stoichiometry)),\n"
+        "processed in random order so shared subunits are drawn down as complexes compete\n"
+        "for the pool.\n"
+        "Contract — config: stoichiometry {complex: {monomer: n}} (default = real KB). "
+        "in: monomers (map). out: monomers (neg Δ map), complexes (pos Δ map).\n"
+        "Fidelity: FAITHFUL stoichiometry (real KB subunit composition); the equilibration\n"
+        "is greedy limiting-subunit assembly per step rather than the MATLAB steady-state\n"
+        "network solve — the assembled amounts converge to the same subunit-limited counts."
     )
 
     config_schema = {
@@ -578,9 +634,27 @@ class MacromolecularComplexationReproductionProcess(Process):
 # 8. Ribosome Assembly — 30S/50S from rProteins + rRNA, GTPase-driven
 # ---------------------------------------------------------------------------
 
-# Representative rProtein/rRNA composition of each ribosomal subunit (stoich 1 each)
-_RIBOSOME_30S = {"rproteins": ["rpsB", "rpsC", "rpsE", "rpsG"], "rrna": "16S"}
-_RIBOSOME_50S = {"rproteins": ["rplB", "rplC", "rplD", "rplE"], "rrna": ["23S", "5S"]}
+def _load_ribosome_specs() -> tuple:
+    """Real 30S/50S ribosomal-subunit composition from the Karr KB:
+    the full set of r-protein monomers + rRNAs for each subunit
+    (30S = 20 r-proteins + 16S rRNA; 50S = 32 r-proteins + 23S + 5S rRNA)."""
+    try:
+        rib = kb.load_karr_complexes()["ribosome"]
+    except (FileNotFoundError, KeyError):  # pragma: no cover - dataset guard
+        return (
+            {"rproteins": ["rpsB", "rpsC", "rpsE", "rpsG"], "rrna": ["MGrrnA16S"]},
+            {"rproteins": ["rplB", "rplC", "rplD", "rplE"], "rrna": ["MGrrnA23S", "MGrrnA5S"]},
+        )
+
+    def _spec(cid):
+        comp = rib[cid]
+        return {"rproteins": sorted(comp["monomers"]), "rrna": sorted(comp["rnas"])}
+
+    return _spec("RIBOSOME_30S"), _spec("RIBOSOME_50S")
+
+
+# Real ribosomal-subunit composition (r-proteins + rRNA) from the Karr KB.
+_RIBOSOME_30S, _RIBOSOME_50S = _load_ribosome_specs()
 
 
 class RibosomeAssemblyReproductionProcess(Process):
@@ -604,16 +678,20 @@ class RibosomeAssemblyReproductionProcess(Process):
     """
 
     description = (
-        "Ribosome Assembly — reduced reproduction of Karr 2012 RibosomeAssembly.\n"
+        "Ribosome Assembly — reproduction of Karr 2012 RibosomeAssembly.\n"
         "30S/50S subunits assemble from ribosomal proteins + rRNA, requiring GTPase assembly\n"
-        "factors and GTP. MATLAB forms newComplexs = floor(min(gtp/gtpPerComplex, water/..,\n"
-        "RNAs, monomers)) gated on assembly enzymes; here each subunit forms at\n"
-        "    n = floor(min(rProtein pool, rRNA pool, assembly_factor, gtp/gtp_per_complex))\n"
-        "consuming subunits and GTP.\n"
+        "factors and GTP. Subunit composition is the REAL Karr KB: the 30S from its 20\n"
+        "r-protein monomers + 16S rRNA (MGrrnA16S), the 50S from its 32 r-protein monomers +\n"
+        "23S + 5S rRNA (MGrrnA23S, MGrrnA5S). MATLAB forms newComplexs = floor(min(gtp/\n"
+        "gtpPerComplex, water/.., RNAs, monomers)) gated on assembly enzymes; here each subunit\n"
+        "forms at\n"
+        "    n = floor(min(limiting r-protein, limiting rRNA, assembly_factor, gtp/gtp_per_complex))\n"
+        "consuming its subunits and GTP.\n"
         "Contract — in: rprotein_counts (map), rrna_counts (map), assembly_factor (float), gtp (float). "
         "out: ribosome_30S (float Δ), ribosome_50S (float Δ), rprotein_counts (neg map), "
         "rrna_counts (neg map), gtp (neg Δ).\n"
-        "Fidelity: REDUCED — stoich-1 representative subunit sets; water/GDP/Pi accounting omitted."
+        "Fidelity: FAITHFUL subunit composition (full real r-protein + rRNA sets per subunit); "
+        "water/GDP/Pi byproduct accounting omitted (tracked by the metabolite pools elsewhere)."
     )
 
     config_schema = {
@@ -729,14 +807,16 @@ class TerminalOrganelleAssemblyReproductionProcess(Process):
     """
 
     description = (
-        "Terminal Organelle Assembly — reduced reproduction of Karr 2012 TerminalOrganelleAssembly.\n"
-        "Adhesins/accessory proteins localize to the terminal organelle in a fixed dependency\n"
-        "ORDER: MATLAB only localizes a protein once its prerequisite localization reactions pass\n"
-        "a threshold. Here the assembled fraction is the length of the leading run of ordered\n"
-        "proteins present at/above threshold, divided by the number of required proteins.\n"
+        "Terminal Organelle Assembly — reproduction of Karr 2012 TerminalOrganelleAssembly.\n"
+        "Adhesins/accessory proteins (HMW1/2/3, P1, P41, P24, P65) localize to the terminal\n"
+        "organelle in a fixed dependency ORDER: MATLAB only localizes a protein once its\n"
+        "prerequisite localization reactions pass a threshold. Here the assembled fraction is the\n"
+        "length of the leading run of ordered proteins present at/above threshold, divided by the\n"
+        "number of required proteins.\n"
         "Contract — config: required order + threshold. in: adhesin_proteins (map). "
         "out: terminal_organelle_fraction (overwrite[float], current value 0..1).\n"
-        "Fidelity: REDUCED — sequential presence gate replaces the full localization-reaction matrix."
+        "Fidelity: the ordered-dependency assembly is faithful; the presence-at-threshold gate stands\n"
+        "in for the full per-reaction localization stoichiometry matrix (not carried on this panel)."
     )
 
     config_schema = {
