@@ -103,9 +103,21 @@ class MetabolismFbaReproductionProcess(Process):
         # normalized-id -> model gene id
         self._gene_index = {normalize_gene_id(g.id): g.id for g in self._model.genes}
         self._enzyme_coupling = bool(self.config["enzyme_coupling"])
-        self._ref_norm = {normalize_gene_id(g): float(v)
-                          for g, v in (self.config["reference_protein_counts"] or {}).items()
-                          if float(v) > 0}
+        # panel-key (symbol-or-id, as expression_defaults keys its panel) ->
+        # normalized model locus tag, so protein_counts/reference_protein_counts
+        # (keyed by symbol) can be matched against model.genes (keyed by locus tag)
+        from ..kb import load_genes
+        panel_to_locus = {}
+        for gg in load_genes():
+            key = (gg.get("symbol") or "").strip() or gg["gene_id"]
+            panel_to_locus[key] = normalize_gene_id(gg["gene_id"])
+        self._panel_to_locus = panel_to_locus
+        # re-key the reference into locus-tag space (matches model.genes ids)
+        self._ref_norm = {}
+        for pk, v in (self.config["reference_protein_counts"] or {}).items():
+            if float(v) > 0:
+                loc = panel_to_locus.get(pk, normalize_gene_id(pk))
+                self._ref_norm[loc] = float(v)
         self._floor = float(self.config["enzyme_coupling_floor"])
         self._cap = float(self.config["enzyme_coupling_cap"])
 
@@ -158,8 +170,9 @@ class MetabolismFbaReproductionProcess(Process):
             # by the live proteome relative to a steady-state reference
             if self._enzyme_coupling and self._ref_norm:
                 live = {}
-                for g, c in (state.get("protein_counts", {}) or {}).items():
-                    live[normalize_gene_id(g)] = live.get(normalize_gene_id(g), 0.0) + float(c)
+                for pk, c in (state.get("protein_counts", {}) or {}).items():
+                    loc = self._panel_to_locus.get(pk, normalize_gene_id(pk))
+                    live[loc] = live.get(loc, 0.0) + float(c)
                 for r in model.reactions:
                     genes = [normalize_gene_id(g.id) for g in r.genes]
                     ratios = [min(live.get(ng, 0.0) / self._ref_norm[ng], self._cap)
