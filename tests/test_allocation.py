@@ -261,3 +261,13 @@ def test_trna_aminoacylation_decrements_amino_acid_pool(core):
     charged = sum(v for v in out["aminoacylated_trna"].values())
     assert charged > 0
     assert out["amino_acid"] == -charged
+
+
+def test_scarcity_partitions_across_consumers():
+    """Under a tight shared pool, two consumers scale back PROPORTIONALLY
+    rather than one starving the other."""
+    from viva_mgen.processes.allocation import allocate
+    g = allocate(40.0, {"protein_folding": 100.0, "dna_repair": 300.0})
+    assert abs(g["protein_folding"] - 10.0) < 1e-6
+    assert abs(g["dna_repair"] - 30.0) < 1e-6
+    assert sum(g.values()) <= 40.0 + 1e-9
