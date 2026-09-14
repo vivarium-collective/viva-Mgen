@@ -33,6 +33,8 @@ from process_bigraph import Composite, gather_emitter_results
 from viva_mgen.core import build_core
 from viva_mgen.composites import build_mgen
 from viva_mgen import viz, constants as Cst
+from viva_mgen import validation as val
+from viva_mgen.ensemble import run_ensemble
 from vivarium_workbench.lib.run_log import append_run_event
 
 SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
@@ -154,6 +156,21 @@ def main() -> int:
         # Fig 2G/2H: low-copy bursty mRNA + mRNA↔protein decoupling across cells
         mrna_protein_abs_corr, mean_mrna_per_gene = _mrna_protein_decoupling()
 
+        # emergent macromolecular dry-mass composition (Gap 2 Σ(species×MW)),
+        # renormalized over protein+DNA+RNA — validated against Karr 2012 (Fig 2C).
+        emf = val.emergent_macro_fractions(rows[-1])
+        emergent_protein_fraction = emf["protein"]
+        emergent_dna_fraction = emf["DNA"]
+        emergent_rna_fraction = emf["RNA"]
+
+        # single-cell mRNA variation across an independent-cell ensemble (Fig 2
+        # single-cell distributions); 1 h is enough for mRNA CV, keep it modest.
+        ens = run_ensemble(n_cells=4, duration=3600.0)
+        def _tot_mrna(cell_rows):
+            rc = cell_rows[-1].get("rna_counts", {}) if cell_rows else {}
+            return sum(rc.values()) if isinstance(rc, dict) else 0.0
+        single_cell_mrna_cv = val.mrna_cv([_tot_mrna(c) for c in ens["cells"]])
+
         print(f"doubling_time_h        = {doubling_time_h:.3f}  (target ~8.9)")
         print(f"final_mass_ratio       = {final_mass_ratio:.3f}  (target ~2.0)")
         print(f"protein_fraction       = {protein_fraction:.3f}  (target 0.62-0.75)")
@@ -161,6 +178,10 @@ def main() -> int:
         print(f"dna_fold_change        = {dna_fold_change:.3f}  (target ~2.0)")
         print(f"mean_mrna_per_gene     = {mean_mrna_per_gene:.3f}  (target 0-2.5)")
         print(f"mrna_protein_abs_corr  = {mrna_protein_abs_corr:.3f}  (target <0.4)")
+        print(f"emergent_protein_fraction = {emergent_protein_fraction:.3f}  (target 0.55-0.80)")
+        print(f"emergent_dna_fraction     = {emergent_dna_fraction:.3f}  (target 0.10-0.35)")
+        print(f"emergent_rna_fraction     = {emergent_rna_fraction:.3f}  (target 0.05-0.25)")
+        print(f"single_cell_mrna_cv       = {single_cell_mrna_cv:.3f}  (target 0.001-1.5)")
 
         viz_dir = STUDY_DIR / "viz"
         viz_dir.mkdir(parents=True, exist_ok=True)
@@ -191,7 +212,11 @@ def main() -> int:
                         "rna_fraction": rna_fraction,
                         "dna_fold_change": dna_fold_change,
                         "mean_mrna_per_gene": mean_mrna_per_gene,
-                        "mrna_protein_abs_corr": mrna_protein_abs_corr}})
+                        "mrna_protein_abs_corr": mrna_protein_abs_corr,
+                        "emergent_protein_fraction": emergent_protein_fraction,
+                        "emergent_dna_fraction": emergent_dna_fraction,
+                        "emergent_rna_fraction": emergent_rna_fraction,
+                        "single_cell_mrna_cv": single_cell_mrna_cv}})
     return 0
 
 
