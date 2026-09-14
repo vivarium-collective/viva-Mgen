@@ -100,6 +100,18 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   (mean±std + per-cell + end-of-cycle distributions). A dashboard variation-figure study
   consuming it is staged.
 
+## Comparison harness
+
+Karr 2012 reference values (`datasets/karr_reference_values.json`) and
+report-card gating metrics have landed: `viva_mgen.validation` scores emergent
+macromolecular composition and single-cell mRNA variation against the paper's
+reported values, and `fig2-growth` gates on them as four new secondary
+`behavior_tests` (emergent protein/DNA/RNA fraction, single-cell mRNA CV) —
+mirrored in `expected_behavior`. This pattern is extensible to other figures
+as their studies land. The emergent-composition gates (Gap 2's Σ(species×MW)
+output vs. Karr's fitted fractions) are the current fidelity target for the
+mass/synthesis work.
+
 ## Recommended order & rationale
 
 1. **Gap 1** (in progress) — the integration algorithm; everything downstream

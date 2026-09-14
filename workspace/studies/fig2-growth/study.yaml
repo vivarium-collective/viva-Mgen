@@ -159,6 +159,58 @@ expected_behavior:
     op: range
     low: 0.0
     high: 0.4
+- name: emergent-mass-protein-fraction
+  en: Emergent (Σ species×MW) protein fraction of macromolecular dry mass is plausible (Karr 2012 composition).
+  observable: emergent_protein_fraction
+  condition: 0.55 <= emergent_protein_fraction <= 0.80
+  rationale: Karr 2012 cell composition puts protein at 0.62 of total dry mass; emergent Σ(species×MW),
+    macromolecule-renormalized target ≈0.70. Test the emergent protein fraction falls in [0.55, 0.80].
+  measure:
+    kind: derived_scalar
+    field: emergent_protein_fraction
+  expect:
+    op: range
+    low: 0.55
+    high: 0.80
+- name: emergent-mass-dna-fraction
+  en: Emergent (Σ species×MW) DNA fraction of macromolecular dry mass is plausible (Karr 2012 composition).
+  observable: emergent_dna_fraction
+  condition: 0.10 <= emergent_dna_fraction <= 0.35
+  rationale: Karr 2012 cell composition puts DNA at 0.169 of total dry mass (0.192 renormalized over
+    protein+DNA+RNA). Test the emergent DNA fraction falls in [0.10, 0.35].
+  measure:
+    kind: derived_scalar
+    field: emergent_dna_fraction
+  expect:
+    op: range
+    low: 0.10
+    high: 0.35
+- name: emergent-mass-rna-fraction
+  en: Emergent (Σ species×MW) RNA fraction of macromolecular dry mass is plausible (Karr 2012 composition).
+  observable: emergent_rna_fraction
+  condition: 0.05 <= emergent_rna_fraction <= 0.25
+  rationale: Karr 2012 cell composition puts RNA at 0.093 of total dry mass (0.106 renormalized over
+    protein+DNA+RNA). Test the emergent RNA fraction falls in [0.05, 0.25].
+  measure:
+    kind: derived_scalar
+    field: emergent_rna_fraction
+  expect:
+    op: range
+    low: 0.05
+    high: 0.25
+- name: single-cell-mrna-variation
+  en: Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).
+  observable: single_cell_mrna_cv
+  condition: 0.001 <= single_cell_mrna_cv <= 1.5
+  rationale: Karr 2012 Fig 2 single-cell distributions show bursty low-copy single-cell mRNA, hence
+    nonzero cell-to-cell variation. Test the CV of total mRNA across independent cells falls in [0.001, 1.5].
+  measure:
+    kind: derived_scalar
+    field: single_cell_mrna_cv
+  expect:
+    op: range
+    low: 0.001
+    high: 1.5
 behavior_tests:
 - name: doubling-time-near-9h
   classification: primary
@@ -264,6 +316,65 @@ behavior_tests:
       kind: experiment
       note: Single-cell mRNA (transient, bursty) and protein (cumulative, long-lived) copy numbers are
         decoupled — no correlation across a population (Karr 2012 Fig 2H). Test |Pearson r| < 0.4.
+  requires_simulation: baseline
+- name: emergent-mass-protein-fraction
+  classification: secondary
+  description: Emergent protein fraction of macromolecular dry mass ≈ 0.70 (Karr 2012 composition).
+  measure:
+    kind: derived_scalar
+    field: emergent_protein_fraction
+  pass_if:
+    op: range
+    low: 0.55
+    high: 0.80
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 cell composition: protein 0.62 of total dry mass; emergent Σ(species×MW), macromolecule-renormalized
+        target ≈0.70.'
+  requires_simulation: baseline
+- name: emergent-mass-dna-fraction
+  classification: secondary
+  description: Emergent DNA fraction of macromolecular dry mass ≈ 0.19 (Karr 2012 composition).
+  measure:
+    kind: derived_scalar
+    field: emergent_dna_fraction
+  pass_if:
+    op: range
+    low: 0.10
+    high: 0.35
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 cell composition: DNA 0.169 of total dry mass (0.192 renormalized over protein+DNA+RNA);
+        emergent Σ(species×MW).'
+  requires_simulation: baseline
+- name: emergent-mass-rna-fraction
+  classification: secondary
+  description: Emergent RNA fraction of macromolecular dry mass ≈ 0.11 (Karr 2012 composition).
+  measure:
+    kind: derived_scalar
+    field: emergent_rna_fraction
+  pass_if:
+    op: range
+    low: 0.05
+    high: 0.25
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 cell composition: RNA 0.093 of total dry mass (0.106 renormalized over protein+DNA+RNA);
+        emergent Σ(species×MW).'
+  requires_simulation: baseline
+- name: single-cell-mrna-variation
+  classification: secondary
+  description: 'Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).'
+  measure:
+    kind: derived_scalar
+    field: single_cell_mrna_cv
+  pass_if:
+    op: range
+    low: 0.001
+    high: 1.5
+    provenance:
+      kind: experiment
+      note: 'Karr 2012 Fig 2 single-cell distributions.'
   requires_simulation: baseline
 readouts:
 - name: mass
