@@ -70,14 +70,26 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   complexation, maturation). Cosmetic loom-rendering only; authoritative `description`
   attributes are correct. Track as regen/parser fix.
 
-- [ ] **Gap 5 — Constants the KB never stored (research task).**
-  ProteinFolding / ProteinModification rate matrices, per-monomer protein
-  half-lives, and the empty RNAModification / tRNAAminoacylation / Transcriptional-
-  Regulation kinetic dicts are order-of-magnitude values today. Source real values
-  from the Karr supplement / primary literature where they exist; where they
-  genuinely don't, document each as irreducible with its citation. Deliverable:
-  a sourced constants table + wiring, or a documented "irreducible" note per
-  constant. Size: M (mostly research).
+- [x] **Gap 5 — Constants the KB never stored (research task).** DONE
+  (provenance audit + supplement sourcing; irreducible constants documented).
+  Every numeric kinetic constant across all process `config_schema`s (83
+  total) is now classified by source tier via
+  `viva_mgen.provenance.audit_constants()`, dumped to
+  `datasets/constant_provenance.json`, and written up in
+  `docs/CONSTANT_PROVENANCE.md`. Final breakdown: **real_kb 11**, **real_supplement
+  1**, **order_of_magnitude 61**, **irreducible 10**. The only Karr 2012 SI file in
+  this workspace (16 pages) is the *Cell* main text + two SI figures, not the
+  Data S1 parameter appendix, so it yielded exactly one explicit unambiguous
+  match (`MassGrowthReproductionProcess.cell_cycle_length_s` = 32,400 s / 9.0 h,
+  Figure 2A). The 10 `irreducible` constants (ProteinFolding
+  spontaneous_rate/chaperone_rate, ProteinModification
+  modification_specific_rate, RNAModification modification_rate/enzyme_kcat,
+  tRNAAminoacylation synthetase_kcat, DNADamage base_rate/agent_rate,
+  ProteinActivation default_k, TerminalOrganelleAssembly threshold) each have a
+  KB dict confirmed empty and an SI-silent note naming the missing Data S1
+  table that would be needed to source a real value. The remaining
+  order-of-magnitude constants are stoichiometric facts, initial conditions,
+  or engineering choices, not missing rate measurements.
 
 - [x] **Gap 7 — Single-cell ensembles.** DONE (ensemble runner + aggregation + demo CLI landed).
   The mechanisms are stochastic but figures use a single representative run.

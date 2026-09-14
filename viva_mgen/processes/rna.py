@@ -252,7 +252,8 @@ class RNAModificationReproductionProcess(Process):
         "Fidelity: mechanism-faithful (enzyme-budget-limited stochastic modification). The Karr KB\n"
         "RNAModification parameter dict is empty, so k_mod / kcat are order-of-magnitude values (not\n"
         "fabricated KB constants); one enzyme pool stands in for the 13 modification enzymes over 86\n"
-        "base modifications, and metabolite substrate/byproduct accounting is delegated to the pools."
+        "base modifications, and metabolite substrate/byproduct accounting is delegated to the pools.\n"
+        "Constant provenance recorded in the gap-#5 audit (docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {
@@ -349,7 +350,8 @@ class TRNAAminoacylationReproductionProcess(Process):
         "tRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.\n"
         "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning):\n"
         "capped each tick at its allocated ATP and amino_acid budgets from the finite\n"
-        "metabolism-replenished pools."
+        "metabolism-replenished pools. Constant provenance recorded in the gap-#5 audit\n"
+        "(docs/CONSTANT_PROVENANCE.md)."
     )
 
     config_schema = {
