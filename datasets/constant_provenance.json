@@ -1,0 +1,564 @@
+{
+  "source": "viva_mgen.provenance.audit_constants() \u2014 kinetic-constant provenance vs Karr 2012 KB + supplement",
+  "n_constants": 83,
+  "by_tier": {
+    "real_kb": 14,
+    "real_supplement": 0,
+    "order_of_magnitude": 69,
+    "irreducible": 0
+  },
+  "constants": {
+    "MetabolismFbaReproductionProcess": {
+      "ntp_base_supply": {
+        "value": 1000000.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "amino_acid_base_supply": {
+        "value": 1000000.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "enzyme_coupling_floor": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "enzyme_coupling_cap": {
+        "value": 1.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[Metabolism]"
+      }
+    },
+    "MassGrowthReproductionProcess": {
+      "initial_mass_fg": {
+        "value": 3.93,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "cell_cycle_length_s": {
+        "value": 32400.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "density_g_per_ml": {
+        "value": 1.1,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TranscriptionReproductionProcess": {
+      "rna_pol_reference": {
+        "value": 100.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TranslationReproductionProcess": {
+      "gtp_per_protein": {
+        "value": 600.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ReplicationReproductionProcess": {
+      "genome_length_bp": {
+        "value": 580070.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dnaA_threshold": {
+        "value": 30.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[Replication]"
+      },
+      "dnaA_synthesis_rate": {
+        "value": 0.0020833333333333333,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_dnaA": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dntp_synthesis_rate": {
+        "value": 37.25322715304091,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "init_synth_fraction": {
+        "value": 0.08,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dna_pol_rate": {
+        "value": 200.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_dntp": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ChromosomeCondensationReproductionProcess": {
+      "bind_rate": {
+        "value": 0.001,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_fraction": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ChromosomeSegregationReproductionProcess": {
+      "complete_threshold": {
+        "value": 0.999,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "segregation_rate": {
+        "value": 0.0002584647195657793,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_fraction": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "DNADamageReproductionProcess": {
+      "base_rate": {
+        "value": 0.001,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "agent_rate": {
+        "value": 0.01,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_bins": {
+        "value": 580.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "DNARepairReproductionProcess": {
+      "repair_rate": {
+        "value": 0.01,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "atp_per_repair": {
+        "value": 4.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[DNARepair]"
+      }
+    },
+    "DNASupercoilingReproductionProcess": {
+      "setpoint": {
+        "value": -0.06,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "gyrase_rate": {
+        "value": 1.2,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[DNASupercoiling]"
+      },
+      "atp_per_act": {
+        "value": 2.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[DNASupercoiling]"
+      },
+      "relaxed_bp_per_turn": {
+        "value": 10.5,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "genome_length_bp": {
+        "value": 580070.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_sigma": {
+        "value": 0.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[DNASupercoiling]"
+      }
+    },
+    "ReplicationInitiationReproductionProcess": {
+      "complex_threshold": {
+        "value": 30.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "recruit_rate": {
+        "value": 0.0023148148148148147,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_complex": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "RNAModificationReproductionProcess": {
+      "modification_rate": {
+        "value": 0.4,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "enzyme_kcat": {
+        "value": 2.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "RNAProcessingReproductionProcess": {
+      "processing_rate": {
+        "value": 3.1683399999999997,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TRNAAminoacylationReproductionProcess": {
+      "synthetase_kcat": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "atp_per_charge": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ProteinActivationReproductionProcess": {
+      "default_k": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "hill_n": {
+        "value": 2.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ProteinFoldingReproductionProcess": {
+      "spontaneous_rate": {
+        "value": 0.05,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "chaperone_rate": {
+        "value": 0.002,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "atp_per_fold": {
+        "value": 7.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ProteinModificationReproductionProcess": {
+      "modification_specific_rate": {
+        "value": 6.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "atp_per_modification": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ProteinProcessingIIReproductionProcess": {
+      "peptidase_specific_rate": {
+        "value": 11.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[ProteinProcessingII]"
+      },
+      "transferase_specific_rate": {
+        "value": 0.0165,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[ProteinProcessingII]"
+      }
+    },
+    "ProteinProcessingIReproductionProcess": {
+      "deformylase_specific_rate": {
+        "value": 38.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[ProteinProcessingI]"
+      },
+      "aminopeptidase_specific_rate": {
+        "value": 6.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[ProteinProcessingI]"
+      }
+    },
+    "ProteinTranslocationReproductionProcess": {
+      "translocase_specific_rate": {
+        "value": 2710000000000.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[ProteinTranslocation]"
+      },
+      "gtp_per_monomer": {
+        "value": 2.0,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[ProteinTranslocation]"
+      }
+    },
+    "RibosomeAssemblyReproductionProcess": {
+      "gtp_per_complex": {
+        "value": 2.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "TerminalOrganelleAssemblyReproductionProcess": {
+      "threshold": {
+        "value": 1.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "CytokinesisReproductionProcess": {
+      "initial_cell_width_nm": {
+        "value": 200.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "contraction_rate_nm_per_s": {
+        "value": 0.051692943913155855,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "replication_complete_threshold": {
+        "value": 0.999,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "ring_subunits_for_full_rate": {
+        "value": 320.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "FtsZPolymerizationReproductionProcess": {
+      "activation_rate": {
+        "value": 1.1,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[FtsZPolymerization]"
+      },
+      "dissociation_rate": {
+        "value": 0.01,
+        "source_tier": "real_kb",
+        "kb_match": true,
+        "note": "value present in karr_parameters.json[FtsZPolymerization]"
+      },
+      "initial_ftsz_gtp": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "initial_ring": {
+        "value": 0.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "HostInteractionReproductionProcess": {
+      "cooperativity": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "half_max_fraction": {
+        "value": 0.7,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "ChromosomeDynamicsReproductionProcess": {
+      "genome_length_bp": {
+        "value": 580070.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_bins": {
+        "value": 580.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_rna_pol": {
+        "value": 50.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "rna_pol_rate_bp": {
+        "value": 50.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "dna_pol_rate_bp": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_smc": {
+        "value": 280.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_ssb": {
+        "value": 30.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_gyrase": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_topo": {
+        "value": 10.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_dnab": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_dnan": {
+        "value": 4.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "n_tf": {
+        "value": 12.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "struct_turnover_per_s": {
+        "value": 0.008,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "struct_bind_tau_s": {
+        "value": 1200.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "rna_gene_span_bins": {
+        "value": 20.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      },
+      "struct_collision_frac": {
+        "value": 0.12,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    },
+    "AllocatorProcess": {
+      "pool_cap": {
+        "value": 1000000000.0,
+        "source_tier": "order_of_magnitude",
+        "kb_match": false,
+        "note": "physiological estimate; not in KB parameters.json"
+      }
+    }
+  }
+}
