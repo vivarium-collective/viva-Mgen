@@ -45,20 +45,36 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
      `gtp_base_supply` to 3500 holds them at ~0.69:0.13:0.18) and fig5's energy
      budget becomes length-accurate (transcription share 0.001→0.006, translation
      0.997→0.985, both toward Karr).
-  `gtp_base_supply` is fitted so the emergent protein:DNA:RNA fractions land on
-  ~0.69:0.13:0.18 across seeds (all three fig2 report-card bands green; was
-  0.002:0.42:0.57).
-  DEFERRED follow-ups (own tasks): (a) protein *count* is high (~460k). NOTE the
-  length-proportional GTP cost above did NOT fix this — count = target mass ÷
-  mean translated length, and translation is biased toward short genes (mean
-  ~80 aa vs the ~346 aa gene mean), so the real fix is the translation
-  rate/length distribution (a ParCa/rate-fitting issue touching fig3), not the
-  GTP cost. (b) mRNA is over-represented (RNA fraction ~0.18 vs Karr ~0.11),
-  pulling DNA low — a transcription-rate trim would center it but touches
-  fig3/fig5, so held back; (c) whole-cell mass/atom balance (conserve water, Pi,
-  PPi, GDP, formate) and division-driving from emergent mass; (d) fig5's
-  `transcription_energy_share` gate [0.04,0.12] still fails at 0.006 (pre-existing;
-  6× closer after the per-bond cost) — needs the transcription-energy calibration.
+  4. *Stable-RNA level.* The emergent RNA mass was over-represented (fraction
+     ~0.18 vs Karr ~0.11), which dragged DNA low (~0.13 vs ~0.19). Splitting the
+     inventory by RNA class showed the excess is entirely STABLE RNA — rRNA (~73%
+     of RNA mass) and tRNA (~19%); real mRNA is only ~9% and at its proper level.
+     Those stable species have no packaging/charging sink here and half-lives
+     (rRNA ~20 h, tRNA ~45 min) exceeding the 9 h cycle, so they accumulate
+     ~linearly instead of reaching steady state. `expression_defaults`
+     .STABLE_RNA_SYNTHESIS_SCALE (0.37) rescales rRNA/tRNA/SRP-RNA synthesis
+     (a proxy for the missing sink) — mRNA synthesis is untouched, so gene-
+     expression timing (fig3 t50/t90) and the translation-feeding mRNA pool are
+     unchanged. The stable-RNA genes are identified by a corrected product-name
+     classifier (the ParCa's substring `rna_type` misclassifies …-tRNA synthetase
+     / rRNA methyltransferase PROTEINS as stable RNA — not used here).
+  With gtp_base_supply (2500) and STABLE_RNA_SYNTHESIS_SCALE (0.37) fitted
+  jointly, the emergent protein:DNA:RNA fractions land on ~0.705:0.185:0.110
+  across seeds — essentially Karr's 0.703:0.192:0.105 (all three fig2 bands
+  green; was 0.002:0.42:0.57). fig3 (t50/t90, exploration, collisions) stays
+  green.
+  DEFERRED follow-ups (own tasks): (a) protein *count* is high (~460k). The
+  length-proportional GTP cost did NOT fix this — count = target mass ÷ mean
+  translated length, and translation is biased toward short genes (mean ~80 aa
+  vs the ~346 aa gene mean), so the real fix is the translation rate/length
+  distribution (a ParCa/rate-fitting issue touching fig3). (b) whole-cell
+  mass/atom balance (conserve water, Pi, PPi, GDP, formate) and division-driving
+  from emergent mass; (c) fig5's `transcription_energy_share` gate [0.04,0.12]
+  still fails at ~0.009 (pre-existing) — needs the transcription-energy
+  calibration; (d) `parca.rna_type` substring-matches "trna"/"rrna" and so
+  misclassifies tRNA-synthetase / rRNA-modification proteins as stable RNA,
+  giving those protein mRNAs stable-RNA half-lives in the ParCa panel — fix the
+  ParCa classifier (touches the fitted panel, so its own task).
 
 - [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
   FBA runs over the real iPS189 network but with static bounds; the original
