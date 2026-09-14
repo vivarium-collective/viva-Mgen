@@ -1,8 +1,12 @@
 import math
-import numpy as np
-from viva_mgen.processes.allocation import allocate, select_budget, demand_entry
-from process_bigraph import Process
-from viva_mgen.processes.allocation import AllocatorProcess
+import pytest
+from viva_mgen.processes.allocation import allocate, select_budget, demand_entry, AllocatorProcess
+from viva_mgen.core import build_core
+
+
+@pytest.fixture(scope="module")
+def core():
+    return build_core()
 
 
 def test_allocate_surplus_grants_full():
@@ -41,15 +45,20 @@ def test_demand_entry_clamps_negative():
     assert demand_entry("x", -2.0) == {"x": 0.0}
 
 
-def test_allocator_replenishes_and_partitions():
-    proc = AllocatorProcess.__new__(AllocatorProcess)   # skip core-requiring __init__
-    # Manually set config and pools without calling __init__
-    proc.config = {"pools": ["atp"], "priorities": {}, "pool_cap": 1.0e9}
-    proc._pools = ["atp"]
+def test_allocator_replenishes_and_partitions(core):
+    proc = AllocatorProcess(config={"pools": ["atp"]}, core=core)
+    # Verify port contract
+    ins = proc.inputs()
+    outs = proc.outputs()
+    assert ins["atp"] == "float"
+    assert ins["atp_supply"] == "float"
+    assert ins["demand__atp"] == "map[float]"
+    assert outs["atp"] == "float"
+    assert outs["alloc__atp"] == "overwrite[map[float]]"
+    # Test arithmetic: supply available = level(5) + production(25) = 30; demands 20+40=60 -> proportional
     state = {"atp": 5.0, "atp_supply": 25.0,
              "demand__atp": {"a": 20.0, "b": 40.0}}
     out = proc.update(state, 1.0)
-    # supply available = level(5) + production(25) = 30; demands 20+40=60 -> proportional
     assert out["alloc__atp"]["a"] == 10.0 and out["alloc__atp"]["b"] == 20.0
     # pool replenished by production this tick (consumers draw it down elsewhere)
     assert out["atp"] == 25.0

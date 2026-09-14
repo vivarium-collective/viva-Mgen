@@ -6,7 +6,6 @@ docs/superpowers/specs/2026-09-14-resource-allocation-design.md.
 """
 from __future__ import annotations
 
-import numpy as np
 from process_bigraph import Process
 
 DEFAULT_POOLS = ["atp", "gtp", "ntp", "amino_acid"]
