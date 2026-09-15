@@ -135,3 +135,13 @@ def test_fork_polymerized_matches_fraction():
     # bidirectional from oriC(0): both low and high (wrapped) bins fill first
     m = fork_polymerized(0.2, 580)
     assert "0" in m and any(int(b) > 500 for b in m)  # wraps to near-terC on both arms
+
+
+def test_fork_regions_at_boundaries_only():
+    from viva_mgen.chromosome_state import fork_regions, fork_polymerized
+    # no replication / complete -> no fork regions (uniform mask)
+    assert fork_regions({}, 580, 20) == set()
+    assert fork_regions(fork_polymerized(1.0, 580), 580, 20) == set()
+    # mid-replication -> a small number of boundary regions (not all 20)
+    fr = fork_regions(fork_polymerized(0.4, 580), 580, 20)
+    assert 0 < len(fr) < 20

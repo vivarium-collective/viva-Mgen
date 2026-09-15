@@ -156,10 +156,20 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   chromosome; `replicated_fraction` is kept as pos/genome and Σ(mask)/n_bins equals
   it, so Fig 4 is byte-identical (verified: cell_cycle_h, r_dntp/r_dnaA, durations
   all unchanged) — a spatial VIEW of the scalar, done with the zero-risk pattern.
-  STAGED (still): per-region perturbation SOURCES (replication/transcription
-  generating local supercoils on the linking-number regions, using the fork
-  position now available) and condensation/segregation per-site — the latter touch
-  emitted-only scalars (no figure output change). NOTE: the aggregate σ/condensed/
+  PHASE 5 landed: per-region PERTURBATION source — DNASupercoiling reads the shared
+  polymerized_map and the advancing replication fork injects positive supercoils
+  into the fork-boundary regions (real overwinding-ahead-of-fork mechanism), the
+  source that drives the per-region linking numbers. Gyrase maintains homeostasis:
+  at the whole-cell timestep it relaxes the injection within a tick, so σ stays
+  ≈setpoint everywhere with a small fork-region deviation (superhelical_density
+  unchanged as an observable; a larger injection than the model's representative
+  gyrase can clear would drive σ unphysically, so this is the homeostatic regime).
+  So the replication↔supercoiling layers now interact on ONE chromosome.
+  REMAINING (only figure-invisible, low priority): condensation/segregation
+  per-site — the condensed/segregated scalars are emitted-only (no figure consumes
+  or gates them), so migrating them is internal representation with no output
+  change. The unified per-site chromosome is otherwise complete (lesions,
+  linking-number, polymerized regions, occupancy↔damage all on the shared bins). NOTE: the aggregate σ/condensed/
   segregated scalars are emitted-only (not consumed by any process or gated by any
   figure), so those remaining migrations are internal-representation fidelity with
   no figure output change.
