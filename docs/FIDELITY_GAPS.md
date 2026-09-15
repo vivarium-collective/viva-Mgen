@@ -151,11 +151,15 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   argument: baseline `damaging_agent=0` → empty lesion set → every obstacle test is
   False → Fig 3 is byte-identical (verified: t50/t90, exploration, collisions all
   unchanged); the coupling only bites under an explicit damage stimulus (tested).
-  STAGED (still) — figure-CRITICAL, would need re-tuning of currently-green figures:
-  replication polymerized-regions (drives `replicated_fraction` → Fig 4),
-  condensation/segregation per-site, and per-region perturbation SOURCES
-  (replication/transcription generating local supercoils, which is what would make
-  the linking-number regions heterogeneous). NOTE: the aggregate σ/condensed/
+  PHASE 4 landed: REPLICATION polymerized-regions — the Replication submodel now
+  emits a per-site `polymerized_map` (bidirectional oriC→terC fork) on the shared
+  chromosome; `replicated_fraction` is kept as pos/genome and Σ(mask)/n_bins equals
+  it, so Fig 4 is byte-identical (verified: cell_cycle_h, r_dntp/r_dnaA, durations
+  all unchanged) — a spatial VIEW of the scalar, done with the zero-risk pattern.
+  STAGED (still): per-region perturbation SOURCES (replication/transcription
+  generating local supercoils on the linking-number regions, using the fork
+  position now available) and condensation/segregation per-site — the latter touch
+  emitted-only scalars (no figure output change). NOTE: the aggregate σ/condensed/
   segregated scalars are emitted-only (not consumed by any process or gated by any
   figure), so those remaining migrations are internal-representation fidelity with
   no figure output change.

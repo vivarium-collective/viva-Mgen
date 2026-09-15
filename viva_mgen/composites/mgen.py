@@ -23,7 +23,8 @@ from __future__ import annotations
 from process_bigraph.composite_generator import composite_generator
 
 from ..chromosome_state import (N_CHROMOSOME_BINS, empty_lesion_map,
-                                N_SUPERCOIL_REGIONS, empty_linking_map)
+                                N_SUPERCOIL_REGIONS, empty_linking_map,
+                                empty_polymerized_map)
 from ..expression_defaults import DEFAULT_GENES, coupling_reference, birth_proteome
 from ..processes import all_process_classes
 
@@ -146,6 +147,7 @@ _STORE_GROUP = {
     "dna_binding_density": "genome", "percent_rnap_explored": "genome",
     "percent_dnap_explored": "genome", "rna_pol_positions": "genome",
     "dna_pol_positions": "genome", "lesion_map": "genome", "linking_number": "genome",
+    "polymerized_map": "genome",
     # transcriptome — RNA synthesis/processing/modification, tRNA charging, regulation
     "rna_counts": "transcriptome", "nascent_rna": "transcriptome",
     "mature_rna": "transcriptome", "unmodified_rna": "transcriptome",
@@ -260,6 +262,8 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
             return empty_lesion_map(N_CHROMOSOME_BINS)
         if key == "linking_number":
             return empty_linking_map(N_SUPERCOIL_REGIONS, 0.0)
+        if key == "polymerized_map":
+            return empty_polymerized_map(N_CHROMOSOME_BINS)
         if key in _MAP_STORES:
             return ({} if key in _EMPTY_MAP_STORES
                     else {g: 0.0 for g in DEFAULT_GENES})

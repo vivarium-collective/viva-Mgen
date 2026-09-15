@@ -29,6 +29,7 @@ import numpy as np
 from process_bigraph import Process
 
 from .. import constants as C
+from ..chromosome_state import N_CHROMOSOME_BINS, fork_polymerized
 
 _INIT, _REPL, _DONE = 0.0, 1.0, 2.0
 
@@ -68,7 +69,9 @@ class ReplicationReproductionProcess(Process):
         "Contract — in: dntp_synthesis_scale (a sibling can couple metabolism→replication). "
         "out (snapshots): replicated_fraction, dntp_pool, dnaA_complex, phase_code "
         "(0=init,1=repl,2=done), chromosome_copy, initiation_duration, replication_duration, "
-        "dntp_at_replication_start.\n"
+        "dntp_at_replication_start, and polymerized_map — the per-site polymerized-regions "
+        "mask on the SHARED chromosome (bidirectional oriC→terC fork; gap #3), a spatial VIEW "
+        "of replicated_fraction (Σ mask / n_bins == replicated_fraction, so unchanged).\n"
         "Fidelity: FAITHFUL to the Fig 4 emergent regulation — the dNTP-buffered inverse "
         "initiation↔replication coupling and the real KB polymerase elongation rate "
         "(dnaPolymeraseElongationRate 100 nt/s ×2 replisomes) are reproduced. The reduction is the "
@@ -101,6 +104,7 @@ class ReplicationReproductionProcess(Process):
         "dna_pol_rate": {"_type": "float", "_default": 200.0},
         "initial_dntp": {"_type": "float", "_default": 0.0},
         "seed": {"_type": "integer", "_default": 0},
+        "n_bins": {"_type": "integer", "_default": N_CHROMOSOME_BINS},
     }
 
     def __init__(self, config=None, core=None):
@@ -114,6 +118,7 @@ class ReplicationReproductionProcess(Process):
         self._init_dur = 0.0
         self._repl_dur = 0.0
         self._dntp_at_start = 0.0
+        self._n_bins = int(self.config["n_bins"])
 
     def inputs(self):
         return {"dntp_synthesis_scale": "float"}
@@ -128,6 +133,9 @@ class ReplicationReproductionProcess(Process):
             "initiation_duration": "overwrite[float]",
             "replication_duration": "overwrite[float]",
             "dntp_at_replication_start": "overwrite[float]",
+            # per-site polymerized-regions mask on the shared chromosome (gap #3);
+            # Σ/n_bins == replicated_fraction, so this is a spatial VIEW of it.
+            "polymerized_map": "overwrite[map[float]]",
         }
 
     def initial_state(self):
@@ -158,8 +166,9 @@ class ReplicationReproductionProcess(Process):
                 self._phase = _DONE
                 self._repl_dur = self._t - self._init_dur
 
+        frac = self._pos / genome
         return {
-            "replicated_fraction": self._pos / genome,
+            "replicated_fraction": frac,
             "dntp_pool": self._dntp,
             "dnaA_complex": self._dnaA,
             "phase_code": self._phase,
@@ -167,4 +176,5 @@ class ReplicationReproductionProcess(Process):
             "initiation_duration": self._init_dur,
             "replication_duration": self._repl_dur,
             "dntp_at_replication_start": self._dntp_at_start,
+            "polymerized_map": fork_polymerized(frac, self._n_bins),
         }
