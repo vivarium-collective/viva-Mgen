@@ -29,7 +29,8 @@ import numpy as np
 from process_bigraph import Process
 
 from .. import constants as C
-from ..chromosome_state import N_CHROMOSOME_BINS, add_lesions, repair_sites, n_lesions
+from ..chromosome_state import (N_CHROMOSOME_BINS, add_lesions, repair_sites, n_lesions,
+                                N_SUPERCOIL_REGIONS, empty_linking_map, mean_sigma, relax_regions)
 from .allocation import select_budget, demand_entry
 
 
@@ -145,11 +146,16 @@ class DNASupercoilingReproductionProcess(Process):
         "Contract — in: gyrase (activity), atp (energy cap). "
         "out: superhelical_density (snapshot σ), atp (negative Δ).\n"
         "Fidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, "
-        "setpoint −0.06, 10.5 bp/turn). σ is tracked genome-wide as one linking-number pool rather "
-        "than per-region; topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme "
-        "rates + sigma-limit gating + dwell time available via kb.karr_process_params('DNASupercoiling')). "
-        "Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): "
-        "capped each tick at its allocated ATP budget from the finite metabolism-replenished pool."
+        "setpoint −0.06, 10.5 bp/turn). σ is now tracked PER-REGION on the shared chromosome "
+        "structure (linking_number: {region -> σ} over N_SUPERCOIL_REGIONS topological regions, "
+        "the viva-native stand-in for CircularSparseMat's per-region linking numbers), and the "
+        "genome-wide superhelical_density observable is their mean; gyrase acts are distributed "
+        "across regions, each relaxed toward the setpoint. Regions are homogeneous until "
+        "replication/transcription wire per-region perturbation in (staged, FIDELITY_GAPS gap #3), "
+        "so the mean equals the former single-pool σ (no behavior change). topoI/topoIV activity "
+        "is lumped into the net gyrase relaxation (per-enzyme rates available via "
+        "kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell "
+        "resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget."
     )
 
     config_schema = {
@@ -168,31 +174,40 @@ class DNASupercoilingReproductionProcess(Process):
         "relaxed_bp_per_turn": {"_type": "float", "_default": 10.5},
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "initial_sigma": {"_type": "float", "_default": 0.0},  # start relaxed, gyrase supercoils it
+        "n_regions": {"_type": "integer", "_default": N_SUPERCOIL_REGIONS},
         "consumer_id": {"_type": "string", "_default": "supercoiling"},
+        "seed": {"_type": "integer", "_default": 0},
     }
 
     def __init__(self, config=None, core=None):
         super().__init__(config, core)
-        self._sigma = float(self.config["initial_sigma"])
         self._cid = self.config["consumer_id"]
+        self._n_regions = int(self.config["n_regions"])
+        self._rng = np.random.default_rng(int(self.config["seed"]))
 
     def inputs(self):
-        return {"gyrase": "float", "atp": "float", "alloc__atp": "map[float]"}
+        return {"gyrase": "float", "atp": "float", "alloc__atp": "map[float]",
+                "linking_number": "map[float]"}
 
     def outputs(self):
         return {"superhelical_density": "overwrite[float]", "atp": "float",
-                "demand__atp": "map[float]"}
+                "demand__atp": "map[float]", "linking_number": "overwrite[map[float]]"}
 
     def initial_state(self):
-        return {"gyrase": 100.0, "atp": 1.0e6}
+        return {"gyrase": 100.0, "atp": 1.0e6,
+                "linking_number": empty_linking_map(self._n_regions, self.config["initial_sigma"])}
 
     def update(self, state, interval):
         gyrase = max(float(state.get("gyrase", 0.0) or 0.0), 0.0)
         atp = max(float(state.get("atp", 0.0) or 0.0), 0.0)
         setpoint = self.config["setpoint"]
+        regions = dict(state.get("linking_number", {}) or {})
+        if not regions:  # unwired/first tick fallback
+            regions = empty_linking_map(self._n_regions, self.config["initial_sigma"])
+        sigma = mean_sigma(regions)  # genome-wide σ = mean of per-region linking numbers
         # total supercoils the relaxed chromosome can hold, to normalize σ ↔ supercoil count
         turns = self.config["genome_length_bp"] / self.config["relaxed_bp_per_turn"]
-        gap = setpoint - self._sigma  # how far below setpoint we still need to go (σ<0)
+        gap = setpoint - sigma  # how far below setpoint we still need to go (σ<0)
         # gyrase catalytic acts this step, capped by ATP (2 ATP/act) — MATLAB gyrase binding
         acts_wanted = abs(gap) * turns  # supercoils still needed
         want_acts = gyrase * self.config["gyrase_rate"] * interval
@@ -200,11 +215,16 @@ class DNASupercoilingReproductionProcess(Process):
         budget = select_budget(state.get("alloc__atp", {}), self._cid)
         atp_cap = min(want_atp, budget, atp)  # atp still bounds as a floor safety
         acts = min(want_acts, atp_cap / self.config["atp_per_act"], acts_wanted)
-        dsigma = np.sign(gap) * acts / turns
-        self._sigma += dsigma
+        # distribute the acts across regions (one supercoil per turns_per_region per act);
+        # the mean over regions moves by acts/turns exactly as the former single pool did.
+        turns_per_region = turns / self._n_regions if self._n_regions else turns
+        changed = relax_regions(regions, setpoint, acts, turns_per_region, self._rng)
+        updated = dict(regions)
+        updated.update(changed)
         atp_used = self.config["atp_per_act"] * acts
-        return {"superhelical_density": self._sigma, "atp": -atp_used,
-                "demand__atp": demand_entry(self._cid, want_atp)}
+        return {"superhelical_density": mean_sigma(updated), "atp": -atp_used,
+                "demand__atp": demand_entry(self._cid, want_atp),
+                "linking_number": updated}
 
 
 # ---------------------------------------------------------------------------

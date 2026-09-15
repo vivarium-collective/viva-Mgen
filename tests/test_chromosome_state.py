@@ -1,7 +1,41 @@
 import numpy as np
 from viva_mgen.chromosome_state import (
     empty_lesion_map, add_lesions, repair_sites, n_lesions, lesion_positions,
+    empty_linking_map, mean_sigma, relax_regions, N_SUPERCOIL_REGIONS,
 )
+
+
+def test_empty_linking_map():
+    lm = empty_linking_map(N_SUPERCOIL_REGIONS, -0.06)
+    assert len(lm) == N_SUPERCOIL_REGIONS
+    assert all(v == -0.06 for v in lm.values())
+    assert abs(mean_sigma(lm) - (-0.06)) < 1e-12   # float-sum rounding, not exact
+    assert mean_sigma({}) == 0.0
+
+
+def test_relax_regions_moves_mean_like_single_pool():
+    # KEY invariant: distributing `acts` supercoiling acts across R regions moves
+    # the MEAN σ by acts/turns_total — exactly as the former single-pool σ did
+    # (turns_per_region = turns_total / R). So the superhelical_density observable
+    # is unchanged by the per-region migration.
+    R, turns_total = 20, 1000.0
+    lm = empty_linking_map(R, 0.0)
+    setpoint, acts = -0.06, 50.0
+    changed = relax_regions(lm, setpoint, acts, turns_total / R, rng=np.random.default_rng(0))
+    updated = dict(lm); updated.update(changed)
+    # single-pool: dσ = sign(gap)*acts/turns_total
+    expected = -1.0 * acts / turns_total
+    assert abs(mean_sigma(updated) - expected) < 1e-9
+    # never overshoot the setpoint; stays on the correct side
+    assert all(setpoint <= v <= 0.0 for v in updated.values())
+
+
+def test_relax_regions_never_overshoots_setpoint():
+    lm = empty_linking_map(4, -0.059)
+    # far more acts than needed to reach setpoint -> clamps at setpoint, no overshoot
+    changed = relax_regions(lm, -0.06, 1e6, 10.0, rng=np.random.default_rng(1))
+    updated = dict(lm); updated.update(changed)
+    assert all(abs(v - (-0.06)) < 1e-9 for v in updated.values())
 
 def test_empty_lesion_map():
     m = empty_lesion_map(10)

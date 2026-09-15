@@ -57,3 +57,67 @@ def lesion_positions(lesion_map, genome_length_bp: float, n_bins: int) -> list[f
     """bp coordinates (bin start coordinates) of currently-damaged bins."""
     bp_per_bin = float(genome_length_bp) / int(n_bins)
     return [int(b) * bp_per_bin for b, v in (lesion_map or {}).items() if float(v) > 0.0]
+
+
+# ---------------------------------------------------------------------------
+# LINKING-NUMBER layer (phase 2): per-region superhelical density on the same
+# chromosome, the viva-native stand-in for CircularSparseMat's per-region
+# linking numbers. Karr partitions the chromosome into topological regions
+# (bounded by the replication forks and bound proteins) each with its own linking
+# number that gyrase/topoisomerases relax independently; the genome-wide σ the
+# DNASupercoiling observable reports is the mean over regions. Until replication/
+# transcription wire per-region perturbation in (staged later phases), the regions
+# are homogeneous, so mean == the former single-pool σ (no behavior change).
+# ---------------------------------------------------------------------------
+N_SUPERCOIL_REGIONS = 20  # topological regions the chromosome is partitioned into
+
+
+def empty_linking_map(n_regions: int, sigma0: float = 0.0) -> dict:
+    """Per-region superhelical density {region_index(str) -> σ(float)}, all
+    initialized to ``sigma0`` (pre-seeded so additive/overwrite deltas land)."""
+    return {str(r): float(sigma0) for r in range(int(n_regions))}
+
+
+def mean_sigma(linking_map) -> float:
+    """Genome-wide σ = mean of the per-region linking numbers (the scalar the
+    ``superhelical_density`` observable reports)."""
+    vals = [float(v) for v in (linking_map or {}).values()]
+    return sum(vals) / len(vals) if vals else 0.0
+
+
+def relax_regions(linking_map, setpoint, total_acts, turns_per_region, rng=None):
+    """Distribute ``total_acts`` gyrase supercoiling acts across the regions and
+    return the per-region σ delta (overwrite semantics: new σ per region). Each
+    act moves one region's σ by 1/turns_per_region toward ``setpoint``; acts are
+    spread over regions that are still short of the setpoint, so no region is
+    driven past it. Returns ``{region: new_sigma}`` for regions that changed."""
+    regions = {r: float(v) for r, v in (linking_map or {}).items()}
+    if not regions or total_acts <= 0:
+        return {}
+    short = [r for r, s in regions.items() if abs(setpoint - s) > 1e-12]
+    if not short:
+        return {}
+    per_turn = 1.0 / float(turns_per_region) if turns_per_region else 0.0
+    acts_left = float(total_acts)
+    order = list(short)
+    if rng is not None:
+        rng.shuffle(order)
+    out: dict = {}
+    # round-robin one act at a time keeps regions balanced; cap per region so σ
+    # never overshoots the setpoint.
+    while acts_left > 0 and order:
+        for r in list(order):
+            if acts_left <= 0:
+                break
+            s = regions[r]
+            gap = setpoint - s
+            if abs(gap) <= 1e-12:
+                order.remove(r)
+                continue
+            step = min(per_turn, abs(gap)) * (1.0 if gap > 0 else -1.0)
+            regions[r] = s + step
+            out[r] = regions[r]
+            acts_left -= 1.0
+            if abs(setpoint - regions[r]) <= 1e-12:
+                order.remove(r)
+    return out
