@@ -668,7 +668,65 @@
   }
   window._renderCompositeCardGrid = _renderCompositeCardGrid;
 
+  // --- Run-target badge -----------------------------------------------------
+  // Show whether a composite ▶ Run will execute Local or on the Cloud (GovCloud)
+  // deployment. This is resolve_run_target(workspace) — per WORKSPACE, not per card,
+  // and NOT the same as the Local/Cloud *scope* selector (which binds the source).
+  // That distinction is exactly what confuses: scope can say "remote" while a Run
+  // still executes locally. One preflight fetch per composites render fills every
+  // card's badge.
+  function _computeRunTarget(pf) {
+    // The Environment scope (dynamic run-target) wins when Cloud is active — a Run
+    // then dispatches to the selected build. Otherwise the badge reflects the
+    // workspace's resolve_run_target (the preflight).
+    try {
+      if (window.VivEnv && window.VivEnv.isCloud()) {
+        var b = window.VivEnv.runBuild();
+        if (b) return { label: 'Runs: Cloud · #' + b.simulator_id, bg: '#e6f0fb', fg: '#1e5fa4',
+          tip: 'This Run dispatches to the Cloud against build #' + b.simulator_id +
+               (b.commit ? ' (' + String(b.commit).slice(0, 7) + ')' : '') +
+               '. It runs the build’s committed code — local edits not in that build won’t apply.' };
+        return { label: 'Runs: Cloud · no build ⚠', bg: '#fdf0e3', fg: '#a15c12',
+          tip: 'Cloud is active but no build is selected — a Run is blocked. Pick or build one, or switch to Local.' };
+      }
+    } catch (e) { /* VivEnv unavailable → fall through to preflight */ }
+    var known = !!(pf && pf.target);
+    var cloud = known && pf.target === 'deployment';
+    if (!known) return { label: 'Runs: —', bg: '#eef1f4', fg: '#8a97a4', tip: 'Could not determine where a Run will execute.' };
+    if (cloud) return { label: 'Runs: Cloud', bg: '#e6f0fb', fg: '#1e5fa4',
+      tip: pf.message || 'This workspace runs on the Cloud (GovCloud) deployment — ▶ Run dispatches remotely.' };
+    return { label: 'Runs: Local', bg: '#eef1f4', fg: '#667085',
+      tip: (pf.message || 'This workspace runs locally.') +
+        ' Switch the Environment scope to Cloud (with a build selected) to dispatch a Run remotely instead.' };
+  }
+  function _applyRunTargetBadges(pf) {
+    var badges = document.querySelectorAll('.pcard-runtarget[data-role="runtarget"]');
+    if (!badges.length) return;
+    if (pf !== undefined) window._lastRunTargetPreflight = pf;  // cache for scope-change re-apply
+    var t = _computeRunTarget(pf !== undefined ? pf : window._lastRunTargetPreflight);
+    badges.forEach(function (b) { b.textContent = t.label; b.title = t.tip; b.style.background = t.bg; b.style.color = t.fg; });
+  }
+  window._applyRunTargetBadges = _applyRunTargetBadges;
+  // Re-reflect the badge live when the Environment scope / selected build changes
+  // (branch-source.js dispatches viv:envchange) — no re-fetch, re-reads VivEnv.
+  window.addEventListener('viv:envchange', function () { _applyRunTargetBadges(); });
+
+  var _runTargetScheduled = false;
+  function _scheduleRunTargetBadges() {
+    if (_runTargetScheduled) return;   // debounce: one fetch per render batch, not per card
+    _runTargetScheduled = true;
+    setTimeout(function () {
+      _runTargetScheduled = false;
+      var BP = window.__BASE_PATH__ || '';
+      fetch(BP + '/api/remote-dispatch-preflight')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; })
+        .then(_applyRunTargetBadges);
+    }, 0);
+  }
+
   function _renderCompositeCardFull(c) {
+    _scheduleRunTargetBadges();
     var params = (c.parameters && typeof c.parameters === 'object') ? c.parameters : {};
     var pKeys = Object.keys(params), nCfg = pKeys.length;
     var desc = (c.description || '').trim();
@@ -715,6 +773,9 @@
         '<div class="pcard-top">' +
           '<div class="pcard-header pcard-title" onclick="_pinCardTop(this)" ondblclick="event.stopPropagation();_maximizeCardFromHeader(this)" title="Click to pin to top · double-click to maximize">' +
             '<span class="loom-name">' + _esc(c.name) + '</span>' + _compositeBadge() + _compositeTierBadge(c) + wsPill + roPill +
+            '<span class="pcard-runtarget" data-role="runtarget" title="checking where a Run will execute…" ' +
+              'style="display:inline-block;margin-left:8px;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;' +
+              'background:#eef1f4;color:#8a97a4;vertical-align:middle">Runs: …</span>' +
             '<code class="loom-addr">' + _esc(addr) + '</code>' +
             '<button class="pcard-hdr-collapse" type="button" onclick="event.stopPropagation();_toggleCardHeader(this)" title="Collapse this bar to maximize the view">⌃</button>' +
             _shareCompositeBtn() +
