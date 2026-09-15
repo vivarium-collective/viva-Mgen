@@ -143,16 +143,22 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   (tested invariant), so it is figure-invisible/non-regressing. Regions are
   homogeneous until per-region perturbation is wired in — the value now is the
   tested LAYER on the shared structure.
-  STAGED for later phases, each figure-CRITICAL (needs re-tuning, hence deferred):
+  PHASE 3 landed: the ChromosomeDynamics↔damage FOLD — `ChromosomeDynamics` (the
+  coordinate-resolved Fig-3 process) now READS the shared `lesion_map` and a DNA
+  lesion on a polymerase's path STALLS it (damage blocks elongation / the fork,
+  recording a `*||lesion` collision). So the damage layer and the coordinate-
+  resolved dynamics operate on ONE chromosome. Done with the phase-1 zero-risk
+  argument: baseline `damaging_agent=0` → empty lesion set → every obstacle test is
+  False → Fig 3 is byte-identical (verified: t50/t90, exploration, collisions all
+  unchanged); the coupling only bites under an explicit damage stimulus (tested).
+  STAGED (still) — figure-CRITICAL, would need re-tuning of currently-green figures:
   replication polymerized-regions (drives `replicated_fraction` → Fig 4),
-  condensation/segregation per-site, per-region perturbation SOURCES (replication/
-  transcription generating local supercoils, which is what makes the linking-number
-  regions heterogeneous), and folding `ChromosomeDynamics`' occupancy in (drives
-  Fig 3 collisions). NOTE: the aggregate σ/condensed/segregated scalars are
-  emitted-only (not consumed by any process or gated by any figure), so those
-  per-region/per-site migrations are internal-representation fidelity with no figure
-  output change; the figure-critical risk is concentrated in replication and the
-  ChromosomeDynamics fold.
+  condensation/segregation per-site, and per-region perturbation SOURCES
+  (replication/transcription generating local supercoils, which is what would make
+  the linking-number regions heterogeneous). NOTE: the aggregate σ/condensed/
+  segregated scalars are emitted-only (not consumed by any process or gated by any
+  figure), so those remaining migrations are internal-representation fidelity with
+  no figure output change.
 
 - [ ] **Gap 4 — Within-submodel state de-reductions (cluster; splittable).**
   Where the mechanism is faithful but the state is lumped:
