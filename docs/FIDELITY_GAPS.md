@@ -126,7 +126,7 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   feature) but latent in the healthy cell. The absolute kcat·[enzyme] form still
   awaits the KB kcats (gap #5). All 7 studies verified; 133 tests pass.
 
-- [~] **Gap 3 — Unified chromosome representation.** IN PROGRESS.
+- [x] **Gap 3 — Unified chromosome representation.** DONE.
   Replace the split (aggregate DNA submodels + a separate coordinate-resolved
   `ChromosomeDynamics`) with ONE shared per-site chromosome structure
   (Karr's `CircularSparseMat`: bound-protein footprints, damaged sites,
@@ -165,11 +165,15 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   unchanged as an observable; a larger injection than the model's representative
   gyrase can clear would drive σ unphysically, so this is the homeostatic regime).
   So the replication↔supercoiling layers now interact on ONE chromosome.
-  REMAINING (only figure-invisible, low priority): condensation/segregation
-  per-site — the condensed/segregated scalars are emitted-only (no figure consumes
-  or gates them), so migrating them is internal representation with no output
-  change. The unified per-site chromosome is otherwise complete (lesions,
-  linking-number, polymerized regions, occupancy↔damage all on the shared bins). NOTE: the aggregate σ/condensed/
+  PHASE 6 landed: condensation/segregation PER-SITE — ChromosomeCondensation emits
+  a condensed_map (SMC loops at regular spacing, spread_mask) and ChromosomeSegregation
+  a segregated_map (oriC-out, following the fork); condensed_fraction/segregated_fraction
+  are kept as the scalars with Σ(mask)/n_bins == fraction, so Fig 4 is byte-identical.
+  Gap #3 is now COMPLETE: the shared per-site chromosome carries lesions, per-region
+  linking numbers, polymerized regions, condensed & segregated masks, and the
+  occupancy↔damage fork-stall coupling — all on the same bin index (the viva-native
+  CircularSparseMat). The remaining aggregate→per-site work was internal
+  representation (emitted-only scalars), landed with zero figure-output change. NOTE: the aggregate σ/condensed/
   segregated scalars are emitted-only (not consumed by any process or gated by any
   figure), so those remaining migrations are internal-representation fidelity with
   no figure output change.

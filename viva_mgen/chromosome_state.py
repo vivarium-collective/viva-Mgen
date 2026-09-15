@@ -83,6 +83,20 @@ def empty_polymerized_map(n_bins: int) -> dict:
     return {str(b): 0.0 for b in range(int(n_bins))}
 
 
+def spread_mask(fraction: float, n_bins: int) -> dict:
+    """Per-bin mask {bin -> 1.0} for ``round(fraction·n_bins)`` bins spread evenly
+    around the chromosome — used for condensation (SMC loops form at a regular
+    ~smcSepNt spacing, not from a single point). Σ/n_bins == fraction."""
+    nb = int(n_bins)
+    n_on = max(0, min(nb, int(round(float(fraction) * nb))))
+    if n_on <= 0:
+        return {}
+    if n_on >= nb:
+        return {str(b): 1.0 for b in range(nb)}
+    step = nb / float(n_on)
+    return {str(int(i * step) % nb): 1.0 for i in range(n_on)}
+
+
 def fork_regions(polymerized_map, n_bins: int, n_regions: int) -> set:
     """Supercoil-region indices that contain a replication-fork boundary — a bin
     that is polymerized while a circular neighbour is not. Replication overwinds
