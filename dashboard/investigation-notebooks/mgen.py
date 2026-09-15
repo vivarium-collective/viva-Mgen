@@ -423,6 +423,7 @@ _save_viz('fig2-growth', 'fig2-h-mrna-protein', _render_one('', {}, RUNS_DB, STU
 # | emergent-mass-dna-fraction | kind=derived_scalar field=emergent_dna_fraction | op range low 0.1 high 0.35 provenance {'kind': 'experiment', 'note': 'Karr 2012 cell composition: DNA 0.169 of total dry mass (0.192 renormalized over protein+DNA+RNA); emergent Σ(species×MW).'} |
 # | emergent-mass-rna-fraction | kind=derived_scalar field=emergent_rna_fraction | op range low 0.05 high 0.25 provenance {'kind': 'experiment', 'note': 'Karr 2012 cell composition: RNA 0.093 of total dry mass (0.106 renormalized over protein+DNA+RNA); emergent Σ(species×MW).'} |
 # | single-cell-mrna-variation | kind=derived_scalar field=single_cell_mrna_cv | op range low 0.001 high 1.5 provenance {'kind': 'experiment', 'note': 'Karr 2012 Fig 2 single-cell distributions.'} |
+# | emergent-cell-cycle-length | kind=derived_scalar field=emergent_doubling_time_h | op range low 4.0 high 12.0 provenance {'kind': 'model', 'note': 'Division now fires when the emergent Σ(species×MW) inventory doubles, so the cycle length emerges from synthesis rates (not the imposed growth-law μ). Reduced model predicts ~6 h — biomass synthesis outpaces the ~9 h replication cycle by ~1.5× (documented rate/cycle- coordination gap). Test the emergent prediction is in the plausible [4, 12] h.'} |
 
 # ## Study: Fig 3 — Chromosome DNA-protein interactions (viva-Mgen) (`fig3-expression`)
 #
