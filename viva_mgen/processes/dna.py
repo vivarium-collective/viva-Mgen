@@ -30,7 +30,8 @@ from process_bigraph import Process
 
 from .. import constants as C
 from ..chromosome_state import (N_CHROMOSOME_BINS, add_lesions, repair_sites, n_lesions,
-                                N_SUPERCOIL_REGIONS, empty_linking_map, mean_sigma, relax_regions)
+                                N_SUPERCOIL_REGIONS, empty_linking_map, mean_sigma, relax_regions,
+                                fork_regions)
 from .allocation import select_budget, demand_entry
 
 
@@ -150,9 +151,13 @@ class DNASupercoilingReproductionProcess(Process):
         "structure (linking_number: {region -> σ} over N_SUPERCOIL_REGIONS topological regions, "
         "the viva-native stand-in for CircularSparseMat's per-region linking numbers), and the "
         "genome-wide superhelical_density observable is their mean; gyrase acts are distributed "
-        "across regions, each relaxed toward the setpoint. Regions are homogeneous until "
-        "replication/transcription wire per-region perturbation in (staged, FIDELITY_GAPS gap #3), "
-        "so the mean equals the former single-pool σ (no behavior change). topoI/topoIV activity "
+        "across regions, each relaxed toward the setpoint. The advancing REPLICATION fork "
+        "(read from the shared polymerized_map) overwinds the DNA just ahead of it, injecting "
+        "positive supercoils into the fork-boundary regions — the source that makes the "
+        "per-region linking numbers heterogeneous (gap #3). Gyrase maintains homeostasis: at the "
+        "whole-cell timestep it relaxes the injection back within a tick, so σ stays ≈ setpoint "
+        "everywhere with a small deviation at the fork region (the mean tracks the former "
+        "single-pool σ; superhelical_density is unchanged as an observable). topoI/topoIV activity "
         "is lumped into the net gyrase relaxation (per-enzyme rates available via "
         "kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell "
         "resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget."
@@ -175,6 +180,14 @@ class DNASupercoilingReproductionProcess(Process):
         "genome_length_bp": {"_type": "float", "_default": float(C.GENOME_LENGTH_BP)},
         "initial_sigma": {"_type": "float", "_default": 0.0},  # start relaxed, gyrase supercoils it
         "n_regions": {"_type": "integer", "_default": N_SUPERCOIL_REGIONS},
+        # positive Δσ per second injected into each fork-boundary region by the
+        # advancing replication fork (overwinding ahead of the fork). Kept within
+        # the model gyrase's per-region relaxation capacity so σ stays physical:
+        # gyrase maintains homeostasis (σ ≈ setpoint everywhere) with only a small
+        # deviation at the fork region. A larger value would exceed the model's
+        # (representative) gyrase count and let σ run away unphysically — real
+        # gyrase keeps pace with the fork, so this is the homeostatic regime.
+        "replication_supercoil_delta": {"_type": "float", "_default": 0.0002},
         "consumer_id": {"_type": "string", "_default": "supercoiling"},
         "seed": {"_type": "integer", "_default": 0},
     }
@@ -187,7 +200,7 @@ class DNASupercoilingReproductionProcess(Process):
 
     def inputs(self):
         return {"gyrase": "float", "atp": "float", "alloc__atp": "map[float]",
-                "linking_number": "map[float]"}
+                "linking_number": "map[float]", "polymerized_map": "map[float]"}
 
     def outputs(self):
         return {"superhelical_density": "overwrite[float]", "atp": "float",
@@ -204,6 +217,19 @@ class DNASupercoilingReproductionProcess(Process):
         regions = dict(state.get("linking_number", {}) or {})
         if not regions:  # unwired/first tick fallback
             regions = empty_linking_map(self._n_regions, self.config["initial_sigma"])
+        # Replication overwinds the DNA just ahead of each fork: the regions at the
+        # fork boundary receive POSITIVE supercoils (σ pushed less-negative), which
+        # gyrase then relaxes back toward the setpoint — this is what makes the
+        # per-region linking numbers genuinely heterogeneous (gap #3). Empty fork
+        # set (no replication in progress) leaves every region equal, so σ mean and
+        # behaviour are unchanged.
+        fr = fork_regions(state.get("polymerized_map", {}), N_CHROMOSOME_BINS, self._n_regions)
+        if fr:
+            bump = float(self.config["replication_supercoil_delta"]) * float(interval)
+            for r in fr:
+                key = str(r)
+                if key in regions:
+                    regions[key] = regions[key] + bump  # toward 0 / positive
         sigma = mean_sigma(regions)  # genome-wide σ = mean of per-region linking numbers
         # total supercoils the relaxed chromosome can hold, to normalize σ ↔ supercoil count
         turns = self.config["genome_length_bp"] / self.config["relaxed_bp_per_turn"]

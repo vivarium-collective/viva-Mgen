@@ -83,6 +83,23 @@ def empty_polymerized_map(n_bins: int) -> dict:
     return {str(b): 0.0 for b in range(int(n_bins))}
 
 
+def fork_regions(polymerized_map, n_bins: int, n_regions: int) -> set:
+    """Supercoil-region indices that contain a replication-fork boundary — a bin
+    that is polymerized while a circular neighbour is not. Replication overwinds
+    the DNA just ahead of each fork, so these regions receive positive supercoils.
+    Empty when replication has not started or is complete (uniform mask)."""
+    nb = int(n_bins)
+    done = {int(b) % nb for b, v in (polymerized_map or {}).items() if float(v) > 0.0}
+    if not done or len(done) >= nb:
+        return set()
+    per = nb / float(n_regions)
+    regions = set()
+    for b in done:
+        if ((b + 1) % nb) not in done or ((b - 1) % nb) not in done:
+            regions.add(int(b // per) % int(n_regions))
+    return regions
+
+
 def fork_polymerized(fraction: float, n_bins: int, oriC_bin: int = 0) -> dict:
     """Per-bin polymerized mask {bin -> 1.0} for a bidirectional oriC→terC fork
     that has copied ``fraction`` of the chromosome: the ``round(fraction·n_bins)``

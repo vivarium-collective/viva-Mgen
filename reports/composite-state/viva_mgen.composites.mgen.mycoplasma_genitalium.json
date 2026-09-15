@@ -1599,6 +1599,11 @@
           "cell",
           "genome",
           "linking_number"
+        ],
+        "polymerized_map": [
+          "cell",
+          "genome",
+          "polymerized_map"
         ]
       },
       "outputs": {
@@ -1623,7 +1628,7 @@
           "linking_number"
         ]
       },
-      "doc": "DNA supercoiling homeostasis \u2014 reproduction of Karr 2012 DNASupercoiling.\nGyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\n    acts = min(gyrase\u00b71.2\u00b7\u0394t, atp/2, supercoils_needed);  \u03c3 += sign(setpoint\u2212\u03c3)\u00b7acts/genome_turns;\n    \u03c3 \u2192 setpoint;  \u0394atp = \u22122\u00b7acts.\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is now tracked PER-REGION on the shared chromosome structure (linking_number: {region -> \u03c3} over N_SUPERCOIL_REGIONS topological regions, the viva-native stand-in for CircularSparseMat's per-region linking numbers), and the genome-wide superhelical_density observable is their mean; gyrase acts are distributed across regions, each relaxed toward the setpoint. Regions are homogeneous until replication/transcription wire per-region perturbation in (staged, FIDELITY_GAPS gap #3), so the mean equals the former single-pool \u03c3 (no behavior change). topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates available via kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget.",
+      "doc": "DNA supercoiling homeostasis \u2014 reproduction of Karr 2012 DNASupercoiling.\nGyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\n    acts = min(gyrase\u00b71.2\u00b7\u0394t, atp/2, supercoils_needed);  \u03c3 += sign(setpoint\u2212\u03c3)\u00b7acts/genome_turns;\n    \u03c3 \u2192 setpoint;  \u0394atp = \u22122\u00b7acts.\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is now tracked PER-REGION on the shared chromosome structure (linking_number: {region -> \u03c3} over N_SUPERCOIL_REGIONS topological regions, the viva-native stand-in for CircularSparseMat's per-region linking numbers), and the genome-wide superhelical_density observable is their mean; gyrase acts are distributed across regions, each relaxed toward the setpoint. The advancing REPLICATION fork (read from the shared polymerized_map) overwinds the DNA just ahead of it, injecting positive supercoils into the fork-boundary regions \u2014 the source that makes the per-region linking numbers heterogeneous (gap #3). Gyrase maintains homeostasis: at the whole-cell timestep it relaxes the injection back within a tick, so \u03c3 stays \u2248 setpoint everywhere with a small deviation at the fork region (the mean tracks the former single-pool \u03c3; superhelical_density is unchanged as an observable). topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates available via kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget.",
       "config_schema": {
         "setpoint": {
           "_type": "float",
@@ -1653,6 +1658,10 @@
           "_type": "integer",
           "_default": 20
         },
+        "replication_supercoil_delta": {
+          "_type": "float",
+          "_default": 0.0002
+        },
         "consumer_id": {
           "_type": "string",
           "_default": "supercoiling"
@@ -1664,13 +1673,14 @@
       },
       "_contract": {
         "summary": "DNA supercoiling homeostasis \u2014 reproduction of Karr 2012 DNASupercoiling.",
-        "description": "Gyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).\nFidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is now tracked PER-REGION on the shared chromosome structure (linking_number: {region -> \u03c3} over N_SUPERCOIL_REGIONS topological regions, the viva-native stand-in for CircularSparseMat's per-region linking numbers), and the genome-wide superhelical_density observable is their mean; gyrase acts are distributed across regions, each relaxed toward the setpoint. Regions are homogeneous until replication/transcription wire per-region perturbation in (staged, FIDELITY_GAPS gap #3), so the mean equals the former single-pool \u03c3 (no behavior change). topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates available via kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget.",
+        "description": "Gyrase introduces negative supercoils at its real KB activity rate (1.2 acts/gyrase/s, 2 ATP \u2192 2 supercoils per act) while topoisomerases relax; the net effect drives the superhelical density \u03c3 toward the maintained negative setpoint (KB \u22120.06). Dynamics (first-order relaxation, gyrase- and ATP-limited):\nContract \u2014 in: gyrase (activity), atp (energy cap). out: superhelical_density (snapshot \u03c3), atp (negative \u0394).",
         "inputs": {},
         "outputs": {},
         "config": {},
         "math": [
           "acts = min(gyrase\u00b71.2\u00b7\u0394t, atp/2, supercoils_needed);  \u03c3 += sign(setpoint\u2212\u03c3)\u00b7acts/genome_turns;",
-          "\u03c3 \u2192 setpoint;  \u0394atp = \u22122\u00b7acts."
+          "\u03c3 \u2192 setpoint;  \u0394atp = \u22122\u00b7acts.",
+          "Fidelity: FAITHFUL constants (real KB gyraseActivityRate 1.2, gyraseATPCost 2.0, setpoint \u22120.06, 10.5 bp/turn). \u03c3 is now tracked PER-REGION on the shared chromosome structure (linking_number: {region -> \u03c3} over N_SUPERCOIL_REGIONS topological regions, the viva-native stand-in for CircularSparseMat's per-region linking numbers), and the genome-wide superhelical_density observable is their mean; gyrase acts are distributed across regions, each relaxed toward the setpoint. The advancing REPLICATION fork (read from the shared polymerized_map) overwinds the DNA just ahead of it, injecting positive supercoils into the fork-boundary regions \u2014 the source that makes the per-region linking numbers heterogeneous (gap #3). Gyrase maintains homeostasis: at the whole-cell timestep it relaxes the injection back within a tick, so \u03c3 stays \u2248 setpoint everywhere with a small deviation at the fork region (the mean tracks the former single-pool \u03c3; superhelical_density is unchanged as an observable). topoI/topoIV activity is lumped into the net gyrase relaxation (per-enzyme rates available via kb.karr_process_params('DNASupercoiling')). Consumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning): capped each tick at its allocated ATP budget."
         ],
         "symbols": {},
         "assumptions": [],
@@ -1685,7 +1695,8 @@
         "gyrase": "float",
         "atp": "float",
         "alloc__atp": "map[float]",
-        "linking_number": "map[float]"
+        "linking_number": "map[float]",
+        "polymerized_map": "map[float]"
       },
       "_outputs": {
         "superhelical_density": "overwrite[float]",
