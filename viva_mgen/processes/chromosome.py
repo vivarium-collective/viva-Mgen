@@ -108,14 +108,18 @@ class ChromosomeDynamicsReproductionProcess(Process):
         "GyrAB, Topo IV, DnaB, DnaN, DnaA, and the Fur/GntR/HrcA/LuxR transcription factors); "
         "and whenever a protein binds an already-occupied bin a binding×unbinding "
         "COLLISION is recorded by protein pair (RNA pol yields to the fork).\n"
-        "Contract — in: rna_polymerase (available RNA pols), replication_active (0/1). "
+        "Contract — in: rna_polymerase (available RNA pols), replication_active (0/1), "
+        "lesion_map (the SHARED per-site chromosome — damaged bins from DNADamage). "
         "out (snapshots): occupancy (bin→bound-time), fraction_explored, "
         "percent_rnap/dnap_explored, rna_pol_positions, dna_pol_positions, collisions "
-        "(pair→count), n_collisions, dna_binding_density.\n"
+        "(pair→count, incl. *||lesion stalls), n_collisions, dna_binding_density.\n"
         "Fidelity: FAITHFUL gene coordinates (real KB per-gene loci + real rRNA operon "
         "position) and bidirectional oriC→terC fork geometry; the spatial approximation is the "
         "genome binning (n_bins), and structural-protein counts are representative. This process "
-        "supplies the spatial layer the aspatial transcription/replication submodels lack."
+        "supplies the spatial layer the aspatial transcription/replication submodels lack, and "
+        "reads the SHARED chromosome structure (gap #3): a DNA lesion on a polymerase's path "
+        "stalls it (damage blocks elongation / the fork), so damage and the coordinate-resolved "
+        "dynamics operate on ONE chromosome. Baseline damaging_agent=0 → no lesions → unchanged."
     )
 
     config_schema = {
@@ -195,7 +199,12 @@ class ChromosomeDynamicsReproductionProcess(Process):
         self._tf_labels = ("Fur", "GntR", "HrcA", "LuxR")
 
     def inputs(self):
-        return {"rna_polymerase": "float", "replication_active": "float"}
+        # lesion_map is the SHARED per-site chromosome structure (gap #3): damaged
+        # sites (from DNADamage) that this process reads so damage and the
+        # coordinate-resolved dynamics operate on ONE chromosome. Baseline
+        # damaging_agent=0 → empty map → no obstacles → behaviour unchanged.
+        return {"rna_polymerase": "float", "replication_active": "float",
+                "lesion_map": "map[float]"}
 
     def outputs(self):
         return {
@@ -211,7 +220,7 @@ class ChromosomeDynamicsReproductionProcess(Process):
         }
 
     def initial_state(self):
-        return {"rna_polymerase": 120.0, "replication_active": 1.0}
+        return {"rna_polymerase": 120.0, "replication_active": 1.0, "lesion_map": {}}
 
     def _collide(self, mover, occupant):
         key = f"{mover}||{occupant}"
@@ -229,6 +238,13 @@ class ChromosomeDynamicsReproductionProcess(Process):
         nb = self.nb
         self.cur_bound = np.zeros(nb, bool)
         occupant = {}  # bin -> RESIDENT protein label (first binder this step)
+        # SHARED chromosome (gap #3): bins carrying a DNA lesion act as physical
+        # obstacles that stall an advancing polymerase (damage blocks elongation /
+        # the replication fork). Read from the same per-site structure DNADamage/
+        # DNARepair use. Empty at baseline (damaging_agent=0) → this set is empty
+        # and every `in lesioned` test below is False → behaviour is unchanged.
+        lesioned = {int(b) % nb for b, v in (state.get("lesion_map", {}) or {}).items()
+                    if float(v) > 0.0}
 
         def place(bin_idx, label, record=True):
             bin_idx = int(bin_idx) % nb
@@ -311,8 +327,15 @@ class ChromosomeDynamicsReproductionProcess(Process):
             # a moving RNA pol displaces every bound protein along the bins it
             # sweeps this step (the dominant collision source, Fig 3F) — except
             # the replication fork, which displaces the RNA pol instead.
+            stalled_at = None
             for b in range(pos + 1, min(newpos, end) + 1):
                 bb = b % nb
+                if lesioned and bb in lesioned:
+                    # a DNA lesion stalls the elongating polymerase (transcription
+                    # blocked at the damaged site) — a real damage↔dynamics coupling.
+                    self._collide("RNA Pol", "lesion")
+                    stalled_at = b - 1  # halts just before the lesion
+                    break
                 occ_label = occupant.get(bb)
                 if occ_label is None or occ_label == "RNA Pol":
                     continue
@@ -321,6 +344,14 @@ class ChromosomeDynamicsReproductionProcess(Process):
                     released = True
                     break
                 self._collide("RNA Pol", occ_label)      # RNA pol displaces the bound protein
+            if stalled_at is not None:
+                # blocked by a lesion: hold position just before the damaged site
+                # and remain bound (keeps elongating once the site is repaired).
+                pol[0] = stalled_at
+                place(stalled_at % nb, "RNA Pol", record=False)
+                self.explored_rnap[stalled_at % nb] = True
+                still.append(pol)
+                continue
             pol[0] = newpos
             if not released and newpos <= end:
                 place(newpos, "RNA Pol", record=False)   # collisions already counted along the path
@@ -335,7 +366,17 @@ class ChromosomeDynamicsReproductionProcess(Process):
         #    each fork clamps once it reaches terC (that arm is fully replicated).
         dna_report = []
         if state.get("replication_active", 0.0) >= 0.5:
-            self.dna_off = min(self.terC, (self.dna_off or 0) + step_bins_dna)
+            advanced = min(self.terC, (self.dna_off or 0) + step_bins_dna)
+            # a lesion on either fork's path stalls replication until it is repaired
+            # (the fork cannot pass a damaged site) — empty lesion set at baseline
+            # leaves this unchanged.
+            if lesioned:
+                for step in range((self.dna_off or 0) + 1, advanced + 1):
+                    if (step % nb) in lesioned or ((-step) % nb) in lesioned:
+                        self._collide("DNA Pol", "lesion")
+                        advanced = step - 1
+                        break
+            self.dna_off = advanced
             for sign in (+1, -1):
                 bb = int(sign * self.dna_off) % nb
                 place(bb, "DNA Pol")                     # fork collides with whatever it meets

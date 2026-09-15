@@ -103,3 +103,22 @@ def test_composite_baseline_no_lesions():
     comp.run(3.0)
     lm = comp.state["cell"]["genome"]["lesion_map"]
     assert sum(lm.values()) == 0.0   # damaging_agent defaults 0 -> no lesions (non-regression)
+
+
+def test_chromodynamics_lesions_stall_polymerases():
+    # gap #3 fold: ChromosomeDynamics reads the SHARED lesion_map; a lesion on a
+    # polymerase's path stalls it and records a *||lesion collision. With NO
+    # lesions there is no such collision (baseline non-regression); with lesions
+    # blanketing the chromosome, the elongating polymerases hit them.
+    from viva_mgen.processes.chromosome import ChromosomeDynamicsReproductionProcess
+    from viva_mgen.core import build_core
+    core = build_core()
+    p = ChromosomeDynamicsReproductionProcess(config={"seed": 0}, core=core)
+    clean = p.update({"rna_polymerase": 120.0, "replication_active": 1.0, "lesion_map": {}}, 60.0)
+    assert not any("lesion" in k for k in clean["collisions"])  # no lesion collisions at baseline
+
+    p2 = ChromosomeDynamicsReproductionProcess(config={"seed": 0}, core=core)
+    lesion_everywhere = {str(b): 1.0 for b in range(0, 580, 3)}  # dense lesions
+    out = p2.update({"rna_polymerase": 120.0, "replication_active": 1.0,
+                     "lesion_map": lesion_everywhere}, 60.0)
+    assert any("lesion" in k for k in out["collisions"])  # polymerases stalled at damaged sites
