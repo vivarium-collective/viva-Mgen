@@ -164,7 +164,7 @@ class MetabolismFbaReproductionProcess(Process):
         # regenerates are re-formed from these byproducts (GDP→GTP, PPi→2Pi), so the
         # atoms are conserved rather than dropped and the pools stay bounded.
         return {"nutrient_scale": "float", "protein_counts": "map[float]",
-                "gdp": "float", "ppi": "float", "pi": "float"}
+                "gdp": "float", "ppi": "float", "pi": "float", "amp": "float"}
 
     def outputs(self):
         return {
@@ -181,11 +181,12 @@ class MetabolismFbaReproductionProcess(Process):
             "ntp_supply": "overwrite[float]",
             "amino_acid_supply": "overwrite[float]",
             # recycle the spent-carrier byproducts (negative Δ drains the pools)
-            "gdp": "float", "ppi": "float", "pi": "float",
+            "gdp": "float", "ppi": "float", "pi": "float", "amp": "float",
         }
 
     def initial_state(self):
-        return {"nutrient_scale": 1.0, "protein_counts": {}, "gdp": 0.0, "ppi": 0.0, "pi": 0.0}
+        return {"nutrient_scale": 1.0, "protein_counts": {},
+                "gdp": 0.0, "ppi": 0.0, "pi": 0.0, "amp": 0.0}
 
     def _flux(self, sol, rxn_id, default=0.0):
         try:
@@ -251,6 +252,7 @@ class MetabolismFbaReproductionProcess(Process):
         gdp_in = max(0.0, float(state.get("gdp", 0.0) or 0.0))
         ppi_in = max(0.0, float(state.get("ppi", 0.0) or 0.0))
         pi_in = max(0.0, float(state.get("pi", 0.0) or 0.0))
+        amp_in = max(0.0, float(state.get("amp", 0.0) or 0.0))
         return {
             "growth_rate": growth,
             "growth_fraction": gf,
@@ -263,5 +265,5 @@ class MetabolismFbaReproductionProcess(Process):
             "gtp_supply": float(self.config["gtp_base_supply"]) * gf,
             "ntp_supply": float(self.config["ntp_base_supply"]) * gf,
             "amino_acid_supply": float(self.config["amino_acid_base_supply"]) * gf,
-            "gdp": -gdp_in, "ppi": -ppi_in, "pi": -pi_in,  # recycle (drain to ~0)
+            "gdp": -gdp_in, "ppi": -ppi_in, "pi": -pi_in, "amp": -amp_in,  # recycle (drain to ~0)
         }

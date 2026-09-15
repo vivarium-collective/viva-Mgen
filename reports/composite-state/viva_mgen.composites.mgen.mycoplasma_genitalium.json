@@ -784,6 +784,11 @@
           "cell",
           "metabolism",
           "pi"
+        ],
+        "amp": [
+          "cell",
+          "metabolism",
+          "amp"
         ]
       },
       "outputs": {
@@ -846,6 +851,11 @@
           "cell",
           "metabolism",
           "pi"
+        ],
+        "amp": [
+          "cell",
+          "metabolism",
+          "amp"
         ]
       },
       "doc": "Flux-balance-analysis metabolism \u2014 reproduction of the Karr 2012 Metabolism submodel.\nEach 1 s step it maximizes the iPS189 biomass objective\n    max c\u1d40v   s.t.   S\u00b7v = 0,   lb \u2264 v \u2264 ub\nover the published Suthers 2009 M. genitalium reconstruction (351 reactions, 346 metabolites, 126 genes; solved with COBRA). Gene disruptions (Fig 6) knock out the disrupted genes' reactions; a kinetic-parameter change (Fig 7) scales a reaction's flux bound as a kcat/Vmax proxy. Both use a reverting model context so the cached network is never mutated.\nContract \u2014 in: nutrient_scale (carbon-uptake multiplier a sibling can throttle). out: growth_rate (biomass flux, raw iPS189 units), growth_fraction (growth_rate \u00f7 wild-type, the calibrated unit-free growth the mass submodel integrates), atp_production (ATP-synthase ATPS4r flux), gtp_production (summed GTP-linked kinase/transport flux: NDPK1/NDPK2 nucleoside-diphosphate kinases, GK1 guanylate kinase, GTPtp transport), feasible \u2208 {0,1}; and the precursor SUPPLY rates atp/gtp/ntp/amino_acid_supply (molecules/s = base_supply\u00b7growth_fraction) that replenish the resource allocator's finite pools. GTP supply is the calibrated translation throttle (~2 GTP/peptide bond), fitted to Karr's ~70% protein dry-mass fraction; the raw FBA atp/gtp_production flux drives Fig 5 and is independent of these knobs.\nFidelity: FULL \u2014 the genuine published reconstruction the WCM's metabolism submodel was built on.\nReaction bounds can also be dynamically gated by the live proteome relative to a steady-state reference (enzyme_coupling) \u2014 the graded generalization of the discrete gene knockout above, scaling each gene-associated reaction's bound by its enzyme's current abundance over the reference instead of an all-or-nothing cut. ON by default (gap #6): the cell is seeded with a birth proteome and the reference is the emergent division proteome, so live/reference \u2248 0.5 at birth rising to \u2248 1 near division; a positive floor keeps reactions at basal activity under enzyme fluctuations. The absolute kcat\u00b7[enzyme] form awaits the KB kcats (gap #5).",
@@ -920,7 +930,8 @@
         "protein_counts": "map[float]",
         "gdp": "float",
         "ppi": "float",
-        "pi": "float"
+        "pi": "float",
+        "amp": "float"
       },
       "_outputs": {
         "growth_rate": "overwrite[float]",
@@ -934,7 +945,8 @@
         "amino_acid_supply": "overwrite[float]",
         "gdp": "float",
         "ppi": "float",
-        "pi": "float"
+        "pi": "float",
+        "amp": "float"
       }
     },
     "mass": {
@@ -1314,6 +1326,11 @@
           "cell",
           "transcriptome",
           "rna_counts"
+        ],
+        "ntp": [
+          "cell",
+          "metabolism",
+          "ntp"
         ]
       },
       "doc": "Stochastic mRNA decay \u2014 reproduction of Karr 2012 RNADecay.\nEach gene's mRNA degrades as a Poisson process at rate \u03bb = ln2 / half-life, using the\nREAL per-gene KB half-lives over the full ~522-gene set:\n    decayed_s ~ min(n_s, Poisson(n_s \u00b7 \u03bb_s \u00b7 \u0394t))\nsetting steady-state copy numbers together with transcription.\nContract \u2014 in/out: rna_counts (per-gene mRNA; a negative-\u0394 map).\nFidelity: FAITHFUL \u2014 real KB per-gene half-lives, full gene set; the NMP-salvage/water\nbyproduct accounting is delegated to the metabolite pools.",
@@ -1351,7 +1368,8 @@
         "rna_counts": "map[float]"
       },
       "_outputs": {
-        "rna_counts": "map[float]"
+        "rna_counts": "map[float]",
+        "ntp": "float"
       }
     },
     "protein_decay": {
@@ -1371,6 +1389,11 @@
           "cell",
           "proteome",
           "protein_counts"
+        ],
+        "amino_acid": [
+          "cell",
+          "metabolism",
+          "amino_acid"
         ]
       },
       "doc": "Stochastic protein decay \u2014 reproduction of Karr 2012 ProteinDecay.\nEach protein degrades as a Poisson process at rate \u03bb = ln2 / half-life over the full\n~522-gene set:\n    decayed_s ~ min(n_s, Poisson(n_s \u00b7 \u03bb_s \u00b7 \u0394t))\nbalancing translation to set steady-state protein copy numbers.\nContract \u2014 in/out: protein_counts (per-gene protein; a negative-\u0394 map).\nFidelity: full gene set with species-level Poisson decay. The Karr KB carries no\nper-monomer protein half-lives, so a single representative half-life is used (not a\nfabricated per-gene KB value); protease/peptidase + ATP/amino-acid byproduct accounting\nis delegated to the metabolite pools.",
@@ -1409,7 +1432,8 @@
         "protein_counts": "map[float]"
       },
       "_outputs": {
-        "protein_counts": "map[float]"
+        "protein_counts": "map[float]",
+        "amino_acid": "float"
       }
     },
     "replication": {
@@ -2341,6 +2365,16 @@
           "cell",
           "budget",
           "demand__amino_acid"
+        ],
+        "amp": [
+          "cell",
+          "metabolism",
+          "amp"
+        ],
+        "ppi": [
+          "cell",
+          "metabolism",
+          "ppi"
         ]
       },
       "doc": "tRNA aminoacylation \u2014 reproduction of Karr 2012 tRNAAminoacylation.\nAminoacyl-tRNA synthetases conjugate amino acids to free tRNAs at a cost of 1 ATP each\n(ATP -> AMP + PPi). The total number charged this step is\n    N = floor( min( sum(free_tRNA), amino_acid, atp, synthetase \u00b7 kcat \u00b7 \u0394t ) )\ndistributed across species by multinomial draw proportional to free-tRNA counts, then\nfree_trna -> aminoacylated_trna and atp decremented by N. Mirrors evolveState's greedy\nreactionLimits loop (min over synthetase/AA/ATP availability, weighted stochastic pick),\nas one aggregate limit + multinomial partition.\nContract \u2014 in: free_trna (count map), amino_acid, atp, synthetase (pools/counts). out: free_trna (negative \u0394), aminoacylated_trna (positive \u0394), atp (negative \u0394).\nORDERING: runs BEFORE Translation (charged tRNAs feed the ribosome same-tick).\nFidelity: mechanism-faithful (co-substrate-limited charging, ATP-coupled). The Karr KB\ntRNAAminoacylation parameter dict is empty, so the synthetase kcat is an order-of-magnitude\nvalue; one lumped synthetase pool + aggregate AA/ATP pools stand in for the 20 AA \u00d7 37\ntRNA/tmRNA reactions with per-synthetase kcats and glutamyl/methionyl transferases.\nConsumption is arbitrated by the whole-cell resource allocator (Karr hybrid partitioning):\ncapped each tick at its allocated ATP and amino_acid budgets from the finite\nmetabolism-replenished pools. Constant provenance recorded in the gap-#5 audit\n(docs/CONSTANT_PROVENANCE.md).",
@@ -2394,7 +2428,9 @@
         "atp": "float",
         "amino_acid": "float",
         "demand__atp": "map[float]",
-        "demand__amino_acid": "map[float]"
+        "demand__amino_acid": "map[float]",
+        "amp": "float",
+        "ppi": "float"
       }
     },
     "protein_processing_i": {
@@ -4150,6 +4186,7 @@
         "gdp": 0.0,
         "ppi": 0.0,
         "pi": 0.0,
+        "amp": 0.0,
         "atp_production": 0.0,
         "gtp_production": 0.0,
         "feasible": 1.0,

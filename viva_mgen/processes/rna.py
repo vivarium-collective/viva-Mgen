@@ -386,6 +386,10 @@ class TRNAAminoacylationReproductionProcess(Process):
             "amino_acid": "float",
             "demand__atp": "map[float]",
             "demand__amino_acid": "map[float]",
+            # aminoacylation hydrolyses ATP -> AMP + PPi; both byproducts are
+            # conserved in pools that metabolism recycles (whole-cell atom balance,
+            # gap #2b) rather than dropped.
+            "amp": "float", "ppi": "float",
         }
 
     def initial_state(self):
@@ -439,11 +443,13 @@ class TRNAAminoacylationReproductionProcess(Process):
                 produced[sp] = d
                 charged += d
 
+        spent = charged * self._atp_cost
         return {
             "free_trna": consumed,
             "aminoacylated_trna": produced,
-            "atp": -charged * self._atp_cost,
+            "atp": -spent,
             "amino_acid": -charged,  # 1 free amino acid consumed per aminoacylation event
             "demand__atp": demand_entry(self._cid, want_atp),
             "demand__amino_acid": demand_entry(self._cid, want_aa),
+            "amp": spent, "ppi": spent,  # ATP -> AMP + PPi per aminoacylation
         }

@@ -15,7 +15,7 @@ from __future__ import annotations
 import numpy as np
 from process_bigraph import Process
 
-from ..expression_defaults import mrna_decay_rates, protein_decay_rates
+from ..expression_defaults import mrna_decay_rates, protein_decay_rates, gene_lengths
 
 
 class _PoissonDecay(Process):
@@ -80,14 +80,28 @@ class RnaDecayReproductionProcess(_PoissonDecay):
     def _default_rates(self):
         return mrna_decay_rates()
 
+    def __init__(self, config=None, core=None):
+        super().__init__(config, core)
+        self._lengths = gene_lengths()
+
     def inputs(self):
         return {"rna_counts": "map[float]"}
 
     def outputs(self):
-        return {"rna_counts": "map[float]"}
+        # ntp: NMPs salvaged from degraded transcripts, recycled to the NTP pool
+        # (length_s NMPs per decayed mRNA) — whole-cell atom balance (gap #2b),
+        # rather than the monomers being dropped.
+        return {"rna_counts": "map[float]", "ntp": "float"}
 
     def initial_state(self):
         return {"rna_counts": {}}
+
+    def update(self, state, interval):
+        out = super().update(state, interval)
+        salvage = sum(-float(d) * float(self._lengths.get(sp, 1000.0))
+                      for sp, d in out.get(self._PORT, {}).items() if float(d) < 0)
+        out["ntp"] = salvage  # recycled NMPs -> NTP pool
+        return out
 
 
 class ProteinDecayReproductionProcess(_PoissonDecay):
@@ -110,11 +124,25 @@ class ProteinDecayReproductionProcess(_PoissonDecay):
     def _default_rates(self):
         return protein_decay_rates()
 
+    def __init__(self, config=None, core=None):
+        super().__init__(config, core)
+        self._lengths = gene_lengths()
+
     def inputs(self):
         return {"protein_counts": "map[float]"}
 
     def outputs(self):
-        return {"protein_counts": "map[float]"}
+        # amino_acid: residues salvaged from degraded proteins (length_s/3 per
+        # decayed protein), recycled to the amino-acid pool — whole-cell atom
+        # balance (gap #2b), rather than the monomers being dropped.
+        return {"protein_counts": "map[float]", "amino_acid": "float"}
+
+    def update(self, state, interval):
+        out = super().update(state, interval)
+        salvage = sum(-float(d) * (float(self._lengths.get(sp, 1000.0)) / 3.0)
+                      for sp, d in out.get(self._PORT, {}).items() if float(d) < 0)
+        out["amino_acid"] = salvage  # recycled residues -> amino-acid pool
+        return out
 
     def initial_state(self):
         return {"protein_counts": {}}

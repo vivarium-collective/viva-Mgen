@@ -39,3 +39,33 @@ def test_byproduct_pools_stay_bounded_not_accumulating():
     # after a full cycle the pools are still ~one tick's output, not ~108 ticks
     # (translation GDP per tick is O(1e5-1e6)); assert < 5x a single tick's scale.
     assert 0 <= m["gdp"] < 5e6 and 0 <= m["ppi"] < 5e6 and 0 <= m["pi"] < 5e6
+
+
+def test_rna_decay_salvages_nmps_to_ntp_pool():
+    from viva_mgen.processes.decay import RnaDecayReproductionProcess
+    from viva_mgen.expression_defaults import gene_lengths
+    p = RnaDecayReproductionProcess({"seed": 3}, core=build_core())
+    out = p.update({"rna_counts": {"tuf": 1000.0}}, 300.0)
+    decayed = -out["rna_counts"]["tuf"]
+    assert out["ntp"] == decayed * gene_lengths().get("tuf", 1000.0)  # NMPs recycled
+    assert out["ntp"] >= 0.0
+
+
+def test_protein_decay_salvages_residues_to_amino_acid_pool():
+    from viva_mgen.processes.decay import ProteinDecayReproductionProcess
+    from viva_mgen.expression_defaults import gene_lengths
+    p = ProteinDecayReproductionProcess({"seed": 4}, core=build_core())
+    out = p.update({"protein_counts": {"tuf": 1e5}}, 300.0)
+    decayed = -out["protein_counts"]["tuf"]
+    assert out["amino_acid"] == decayed * (gene_lengths().get("tuf", 1000.0) / 3.0)
+    assert out["amino_acid"] >= 0.0
+
+
+def test_aminoacylation_releases_amp_and_ppi():
+    from viva_mgen.processes.rna import TRNAAminoacylationReproductionProcess
+    p = TRNAAminoacylationReproductionProcess({"seed": 5}, core=build_core())
+    out = p.update({"free_trna": {f"t{i}": 1000.0 for i in range(5)},
+                    "amino_acid": 1e6, "atp": 1e6, "synthetase": 1e4,
+                    "alloc__atp": {}, "alloc__amino_acid": {}}, 1.0)
+    assert out["amp"] == -out["atp"] and out["ppi"] == -out["atp"]  # ATP -> AMP + PPi
+    assert out["amp"] > 0.0

@@ -93,9 +93,13 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   RECYCLES each tick (regenerating the carriers behind the base_supply) — so those
   atoms are conserved (pools stay ~one tick's output, verified bounded over a full
   cycle) instead of silently dropped, and the energy supply/throttle is unchanged
-  so figures are unaffected. Remaining byproducts (water, formate, AMP from the
-  maturation/decay/charging steps) are still delegated to the pools — figure-
-  invisible, low priority. (c) fig5's
+  so figures are unaffected. Atom balance is now EXTENDED to the monomer cycle too:
+  RNA decay salvages NMPs back to the NTP pool, protein decay salvages residues to
+  the amino-acid pool, and tRNA aminoacylation releases AMP + PPi (recycled) — so
+  degraded/spent monomers are conserved rather than dropped (all figure-safe: the
+  recycled pools are non-limiting; verified bounded; fig2/3/4/5 unchanged). Only
+  trace byproducts (water from peptide/phosphodiester hydrolysis, formate from
+  deformylation) remain delegated to the pools — genuinely negligible. (c) fig5's
   `transcription_energy_share` gate [0.04,0.12] (Karr's 7.1% of ATP+GTP): the
   transcription energy is now counted at the FULL stable-RNA synthesis rate (the
   pool-shaping STABLE_RNA_SYNTHESIS_SCALE is a degradation-sink proxy, not a real
