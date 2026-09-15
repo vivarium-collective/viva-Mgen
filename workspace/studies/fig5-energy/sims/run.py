@@ -86,7 +86,15 @@ def _run_expression_accounting(core, n_seconds=3600, dt=1.0):
     energy share far below the paper's ~7%. With decay the pool stays low/bursty,
     so each transcript is translated a realistic number of times."""
     from viva_mgen.processes.decay import RnaDecayReproductionProcess
-    txn = TranscriptionReproductionProcess({"seed": 0}, core=core)
+    from viva_mgen.expression_defaults import unscaled_synthesis_rates
+    # The energy budget reflects how fast the cell actually TRANSCRIBES. Use the
+    # full (unscaled) synthesis rates: STABLE_RNA_SYNTHESIS_SCALE lowers the
+    # emergent rRNA/tRNA pool as a proxy for their missing degradation sink, but
+    # the cell really does synthesize rRNA/tRNA at full rate (and then degrades
+    # them), so counting transcription energy at the scaled rate would undercount
+    # the real cost of stable-RNA synthesis.
+    txn = TranscriptionReproductionProcess(
+        {"seed": 0, "synthesis_rates": unscaled_synthesis_rates()}, core=core)
     tsl = TranslationReproductionProcess({"seed": 1}, core=core)
     rdec = RnaDecayReproductionProcess({"seed": 2}, core=core)
     rna_counts: dict[str, float] = {}

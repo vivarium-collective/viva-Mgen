@@ -126,6 +126,16 @@ def synthesis_rates() -> dict:
             for g, v in REPRESENTATIVE_GENES.items()}
 
 
+def unscaled_synthesis_rates() -> dict:
+    """Per-gene mRNA-synthesis rates WITHOUT STABLE_RNA_SYNTHESIS_SCALE. The scale
+    is a proxy for the missing stable-RNA degradation/packaging sink — it lowers
+    the emergent rRNA/tRNA POOL, not the true transcription RATE. For quantities
+    that depend on how fast the cell actually transcribes (e.g. the Fig 5 energy
+    budget, where the cell really does synthesize rRNA/tRNA at full rate and then
+    degrades them), use these full rates rather than the pool-calibrated ones."""
+    return {g: v[0] for g, v in REPRESENTATIVE_GENES.items()}
+
+
 def mrna_decay_rates() -> dict:
     return {g: math.log(2.0) / v[1] for g, v in REPRESENTATIVE_GENES.items()}
 
