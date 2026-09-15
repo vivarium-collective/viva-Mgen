@@ -142,8 +142,12 @@ expected_behavior:
   en: Transcription consumes ~7% of ATP+GTP.
   observable: transcription_energy_share
   condition: 0.04 <= transcription_energy_share <= 0.12
-  rationale: 'Fig 5D: Transcription = 7.1% of ATP+GTP usage. (Reduced-panel transcription accounting currently
-    under-counts NTP relative to translation.)'
+  rationale: 'Fig 5D: Transcription = 7.1% of ATP+GTP usage. Transcription energy is now counted at the FULL
+    stable-RNA synthesis rate (the STABLE_RNA_SYNTHESIS_SCALE that shapes the emergent RNA pool is a
+    degradation-sink proxy, not a real transcription-rate cut), which raises the share from ~2% to ~2.5%.
+    The residual gap to 7.1% is the reduced model translating each transcript more times than Karr
+    (higher translation-per-mRNA ratio) — a known reduced-panel limitation the study documents, not a
+    defect; closing it would perturb the fig2 protein calibration.'
   measure:
     kind: derived_scalar
     field: transcription_energy_share

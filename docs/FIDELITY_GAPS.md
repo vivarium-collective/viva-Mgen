@@ -74,12 +74,20 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   across seeds — essentially Karr's 0.703:0.192:0.105 (all three fig2 bands
   green; was 0.002:0.42:0.57). fig3 (t50/t90, exploration, collisions) and fig5
   (energy shares) stay green; the parca-fitting closure stays feasible.
-  DEFERRED follow-ups (own tasks): (a) mean protein length is now ~198 aa vs the
-  cell's ~330 aa — a milder residual short-gene translation bias (rate/length
-  distribution) remains; (b) whole-cell mass/atom balance (conserve water, Pi,
-  PPi, GDP, formate) and division-driving from emergent mass; (c) fig5's
-  `transcription_energy_share` gate [0.04,0.12] still fails at ~0.02 (pre-existing,
-  now closer) — needs the transcription-energy calibration.
+  DEFERRED / investigated follow-ups: (a) protein length — NOT a defect on
+  inspection: the by-gene mean of translated proteins is ~369 aa (matches real
+  M. genitalium ~330–360; all 482 protein-coding genes translate); the ~198 aa
+  copy-weighted mean is just abundant proteins skewing it, as expected. (b)
+  whole-cell mass/atom balance (conserve water, Pi, PPi, GDP, formate) and
+  division-driving from emergent mass — genuinely open, own task. (c) fig5's
+  `transcription_energy_share` gate [0.04,0.12] (Karr's 7.1% of ATP+GTP): the
+  transcription energy is now counted at the FULL stable-RNA synthesis rate (the
+  pool-shaping STABLE_RNA_SYNTHESIS_SCALE is a degradation-sink proxy, not a real
+  transcription-rate cut), raising it ~2%→2.5%. The residual gap is the reduced
+  model translating each transcript ~3× more than Karr (higher translation-per-
+  mRNA); the study itself documents it won't hit Karr's exact split, and closing
+  it would perturb the fig2 protein calibration — a genuine reduced-model limit,
+  not a defect.
 
 - [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
   FBA runs over the real iPS189 network but with static bounds; the original
