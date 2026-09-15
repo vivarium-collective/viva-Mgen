@@ -85,8 +85,10 @@ class MetabolismFbaReproductionProcess(Process):
         "a steady-state reference (enzyme_coupling) — the graded generalization of the "
         "discrete gene knockout above, scaling each gene-associated reaction's bound by "
         "its enzyme's current abundance over the reference instead of an all-or-nothing "
-        "cut. Off by default pending birth-proteome seeding; the absolute kcat·[enzyme] "
-        "form awaits the KB kcats (gap #5)."
+        "cut. ON by default (gap #6): the cell is seeded with a birth proteome and the "
+        "reference is the emergent division proteome, so live/reference ≈ 0.5 at birth "
+        "rising to ≈ 1 near division; a positive floor keeps reactions at basal activity "
+        "under enzyme fluctuations. The absolute kcat·[enzyme] form awaits the KB kcats (gap #5)."
     )
 
     config_schema = {
@@ -109,15 +111,24 @@ class MetabolismFbaReproductionProcess(Process):
         # ~0.70:0.19:0.11 (fig2 report-card bands); GTP demand from translation
         # exceeds supply, so this rate sets the sustainable protein synthesis.
         # Fitted against translation's length-proportional GTP cost (2 GTP/peptide
-        # bond). See docs/FIDELITY_GAPS.md gap #2.
-        "gtp_base_supply": {"_type": "float", "_default": 2500.0},
+        # bond). Re-fitted for the birth-proteome cell cycle (gap #6): the cell is
+        # seeded with ~half its division proteome, so it need only DOUBLE its
+        # protein over a cycle, not build it from zero — hence a lower supply than
+        # the accumulate-from-zero calibration. See docs/FIDELITY_GAPS.md gap #2/#6.
+        "gtp_base_supply": {"_type": "float", "_default": 1900.0},
         "ntp_base_supply": {"_type": "float", "_default": 1.0e6},
         "amino_acid_base_supply": {"_type": "float", "_default": 1.0e6},
         # optional enzyme-gating coupling: scale each reaction's flux bound by
         # the live proteome relative to a steady-state reference (default off)
         "enzyme_coupling": {"_type": "boolean", "_default": False},
         "reference_protein_counts": {"_type": "map[float]", "_default": {}},
-        "enzyme_coupling_floor": {"_type": "float", "_default": 0.0},
+        # graded floor: a gene-associated reaction's bound is scaled by
+        # clip(live/reference, floor, cap); a positive floor keeps a reaction at
+        # basal activity when its enzyme fluctuates low, so stochastic dips can't
+        # kill an essential reaction and collapse growth (gap #6). Hard gene
+        # KNOCKOUTS still use the separate disrupted_genes path, so essentiality
+        # (Fig 6) is unaffected.
+        "enzyme_coupling_floor": {"_type": "float", "_default": 0.1},
         "enzyme_coupling_cap": {"_type": "float", "_default": 1.0},
     }
 

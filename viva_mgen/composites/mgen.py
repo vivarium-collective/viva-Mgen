@@ -23,7 +23,7 @@ from __future__ import annotations
 from process_bigraph.composite_generator import composite_generator
 
 from ..chromosome_state import N_CHROMOSOME_BINS, empty_lesion_map
-from ..expression_defaults import DEFAULT_GENES, reference_protein_counts
+from ..expression_defaults import DEFAULT_GENES, coupling_reference, birth_proteome
 from ..processes import all_process_classes
 
 # class name -> composite node name
@@ -228,7 +228,7 @@ def _store_key(cls_name, port):
 
 def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
                reaction_bound_scale=None, initial_dnaA=0.0, initial_dntp=0.0,
-               seed=0, interval=1.0, enzyme_coupling: bool = False):
+               seed=0, interval=1.0, enzyme_coupling: bool = True):
     """Return the integrated 28-submodel M. genitalium composite document."""
     if core is None:
         # port introspection below instantiates each process, which needs a core;
@@ -240,7 +240,7 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         "metabolism": {"disrupted_genes": list(disrupted_genes or []),
                        "reaction_bound_scale": dict(reaction_bound_scale or {}),
                        "enzyme_coupling": enzyme_coupling,
-                       "reference_protein_counts": reference_protein_counts()},
+                       "reference_protein_counts": coupling_reference()},
         "transcription": {"seed": seed},
         "translation": {"seed": seed + 1},
         "replication": {"initial_dnaA": initial_dnaA, "initial_dntp": initial_dntp, "seed": seed},
@@ -285,6 +285,12 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
 
     # honor the param override (nutrient_scale lives under cell/metabolism)
     cell.setdefault("metabolism", {})["nutrient_scale"] = nutrient_scale
+    # Seed the BIRTH proteome (gap #6): a daughter cell is born with ~half its
+    # division proteome, not empty. This makes the cell cycle birth→double and,
+    # crucially, gives enzyme_coupling live enzymes at t=0 so metabolism isn't
+    # starved on the first tick. Only seed keys that exist in the proteome store.
+    if "protein_counts" in cell.get("proteome", {}):
+        cell["proteome"]["protein_counts"] = dict(birth_proteome())
     doc[_ROOT] = cell
     emit = {k: v for k, v in _EMIT.items() if k in used}
     doc["emitter"] = {"_type": "step", "address": "local:RAMEmitter",
@@ -304,8 +310,8 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
         "initial_dntp": {"type": "float", "default": 0.0,
                          "description": "dNTP molecules at birth (Fig 4)"},
         "seed": {"type": "integer", "default": 0, "description": "Stochastic seed"},
-        "enzyme_coupling": {"type": "boolean", "default": False,
-                           "description": "Gate metabolism's reaction bounds by the live proteome vs a steady-state reference (off by default)"},
+        "enzyme_coupling": {"type": "boolean", "default": True,
+                           "description": "Gate metabolism's reaction bounds by the live proteome vs the emergent-division-proteome reference (on by default; gap #6)"},
     },
     emitters=[{"address": "local:ParquetEmitter",
                "paths": ["cell/physiology/mass", "cell/physiology/growth_fraction",
@@ -314,7 +320,7 @@ def build_mgen(core=None, *, nutrient_scale=1.0, disrupted_genes=None,
                          "cell/genome/replicated_fraction", "cell/metabolism/dntp_pool"]}],
 )
 def mycoplasma_genitalium(core=None, *, nutrient_scale=1.0, initial_dnaA=0.0,
-                          initial_dntp=0.0, seed=0, enzyme_coupling: bool = False):
+                          initial_dntp=0.0, seed=0, enzyme_coupling: bool = True):
     return build_mgen(core, nutrient_scale=nutrient_scale, initial_dnaA=initial_dnaA,
                       initial_dntp=initial_dntp, seed=seed, enzyme_coupling=enzyme_coupling)
 

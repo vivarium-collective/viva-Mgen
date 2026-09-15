@@ -35,7 +35,13 @@ def test_coupling_on_reference_is_wildtype():
 
 def test_coupling_on_enzyme_knockdown_lowers_growth():
     ref = reference_protein_counts()
-    p = _metab({"enzyme_coupling": True, "reference_protein_counts": ref})
+    # A tiny non-zero floor (0.001) so the graded response can run down through the
+    # binding range (~<4% of reference). NOTE: 0.0 cannot be used — bigraph_schema
+    # treats a Float 0.0 as "empty", so Core.fill replaces it with the config
+    # default (now 0.1, the production graceful-throttle floor), which would clamp
+    # this whole sub-4% range flat and hide the gradient this test checks.
+    p = _metab({"enzyme_coupling": True, "reference_protein_counts": ref,
+                "enzyme_coupling_floor": 0.001})
     full = p.update({"nutrient_scale": 1.0, "protein_counts": dict(ref)}, 1.0)
     # iPS189 has enough flux slack that a uniform 50%/25% knockdown of every
     # gated reaction's bound doesn't bind the FBA optimum at all (it's flat
@@ -74,10 +80,14 @@ def test_composite_runs_with_enzyme_coupling():
     assert comp.state["cell"]["metabolism"]["feasible"] in (0.0, 1.0)
 
 
-def test_composite_default_has_coupling_off():
+def test_composite_default_has_coupling_on_and_birth_proteome():
     from viva_mgen.composites.mgen import build_mgen
     from viva_mgen.core import build_core
     doc = build_mgen(core=build_core())
-    # metabolism node config must default enzyme_coupling False (non-regression)
+    # gap #6: the whole-cell composite turns enzyme_coupling ON by default and
+    # seeds a birth proteome (so coupling has live enzymes at t=0).
     met = doc["metabolism"]["config"]
-    assert met.get("enzyme_coupling", False) is False
+    assert met.get("enzyme_coupling") is True
+    assert sum(met.get("reference_protein_counts", {}).values()) > 0
+    seeded = doc["cell"]["proteome"]["protein_counts"]
+    assert sum(seeded.values()) > 0   # born with a proteome, not empty

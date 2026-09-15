@@ -89,13 +89,32 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   it would perturb the fig2 protein calibration — a genuine reduced-model limit,
   not a defect.
 
-- [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
-  FBA runs over the real iPS189 network but with static bounds; the original
-  updates each reaction's flux bound from **current enzyme copy numbers** every
-  tick. Wire metabolic-enzyme protein counts → per-reaction `v_max` bounds each
-  step (kcat × [enzyme]), so proteome composition actually gates metabolism.
-  Needs the gene→reaction→enzyme map (already partly in `genes.csv`
-  associated_reactions). Independent of Gap 2. Size: M.
+- [x] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** DONE (default-on).
+  FBA runs over the real iPS189 network; each gene-associated reaction's flux
+  bound is now scaled every step by the live enzyme abundance over a reference
+  (`clip(live/reference, floor, cap)`), so proteome composition gates metabolism.
+  The two blockers are resolved:
+  - *Birth proteome.* The cell is seeded with `expression_defaults.birth_proteome()`
+    (~half the emergent division proteome, emergent-distributed), so enzyme_coupling
+    has live enzymes at t=0 (was: empty proteome → every reaction clipped to the
+    floor → growth collapsed on tick 1) and the cell cycle is birth→double rather
+    than accumulate-from-zero. `gtp_base_supply` re-fitted 2500→1900 for the halved
+    per-cycle protein synthesis; fig2 fractions stay on Karr (~0.68:0.20:0.12).
+  - *Consistent reference.* enzyme_coupling's reference is the emergent DIVISION
+    proteome (`coupling_reference()` = 2×birth ≈ 135k), NOT the analytic
+    `reference_protein_counts` (~3.0M, 22× too high, which made live/ref ~0.05 and
+    starved every reaction). live/ref runs ~0.5 at birth → ~1 near division.
+  - *Graceful floor.* `enzyme_coupling_floor` default 0.0→0.1 so a stochastic dip
+    in one essential enzyme can't zero its reaction and collapse growth. Hard gene
+    KNOCKOUTS still use the separate `disrupted_genes` path, so Fig 6 essentiality
+    is unchanged (verified identical to pre-coupling).
+  HONEST NOTE: at the healthy calibrated proteome the coupling is ACTIVE but
+  NON-BINDING — iPS189 has flux slack (growth is flat down to ~4% of reference,
+  per the Fig 7 kcat sweep), and the normal cycle only ranges live/ref 0.5→1.0, so
+  growth is unaffected at health; the coupling bites only under severe enzyme
+  depletion. So the mechanism is present and correct (the defining whole-cell
+  feature) but latent in the healthy cell. The absolute kcat·[enzyme] form still
+  awaits the KB kcats (gap #5). All 7 studies verified; 133 tests pass.
 
 - [~] **Gap 3 — Unified chromosome representation.** IN PROGRESS.
   Replace the split (aggregate DNA submodels + a separate coordinate-resolved
