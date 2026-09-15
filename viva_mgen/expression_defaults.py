@@ -99,32 +99,22 @@ DEFAULT_GENES = list(REPRESENTATIVE_GENES.keys())
 STABLE_RNA_SYNTHESIS_SCALE = 0.37
 
 
-# A gene PRODUCT that is itself a stable RNA — the tRNA charged for translation,
-# the rRNA of the ribosome, or the SRP 4.5S RNA. Matched on the product name so
-# that PROTEINS acting on those RNAs (…-tRNA synthetase, 23S rRNA methyltransferase,
-# peptidyl-tRNA hydrolase) are NOT caught — their mRNAs stay mRNAs. (parca.rna_type
-# substring-matches "trna"/"rrna" and so misclassifies those proteins; do not use
-# it here.)
-import re as _re
-_TRNA_RE = _re.compile(r"\btrna-[a-z]", _re.I)                # "tRNA-ALA (GCA, ...)"
-_RRNA_RE = _re.compile(r"ribosomal rrna", _re.I)             # "16S ribosomal rRNA"
-_SRNA_RE = _re.compile(r"scrna|\b4\.5s rna\b", _re.I)  # the 4.5S SRP RNA, not the SRP protein (ffh)
-
-
 def _stable_rna_keys() -> frozenset:
-    """Panel keys whose gene product is a stable RNA (rRNA/tRNA/SRP RNA). Cached;
-    empty if the gene table is unreadable."""
+    """Panel keys whose gene product is a non-coding (stable) RNA — rRNA, tRNA, or
+    the SRP RNA — classified by :func:`viva_mgen.parca.rna_type` (which matches the
+    RNA products themselves, not the proteins that process them). Cached; empty if
+    the gene table is unreadable."""
     cached = getattr(_stable_rna_keys, "_cache", None)
     if cached is not None:
         return cached
     keys = set()
     try:
         from .kb import load_genes
+        from .parca import rna_type
         for g in load_genes():
-            name = g.get("name") or ""
-            if _TRNA_RE.search(name) or _RRNA_RE.search(name) or _SRNA_RE.search(name):
+            if rna_type(g) != "mRNA":
                 keys.add((g.get("symbol") or "").strip() or g["gene_id"])
-    except Exception:  # noqa: BLE001 — no gene table: scale nothing (mRNA-only panel)
+    except Exception:  # noqa: BLE001 — no gene table: classify nothing (mRNA-only panel)
         keys = set()
     _stable_rna_keys._cache = frozenset(keys)
     return _stable_rna_keys._cache
@@ -141,7 +131,14 @@ def mrna_decay_rates() -> dict:
 
 
 def translation_rates() -> dict:
-    return {g: v[2] for g, v in REPRESENTATIVE_GENES.items()}
+    # Only mRNA (protein-coding) genes are translated. The panel carries a nominal
+    # translation rate for every gene, but ribosomes translate mRNA — not the tRNA/
+    # rRNA/SRP-RNA gene products — so non-coding genes are excluded here (otherwise
+    # e.g. a 76-nt tRNA gene would be "translated" into a spurious 25-aa protein,
+    # which dominated the emergent protein count). Their transcripts still count as
+    # RNA via rna_counts; they simply have no protein product.
+    stable = _stable_rna_keys()
+    return {g: v[2] for g, v in REPRESENTATIVE_GENES.items() if g not in stable}
 
 
 def protein_decay_rates() -> dict:

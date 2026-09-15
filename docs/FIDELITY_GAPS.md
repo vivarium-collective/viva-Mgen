@@ -55,26 +55,31 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
      .STABLE_RNA_SYNTHESIS_SCALE (0.37) rescales rRNA/tRNA/SRP-RNA synthesis
      (a proxy for the missing sink) — mRNA synthesis is untouched, so gene-
      expression timing (fig3 t50/t90) and the translation-feeding mRNA pool are
-     unchanged. The stable-RNA genes are identified by a corrected product-name
-     classifier (the ParCa's substring `rna_type` misclassifies …-tRNA synthetase
-     / rRNA methyltransferase PROTEINS as stable RNA — not used here).
+     unchanged. Stable-RNA genes are identified by `parca.rna_type`.
+  5. *RNA-type classifier + protein-coding translation.* `parca.rna_type` had
+     substring-matched "trna"/"rrna", so tRNA-synthetase / rRNA-methyltransferase
+     PROTEINS were misclassified as non-coding RNA — which (a) gave those protein
+     mRNAs stable-RNA half-lives in the fitted panel and (b) let the tRNA/rRNA
+     GENES themselves be "translated" into spurious proteins: **92% of the
+     emergent protein COUNT (~286k of ~311k copies) was non-coding genes**, led by
+     76-nt tRNAs turned into 25-aa "proteins". `rna_type` now matches the RNA
+     PRODUCTS (tRNA-<AA> / "ribosomal rRNA" / SRP 4.5S RNA), never the proteins
+     that process them, and `translation_rates()` translates only mRNA genes. The
+     GTP freed from the fake proteins flows to real ones, so the dry-mass fractions
+     are unchanged (still ~0.70:0.18:0.11) while the protein population becomes
+     realistic: **count ~311k → ~135k, mean length ~80 → ~198 aa**, zero non-coding
+     "proteins".
   With gtp_base_supply (2500) and STABLE_RNA_SYNTHESIS_SCALE (0.37) fitted
-  jointly, the emergent protein:DNA:RNA fractions land on ~0.705:0.185:0.110
+  jointly, the emergent protein:DNA:RNA fractions land on ~0.703:0.185:0.113
   across seeds — essentially Karr's 0.703:0.192:0.105 (all three fig2 bands
-  green; was 0.002:0.42:0.57). fig3 (t50/t90, exploration, collisions) stays
-  green.
-  DEFERRED follow-ups (own tasks): (a) protein *count* is high (~460k). The
-  length-proportional GTP cost did NOT fix this — count = target mass ÷ mean
-  translated length, and translation is biased toward short genes (mean ~80 aa
-  vs the ~346 aa gene mean), so the real fix is the translation rate/length
-  distribution (a ParCa/rate-fitting issue touching fig3). (b) whole-cell
-  mass/atom balance (conserve water, Pi, PPi, GDP, formate) and division-driving
-  from emergent mass; (c) fig5's `transcription_energy_share` gate [0.04,0.12]
-  still fails at ~0.009 (pre-existing) — needs the transcription-energy
-  calibration; (d) `parca.rna_type` substring-matches "trna"/"rrna" and so
-  misclassifies tRNA-synthetase / rRNA-modification proteins as stable RNA,
-  giving those protein mRNAs stable-RNA half-lives in the ParCa panel — fix the
-  ParCa classifier (touches the fitted panel, so its own task).
+  green; was 0.002:0.42:0.57). fig3 (t50/t90, exploration, collisions) and fig5
+  (energy shares) stay green; the parca-fitting closure stays feasible.
+  DEFERRED follow-ups (own tasks): (a) mean protein length is now ~198 aa vs the
+  cell's ~330 aa — a milder residual short-gene translation bias (rate/length
+  distribution) remains; (b) whole-cell mass/atom balance (conserve water, Pi,
+  PPi, GDP, formate) and division-driving from emergent mass; (c) fig5's
+  `transcription_energy_share` gate [0.04,0.12] still fails at ~0.02 (pre-existing,
+  now closer) — needs the transcription-energy calibration.
 
 - [~] **Gap 6 — Dynamic metabolism ↔ proteome coupling.** IN PROGRESS (opt-in coupling; default-on gated on birth-proteome seeding).
   FBA runs over the real iPS189 network but with static bounds; the original
