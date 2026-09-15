@@ -96,13 +96,31 @@ def fit_analytically(counts0, mw, held_idx=(), supercoil=None):
     return np.maximum(x, 0.0)
 
 
+import re as _re
+
+# Match a gene whose PRODUCT is itself a non-coding RNA — the tRNA charged for
+# translation ("tRNA-ALA (GCA, ...)"), the ribosome's rRNA ("16S ribosomal rRNA"),
+# or the SRP 4.5S RNA. Anchored so that PROTEINS that merely act on those RNAs —
+# "seryl-tRNA synthetase", "23S rRNA methyltransferase", "peptidyl-tRNA hydrolase",
+# "signal recognition particle protein" — are NOT matched: their products are
+# proteins translated from mRNA.
+_TRNA_NAME = _re.compile(r"\btrna-[a-z]", _re.I)      # the tRNA itself, not a tRNA enzyme
+_RRNA_NAME = _re.compile(r"ribosomal rrna", _re.I)    # "16S/23S/5S ribosomal rRNA"
+_SRNA_NAME = _re.compile(r"scrna|\b4\.5s rna\b", _re.I)  # SRP 4.5S RNA (not the SRP protein)
+
+
 def rna_type(gene: dict) -> str:
-    """Classify a gene's RNA product from its name/id (rRNA / tRNA / mRNA)."""
-    text = f"{gene.get('name', '')} {gene.get('gene_id', '')}".lower()
-    if "ribosomal rna" in text or "rrna" in text or "rrn" in text.replace("_", ""):
+    """Classify a gene's product as ``rRNA`` / ``tRNA`` / ``sRNA`` / ``mRNA`` from
+    its product name. Matches the RNA products themselves, NOT the proteins that
+    process them (tRNA synthetases, rRNA methyltransferases), so a protein-coding
+    gene is never mistaken for a non-coding-RNA gene."""
+    name = gene.get("name", "") or ""
+    if _RRNA_NAME.search(name):
         return "rRNA"
-    if "trna" in text:
+    if _TRNA_NAME.search(name):
         return "tRNA"
+    if _SRNA_NAME.search(name):
+        return "sRNA"
     return "mRNA"
 
 
