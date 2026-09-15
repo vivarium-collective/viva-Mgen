@@ -9,7 +9,7 @@ def test_empty_linking_map():
     lm = empty_linking_map(N_SUPERCOIL_REGIONS, -0.06)
     assert len(lm) == N_SUPERCOIL_REGIONS
     assert all(v == -0.06 for v in lm.values())
-    assert mean_sigma(lm) == -0.06
+    assert abs(mean_sigma(lm) - (-0.06)) < 1e-12   # float-sum rounding, not exact
     assert mean_sigma({}) == 0.0
 
 
