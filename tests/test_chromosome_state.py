@@ -122,3 +122,16 @@ def test_chromodynamics_lesions_stall_polymerases():
     out = p2.update({"rna_polymerase": 120.0, "replication_active": 1.0,
                      "lesion_map": lesion_everywhere}, 60.0)
     assert any("lesion" in k for k in out["collisions"])  # polymerases stalled at damaged sites
+
+
+def test_fork_polymerized_matches_fraction():
+    from viva_mgen.chromosome_state import fork_polymerized, empty_polymerized_map
+    assert empty_polymerized_map(580) == {str(b): 0.0 for b in range(580)}
+    assert fork_polymerized(0.0, 580) == {}
+    for frac in (0.1, 0.5, 0.83, 1.0):
+        m = fork_polymerized(frac, 580)
+        # Σ mask / n_bins reproduces the replicated_fraction (to bin quantization)
+        assert abs(sum(m.values()) / 580 - frac) <= 1.0 / 580 + 1e-9
+    # bidirectional from oriC(0): both low and high (wrapped) bins fill first
+    m = fork_polymerized(0.2, 580)
+    assert "0" in m and any(int(b) > 500 for b in m)  # wraps to near-terC on both arms

@@ -72,6 +72,30 @@ def lesion_positions(lesion_map, genome_length_bp: float, n_bins: int) -> list[f
 N_SUPERCOIL_REGIONS = 20  # topological regions the chromosome is partitioned into
 
 
+# ---------------------------------------------------------------------------
+# POLYMERIZED-REGIONS layer (phase 4): which bins the replication fork has copied,
+# the CircularSparseMat "polymerized" mask. Two forks diverge bidirectionally from
+# oriC to terC; a bin is polymerized once a fork has passed it. Σ(mask)/n_bins is
+# the replicated_fraction the Replication submodel already reports, so the mask is
+# a per-site VIEW of the same scalar (no behaviour change to replicated_fraction).
+# ---------------------------------------------------------------------------
+def empty_polymerized_map(n_bins: int) -> dict:
+    return {str(b): 0.0 for b in range(int(n_bins))}
+
+
+def fork_polymerized(fraction: float, n_bins: int, oriC_bin: int = 0) -> dict:
+    """Per-bin polymerized mask {bin -> 1.0} for a bidirectional oriC→terC fork
+    that has copied ``fraction`` of the chromosome: the ``round(fraction·n_bins)``
+    bins closest to oriC (by circular distance) are marked replicated. Σ of the
+    mask is ``round(fraction·n_bins)`` so mask-fraction ≈ ``fraction``."""
+    nb = int(n_bins)
+    n_done = max(0, min(nb, int(round(float(fraction) * nb))))
+    if n_done <= 0:
+        return {}
+    order = sorted(range(nb), key=lambda b: min((b - oriC_bin) % nb, (oriC_bin - b) % nb))
+    return {str(b): 1.0 for b in order[:n_done]}
+
+
 def empty_linking_map(n_regions: int, sigma0: float = 0.0) -> dict:
     """Per-region superhelical density {region_index(str) -> σ(float)}, all
     initialized to ``sigma0`` (pre-seeded so additive/overwrite deltas land)."""
