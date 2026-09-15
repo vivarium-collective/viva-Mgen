@@ -124,10 +124,25 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   condensation, segregation, and repair all read/write. Largest structural
   change. Depends on nothing but touches many submodels. Size: XL.
   PHASE 1 landed: shared per-site chromosome structure (`chromosome_state.py`)
-  with DNADamage/DNARepair migrated to per-site lesions on a shared
-  `lesion_map`. STAGED for later phases: replication polymerized-regions,
-  DNASupercoiling per-region linking number, condensation/segregation
-  per-site, and folding ChromosomeDynamics' occupancy in.
+  with DNADamage/DNARepair migrated to per-site lesions on a shared `lesion_map`.
+  PHASE 2 landed: the per-region LINKING-NUMBER layer — DNASupercoiling now tracks
+  σ per topological region (`linking_number: {region -> σ}` over
+  N_SUPERCOIL_REGIONS=20, the CircularSparseMat per-region linking numbers) and the
+  genome-wide `superhelical_density` observable is the region mean; gyrase acts are
+  distributed across regions. The mean moves exactly as the former single pool
+  (tested invariant), so it is figure-invisible/non-regressing. Regions are
+  homogeneous until per-region perturbation is wired in — the value now is the
+  tested LAYER on the shared structure.
+  STAGED for later phases, each figure-CRITICAL (needs re-tuning, hence deferred):
+  replication polymerized-regions (drives `replicated_fraction` → Fig 4),
+  condensation/segregation per-site, per-region perturbation SOURCES (replication/
+  transcription generating local supercoils, which is what makes the linking-number
+  regions heterogeneous), and folding `ChromosomeDynamics`' occupancy in (drives
+  Fig 3 collisions). NOTE: the aggregate σ/condensed/segregated scalars are
+  emitted-only (not consumed by any process or gated by any figure), so those
+  per-region/per-site migrations are internal-representation fidelity with no figure
+  output change; the figure-critical risk is concentrated in replication and the
+  ChromosomeDynamics fold.
 
 - [ ] **Gap 4 — Within-submodel state de-reductions (cluster; splittable).**
   Where the mechanism is faithful but the state is lumped:
