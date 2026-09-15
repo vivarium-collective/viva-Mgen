@@ -92,7 +92,11 @@ class TranslationReproductionProcess(Process):
         return {"rna_counts": "map[float]", "gtp": "float", "alloc__gtp": "map[float]"}
 
     def outputs(self):
-        return {"protein_counts": "map[float]", "gtp": "float", "demand__gtp": "map[float]"}
+        # gdp/pi: each GTP hydrolyzed during elongation yields one GDP + one Pi —
+        # the translation byproducts, conserved in pools (metabolism recycles them)
+        # rather than silently dropped (whole-cell atom balance, gap #2b).
+        return {"protein_counts": "map[float]", "gtp": "float", "demand__gtp": "map[float]",
+                "gdp": "float", "pi": "float"}
 
     def initial_state(self):
         return {"rna_counts": {}, "gtp": 1e7}
@@ -136,4 +140,5 @@ class TranslationReproductionProcess(Process):
             new_counts[gene] = float(m)
             gtp_used += m * costs[gene]
         return {"protein_counts": new_counts, "gtp": -gtp_used,
-                "demand__gtp": demand_entry(self._cid, want_gtp)}
+                "demand__gtp": demand_entry(self._cid, want_gtp),
+                "gdp": gtp_used, "pi": gtp_used}  # GTP -> GDP + Pi per hydrolysis

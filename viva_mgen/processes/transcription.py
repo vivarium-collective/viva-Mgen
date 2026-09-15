@@ -75,7 +75,11 @@ class TranscriptionReproductionProcess(Process):
         return {"ntp": "float", "rna_pol": "float", "alloc__ntp": "map[float]"}
 
     def outputs(self):
-        return {"rna_counts": "map[float]", "ntp": "float", "demand__ntp": "map[float]"}
+        # ppi: pyrophosphate released, one PPi per NTP polymerized into the chain —
+        # the transcription byproduct, conserved in a pool (metabolism recycles it)
+        # rather than silently dropped (whole-cell atom balance, gap #2b).
+        return {"rna_counts": "map[float]", "ntp": "float", "demand__ntp": "map[float]",
+                "ppi": "float"}
 
     def initial_state(self):
         return {"ntp": 1e7, "rna_pol": self.config["rna_pol_reference"]}
@@ -105,4 +109,5 @@ class TranscriptionReproductionProcess(Process):
             new_counts[gene] = float(n)
             ntp_used += need
         return {"rna_counts": new_counts, "ntp": -ntp_used,
-                "demand__ntp": demand_entry(self._cid, want_ntp)}
+                "demand__ntp": demand_entry(self._cid, want_ntp),
+                "ppi": ntp_used}  # 1 PPi released per NTP incorporated

@@ -87,9 +87,15 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   i.e. biomass synthesis outpaces the ~9 h replication cycle by ~1.5×, a
   documented rate/cycle-coordination gap (the remaining half of a full emergent
   cell cycle: co-calibrating synthesis rates with replication so the emergent
-  doubling lands at 9 h). Whole-cell mass/ATOM balance (conserve water, Pi, PPi,
-  GDP, formate — currently delegated to the pools) is still OPEN but
-  figure-invisible (no figure gates byproduct conservation), low priority. (c) fig5's
+  doubling lands at 9 h). Whole-cell ATOM balance for the dominant energy cycle is
+  now DONE: transcription releases PPi (1 per NTP), translation releases GDP + Pi
+  (1 each per GTP hydrolysed), into conserved byproduct pools that metabolism
+  RECYCLES each tick (regenerating the carriers behind the base_supply) — so those
+  atoms are conserved (pools stay ~one tick's output, verified bounded over a full
+  cycle) instead of silently dropped, and the energy supply/throttle is unchanged
+  so figures are unaffected. Remaining byproducts (water, formate, AMP from the
+  maturation/decay/charging steps) are still delegated to the pools — figure-
+  invisible, low priority. (c) fig5's
   `transcription_energy_share` gate [0.04,0.12] (Karr's 7.1% of ATP+GTP): the
   transcription energy is now counted at the FULL stable-RNA synthesis rate (the
   pool-shaping STABLE_RNA_SYNTHESIS_SCALE is a degradation-sink proxy, not a real
