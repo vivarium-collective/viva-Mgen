@@ -130,6 +130,9 @@ _STORE_GROUP = {
     # precursor supply RATES (molecules/s) metabolism feeds to the allocator
     "atp_supply": "metabolism", "gtp_supply": "metabolism",
     "ntp_supply": "metabolism", "amino_acid_supply": "metabolism",
+    # spent-carrier byproduct pools (whole-cell atom balance, gap #2b): produced by
+    # transcription (PPi) / translation (GDP+Pi), recycled by metabolism each tick.
+    "gdp": "metabolism", "ppi": "metabolism", "pi": "metabolism",
     # resource-allocation budget — per-pool consumer demand/grant maps
     "demand__atp": "budget", "demand__gtp": "budget",
     "demand__ntp": "budget", "demand__amino_acid": "budget",

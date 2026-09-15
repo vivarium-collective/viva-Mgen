@@ -158,7 +158,13 @@ class MetabolismFbaReproductionProcess(Process):
         self._cap = float(self.config["enzyme_coupling_cap"])
 
     def inputs(self):
-        return {"nutrient_scale": "float", "protein_counts": "map[float]"}
+        # gdp/ppi/pi: spent-carrier byproduct pools (from translation/transcription)
+        # that metabolism RECYCLES back into the energy carriers each tick — closing
+        # the whole-cell atom balance (gap #2b): the carriers the base_supply
+        # regenerates are re-formed from these byproducts (GDP→GTP, PPi→2Pi), so the
+        # atoms are conserved rather than dropped and the pools stay bounded.
+        return {"nutrient_scale": "float", "protein_counts": "map[float]",
+                "gdp": "float", "ppi": "float", "pi": "float"}
 
     def outputs(self):
         return {
@@ -174,10 +180,12 @@ class MetabolismFbaReproductionProcess(Process):
             "gtp_supply": "overwrite[float]",
             "ntp_supply": "overwrite[float]",
             "amino_acid_supply": "overwrite[float]",
+            # recycle the spent-carrier byproducts (negative Δ drains the pools)
+            "gdp": "float", "ppi": "float", "pi": "float",
         }
 
     def initial_state(self):
-        return {"nutrient_scale": 1.0, "protein_counts": {}}
+        return {"nutrient_scale": 1.0, "protein_counts": {}, "gdp": 0.0, "ppi": 0.0, "pi": 0.0}
 
     def _flux(self, sol, rxn_id, default=0.0):
         try:
@@ -235,6 +243,14 @@ class MetabolismFbaReproductionProcess(Process):
             for rid in ("NDPK1", "NDPK2", "GK1", "GTPtp"):
                 gtp += abs(self._flux(sol, rid))
         gf = growth / self._wt if self._wt else 0.0
+        # Recycle the spent-carrier byproducts: drain the pools back to zero each
+        # tick (the carriers metabolism regenerates for the base_supply above are
+        # re-formed from these), so byproducts are conserved (produced by
+        # transcription/translation, consumed here) instead of dropped or piling up
+        # unboundedly. Energy supply/throttle unchanged, so figures are unaffected.
+        gdp_in = max(0.0, float(state.get("gdp", 0.0) or 0.0))
+        ppi_in = max(0.0, float(state.get("ppi", 0.0) or 0.0))
+        pi_in = max(0.0, float(state.get("pi", 0.0) or 0.0))
         return {
             "growth_rate": growth,
             "growth_fraction": gf,
@@ -247,4 +263,5 @@ class MetabolismFbaReproductionProcess(Process):
             "gtp_supply": float(self.config["gtp_base_supply"]) * gf,
             "ntp_supply": float(self.config["ntp_base_supply"]) * gf,
             "amino_acid_supply": float(self.config["amino_acid_base_supply"]) * gf,
+            "gdp": -gdp_in, "ppi": -ppi_in, "pi": -pi_in,  # recycle (drain to ~0)
         }
