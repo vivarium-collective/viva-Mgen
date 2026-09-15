@@ -171,26 +171,26 @@ expected_behavior:
   expect:
     op: range
     low: 0.55
-    high: 0.80
+    high: 0.8
 - name: emergent-mass-dna-fraction
   en: Emergent (Σ species×MW) DNA fraction of macromolecular dry mass is plausible (Karr 2012 composition).
   observable: emergent_dna_fraction
   condition: 0.10 <= emergent_dna_fraction <= 0.35
-  rationale: Karr 2012 cell composition puts DNA at 0.169 of total dry mass (0.192 renormalized over
-    protein+DNA+RNA). Test the emergent DNA fraction falls in [0.10, 0.35].
+  rationale: Karr 2012 cell composition puts DNA at 0.169 of total dry mass (0.192 renormalized over protein+DNA+RNA).
+    Test the emergent DNA fraction falls in [0.10, 0.35].
   measure:
     kind: derived_scalar
     field: emergent_dna_fraction
   expect:
     op: range
-    low: 0.10
+    low: 0.1
     high: 0.35
 - name: emergent-mass-rna-fraction
   en: Emergent (Σ species×MW) RNA fraction of macromolecular dry mass is plausible (Karr 2012 composition).
   observable: emergent_rna_fraction
   condition: 0.05 <= emergent_rna_fraction <= 0.25
-  rationale: Karr 2012 cell composition puts RNA at 0.093 of total dry mass (0.106 renormalized over
-    protein+DNA+RNA). Test the emergent RNA fraction falls in [0.05, 0.25].
+  rationale: Karr 2012 cell composition puts RNA at 0.093 of total dry mass (0.106 renormalized over protein+DNA+RNA).
+    Test the emergent RNA fraction falls in [0.05, 0.25].
   measure:
     kind: derived_scalar
     field: emergent_rna_fraction
@@ -202,8 +202,8 @@ expected_behavior:
   en: Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).
   observable: single_cell_mrna_cv
   condition: 0.001 <= single_cell_mrna_cv <= 1.5
-  rationale: Karr 2012 Fig 2 single-cell distributions show bursty low-copy single-cell mRNA, hence
-    nonzero cell-to-cell variation. Test the CV of total mRNA across independent cells falls in [0.001, 1.5].
+  rationale: Karr 2012 Fig 2 single-cell distributions show bursty low-copy single-cell mRNA, hence nonzero
+    cell-to-cell variation. Test the CV of total mRNA across independent cells falls in [0.001, 1.5].
   measure:
     kind: derived_scalar
     field: single_cell_mrna_cv
@@ -216,11 +216,11 @@ expected_behavior:
     mass doubles and division fires) is biologically plausible.
   observable: emergent_doubling_time_h
   condition: 4.0 <= emergent_doubling_time_h <= 12.0
-  rationale: 'Gap 2b (phenotype from genotype): division now fires when the EMERGENT macromolecule
-    inventory doubles, so the cycle length emerges from the synthesis rates rather than the imposed
-    growth-law μ. The reduced model predicts ~6 h — faster than the measured/calibrated ~9 h cycle,
-    because biomass synthesis currently outpaces replication by ~1.5×; a documented rate/cycle-
-    coordination gap. Test the emergent prediction is in the biologically plausible [4, 12] h.'
+  rationale: 'Gap 2b (phenotype from genotype): division now fires when the EMERGENT macromolecule inventory
+    doubles, so the cycle length emerges from the synthesis rates rather than the imposed growth-law μ.
+    The reduced model predicts ~6 h — faster than the measured/calibrated ~9 h cycle, because biomass
+    synthesis currently outpaces replication by ~1.5×; a documented rate/cycle- coordination gap. Test
+    the emergent prediction is in the biologically plausible [4, 12] h.'
   measure:
     kind: derived_scalar
     field: emergent_doubling_time_h
@@ -343,7 +343,7 @@ behavior_tests:
   pass_if:
     op: range
     low: 0.55
-    high: 0.80
+    high: 0.8
     provenance:
       kind: experiment
       note: 'Karr 2012 cell composition: protein 0.62 of total dry mass; emergent Σ(species×MW), macromolecule-renormalized
@@ -357,7 +357,7 @@ behavior_tests:
     field: emergent_dna_fraction
   pass_if:
     op: range
-    low: 0.10
+    low: 0.1
     high: 0.35
     provenance:
       kind: experiment
@@ -381,7 +381,7 @@ behavior_tests:
   requires_simulation: baseline
 - name: single-cell-mrna-variation
   classification: secondary
-  description: 'Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).'
+  description: Cell-to-cell CV of total mRNA is nonzero and plausible (Fig 2 single-cell distributions).
   measure:
     kind: derived_scalar
     field: single_cell_mrna_cv
@@ -391,12 +391,12 @@ behavior_tests:
     high: 1.5
     provenance:
       kind: experiment
-      note: 'Karr 2012 Fig 2 single-cell distributions.'
+      note: Karr 2012 Fig 2 single-cell distributions.
   requires_simulation: baseline
 - name: emergent-cell-cycle-length
   classification: secondary
-  description: 'Cell-cycle length PREDICTED from the synthesized inventory (emergent-mass doubling)
-    is biologically plausible (gap 2b, phenotype from genotype).'
+  description: Cell-cycle length PREDICTED from the synthesized inventory (emergent-mass doubling) is
+    biologically plausible (gap 2b, phenotype from genotype).
   measure:
     kind: derived_scalar
     field: emergent_doubling_time_h
@@ -406,10 +406,10 @@ behavior_tests:
     high: 12.0
     provenance:
       kind: model
-      note: 'Division now fires when the emergent Σ(species×MW) inventory doubles, so the cycle length
-        emerges from synthesis rates (not the imposed growth-law μ). Reduced model predicts ~6 h —
-        biomass synthesis outpaces the ~9 h replication cycle by ~1.5× (documented rate/cycle-
-        coordination gap). Test the emergent prediction is in the plausible [4, 12] h.'
+      note: Division now fires when the emergent Σ(species×MW) inventory doubles, so the cycle length
+        emerges from synthesis rates (not the imposed growth-law μ). Reduced model predicts ~6 h — biomass
+        synthesis outpaces the ~9 h replication cycle by ~1.5× (documented rate/cycle- coordination gap).
+        Test the emergent prediction is in the plausible [4, 12] h.
   requires_simulation: baseline
 readouts:
 - name: mass

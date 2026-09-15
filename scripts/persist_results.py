@@ -50,6 +50,7 @@ def _persist_one(core, slug, params, readouts, sim_time, interval):
     from viva_emitters.xarray_emitter.view import view_from_emit_paths
     from viva_mgen.composites import build_mgen
 
+    from viva_mgen.composites.mgen import _store_path
     core.register_link("XArrayEmitter", pbg_emitters.XArrayEmitter)
     run_id = f"{slug}-baseline"  # stable id == zarr experiment_id, referenced by study.yaml runs[]
     results_dir = WS / "workspace" / "studies" / slug / "results"
@@ -59,7 +60,11 @@ def _persist_one(core, slug, params, readouts, sim_time, interval):
         shutil.rmtree(store)
 
     doc = build_mgen(core, interval=interval, **params)
-    flat = {name: ["stores", sp.split("/", 1)[1]] for name, sp in readouts.items()}
+    # Wire the emitter to each readout's REAL composite store path
+    # ([cell, <compartment>, <name>]) — the composite was reorganized from a flat
+    # `stores/<name>` tree into `cell/<compartment>/<name>`, so the old hardcoded
+    # `stores/<name>` paths no longer resolve (Results tab had gone stale).
+    flat = {name: _store_path(name) for name in readouts}
     view = view_from_emit_paths(sorted(flat), dtype="<f8")
     cfg = _xarray_emitter_config(str(store), view, None)
     cfg["metadata"] = {"experiment_id": run_id}
