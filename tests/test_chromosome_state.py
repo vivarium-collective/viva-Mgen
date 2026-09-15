@@ -145,3 +145,15 @@ def test_fork_regions_at_boundaries_only():
     # mid-replication -> a small number of boundary regions (not all 20)
     fr = fork_regions(fork_polymerized(0.4, 580), 580, 20)
     assert 0 < len(fr) < 20
+
+
+def test_spread_mask_fraction_and_spacing():
+    from viva_mgen.chromosome_state import spread_mask
+    assert spread_mask(0.0, 580) == {}
+    assert len(spread_mask(1.0, 580)) == 580
+    for frac in (0.1, 0.5, 0.83):
+        m = spread_mask(frac, 580)
+        assert abs(sum(m.values()) / 580 - frac) <= 1.0 / 580 + 1e-9  # Σ/n == fraction
+    # evenly spread (not clustered at one end): half-condensed spans both halves
+    m = spread_mask(0.5, 580)
+    assert any(int(b) < 290 for b in m) and any(int(b) >= 290 for b in m)

@@ -31,7 +31,7 @@ from process_bigraph import Process
 from .. import constants as C
 from ..chromosome_state import (N_CHROMOSOME_BINS, add_lesions, repair_sites, n_lesions,
                                 N_SUPERCOIL_REGIONS, empty_linking_map, mean_sigma, relax_regions,
-                                fork_regions)
+                                fork_regions, spread_mask, fork_polymerized)
 from .allocation import select_budget, demand_entry
 
 
@@ -290,6 +290,7 @@ class ChromosomeCondensationReproductionProcess(Process):
         # viva_mgen.kb.karr_process_params("ChromosomeCondensation").
         "bind_rate": {"_type": "float", "_default": 1.0e-3},
         "initial_fraction": {"_type": "float", "_default": 0.0},
+        "n_bins": {"_type": "integer", "_default": N_CHROMOSOME_BINS},
     }
 
     def __init__(self, config=None, core=None):
@@ -300,7 +301,8 @@ class ChromosomeCondensationReproductionProcess(Process):
         return {"smc": "float"}
 
     def outputs(self):
-        return {"condensed_fraction": "overwrite[float]"}
+        return {"condensed_fraction": "overwrite[float]",
+                "condensed_map": "overwrite[map[float]]"}
 
     def initial_state(self):
         return {"smc": 100.0}
@@ -311,7 +313,10 @@ class ChromosomeCondensationReproductionProcess(Process):
         # compacted. Saturating first-order approach: remaining uncondensed DNA compacts w/ SMC.
         self._frac += self.config["bind_rate"] * smc * (1.0 - self._frac) * interval
         self._frac = float(np.clip(self._frac, 0.0, 1.0))
-        return {"condensed_fraction": self._frac}
+        # per-site condensed mask (SMC loops at regular spacing) on the shared
+        # chromosome; Σ/n_bins == condensed_fraction, so this is a spatial view.
+        return {"condensed_fraction": self._frac,
+                "condensed_map": spread_mask(self._frac, int(self.config["n_bins"]))}
 
 
 # ---------------------------------------------------------------------------
@@ -348,6 +353,7 @@ class ChromosomeSegregationReproductionProcess(Process):
         "complete_threshold": {"_type": "float", "_default": 0.999},  # replication ~complete
         "segregation_rate": {"_type": "float", "_default": 1.0 / 3869.0},  # ~cytokinesis duration
         "initial_fraction": {"_type": "float", "_default": 0.0},
+        "n_bins": {"_type": "integer", "_default": N_CHROMOSOME_BINS},
         # The reduced ramp omits the segregation event's energetic cost; the real
         # per-event GTP cost (Karr 2012 parameters.json ChromosomeSegregation.gtpCost 1.0)
         # has no slot here — available via
@@ -362,7 +368,8 @@ class ChromosomeSegregationReproductionProcess(Process):
         return {"replicated_fraction": "float"}
 
     def outputs(self):
-        return {"segregated_fraction": "overwrite[float]"}
+        return {"segregated_fraction": "overwrite[float]",
+                "segregated_map": "overwrite[map[float]]"}
 
     def initial_state(self):
         return {"replicated_fraction": 0.0}
@@ -373,7 +380,10 @@ class ChromosomeSegregationReproductionProcess(Process):
         if replicated >= self.config["complete_threshold"]:
             self._frac += self.config["segregation_rate"] * interval
             self._frac = float(np.clip(self._frac, 0.0, 1.0))
-        return {"segregated_fraction": self._frac}
+        # per-site segregated mask (daughters resolve from oriC outward, following
+        # the fork) on the shared chromosome; Σ/n_bins == segregated_fraction.
+        return {"segregated_fraction": self._frac,
+                "segregated_map": fork_polymerized(self._frac, int(self.config["n_bins"]))}
 
 
 # ---------------------------------------------------------------------------
