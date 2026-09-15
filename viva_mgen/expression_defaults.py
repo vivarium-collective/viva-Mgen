@@ -178,3 +178,30 @@ def reference_protein_counts() -> dict:
         mrna_ss = synth[g] / md
         out[g] = transl.get(g, 0.0) * mrna_ss / pd
     return out
+
+
+# Emergent whole-cell proteome scale (gap #6). The analytic reference_protein_counts
+# above (~3.0M total = steady-state translation·mRNA/decay) far exceeds the
+# GTP-throttled EMERGENT proteome the integrated cell actually reaches (~135k at
+# division). Two consumers need the emergent scale, not the analytic one:
+#   * the BIRTH proteome a daughter is seeded with, so the cell cycle is
+#     birth→double rather than accumulate-from-zero; and
+#   * enzyme_coupling's live/reference ratio, which must be ~1 at the normal
+#     proteome (else every reaction clips low and metabolism starves).
+# So scale the analytic distribution down to the emergent totals. Fitted jointly
+# with metabolism.gtp_base_supply. See docs/FIDELITY_GAPS.md gap #6.
+BIRTH_PROTEOME_SCALE = 0.0225  # analytic reference -> ~half the emergent division proteome (~67.5k)
+
+
+def birth_proteome() -> dict:
+    """The proteome a daughter cell is born with: ~half the emergent division
+    proteome (~67.5k), keyed like protein_counts, in the analytic distribution
+    scaled to the emergent total. Seeding it makes the cycle birth→double."""
+    return {g: v * BIRTH_PROTEOME_SCALE for g, v in reference_protein_counts().items()}
+
+
+def coupling_reference() -> dict:
+    """Reference proteome for enzyme_coupling's live/reference ratio: the emergent
+    DIVISION proteome (~135k = 2×birth), so live/ref ≈ 0.5 at birth and ≈ 1.0 near
+    division and reactions scale gracefully with enzyme abundance."""
+    return {g: 2.0 * v for g, v in birth_proteome().items()}
