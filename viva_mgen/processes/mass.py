@@ -69,7 +69,11 @@ class MassGrowthReproductionProcess(Process):
         "with T_cycle = 32400 s (≈ 9 h) the model's fitted cell-cycle length, so unperturbed "
         "growth (growth_fraction = 1) doubles the cell in ~9 h. Dry mass is partitioned into "
         "the fitted dry-weight fractions (protein 0.620, DNA 0.169, RNA 0.093, lipid 0.057, …); "
-        "volume follows from wet mass and cell density; division fires at 2× birth mass.\n"
+        "volume follows from wet mass and cell density. Division now fires when the EMERGENT "
+        "macromolecule inventory (Σ species×MW) has doubled — the cell-cycle length is PREDICTED "
+        "from the synthesis rates (phenotype from genotype), not imposed by the growth-law μ "
+        "(which still sets the calibrated mass curve). Falls back to the 2×-birth growth-law "
+        "trigger only until the emergent mass is populated (tick 0).\n"
         "Contract — in: growth_fraction (unit-free growth from metabolism), mass (current dry "
         "fg). out: mass (additive Δ, fg), mass_fractions (per-component fg snapshot), volume "
         "(fL snapshot), division ∈ {0,1}.\n"
@@ -97,6 +101,11 @@ class MassGrowthReproductionProcess(Process):
         super().__init__(config, core)
         # calibrated specific growth rate (per second): ln2 / cell-cycle-length
         self._mu = math.log(2.0) / float(self.config["cell_cycle_length_s"])
+        # birth EMERGENT macromolecule mass (fg), captured on the first tick it is
+        # populated; division fires when the emergent (Σ species×MW) inventory has
+        # doubled — an EMERGENT cell cycle predicted from the synthesized inventory,
+        # not the imposed exponential. None until captured.
+        self._birth_emergent_fg = None
 
     def inputs(self):
         return {
@@ -138,7 +147,6 @@ class MassGrowthReproductionProcess(Process):
         d_mass = mass * (math.exp(self._mu * gf * interval) - 1.0)
         new_mass = mass + d_mass
         fractions = {k: new_mass * v for k, v in C.DRY_MASS_FRACTIONS.items()}
-        divided = 1.0 if new_mass >= 2.0 * float(self.config["initial_mass_fg"]) else 0.0
 
         # Emergent macromolecular dry-mass composition (RNA + protein + DNA),
         # computed from the real molecular inventory for validation against
@@ -157,13 +165,26 @@ class MassGrowthReproductionProcess(Process):
             {k: comp[k] / macro_total for k in ("RNA", "protein", "DNA")}
             if macro_total > 0 else {k: 0.0 for k in ("RNA", "protein", "DNA")}
         )
+        emergent_fg = macro_total * 1e15
+
+        # EMERGENT division: capture the birth emergent mass on the first populated
+        # tick, then divide once the synthesized inventory has doubled. The cell
+        # cycle length is thus PREDICTED from the synthesis rates (Karr's "phenotype
+        # from genotype"), not imposed. Fall back to the growth-law 2×-birth-mass
+        # trigger only until the emergent mass is populated (tick 0).
+        if self._birth_emergent_fg is None and emergent_fg > 0:
+            self._birth_emergent_fg = emergent_fg
+        if self._birth_emergent_fg:
+            divided = 1.0 if emergent_fg >= 2.0 * self._birth_emergent_fg else 0.0
+        else:
+            divided = 1.0 if new_mass >= 2.0 * float(self.config["initial_mass_fg"]) else 0.0
 
         return {
             "mass": d_mass,
             "mass_fractions": fractions,
             "volume": self._volume_fl(new_mass),
             "division": divided,
-            "emergent_mass": macro_total * 1e15,
+            "emergent_mass": emergent_fg,
             "emergent_mass_fractions": macro_fractions,
             "metabolite_mass": comp["metabolite"] * 1e15,
         }

@@ -163,6 +163,16 @@ def main() -> int:
         emergent_dna_fraction = emf["DNA"]
         emergent_rna_fraction = emf["RNA"]
 
+        # EMERGENT cell-cycle length (gap 2b): the mass submodel now fires the
+        # division flag when the emergent (Σ species×MW) macromolecule inventory
+        # has DOUBLED — so the cycle length is PREDICTED from the synthesis rates
+        # (phenotype from genotype), not imposed by the growth-law μ used for the
+        # calibrated doubling_time above. Reported as a prediction: the reduced
+        # model's biomass synthesis currently outpaces the ~9 h replication cycle
+        # (predicts ~6 h), a documented rate/cycle-coordination gap.
+        _div = [i for i, r in enumerate(rows) if float(r.get("division", 0.0)) >= 1.0]
+        emergent_doubling_time_h = float(t[_div[0]]) if _div else float(t[-1])
+
         # single-cell mRNA variation across an independent-cell ensemble (Fig 2
         # single-cell distributions); 1 h is enough for mRNA CV, keep it modest.
         ens = run_ensemble(n_cells=4, duration=3600.0)
@@ -182,6 +192,7 @@ def main() -> int:
         print(f"emergent_dna_fraction     = {emergent_dna_fraction:.3f}  (target 0.10-0.35)")
         print(f"emergent_rna_fraction     = {emergent_rna_fraction:.3f}  (target 0.05-0.25)")
         print(f"single_cell_mrna_cv       = {single_cell_mrna_cv:.3f}  (target 0.001-1.5)")
+        print(f"emergent_doubling_time_h  = {emergent_doubling_time_h:.2f}  (emergent prediction; measured ~9 h)")
 
         viz_dir = STUDY_DIR / "viz"
         viz_dir.mkdir(parents=True, exist_ok=True)
@@ -216,7 +227,8 @@ def main() -> int:
                         "emergent_protein_fraction": emergent_protein_fraction,
                         "emergent_dna_fraction": emergent_dna_fraction,
                         "emergent_rna_fraction": emergent_rna_fraction,
-                        "single_cell_mrna_cv": single_cell_mrna_cv}})
+                        "single_cell_mrna_cv": single_cell_mrna_cv,
+                        "emergent_doubling_time_h": emergent_doubling_time_h}})
     return 0
 
 

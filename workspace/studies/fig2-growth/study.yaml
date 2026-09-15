@@ -211,6 +211,23 @@ expected_behavior:
     op: range
     low: 0.001
     high: 1.5
+- name: emergent-cell-cycle-length
+  en: The cell-cycle length PREDICTED from the synthesized inventory (time the emergent Σ(species×MW)
+    mass doubles and division fires) is biologically plausible.
+  observable: emergent_doubling_time_h
+  condition: 4.0 <= emergent_doubling_time_h <= 12.0
+  rationale: 'Gap 2b (phenotype from genotype): division now fires when the EMERGENT macromolecule
+    inventory doubles, so the cycle length emerges from the synthesis rates rather than the imposed
+    growth-law μ. The reduced model predicts ~6 h — faster than the measured/calibrated ~9 h cycle,
+    because biomass synthesis currently outpaces replication by ~1.5×; a documented rate/cycle-
+    coordination gap. Test the emergent prediction is in the biologically plausible [4, 12] h.'
+  measure:
+    kind: derived_scalar
+    field: emergent_doubling_time_h
+  expect:
+    op: range
+    low: 4.0
+    high: 12.0
 behavior_tests:
 - name: doubling-time-near-9h
   classification: primary
@@ -375,6 +392,24 @@ behavior_tests:
     provenance:
       kind: experiment
       note: 'Karr 2012 Fig 2 single-cell distributions.'
+  requires_simulation: baseline
+- name: emergent-cell-cycle-length
+  classification: secondary
+  description: 'Cell-cycle length PREDICTED from the synthesized inventory (emergent-mass doubling)
+    is biologically plausible (gap 2b, phenotype from genotype).'
+  measure:
+    kind: derived_scalar
+    field: emergent_doubling_time_h
+  pass_if:
+    op: range
+    low: 4.0
+    high: 12.0
+    provenance:
+      kind: model
+      note: 'Division now fires when the emergent Σ(species×MW) inventory doubles, so the cycle length
+        emerges from synthesis rates (not the imposed growth-law μ). Reduced model predicts ~6 h —
+        biomass synthesis outpaces the ~9 h replication cycle by ~1.5× (documented rate/cycle-
+        coordination gap). Test the emergent prediction is in the plausible [4, 12] h.'
   requires_simulation: baseline
 readouts:
 - name: mass

@@ -78,8 +78,18 @@ implementation cycle (specs under `docs/superpowers/specs/`, plans under
   inspection: the by-gene mean of translated proteins is ~369 aa (matches real
   M. genitalium ~330–360; all 482 protein-coding genes translate); the ~198 aa
   copy-weighted mean is just abundant proteins skewing it, as expected. (b)
-  whole-cell mass/atom balance (conserve water, Pi, PPi, GDP, formate) and
-  division-driving from emergent mass — genuinely open, own task. (c) fig5's
+  division-driving from emergent mass — DONE: the mass submodel now fires the
+  division flag when the emergent Σ(species×MW) inventory DOUBLES, so the
+  cell-cycle length is predicted from the synthesis rates (phenotype from
+  genotype), not imposed by the growth-law μ (which still sets the calibrated
+  mass curve, so doubling_time_h=9.0 and final_mass_ratio=2.0 are unchanged). fig2
+  reports `emergent_doubling_time_h` as a secondary prediction — currently ~6 h,
+  i.e. biomass synthesis outpaces the ~9 h replication cycle by ~1.5×, a
+  documented rate/cycle-coordination gap (the remaining half of a full emergent
+  cell cycle: co-calibrating synthesis rates with replication so the emergent
+  doubling lands at 9 h). Whole-cell mass/ATOM balance (conserve water, Pi, PPi,
+  GDP, formate — currently delegated to the pools) is still OPEN but
+  figure-invisible (no figure gates byproduct conservation), low priority. (c) fig5's
   `transcription_energy_share` gate [0.04,0.12] (Karr's 7.1% of ATP+GTP): the
   transcription energy is now counted at the FULL stable-RNA synthesis rate (the
   pool-shaping STABLE_RNA_SYNTHESIS_SCALE is a degradation-sink proxy, not a real
