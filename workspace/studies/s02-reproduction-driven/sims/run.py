@@ -28,9 +28,11 @@ from viva_mgen.composites import build_mgen
 from viva_mgen.structural.maritan_tables import load_proteins, load_genes
 from viva_mgen.structural.counts import maritan_counts, mgen_sim_counts
 from viva_mgen.structural.build import build_mgen_pack, mgen_ingredients, estimate_occupancy
+from viva_mgen.structural.viewer import relativize_pack_urls
 
 STUDY_DIR = Path(__file__).resolve().parents[1]
-PACK_DIR = STUDY_DIR / "pack"
+# The workbench's built-in Parsimony Viewer discovers packs under <study>/viz/3d/.
+PACK_DIR = STUDY_DIR / "viz" / "3d"
 _DATASETS = Path(__file__).resolve().parents[4] / "datasets"
 
 
@@ -121,6 +123,7 @@ def main() -> int:
     print(f"Packing reproduction-driven cell (top_n={args.top_n}) ...")
     res = build_mgen_pack(counts, out_dir=PACK_DIR, top_n=args.top_n,
                           name="mgen_reproduction_driven")
+    relativize_pack_urls(res["pack_path"])  # for the workbench built-in viewer
 
     ings = mgen_ingredients(counts, top_n=args.top_n)
     occ = estimate_occupancy(counts, top_n=args.top_n)

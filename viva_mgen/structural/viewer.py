@@ -27,6 +27,25 @@ VIEWER_SRC = Path(pbg_parsimony.__file__).resolve().parent / "viewer"
 _VIEWER_FILES = ("index.html", "viewer.js", "obj-worker.js", "vr.js", "vr-helpers.js")
 
 
+def relativize_pack_urls(pack_path: str | Path) -> Path:
+    """Rewrite a pack's LOD mesh URLs from absolute paths to ``meshes/<file>``
+    (in place), so the workbench's built-in Parsimony Viewer — which serves the
+    pack statically from ``<study>/viz/3d/`` and resolves meshes relative to it
+    — can fetch each mesh from the sibling ``meshes/`` dir. Idempotent."""
+    pack_path = Path(pack_path)
+    pack = json.loads(pack_path.read_text())
+    changed = False
+    for ing in pack.get("ingredients", []):
+        for lod in ing.get("shape", {}).get("lods", []):
+            rel = "meshes/" + Path(lod["url"]).name
+            if lod["url"] != rel:
+                lod["url"] = rel
+                changed = True
+    if changed:
+        pack_path.write_text(json.dumps(pack))
+    return pack_path
+
+
 def assemble_viewer_app(pack_path: str | Path, app_dir: str | Path, *,
                         meshes_dir: str | Path | None = None,
                         sidecar_path: str | Path | None = None,

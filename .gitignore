@@ -29,3 +29,4 @@ workspace/reports/assets/*
 .parsimony/
 workspace/studies/*/pack/
 workspace/studies/*/viz/viewer/
+workspace/studies/*/viz/3d/
