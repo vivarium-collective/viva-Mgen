@@ -74,7 +74,7 @@ class MgenStructuralStep(Step):
 
     config_schema: ClassVar[Dict[str, Any]] = {
         "counts_source": {"_type": "string", "_default": "maritan"},
-        "top_n": {"_type": "integer", "_default": None},
+        "top_n": {"_type": "maybe[integer]", "_default": None},
         "out_dir": {"_type": "string", "_default": "out/structural"},
         "name": {"_type": "string", "_default": "mgen"},
     }
