@@ -11,13 +11,18 @@ into a list of :class:`pbg_parsimony.Ingredient`, size a spherocylinder cell
 
 from __future__ import annotations
 
+import csv
 import math
+import tempfile
+from pathlib import Path
 
 from pbg_parsimony import Capsule, Chromosome, Ingredient, build_pack
 
 from viva_mgen.constants import GENOME_LENGTH_BP
 from viva_mgen.structural.maritan_tables import ProteinRow, load_genes, load_proteins
 from viva_mgen.structural.structures import structure_ref_for, uniprot_index
+
+DATA = Path(__file__).resolve().parent / "data"
 
 # --- cell geometry -----------------------------------------------------------
 # M. genitalium is among the smallest known free-living cells: Maritan et al.
@@ -40,6 +45,55 @@ MGEN_VOLUME_FL = 0.067
 # (34,000 beads for a 4,641,652 bp E. coli genome, i.e. ~135 bp/bead).
 _BP_PER_BEAD = 135.0
 
+# --- genome-annotation CSV for pbg_parsimony -------------------------------
+# pbg_parsimony's Rust engine (parsimony-core's genome.rs, ``Genome::from_csv``)
+# PARSES ``Chromosome.genome_csv`` (Python only ``shutil.copy``s it through
+# unread; the parsing happens downstream, in the packer binary) to seat RNAP
+# at real, abundance-weighted transcription sites. It expects a specific,
+# positionally-parsed layout that is NOT what mgen_genes.csv (Task 1's S2
+# reader) provides:
+#   line 1: ``# genome_length_bp=<N>``
+#   header: ``old_locus_tag,locus_tag,start,end,strand,biotype``
+#   rows:   old_locus_tag (matched against ``MG_<digits>`` tokens embedded in
+#           ingredient ids, e.g. ``MG_003_MONOMER`` -> ``MG_003``), locus_tag
+#           (informational; duplicated here, no second identifier available),
+#           1-based start/end (bp), strand (``+``/``-``), biotype.
+# This reshapes ``load_genes()`` (coord/length/direction/name) into that exact
+# layout rather than passing mgen_genes.csv verbatim, which would fail to
+# parse (no ``genome_length_bp`` comment, wrong column count/positions) and
+# make the packer silently skip genome-driven placement.
+_GENOME_CSV_HEADER = ("old_locus_tag", "locus_tag", "start", "end", "strand", "biotype")
+_genome_csv_cache: str | None = None
+
+
+def _pbg_genome_csv() -> str:
+    """Derive pbg_parsimony's expected genome-annotation CSV from this
+    workspace's own S2 gene table (``load_genes()``); write once per process
+    to a cache file and reuse the path on subsequent calls."""
+    global _genome_csv_cache
+    if _genome_csv_cache is not None and Path(_genome_csv_cache).exists():
+        return _genome_csv_cache
+
+    genes = load_genes()
+    fd, path = tempfile.mkstemp(prefix="mgen_genome_pbg_", suffix=".csv")
+    with open(fd, "w", newline="") as f:
+        f.write(f"# genome_length_bp={GENOME_LENGTH_BP}\n")
+        writer = csv.writer(f)
+        writer.writerow(_GENOME_CSV_HEADER)
+        for gene in genes:
+            if not gene.coord or not gene.length:
+                continue
+            start = int(gene.coord)
+            end = start + int(gene.length) - 1
+            if end <= start:
+                continue
+            strand = "+" if gene.direction == "Forward" else "-"
+            biotype = "protein_coding" if gene.protein_monomer else gene.gtype
+            writer.writerow([gene.gene_id, gene.gene_id, start, end, strand, biotype])
+
+    _genome_csv_cache = path
+    return path
+
 
 def mgen_capsule() -> Capsule:
     """Spherocylinder sized to MGEN_VOLUME_FL at cap radius MGEN_RADIUS_UM."""
@@ -47,9 +101,11 @@ def mgen_capsule() -> Capsule:
 
 
 def mgen_chromosome() -> Chromosome:
-    """Single circular chromosome; bead count sized to GENOME_LENGTH_BP."""
+    """Single circular chromosome; bead count sized to GENOME_LENGTH_BP, with
+    a genome-annotation CSV so the pack seats RNAP at real (abundance-
+    weighted) transcription sites instead of uniformly along the fiber."""
     beads = max(1, round(GENOME_LENGTH_BP / _BP_PER_BEAD))
-    return Chromosome(beads=beads, n_chromosomes=1)
+    return Chromosome(beads=beads, n_chromosomes=1, genome_csv=_pbg_genome_csv())
 
 
 # --- molecular-weight sphere-radius proxy ------------------------------------
