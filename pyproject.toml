@@ -27,7 +27,7 @@ dependencies = [
     "cobra",
     "pyyaml>=6.0",
     "jsonschema[format-nongpl]>=4.21",
-    "pbg-parsimony",
+    "viva-parsimony",
 ]
 
 [project.optional-dependencies]
@@ -49,7 +49,7 @@ Homepage = "https://github.com/vivarium-collective/viva-Mgen"
 Issues = "https://github.com/vivarium-collective/viva-Mgen/issues"
 
 [tool.uv.sources]
-pbg-parsimony = { git = "https://github.com/vivarium-collective/pbg-parsimony", branch = "main" }
+viva-parsimony = { git = "https://github.com/vivarium-collective/viva-parsimony", branch = "main" }
 
 [tool.hatch.build.targets.wheel]
 packages = ["viva_mgen"]

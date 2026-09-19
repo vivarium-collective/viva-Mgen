@@ -6,7 +6,7 @@ package_path: viva_mgen
 
 imports:
   pbg_parsimony:
-    source: https://github.com/vivarium-collective/pbg-parsimony
+    source: https://github.com/vivarium-collective/viva-parsimony
     ref: main
     mode: reference
     description: |
