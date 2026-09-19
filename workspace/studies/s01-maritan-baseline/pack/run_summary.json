@@ -1,0 +1,13 @@
+{
+  "n_placed": 49547,
+  "n_species": 506,
+  "n_surface_membrane": 75,
+  "n_with_structure": 506,
+  "pack_path": "/Users/eranagmon/code/viva-mGen--structural-model/workspace/studies/s01-maritan-baseline/pack/mgen_maritan_baseline.pack.json",
+  "sidecar_path": "/Users/eranagmon/code/viva-mGen--structural-model/workspace/studies/s01-maritan-baseline/pack/mgen_maritan_baseline.meta.json",
+  "checks": {
+    "structural-species-placed-at-abundance": true,
+    "structural-single-supercoiled-chromosome": true,
+    "structural-membrane-proteins-in-bilayer": true
+  }
+}

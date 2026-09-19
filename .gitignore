@@ -22,3 +22,10 @@ investigations/*/.run.lock
 workspace/reports/assets/*
 !workspace/reports/assets/.keep
 .superpowers/brainstorm/
+
+# structural-model: parsimony engine state + large regenerable pack artifacts
+# (meshes ~350MB, *.pack.json ~17MB) and the assembled 3D viewer app. All
+# regenerate via `sims/run.py` + `python -m viva_mgen.structural.viewer`.
+.parsimony/
+workspace/studies/*/pack/
+workspace/studies/*/viz/viewer/

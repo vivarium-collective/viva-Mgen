@@ -1,0 +1,64 @@
+schema_version: 4
+name: s02-reproduction-driven
+investigation: structural-model
+parent_studies:
+- {study: s01-maritan-baseline, relation: leads-to, condition: tests-passed}
+title: "s02 — Reproduction-driven: the 3D cell from viva_mgen's simulated proteome"
+created: '2026-09-19'
+status: planned
+phase: Design
+confidence: Planned
+
+question: |
+  Driving the SAME Maritan roster + structures with abundances from a viva_mgen
+  simulated run (rather than the published WC-MG counts), does the reproduction's
+  own proteome yield a structurally comparable 3D cell — and where does it diverge?
+
+hypothesis: |
+  The viva_mgen reproduction's simulated per-gene protein counts, packed through
+  the identical pipeline, produce a cell whose species roster and occupancy match
+  the Maritan baseline within the reproduction's known expression differences
+  (GTP-capped translation, Poisson decay), diverging mainly for the most
+  dynamically-regulated genes.
+
+objective: |
+  Run the mgen_structural composite with counts_source=sim against a viva_mgen
+  steady-state run's protein_counts, pack the cell, and compare per-category
+  species counts and occupancy to the s01 baseline.
+
+description: |
+  VARIANT (run pending). Same ingredient roster, structures, geometry, and packer
+  as s01; only the copy-number source changes — from the WC-MG proxy to the
+  viva_mgen reproduction's simulated protein_counts (emitted by the Translation
+  reproduction over the full ~522-gene panel). The counts provider
+  (viva_mgen.structural.counts.mgen_sim_counts) is implemented and unit-tested
+  against a pre-loaded mapping; wiring it end-to-end needs a viva_mgen WCM run
+  configured to emit the per-gene protein_counts store (the existing figure-study
+  runs emit mass/growth/energy observables, not protein counts). This study is
+  authored and wired to the composite; its run is deferred pending that sim.
+
+baseline:
+- name: baseline
+  composite: viva_mgen.composites.structural.mgen_structural
+  params:
+    counts_source: sim
+
+variants: []
+interventions: []
+
+expected_behavior:
+- name: structural-sim-cell-comparable-to-baseline
+  observable: n_placed
+  condition: counts_source=sim vs counts_source=maritan
+  rationale: |
+    The simulated-proteome pack should place a comparable roster at comparable
+    occupancy to the Maritan baseline, with divergence concentrated in the most
+    dynamically-regulated genes — evidence the reproduction's proteome is
+    structurally self-consistent.
+
+simulation_set:
+- name: baseline
+  status: planned
+  base_model: viva_mgen.composites.structural.mgen_structural
+  seeds:
+  - 0
