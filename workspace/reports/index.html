@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="UTF-8"><title>mgen:mgen</title>
-<link rel="stylesheet" href="assets/style.css?v=1789256895_1788282112">
+<meta charset="UTF-8"><title>mgen</title>
+<link rel="stylesheet" href="assets/style.css?v=1789836339_1789608173">
 <link rel="stylesheet" href="assets/snapshot-readonly.css">
 <!-- Apply the saved light/dark theme before first paint (no flash of light). -->
 <script>(function(){try{var t=localStorage.getItem('viv.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
@@ -9,7 +9,7 @@
      blocking script, so the window.fetch override is in place before any other
      script or inline fetch runs — every same-origin request then carries this
      tab's X-VW-Session header. -->
-<script src="assets/session.js?v=1789256895_1788282112"></script>
+<script src="assets/session.js?v=1789836339_1789608173"></script>
 <script>
 // Per-workspace branding (rail logo, title, brand text) is resolved
 // server-side at GET / and is NOT re-applied by any client script. The
@@ -531,7 +531,7 @@ body.snapshot .viv-wsp-trigger .viv-wsp-dot { color: #94a3b8; }
 .viv-bs-select:focus, .viv-bs-commit-select:focus, .viv-bs-search:focus {
   outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12);
 }
-/* Scope: a segmented Local/Remote control. */
+/* Environment: a segmented Local/Cloud control. */
 .viv-bs-scope-group { display: inline-flex; }
 .viv-bs-toggle {
   padding: 5px 14px; border: 1px solid #e2e8f0; background: #f1f5f9; cursor: pointer;
@@ -699,9 +699,9 @@ a.viv-bs-commit:hover { text-decoration: underline; }
     <!-- Brand: fixed Vivarium logo + name (no per-workspace icon/name override). -->
     <div class="viv-rail-header">
       <a class="viv-rail-brand-link" href="#about" title="About Vivarium Workbench">
-        <img class="viv-rail-logo" src="assets/vivarium-logo.png?v=1789256895_1788282112" alt="Vivarium" loading="lazy"
-             data-light-src="assets/vivarium-logo.png?v=1789256895_1788282112"
-             data-dark-src="assets/vivarium-logo-dark.png?v=1789256895_1788282112"
+        <img class="viv-rail-logo" src="assets/vivarium-logo.png?v=1789836339_1789608173" alt="Vivarium" loading="lazy"
+             data-light-src="assets/vivarium-logo.png?v=1789836339_1789608173"
+             data-dark-src="assets/vivarium-logo-dark.png?v=1789836339_1789608173"
              onerror="if(this.dataset.lightSrc&&this.src.indexOf('logo-dark')>=0){this.src=this.dataset.lightSrc;}">
         <div class="viv-rail-brand">
           <strong>Vivarium</strong>
@@ -733,7 +733,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
           <span class="viv-wsp-dot viv-wsp-ready">●</span>
           <span class="viv-wsp-trigger-names">
             <strong>mgen</strong>
-            <span class="viv-wsp-trigger-branch" title="branch: main">main</span>
+            <span class="viv-wsp-trigger-branch" title="branch: investigation/structural-model">investigation/structural-model</span>
           </span>
         </span>
         <span class="viv-wsp-trigger-caret" aria-hidden="true">▾</span>
@@ -823,7 +823,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
             <path d="M20 9.5 L22.5 12 L20 14.5"/>
           </svg>
         </span>
-        <span class="viv-rail-link-label">Modules</span>
+        <span class="viv-rail-link-label">Processes</span>
       </a>
       <!-- Studies: the investigations overview. Sits directly under Composites; the
            per-investigation study list lives in the search section below. Branching-fan (DAG) icon. -->
@@ -963,9 +963,9 @@ a.viv-bs-commit:hover { text-decoration: underline; }
     <div class="about-page">
 
       <header class="about-hero">
-        <img class="about-logo" src="assets/vivarium-logo.png?v=1789256895_1788282112" alt="Vivarium"
-             data-light-src="assets/vivarium-logo.png?v=1789256895_1788282112"
-             data-dark-src="assets/vivarium-logo-dark.png?v=1789256895_1788282112"
+        <img class="about-logo" src="assets/vivarium-logo.png?v=1789836339_1789608173" alt="Vivarium"
+             data-light-src="assets/vivarium-logo.png?v=1789836339_1789608173"
+             data-dark-src="assets/vivarium-logo-dark.png?v=1789836339_1789608173"
              onerror="if(this.dataset.lightSrc&&this.src.indexOf('logo-dark')>=0){this.src=this.dataset.lightSrc;}">
         <div class="about-hero-text">
           <h1>Vivarium&nbsp;Workbench</h1>
@@ -1133,7 +1133,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         <button class="registry-tab"        data-kind="emitter"       onclick="_setRegistryTab('emitter')">Emitters <span class="count-badge" id="registry-emitter-count"></span></button>
         <button class="registry-tab"        data-kind="visualization" onclick="_setRegistryTab('visualization')">Visualizations <span class="count-badge" id="registry-visualization-count"></span></button>
         <button class="registry-tab"        data-kind="analysis"      onclick="_setRegistryTab('analysis')">Analyses <span class="count-badge" id="registry-analysis-count"></span></button>
-        <button class="registry-tab"        data-kind="report_card"   onclick="_setRegistryTab('report_card')">Report Cards <span class="count-badge" id="registry-report_card-count"></span></button>
+        <button class="registry-tab"        data-kind="report_card"   onclick="_setRegistryTab('report_card')">Tests <span class="count-badge" id="registry-report_card-count"></span></button>
         <button class="registry-tab"        data-kind="type"          onclick="_setRegistryTab('type')">Types <span class="count-badge" id="registry-type-count"></span></button>
         <button class="icon-btn" onclick="_loadRegistry(true)" title="Refresh registry" aria-label="Refresh registry" style="margin-left:auto;align-self:center">&#8635;</button>
       </div>
@@ -1472,17 +1472,17 @@ a.viv-bs-commit:hover { text-decoration: underline; }
     :root[data-theme="dark"] .viv-source-help > summary { color:var(--text) }
     :root[data-theme="dark"] .viv-help-cols code, :root[data-theme="dark"] .viv-source-help code { background:var(--field) }
   </style>
-  <details id="viv-source-help" class="viv-source-help" open>
+  <details id="viv-source-help" class="viv-source-help">
     <summary>How this page works</summary>
     <div class="viv-source-help-body">
-      <p>This page controls <strong>where this browser tab runs</strong> and how your work <strong>syncs with GitHub</strong> — two separate jobs, one per card below.</p>
+      <p>This page controls <strong>where this workspace runs</strong> and how your work <strong>syncs with GitHub</strong> — two separate jobs, one per card below.</p>
       <div class="viv-help-cols">
         <div>
-          <h4>Source — where this tab runs</h4>
+          <h4>Source — where this workspace runs</h4>
           <ul>
-            <li><strong>Local</strong> is a workspace checked out on this machine; <strong>Remote</strong> is a build registered on the GovCloud sms-api server.</li>
-            <li>Pick a <strong>Repo / Branch / Commit</strong> (or build), then <strong>Switch here</strong> to re-point <em>this</em> tab to it, or <strong>Open ↗</strong> to open it in a new tab. A remote build downloads its workspace the first time (a minute or two); cached builds are instant.</li>
-            <li><strong>Build via sms-api</strong> registers a branch's current HEAD as a new remote build. <strong>Reproduce locally</strong> gives you a command to recreate this exact source on your own machine.</li>
+            <li><strong>Local</strong> is a workspace checked out on this machine; <strong>Cloud</strong> is a build registered on the GovCloud sms-api server.</li>
+            <li>Pick a <strong>Repo / Branch / Commit</strong> (or build), then <strong>Open ↗</strong> to open it in a new tab (instant, non-destructive), or <strong>Use this environment</strong> to re-point <em>this</em> tab to it — that downloads the cloud environment's workspace the first time (a minute or two; cached builds are instant). You don't need to use the cloud environment to view results.</li>
+            <li><strong>Build via sms-api</strong> registers a branch's current HEAD as a new cloud environment. <strong>Run locally</strong> gives you a command to recreate this exact source on your own machine.</li>
             <li>In the build list, chips flag which build is <strong>in workspace ✓</strong>, on your <strong>workspace commit</strong>, or the <strong>latest</strong>.</li>
           </ul>
         </div>
@@ -2276,28 +2276,32 @@ Nothing on <code id="pr-base-display-2">main</code> changes until someone presse
 <script src="assets/data-source.js"></script>
 <script src="assets/render-helpers.js"></script>
 <script src="assets/client.js" onerror="/* live mode unavailable */"></script>
-<script src="assets/aig-graph.js?v=1789256895_1788282112" onerror="/* aig-graph unavailable */"></script>
-<script src="assets/audit.js?v=1789256895_1788282112" onerror="/* audit view unavailable */"></script>
-<script src="assets/col-resize.js?v=1789256895_1788282112"></script>
-<script src="assets/sim-table.js?v=1789256895_1788282112"></script>
+<script src="assets/aig-graph.js?v=1789836339_1789608173" onerror="/* aig-graph unavailable */"></script>
+<script src="assets/audit.js?v=1789836339_1789608173" onerror="/* audit view unavailable */"></script>
+<script src="assets/col-resize.js?v=1789836339_1789608173"></script>
+<script src="assets/sim-table.js?v=1789836339_1789608173"></script>
 <!-- composite-card.js: the shared composite-card renderer (extracted from
      walkthrough.js, study-spine-reorg Task 6) — MUST load before
      walkthrough.js, which now calls these functions as globals rather than
      defining them itself. Also loaded on study-detail.html so the Model tab
      renders the identical Full/Grid composite card. -->
-<script src="assets/composite-card.js?v=1789256895_1788282112" onerror="/* composite-card unavailable */"></script>
-<script src="assets/walkthrough.js?v=1789256895_1788282112" onerror="/* walkthrough unavailable */"></script>
-<script src="assets/github-login.js?v=1789256895_1788282112" onerror="/* github-login unavailable */"></script>
+<script src="assets/composite-card.js?v=1789836339_1789608173" onerror="/* composite-card unavailable */"></script>
+<!-- loom-embed.js: the single source for the loom embed glue (_openCompositeLoomInline
+     + _compositeStateUrl + auto-height). MUST load before walkthrough.js, which now
+     calls these as globals instead of duplicating them. -->
+<script src="assets/loom-embed.js?v=1789836339_1789608173" onerror="/* loom-embed unavailable */"></script>
+<script src="assets/walkthrough.js?v=1789836339_1789608173" onerror="/* walkthrough unavailable */"></script>
+<script src="assets/github-login.js?v=1789836339_1789608173" onerror="/* github-login unavailable */"></script>
 <!-- workspace-switcher.js is intentionally not loaded: the left-rail dropdown
      it used to drive has been repurposed into the investigation switcher
      (investigation-switcher.js). The /api/workspaces endpoints remain available
      for CLI tooling. -->
 <script src="assets/investigation-switcher.js"></script>
-<script src="assets/branch-source.js?v=1789256895_1788282112"></script>
+<script src="assets/branch-source.js?v=1789836339_1789608173"></script>
 <!-- Encode this tab's workspace materialization state in the favicon + title
      (session-per-tab): ready / ⏳ preparing / ⚠️ failed. -->
-<script src="assets/session-status.js?v=1789256895_1788282112"></script>
-<script src="assets/workspace-picker.js?v=1789256895_1788282112"></script>
+<script src="assets/session-status.js?v=1789836339_1789608173"></script>
+<script src="assets/workspace-picker.js?v=1789836339_1789608173"></script>
 <script>
 // Initialize drop zones once walkthrough.js is loaded.
 document.addEventListener("DOMContentLoaded", function() {
