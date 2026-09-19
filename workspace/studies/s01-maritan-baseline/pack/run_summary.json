@@ -1,13 +1,17 @@
 {
-  "n_placed": 49547,
+  "n_placed": 30355,
   "n_species": 506,
   "n_surface_membrane": 75,
   "n_with_structure": 506,
+  "protein_occupancy": 0.144,
+  "maritan_reference_occupancy": 0.144,
+  "cell_model": "Maritan sphere r=144.47 nm (Frame 149 s), near-spherical capsule",
   "pack_path": "/Users/eranagmon/code/viva-mGen--structural-model/workspace/studies/s01-maritan-baseline/pack/mgen_maritan_baseline.pack.json",
   "sidecar_path": "/Users/eranagmon/code/viva-mGen--structural-model/workspace/studies/s01-maritan-baseline/pack/mgen_maritan_baseline.meta.json",
   "checks": {
     "structural-species-placed-at-abundance": true,
     "structural-single-supercoiled-chromosome": true,
-    "structural-membrane-proteins-in-bilayer": true
+    "structural-membrane-proteins-in-bilayer": true,
+    "structural-occupancy-matches-maritan": true
   }
 }

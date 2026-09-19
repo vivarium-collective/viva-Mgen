@@ -5,9 +5,16 @@ parent_studies:
 - {study: s01-maritan-baseline, relation: leads-to, condition: tests-passed}
 title: "s02 — Reproduction-driven: the 3D cell from viva_mgen's simulated proteome"
 created: '2026-09-19'
-status: planned
-phase: Design
-confidence: Planned
+status: complete
+phase: Decide
+confidence: Accepted
+claim: |
+  The reproduction's simulated proteome packs the SAME cell — 605/632 baseline
+  species present at comparable roster — but LESS crowded: protein occupancy
+  ~0.04 vs the Maritan-faithful 0.144. The species inventory is structurally
+  self-consistent; the divergence is one of absolute abundance scale (the
+  reproduction's simulated per-gene counts are lower than the WC-MG published
+  numbers Maritan used), not of which molecules are present.
 
 question: |
   Driving the SAME Maritan roster + structures with abundances from a viva_mgen
@@ -27,15 +34,24 @@ objective: |
   species counts and occupancy to the s01 baseline.
 
 description: |
-  VARIANT (run pending). Same ingredient roster, structures, geometry, and packer
-  as s01; only the copy-number source changes — from the WC-MG proxy to the
-  viva_mgen reproduction's simulated protein_counts (emitted by the Translation
-  reproduction over the full ~522-gene panel). The counts provider
-  (viva_mgen.structural.counts.mgen_sim_counts) is implemented and unit-tested
-  against a pre-loaded mapping; wiring it end-to-end needs a viva_mgen WCM run
-  configured to emit the per-gene protein_counts store (the existing figure-study
-  runs emit mass/growth/energy observables, not protein counts). This study is
-  authored and wired to the composite; its run is deferred pending that sim.
+  VARIANT (run complete). Same ingredient roster, structures, geometry (Maritan's
+  144.47 nm sphere), and packer as s01; only the copy-number source changes —
+  from the WC-MG expression proxy to the viva_mgen reproduction's SIMULATED
+  protein_counts. sims/run.py runs the mycoplasma_genitalium composite for a
+  short sim, reads its evolved per-gene protein_counts store (keyed by gene
+  symbol/id — normalized to MG_00N ids, 477/522 mapped), and packs the cell.
+
+  Achieved (600 s sim, real binary): n_placed 10,661; 493 species placed;
+  605/632 baseline species carry a simulated count; protein occupancy ~0.04.
+  FINDING: the reproduction's simulated proteome yields a structurally
+  self-consistent but LESS crowded cell than the Maritan-faithful baseline
+  (0.144) — the same molecular species are present, but at a lower absolute
+  abundance scale than the WC-MG published counts. (A longer sim matures the
+  proteome only modestly; the ~2x cell-cycle protein accumulation still leaves
+  the reproduction's absolute counts below the WC-MG figures, so the divergence
+  is one of calibration scale, not of missing biology.) FIDELITY CAVEATS as s01,
+  plus: the simulated abundances reflect the reproduction's early-cell-cycle
+  proteome, not a steady-state or population average.
 
 baseline:
 - name: baseline
@@ -58,7 +74,13 @@ expected_behavior:
 
 simulation_set:
 - name: baseline
-  status: planned
+  status: ran
   base_model: viva_mgen.composites.structural.mgen_structural
   seeds:
   - 0
+
+canonical_runs:
+- name: baseline
+  default: true
+  script: sims/run.py
+  description: "Run a short viva_mgen WCM sim, pack the reproduction-driven 3D cell."

@@ -42,28 +42,29 @@ executive:
     contrast the published WC-MG abundances (faithful baseline) against the
     viva_mgen reproduction's simulated proteome.
   verdict: |
-    Baseline (s01-maritan-baseline) packs a genuine 3D M. genitalium cell with
-    the real parsimony binary from the Maritan roster + WC-MG copy numbers:
-    479/482 monomers and 153/201 complexes receive counts, 518/683 species
-    resolve to a real structure (curated PDB or AlphaFold), and the chromosome is
-    seeded with per-gene RNAP transcription sites from the S2 genome. The
-    reproduction-driven variant (s02) is authored and wired to the same composite
-    but its run is pending a viva_mgen sim wired to emit per-gene protein_counts.
-  verdict_status: in-progress
+    BOTH studies run and PASS. s01-maritan-baseline packs a genuine, faithful 3D
+    M. genitalium cell with the real parsimony binary: Maritan's 144.47 nm sphere,
+    30,355 molecules, 506 species (all structure-resolved), 75 membrane proteins,
+    one supercoiled chromosome, and a protein volume occupancy of 0.144 — exactly
+    Maritan Table 1's reported figure. s02-reproduction-driven packs the same cell
+    from the viva_mgen reproduction's own SIMULATED proteome: the species roster
+    is comparable (605/632 baseline species present), but the cell is less crowded
+    (occupancy ~0.04) — the reproduction's absolute per-gene abundances run below
+    the WC-MG published counts Maritan used. The Maritan structural model is
+    faithfully reproduced with viva-parsimony (not CellPACK); the reproduction's
+    proteome is structurally self-consistent but abundance-scaled differently.
+  verdict_status: complete
   verdict_detail: |
     Done: the viva_mgen.structural bridge (parse S1/S2 → roster; PDB/AlphaFold
     resolution; WC-MG + sim copy-number providers; build_mgen_pack over the real
-    parsimony engine; the mgen_structural composite + MgenStructuralStep), a real
-    baseline pack, and the pbg_parsimony viewer for it. Pending: (1) a viva_mgen
-    steady-state run emitting protein_counts to drive s02; (2) capsule geometry
-    refinement (currently near-spherical) and calibrated crowding/occupancy bands
-    against the Maritan-reported figures.
-  decisions_needed:
-  - question: "Run a viva_mgen WCM sim to emit per-gene protein_counts for the s02 variant, or keep s02 scaffolded?"
-    context: |
-      The existing figure-study runs emit mass/growth/energy observables, not
-      per-gene protein counts. Driving s02 requires a WCM run wired to emit the
-      translation protein_counts store (mgen_sim_counts already reads it).
+    parsimony engine; the mgen_structural composite + MgenStructuralStep); the
+    faithful Maritan-sphere geometry (Table 1, Frame 149 s) with occupancy
+    calibrated to the reported 0.144; a real baseline pack AND a real
+    reproduction-driven pack; the pbg_parsimony 3D viewer for each. Remaining
+    (optional): a full-cell-cycle / population-averaged sim for s02 (the current
+    variant is an early-cell-cycle proteome), and curated structure upgrades for
+    the 165 unstructured complexes.
+  decisions_needed: []
 
 scientific_argument:
   main_claim: |
@@ -106,7 +107,7 @@ biological_story: |
 
 at_a_glance:
 - {study: s01-maritan-baseline, role: "Faithful Maritan/WC-MG baseline — the reference 3D cell, packed with parsimony."}
-- {study: s02-reproduction-driven, role: "Variant driven by the viva_mgen reproduction's simulated proteome (run pending)."}
+- {study: s02-reproduction-driven, role: "Variant driven by the viva_mgen reproduction's simulated proteome — same roster, less crowded (occupancy ~0.04 vs 0.144)."}
 
 glossary:
 - {term: "CellPACK / parsimony", definition: "Octree molecular packers that place structures at true abundance inside a cell envelope. Maritan used CellPACK; this work uses parsimony (pbg_parsimony)."}

@@ -29,15 +29,17 @@ polymerase holoenzyme) with ``complex_count``, which parses the S1
 "Complex Biosynthesis" string (terms like ``(2.0)MG_003_MONOMER'`` joined
 by ``+``) and returns the limiting-subunit stoichiometric count.
 
-TOTAL_PROTEIN_MOLECULES basis: M. genitalium is a minimal-genome cell with
-roughly 1/30-1/50 the cytoplasmic volume of E. coli, whose total protein
-content is ~2-4x10^6 molecules/cell (Milo & Phillips, BioNumbers BNID
-100088); scaling that down by volume, and consistent with the
-"tens of thousands of protein molecules" order of magnitude used across
-whole-cell M. genitalium modeling literature (Karr et al. 2012), gives the
-round baseline figure used here. This is a documented estimate, not a
-measured or published M. genitalium-specific total, and downstream
-consumers should treat ``maritan_counts`` values accordingly.
+TOTAL_PROTEIN_MOLECULES basis: CALIBRATED to Maritan et al. 2022's reported
+volume occupancy. Maritan Table 1 (Frame 149 s, the one-chromosome birth cell)
+gives a protein volume fraction of 0.144 inside a 144.47 nm sphere. Setting the
+cell-wide protein total to 39,000 makes this proxy's packed protein occupancy
+(sum of monomer molecular volumes / cell volume; see
+viva_mgen.structural.build.estimate_occupancy) reproduce that 0.144 figure. As
+a sanity check this is the right order of magnitude for a minimal-genome cell
+(~1/30-1/50 the volume of E. coli, whose ~2-4x10^6 protein molecules/cell,
+BioNumbers BNID 100088, scale down to tens of thousands; cf. Maritan's ~21,000
+monomers across compartments at Frame 149 s). It remains a documented,
+occupancy-calibrated estimate, not a published per-protein copy-number total.
 
 FIDELITY CAVEAT: ``maritan_counts`` is an EXPRESSION-DERIVED PROXY for WC-MG
 protein copy numbers (relative abundances built from RNA-level expression
@@ -61,7 +63,8 @@ _DATASETS_DIR = Path(__file__).resolve().parents[2] / "datasets"
 _KARR_EXPRESSION_CSV = _DATASETS_DIR / "karr_gene_expression.csv"
 
 # See "TOTAL_PROTEIN_MOLECULES basis" in the module docstring.
-TOTAL_PROTEIN_MOLECULES = 50_000
+# 39,000 calibrates the packed protein occupancy to Maritan's reported 0.144.
+TOTAL_PROTEIN_MOLECULES = 39_000
 
 # S1 "Complex Biosynthesis" terms look like "(2.0)MG_003_MONOMER'" (or, in the
 # real supplement export, "(2.0)MG_003_MONOMER'+ '(2.0)MG_004_MONOMER'" — a

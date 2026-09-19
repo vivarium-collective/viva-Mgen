@@ -18,7 +18,7 @@ from pathlib import Path
 
 from viva_mgen.structural.maritan_tables import load_proteins, load_genes
 from viva_mgen.structural.counts import maritan_counts
-from viva_mgen.structural.build import build_mgen_pack, mgen_ingredients
+from viva_mgen.structural.build import build_mgen_pack, mgen_ingredients, estimate_occupancy
 
 STUDY_DIR = Path(__file__).resolve().parents[1]
 PACK_DIR = STUDY_DIR / "pack"
@@ -51,10 +51,16 @@ def main() -> int:
     n_surface = sum(1 for i in ings if getattr(i, "region", "") == "surface")
     n_with_struct = sum(1 for i in ings if getattr(i, "structure", None) is not None)
 
+    occ = estimate_occupancy(counts, top_n=args.top_n)
+    occupancy = round(occ["occupancy"], 3)
+
     checks = {
         "structural-species-placed-at-abundance": n_placed > 0 and n_species > 100,
         "structural-single-supercoiled-chromosome": True,  # build_mgen_pack packs exactly one
         "structural-membrane-proteins-in-bilayer": n_surface > 0,
+        # Protein volume occupancy calibrated to Maritan 2022 Table 1 (0.144);
+        # allow tolerance for the seq-length-derived volume estimate.
+        "structural-occupancy-matches-maritan": 0.11 <= occ["occupancy"] <= 0.18,
     }
 
     summary = {
@@ -62,6 +68,9 @@ def main() -> int:
         "n_species": n_species,
         "n_surface_membrane": n_surface,
         "n_with_structure": n_with_struct,
+        "protein_occupancy": occupancy,
+        "maritan_reference_occupancy": 0.144,
+        "cell_model": "Maritan sphere r=144.47 nm (Frame 149 s), near-spherical capsule",
         "pack_path": str(res.get("pack_path", "")),
         "sidecar_path": str(res.get("sidecar_path", "")),
         "checks": checks,

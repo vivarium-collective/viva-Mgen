@@ -25,21 +25,23 @@ from viva_mgen.structural.structures import structure_ref_for, uniprot_index
 DATA = Path(__file__).resolve().parent / "data"
 
 # --- cell geometry -----------------------------------------------------------
-# M. genitalium is among the smallest known free-living cells: Maritan et al.
-# 2022 and the Karr et al. 2012 whole-cell model both describe a
-# roughly-spherical/pleomorphic cell body ~0.3-0.4 um in diameter.
-# MGEN_RADIUS_UM is the spherocylinder cap radius (~half that diameter).
-MGEN_RADIUS_UM = 0.20
-
-# MGEN_VOLUME_FL: viva_mgen.constants.CELL_INITIAL_DRY_WEIGHT_FG is 3.93 fg at
-# ~30% dry-mass fraction (FRACTION_WET_WEIGHT=0.7) -> a wet weight ~13 fg;
-# at a typical cytoplasmic density of ~1.1 g/mL that implies a cell volume on
-# the order of a few hundredths of a fL. A bare sphere at MGEN_RADIUS_UM is
-# (4/3)*pi*(0.20 um)^3 ~= 0.034 fL; MGEN_VOLUME_FL below is a round
-# literature/order-of-magnitude figure (~2x that bare-sphere volume, allowing
-# a modest capsule elongation) consistent with both estimates. Refine against
-# Maritan et al. 2022's stated cell dimensions if/when available.
-MGEN_VOLUME_FL = 0.067
+# FAITHFUL TO MARITAN. Biological M. genitalium is flask-shaped (an ovoid body
+# with a tapered terminal organelle), but Maritan et al. 2022 -- the model this
+# investigation reproduces -- state explicitly: "The cell shape is approximated
+# as a sphere, and the attachment organelle is omitted", modelling the first
+# cell-cycle phase (one chromosome present, ~23% of the cycle). To reproduce
+# Maritan faithfully we use their sphere, NOT a biological flask.
+#
+# Maritan Table 1, Frame 149 s (the very start of the cell cycle = a one-
+# chromosome birth cell): cell radius 144.47 nm. The parsimony packer will not
+# fill a zero-length cylinder (a true half_len=0 sphere packs nothing), so the
+# cell is modelled as a NEAR-spherical spherocylinder with a small medial
+# half-length, its cap radius solved to CONSERVE Maritan's sphere volume
+# (aspect ratio ~1.1:1). This keeps the packed volume -- and therefore the
+# volume-occupancy comparison below -- honest against Maritan's 0.144 protein
+# fraction.
+MGEN_MARITAN_SPHERE_RADIUS_A = 1444.7   # 144.47 nm, Maritan Table 1 Frame 149 s
+_MGEN_HALF_LEN_A = 150.0                 # small medial length so the packer fills it
 
 # Genome contour -> bead count, following ecoli_3d's GENOME_BEADS convention
 # (34,000 beads for a 4,641,652 bp E. coli genome, i.e. ~135 bp/bead).
@@ -96,8 +98,74 @@ def _pbg_genome_csv() -> str:
 
 
 def mgen_capsule() -> Capsule:
-    """Spherocylinder sized to MGEN_VOLUME_FL at cap radius MGEN_RADIUS_UM."""
-    return Capsule.from_volume_fl(MGEN_VOLUME_FL, radius_um=MGEN_RADIUS_UM)
+    """Maritan's spherical cell (Table 1, Frame 149 s: radius 144.47 nm),
+    modelled as a near-spherical spherocylinder with a small medial half-length
+    and cap radius solved to conserve the sphere's volume (a true half_len=0
+    sphere packs nothing). Faithful to Maritan's stated sphere approximation."""
+    import math
+    R = MGEN_MARITAN_SPHERE_RADIUS_A
+    target_v = (4.0 / 3.0) * math.pi * R ** 3
+    hl = _MGEN_HALF_LEN_A
+    # Solve pi*r^2*(2*hl) + (4/3)*pi*r^3 = target_v for r by bisection.
+    lo, hi = 0.0, R
+    for _ in range(60):
+        r = 0.5 * (lo + hi)
+        v = math.pi * r * r * (2.0 * hl) + (4.0 / 3.0) * math.pi * r ** 3
+        if v < target_v:
+            lo = r
+        else:
+            hi = r
+    return Capsule(half_len=hl, radius=0.5 * (lo + hi))
+
+
+def _capsule_volume_a3(cap: Capsule) -> float:
+    """Spherocylinder volume in Angstrom^3: cylinder (length 2*half_len) + two
+    hemispherical caps."""
+    import math
+    r = cap.radius
+    return math.pi * r * r * (2.0 * cap.half_len) + (4.0 / 3.0) * math.pi * r ** 3
+
+
+def _protein_volume_a3(protein) -> float:
+    """Rough molecular volume (Angstrom^3) from residue count via the standard
+    protein specific volume: MW ~= 110 Da/residue, V ~= 1.21 A^3/Da
+    (Harpaz/Gerstein). Returns 0 when the residue count is unknown (complexes
+    without a seq_length; their subunits are counted separately)."""
+    aa = getattr(protein, "seq_length", None)
+    if not aa:
+        return 0.0
+    return float(aa) * 110.0 * 1.21
+
+
+def estimate_occupancy(counts, top_n=None) -> dict:
+    """Estimate macromolecular volume occupancy (crowding) of the packed cell:
+    sum of placed monomers' molecular volumes divided by the capsule volume.
+
+    Monomers carry a residue count (seq_length) → a volume; complexes are
+    covered through their subunit monomers (counted at their own abundance), so
+    to avoid double counting only monomer ingredients contribute here. Returns
+    ``{occupancy, macromol_volume_a3, cell_volume_a3, monomers_counted}`` — a
+    labeled estimate, not a mesh-exact figure. Typical bacterial cytoplasmic
+    crowding is a volume fraction of ~0.2-0.4."""
+    proteins = load_proteins()
+    by_id = {p.prot_id: p for p in proteins}
+    cell_v = _capsule_volume_a3(mgen_capsule())
+    macromol_v = 0.0
+    counted = 0
+    for prot_id, n in counts.items():
+        p = by_id.get(prot_id)
+        if p is None or getattr(p, "kind", "") != "monomer":
+            continue
+        v = _protein_volume_a3(p)
+        if v > 0 and n > 0:
+            macromol_v += v * float(n)
+            counted += 1
+    return {
+        "occupancy": (macromol_v / cell_v) if cell_v else 0.0,
+        "macromol_volume_a3": macromol_v,
+        "cell_volume_a3": cell_v,
+        "monomers_counted": counted,
+    }
 
 
 def mgen_chromosome() -> Chromosome:
