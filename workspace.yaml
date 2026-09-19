@@ -4,6 +4,16 @@ created: "2026-09-12"
 plugin_version: 0.22.0
 package_path: viva_mgen
 
+imports:
+  pbg_parsimony:
+    source: https://github.com/vivarium-collective/pbg-parsimony
+    ref: main
+    mode: reference
+    description: |
+      cellPACK-style 3D packing engine (Ingredient/Capsule/Chromosome/
+      build_pack) used by viva_mgen.structural to pack the whole-cell
+      molecular roster into a single-membrane M. genitalium capsule.
+
 # Directory layout. New workspaces group their research directories under a
 # tidy `workspace/` subtree (the dirs below); the hidden `.pbg/` machine state
 # stays at the root like `.git/`. Tooling (dashboard, lint, skills) resolves
