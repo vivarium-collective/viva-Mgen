@@ -207,6 +207,63 @@ RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
 
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **3d-cell**
+
+def _save_viz(study, slug, html):
+    d = REPO / 'reports/notebooks/figures' / study
+    d.mkdir(parents=True, exist_ok=True)
+    out = d / (slug + '.html')
+    out.write_text(html, encoding='utf-8')
+    print('  wrote', out)
+
+
+# 3d-cell
+_save_viz('s01-maritan-baseline', '3d-cell', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **inventory-sunburst**
+
+# inventory-sunburst
+_save_viz('s01-maritan-baseline', 'inventory-sunburst', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **copy-numbers**
+
+# copy-numbers
+_save_viz('s01-maritan-baseline', 'copy-numbers', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **spatial-classes**
+
+# spatial-classes
+_save_viz('s01-maritan-baseline', 'spatial-classes', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **molecular-machines**
+
+# molecular-machines
+_save_viz('s01-maritan-baseline', 'molecular-machines', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **structure-prep**
+
+# structure-prep
+_save_viz('s01-maritan-baseline', 'structure-prep', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **preparation-pipeline**
+
+# preparation-pipeline
+_save_viz('s01-maritan-baseline', 'preparation-pipeline', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **maritan-comparison**
+
+# maritan-comparison
+_save_viz('s01-maritan-baseline', 'maritan-comparison', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **baseline-vs-sim**
+
+# baseline-vs-sim
+_save_viz('s01-maritan-baseline', 'baseline-vs-sim', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
 # ## Study: s02 — Reproduction-driven: the 3D cell from viva_mgen's simulated proteome (`s02-reproduction-driven`)
 #
 # **Question.** Driving the SAME Maritan roster + structures with abundances from a viva_mgen
@@ -255,3 +312,47 @@ STUDY_YAML = str(STUDY_DIR / "study.yaml")
 RUNS_DB = str(STUDY_DIR / "runs.db")
 
 print("No recorded runs for this study; nothing to reproduce.")
+
+# ### Visualizations
+#
+# _Results are shown by the figures below, produced by the run above._
+
+# **3d-cell**
+
+# 3d-cell
+_save_viz('s02-reproduction-driven', '3d-cell', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **inventory-sunburst**
+
+# inventory-sunburst
+_save_viz('s02-reproduction-driven', 'inventory-sunburst', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **copy-numbers**
+
+# copy-numbers
+_save_viz('s02-reproduction-driven', 'copy-numbers', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **spatial-classes**
+
+# spatial-classes
+_save_viz('s02-reproduction-driven', 'spatial-classes', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **molecular-machines**
+
+# molecular-machines
+_save_viz('s02-reproduction-driven', 'molecular-machines', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **structure-prep**
+
+# structure-prep
+_save_viz('s02-reproduction-driven', 'structure-prep', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **preparation-pipeline**
+
+# preparation-pipeline
+_save_viz('s02-reproduction-driven', 'preparation-pipeline', _render_one('', {}, RUNS_DB, STUDY_YAML))
+
+# **baseline-vs-sim**
+
+# baseline-vs-sim
+_save_viz('s02-reproduction-driven', 'baseline-vs-sim', _render_one('', {}, RUNS_DB, STUDY_YAML))
