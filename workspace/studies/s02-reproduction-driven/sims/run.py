@@ -28,7 +28,7 @@ from viva_mgen.composites import build_mgen
 from viva_mgen.structural.maritan_tables import load_proteins, load_genes
 from viva_mgen.structural.counts import maritan_counts, mgen_sim_counts
 from viva_mgen.structural.build import build_mgen_pack, mgen_ingredients, estimate_occupancy
-from viva_mgen.structural.viewer import relativize_pack_urls
+from viva_mgen.structural.viewer import relativize_pack_urls, set_pack_about, mgen_about_html
 
 STUDY_DIR = Path(__file__).resolve().parents[1]
 # The workbench's built-in Parsimony Viewer discovers packs under <study>/viz/3d/.
@@ -124,6 +124,7 @@ def main() -> int:
     res = build_mgen_pack(counts, out_dir=PACK_DIR, top_n=args.top_n,
                           name="mgen_reproduction_driven")
     relativize_pack_urls(res["pack_path"])  # for the workbench built-in viewer
+    set_pack_about(res["sidecar_path"], mgen_about_html("sim"))  # M. genitalium about panel
 
     ings = mgen_ingredients(counts, top_n=args.top_n)
     occ = estimate_occupancy(counts, top_n=args.top_n)
