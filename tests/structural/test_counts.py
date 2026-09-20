@@ -43,24 +43,28 @@ def test_maritan_counts_covers_complexes_including_nested_ones():
     assert isinstance(counts[nested.prot_id], int)
 
 
-def test_maritan_counts_scale_sums_near_total_protein_target():
-    from viva_mgen.structural.counts import TOTAL_PROTEIN_MOLECULES
+def test_maritan_counts_total_protein_is_maritan_plausible():
+    # Subunit-conserving assembly: free monomers + assembled complexes should
+    # total in the Maritan Table-1 ballpark (~26k), not the ~10x-inflated figure
+    # the old independent-complex counting produced. (The volume is conserved, so
+    # test_protein_occupancy_matches_maritan pins the 0.144 fraction separately.)
     proteins, genes = load_proteins(), load_genes()
     counts = maritan_counts(proteins, genes)
-    mono = [p for p in proteins if p.kind == "monomer"]
-    monomer_total = sum(counts[p.prot_id] for p in mono)
-    # rounding per-gene keeps the sum close to (not exactly) the target
-    assert monomer_total == pytest.approx(TOTAL_PROTEIN_MOLECULES, rel=0.05)
+    total = sum(v for v in counts.values() if v > 0)
+    assert 18_000 <= total <= 36_000        # Maritan ~26k
+    # ribosomes assemble (rRNA subunits non-limiting)
+    assert counts.get("RIBOSOME_70S", 0) > 0
 
 
 def test_mgen_sim_counts_from_synthetic_mapping():
     proteins, genes = load_proteins(), load_genes()
     gene_totals = {"MG_003": 100.0, "MG_004": 50.0}
     counts = mgen_sim_counts(gene_totals, proteins, genes)
-    assert counts["MG_003_MONOMER"] == 100
-    assert counts["MG_004_MONOMER"] == 50
-    gyr = next(p for p in proteins if p.prot_id == "DNA_GYRASE")
-    assert counts[gyr.prot_id] == complex_count(gyr.biosynthesis, counts)
+    # DNA_GYRASE = (2)MG_003 + (2)MG_004 -> min(100//2, 50//2) = 25, consuming
+    # 50 of each. Subunit-conserving assembly leaves the FREE remainder:
+    assert counts["DNA_GYRASE"] == 25
+    assert counts["MG_003_MONOMER"] == 50   # 100 synthesized - 50 consumed
+    assert counts["MG_004_MONOMER"] == 0    # 50 synthesized - 50 consumed
 
 
 def test_mgen_sim_counts_rounds_and_ignores_unmapped_genes():

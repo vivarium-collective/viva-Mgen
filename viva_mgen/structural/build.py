@@ -11,6 +11,8 @@ into a list of :class:`pbg_parsimony.Ingredient`, size a spherocylinder cell
 
 from __future__ import annotations
 
+import re
+
 import csv
 import math
 import tempfile
@@ -43,9 +45,15 @@ DATA = Path(__file__).resolve().parent / "data"
 MGEN_MARITAN_SPHERE_RADIUS_A = 1444.7   # 144.47 nm, Maritan Table 1 Frame 149 s
 _MGEN_HALF_LEN_A = 150.0                 # small medial length so the packer fills it
 
-# Genome contour -> bead count, following ecoli_3d's GENOME_BEADS convention
-# (34,000 beads for a 4,641,652 bp E. coli genome, i.e. ~135 bp/bead).
-_BP_PER_BEAD = 135.0
+# Genome contour -> bead count. Maritan et al. build the nucleoid with a
+# LatticeNucleoid at 10 bp/bead; we match that resolution (580,070 bp ->
+# ~58,000 beads). Bead spacing is the physical B-DNA rise (3.4 A/bp x 10 bp =
+# 34 A) and bead_radius ~10 A (the dsDNA radius), so the fiber's contour length
+# is the real ~197 um of chromosomal DNA supercoiled into the cell.
+_BP_PER_BEAD = 10.0
+_DNA_RISE_A_PER_BP = 3.4
+_DNA_BEAD_SPACING_A = _BP_PER_BEAD * _DNA_RISE_A_PER_BP   # 34 A
+_DNA_BEAD_RADIUS_A = 10.0
 
 # --- genome-annotation CSV for pbg_parsimony -------------------------------
 # pbg_parsimony's Rust engine (parsimony-core's genome.rs, ``Genome::from_csv``)
@@ -137,16 +145,39 @@ def _protein_volume_a3(protein) -> float:
     return float(aa) * 110.0 * 1.21
 
 
-def estimate_occupancy(counts, top_n=None) -> dict:
-    """Estimate macromolecular volume occupancy (crowding) of the packed cell:
-    sum of placed monomers' molecular volumes divided by the capsule volume.
+_BIOSYNTHESIS_TERM_RE = re.compile(r"\(([\d.]+)\)\s*'?([A-Za-z0-9_]+)'?")
 
-    Monomers carry a residue count (seq_length) → a volume; complexes are
-    covered through their subunit monomers (counted at their own abundance), so
-    to avoid double counting only monomer ingredients contribute here. Returns
-    ``{occupancy, macromol_volume_a3, cell_volume_a3, monomers_counted}`` — a
-    labeled estimate, not a mesh-exact figure. Typical bacterial cytoplasmic
-    crowding is a volume fraction of ~0.2-0.4."""
+
+def _complex_volume_a3(protein, by_id, _memo=None) -> float:
+    """Molecular volume of a complex = sum over its subunits of
+    (stoichiometry x subunit volume), recursing through sub-complexes. Missing
+    or RNA subunits contribute nothing (proteins-only volume)."""
+    if _memo is None:
+        _memo = {}
+    if protein.prot_id in _memo:
+        return _memo[protein.prot_id]
+    _memo[protein.prot_id] = 0.0  # guard against cycles
+    total = 0.0
+    for st, sub_id in _BIOSYNTHESIS_TERM_RE.findall(protein.biosynthesis or ""):
+        stoich = float(st)
+        sub = by_id.get(sub_id)
+        if sub is None:
+            continue
+        v = _protein_volume_a3(sub) if sub.kind == "monomer" else _complex_volume_a3(sub, by_id, _memo)
+        total += stoich * v
+    _memo[protein.prot_id] = total
+    return total
+
+
+def estimate_occupancy(counts, top_n=None) -> dict:
+    """Estimate protein volume occupancy (crowding) of the packed cell: total
+    placed protein volume / capsule volume.
+
+    Counts free monomers (residue-count -> volume) AND complexes (summed subunit
+    volumes). With subunit-conserving assembly (counts.py) this totals the same
+    conserved protein volume regardless of how it partitions into free monomers
+    vs assembled complexes. Returns ``{occupancy, macromol_volume_a3,
+    cell_volume_a3, species_counted}``; Maritan reports 0.144 (Table 1)."""
     proteins = load_proteins()
     by_id = {p.prot_id: p for p in proteins}
     cell_v = _capsule_volume_a3(mgen_capsule())
@@ -154,17 +185,17 @@ def estimate_occupancy(counts, top_n=None) -> dict:
     counted = 0
     for prot_id, n in counts.items():
         p = by_id.get(prot_id)
-        if p is None or getattr(p, "kind", "") != "monomer":
+        if p is None or n <= 0:
             continue
-        v = _protein_volume_a3(p)
-        if v > 0 and n > 0:
+        v = _protein_volume_a3(p) if p.kind == "monomer" else _complex_volume_a3(p, by_id)
+        if v > 0:
             macromol_v += v * float(n)
             counted += 1
     return {
         "occupancy": (macromol_v / cell_v) if cell_v else 0.0,
         "macromol_volume_a3": macromol_v,
         "cell_volume_a3": cell_v,
-        "monomers_counted": counted,
+        "species_counted": counted,
     }
 
 
@@ -175,14 +206,17 @@ def mgen_chromosome() -> Chromosome:
     dsDNA mesh (RCSB 1BNA, B-DNA) so the fiber actually draws (without it the
     chromosome is defined but invisible), tinted tan and coiled by ``supercoil``.
     ``genome_csv`` seats RNAP at real (abundance-weighted) transcription sites
-    instead of uniformly along the fiber. Bead geometry (spacing 135 A ~= 40 bp,
-    radius 12 A) follows ecoli_3d's convention."""
+    instead of uniformly along the fiber. Bead geometry matches Maritan's
+    LatticeNucleoid resolution: 10 bp/bead at the physical B-DNA rise (34 A
+    spacing, ~10 A radius), so the fiber carries the real chromosomal contour."""
     beads = max(1, round(GENOME_LENGTH_BP / _BP_PER_BEAD))
     return Chromosome(
-        beads=beads, spacing=135.0, bead_radius=12.0, n_chromosomes=1,
+        beads=beads, spacing=_DNA_BEAD_SPACING_A, bead_radius=_DNA_BEAD_RADIUS_A,
+        n_chromosomes=1,
         genome_csv=_pbg_genome_csv(),
         segment=StructureRef("pdb", "1BNA"),
-        supercoil={"radius": 90.0, "pitch": 130.0, "domains": 200},
+        # More supercoil domains fold the real (~197 um) contour into the cell.
+        supercoil={"radius": 90.0, "pitch": 130.0, "domains": 700},
         color=(0.85, 0.75, 0.45),
     )
 
@@ -306,6 +340,26 @@ def mgen_ingredients(counts: dict, top_n: int | None = None) -> list:
     return ingredients
 
 
+# Non-protein RNA species (S1 is proteins-only). rRNA is already inside the 70S
+# ribosome structure; tRNAs are the dominant free RNA — Maritan Table 1 (Frame
+# 149 s) places 1653. Modelled as one tRNA species (RCSB 1EHZ, yeast tRNA-Phe).
+MGEN_TRNA_COUNT = 1653
+
+
+def mgen_rna_ingredients() -> list:
+    """RNA ingredients absent from the protein-only S1 roster. Currently the
+    free tRNA pool (Maritan's most abundant RNA species); rRNA rides inside the
+    70S ribosome mesh and mRNA/nascent transcripts are deferred."""
+    return [
+        Ingredient(
+            id="tRNA", count=MGEN_TRNA_COUNT,
+            structure=StructureRef("pdb", "1EHZ"),
+            region="interior", compartment="cytoplasm",
+            display_name="tRNA", category="RNA", color=(0.90, 0.55, 0.20),
+        ),
+    ]
+
+
 def build_mgen_pack(counts: dict, *, out_dir, top_n: int | None = None, name: str = "mgen") -> dict:
     """Assemble ingredients + geometry and pack the cell via ``pbg_parsimony``.
 
@@ -313,6 +367,8 @@ def build_mgen_pack(counts: dict, *, out_dir, top_n: int | None = None, name: st
     ``envelope=`` (the ``build_pack`` default, ``None``).
     """
     ingredients = mgen_ingredients(counts, top_n=top_n)
+    if top_n is None:                      # full cell -> include the RNA species
+        ingredients += mgen_rna_ingredients()
     capsule = mgen_capsule()
     chromosome = mgen_chromosome()
     return build_pack(ingredients, capsule, chromosome, out_dir=out_dir, name=name, envelope=None)

@@ -78,3 +78,16 @@ def test_dna_binding_parsed():
     nap = [p for p in load_proteins() if p.dna_binding]
     assert len(nap) > 40                                      # 57 in S1 (41 dsDNA + 16 ssDNA)
     assert all(p.dna_binding in ("dsDNA", "ssDNA") for p in nap)
+
+
+def test_s3_refines_membrane():
+    # S3 consensus reclassifies a few cytoplasmic proteins as membrane.
+    from viva_mgen.structural.maritan_tables import load_proteins
+    by_id = {p.prot_id: p for p in load_proteins()}
+    assert by_id["MG_045_MONOMER"].compartment == "m"   # c in S1, m by S3 consensus
+
+
+def test_nucleoid_is_fine_grained():
+    # Maritan LatticeNucleoid resolution: ~10 bp/bead over the 580 kbp genome.
+    from viva_mgen.structural.build import mgen_chromosome
+    assert mgen_chromosome().beads > 40000              # ~58k at 10 bp/bead

@@ -36,6 +36,20 @@ def uniprot_index(
     }
 
 
+# Curated structures for the large assembled machines Maritan hand-curated
+# (their §"molecular ingredient modeling" names the 70S ribosome, RNA polymerase
+# and GroEL/ES). S1 leaves no single bare PDB id for the assembled particle, and
+# a complex has no UniProt, so without these they'd be skipped. Real bacterial
+# homolog structures from RCSB (mmCIF for the big assemblies).
+_CURATED_STRUCTURES: dict[str, tuple[str, str]] = {
+    "RIBOSOME_70S": ("cif", "4YBB"),               # E. coli 70S ribosome
+    "RNA_POLYMERASE": ("cif", "4YG2"),             # bacterial RNA polymerase core
+    "RNA_POLYMERASE_HOLOENZYME": ("cif", "4YG2"),
+    "GROEL_GROES": ("pdb", "1AON"),                # GroEL/ES chaperonin
+    "GROEL": ("pdb", "1GRL"),
+}
+
+
 def structure_ref_for(
     protein: ProteinRow, uniprot_by_prot: dict[str, str]
 ) -> StructureRef | None:
@@ -47,4 +61,7 @@ def structure_ref_for(
     uniprot = uniprot_by_prot.get(protein.prot_id)
     if uniprot:
         return StructureRef(kind="alphafold", ref=uniprot)
+    curated = _CURATED_STRUCTURES.get(protein.prot_id)
+    if curated:
+        return StructureRef(kind=curated[0], ref=curated[1])
     return None

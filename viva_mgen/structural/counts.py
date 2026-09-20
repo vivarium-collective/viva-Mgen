@@ -127,27 +127,83 @@ def complex_count(biosynthesis: str, monomer_counts: dict[str, int]) -> int:
     return max(limiting, 0)
 
 
+def _is_rna_subunit(sub_id: str, all_prot_ids: set) -> bool:
+    """A biosynthesis subunit that is not a placeable protein and looks like an
+    RNA (rRNA/tRNA/sRNA/mRNA). Such species exist in the cell (e.g. the ribosome's
+    16S/23S/5S rRNA) but S1 is proteins-only, so they are non-limiting for
+    assembly rather than zeroing the whole complex."""
+    if sub_id in all_prot_ids:
+        return False
+    up = sub_id.upper()
+    return any(k in up for k in ("RRNA", "TRNA", "SRNA", "MRNA", "_RNA", "RIBOSOMAL_RNA"))
+
+
 def _resolve_complexes(proteins: list[ProteinRow], counts: dict[str, int]) -> None:
-    """Lift ``counts`` (monomer counts already populated) to cover every
-    complex in ``proteins``, in place. Handles complexes whose subunits are
-    themselves complexes (e.g. the DNA polymerase holoenzyme) by resolving
-    in dependency order; a subunit id that never appears in ``proteins`` at
-    all counts as missing (0) rather than blocking resolution forever.
+    """Assemble every complex by CONSUMING its subunits from the pool, in place.
+
+    Counting each complex independently as ``min(subunit // stoich)`` (the old
+    behaviour) massively over-counts shared subunits — a monomer used by five
+    complexes was counted into all five, inflating total protein ~10x. Instead
+    we assemble in dependency order (sub-complexes before super-complexes) and
+    DEDUCT consumed subunits, so total protein is conserved (matching the WC-MG's
+    conserved copy numbers). Monomer counts become the *free* (unassembled)
+    remainder; ``counts`` ends up with free-monomer + assembled-complex copies.
+    rRNA/tRNA subunits are non-limiting (present but not modelled as ingredients),
+    so ribosomes assemble from their protein subunits.
     """
     complexes = [p for p in proteins if p.kind != "monomer"]
     all_prot_ids = {p.prot_id for p in proteins}
-    pending = {p.prot_id: p.biosynthesis for p in complexes}
+    bio = {p.prot_id: p.biosynthesis for p in proteins}
+
+    def _size(pid, seen=None):
+        """Recursive subunit-copy count — a proxy for assembly size, so larger
+        machines (the 70S ribosome) claim shared subunits before minor
+        intermediates (an IF3-bound 30S) that compete for the same pool."""
+        seen = seen or set()
+        if pid in seen:
+            return 0.0
+        seen = seen | {pid}
+        total = 0.0
+        for st, s in _BIOSYNTHESIS_TERM_RE.findall(bio.get(pid, "") or ""):
+            total += float(st) * (1.0 + _size(s, seen))
+        return total
+
+    available = dict(counts)          # id -> currently-free copies (monomers seeded)
+    # Assemble larger complexes first so they win contested shared subunits.
+    order = sorted((p.prot_id for p in complexes), key=_size, reverse=True)
+    pending = {pid: bio[pid] for pid in order}
     changed = True
     while pending and changed:
         changed = False
         for prot_id, biosynthesis in list(pending.items()):
-            subunits = [s for _, s in _BIOSYNTHESIS_TERM_RE.findall(biosynthesis or "")]
-            if all(s in counts or s not in all_prot_ids for s in subunits):
-                counts[prot_id] = complex_count(biosynthesis, counts)
-                del pending[prot_id]
-                changed = True
-    for prot_id in pending:  # unresolved (cyclic) references: no defensible count
+            terms = [(max(1, int(round(float(st)))), s)
+                     for st, s in _BIOSYNTHESIS_TERM_RE.findall(biosynthesis or "")]
+            prot_terms = [(st, s) for st, s in terms if s in all_prot_ids]
+            # resolvable once every PROTEIN subunit (monomer or assembled sub-complex) is in the pool
+            if not all(s in available for _, s in prot_terms):
+                continue
+            limits = []
+            for st, s in terms:
+                if s in available:
+                    limits.append(available[s] // st)
+                elif _is_rna_subunit(s, all_prot_ids):
+                    continue                       # non-limiting RNA subunit
+                else:
+                    limits.append(0)               # missing protein subunit
+            n = min(limits) if limits else 0
+            counts[prot_id] = n
+            available[prot_id] = n                  # may itself be a super-complex subunit
+            for st, s in prot_terms:
+                available[s] = max(0, available[s] - n * st)
+            del pending[prot_id]
+            changed = True
+    for prot_id in pending:                         # unresolved (cyclic) references
         counts[prot_id] = 0
+    # Final count of every species = its FREE (unconsumed) copies: a monomer's
+    # remainder after assembly, and a sub-complex's remainder after any
+    # super-complex consumed it (so a 30S eaten by the 70S isn't also placed).
+    for p in proteins:
+        counts[p.prot_id] = int(available.get(p.prot_id, 0))
 
 
 def maritan_counts(proteins: list[ProteinRow], genes: list[GeneRow]) -> dict[str, int]:
