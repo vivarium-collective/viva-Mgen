@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from viva_mgen.evaluators import _latest_observable, register_derived_scalars, FIG7_FIELDS
+from viva_mgen.evaluators import _latest_observable, register_derived_scalars, ALL_FIELDS, FIG7_FIELDS
 
 
 def _write_log(ws: Path, events):
@@ -41,3 +41,25 @@ def test_registered_fn_reads_value(tmp_path):
     reg = {}
     register_derived_scalars(reg)
     assert reg["growth_is_monotonic_in_kcat"](None, {}, tmp_path) == 1.0
+
+
+def test_registers_all_studies_fields():
+    reg = {}
+    register_derived_scalars(reg)
+    # every declared field across all 8 studies is registered
+    for f in ALL_FIELDS:
+        assert f in reg and callable(reg[f])
+    # field names are unique across studies (no collision in the union)
+    assert len(ALL_FIELDS) == len(set(ALL_FIELDS))
+
+
+def test_cross_study_field_reads_own_value(tmp_path):
+    # a non-fig7 field (fig4) resolves from its own study's run, bound correctly
+    _write_log(tmp_path, [
+        {"run_id": "fig4-cell-cycle-baseline", "completed_at": 5.0,
+         "observables": {"cell_cycle_h": 12.5, "essentiality_accuracy": 0.9}},
+    ])
+    reg = {}
+    register_derived_scalars(reg)
+    assert reg["cell_cycle_h"](None, {}, tmp_path) == 12.5
+    assert reg["essentiality_accuracy"](None, {}, tmp_path) == 0.9
