@@ -582,6 +582,95 @@
   }
   window._loadCompositeObservables = _loadCompositeObservables;
 
+  // ── Build-error warning chip ──────────────────────────────────────────────
+  // PR #1111 made GET /api/composite-state degrade to a 200 with a `build_error`
+  // object (+ kind: static-fallback/last-good/skeleton, optional stale_overrides)
+  // instead of 400ing when a generator build fails (stale/absent ParCa cache,
+  // env-probe drift, an import error). This renders a small, non-blocking amber
+  // chip near the composite header so the user knows the shown wiring is stale/
+  // degraded. It is informational only — it never blocks the Run button or the
+  // view (the card already renders the best-available wiring).
+  //
+  // Given a composite-state response object, return {text, title} for the chip,
+  // or null when the wiring is healthy (no chip).
+  function _buildErrorChipInfo(d) {
+    if (!d || typeof d !== 'object') return null;
+    var be = (d.build_error && typeof d.build_error === 'object') ? d.build_error : null;
+    var kind = d.kind || '';
+    var unavailable = (kind === 'skeleton' || d.wiring_status === 'unavailable');
+    // Healthy build (kind generator/spec, no build_error) → no chip.
+    if (!be && kind !== 'last-good' && !unavailable && !d.stale_overrides) return null;
+    var detail = be ? String(be.detail || '') : String(d.notice || '');
+    var shortDetail = detail.length > 160 ? detail.slice(0, 160) + '…' : detail;
+    var msg = (be && be.notice) ? be.notice : shortDetail;
+    var label;
+    if (unavailable) {
+      label = 'wiring preview unavailable';
+    } else if (kind === 'last-good') {
+      label = 'showing last-known-good wiring';
+    } else if (be && (be.kind === 'stale-cache' || be.remote_no_cache)) {
+      label = 'wiring may be stale';
+    } else if (kind === 'static-fallback' || be) {
+      label = 'showing default wiring — live build failed';
+    } else {
+      label = 'wiring may be degraded';
+    }
+    var text = '⚠ ' + label;   // ⚠
+    if (msg && msg !== label) text += ' — ' + msg;   // — msg
+    if (d.stale_overrides) {
+      text += ' · Config → Apply didn’t render (showing default wiring)';
+    }
+    return { text: text, title: detail || msg || label };
+  }
+  window._buildErrorChipInfo = _buildErrorChipInfo;
+
+  // Fill (or clear) a card's build-warning chip from a composite-state response.
+  function _renderCompositeBuildWarn(cardEl, d) {
+    if (!cardEl) return;
+    var chip = cardEl.querySelector('[data-role="build-warn"]');
+    if (!chip) return;
+    var info = _buildErrorChipInfo(d);
+    // Toggle style.display too: the chip's inline style sets a display, which
+    // overrides the `hidden` attribute's UA display:none — without this the empty
+    // amber pill lingers visible when the wiring is healthy.
+    if (!info) { chip.hidden = true; chip.style.display = 'none'; chip.textContent = ''; chip.removeAttribute('title'); return; }
+    chip.textContent = info.text;
+    chip.title = info.title || info.text;
+    chip.hidden = false;
+    chip.style.display = 'inline-block';
+  }
+  window._renderCompositeBuildWarn = _renderCompositeBuildWarn;
+
+  // Composite-state URL. `build_error` lives on /api/composite-state — NOT on the
+  // /api/composite-resolve the card payload came from — so the chip needs its own
+  // lookup. Snapshot bundles bake it at <base>/api/composite-state/<id>.json.
+  function _compositeBuildStateUrl(id, overridesJson) {
+    var apiUrl = (window.DataSource && window.DataSource.apiUrl)
+      ? window.DataSource.apiUrl.bind(window.DataSource) : function (p) { return p; };
+    if (document.body.classList.contains('snapshot')) {
+      return apiUrl('/api/composite-state/' + encodeURIComponent(id) + '.json');
+    }
+    return apiUrl('/api/composite-state?ref=' + encodeURIComponent(id)) +
+      (overridesJson ? '&overrides=' + encodeURIComponent(overridesJson) : '');
+  }
+
+  // Lazily fetch composite-state for a mounted card and render the build-warning
+  // chip if the wiring came back degraded. Fire-and-forget: never throws, never
+  // blocks the card/Run — a fetch failure just leaves the chip hidden. The build
+  // is ParCa-heavy so this only runs on demand (loom mount), once per card, and
+  // the backend TTL-caches the same lookup the loom itself makes.
+  function _loadCompositeBuildWarn(cardEl, id, overridesJson) {
+    if (!cardEl || !id || cardEl._buildWarnLoaded) return;
+    cardEl._buildWarnLoaded = true;
+    try {
+      fetch(_compositeBuildStateUrl(id, overridesJson))
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { if (d) _renderCompositeBuildWarn(cardEl, d); })
+        .catch(function () { /* informational only — leave the chip hidden */ });
+    } catch (e) { /* never break the card */ }
+  }
+  window._loadCompositeBuildWarn = _loadCompositeBuildWarn;
+
   // ── Composite ProcessCard ────────────────────────────────────────────────
   // A composite IS a process (§ unified idea): same card, same accordion, plus
   // an EXPLORE section (the wide loom bigraph) between Inputs and Run. A
@@ -682,11 +771,16 @@
     try {
       if (window.VivEnv && window.VivEnv.isCloud()) {
         var b = window.VivEnv.runBuild();
-        if (b) return { label: 'Runs: Cloud · #' + b.simulator_id, bg: '#e6f0fb', fg: '#1e5fa4',
-          tip: 'This Run dispatches to the Cloud against build #' + b.simulator_id +
+        // Action-oriented affordance: make it obvious that ▶ Run dispatches to a
+        // SPECIFIC Cloud build, not just that the workspace "runs on cloud".
+        // Green/cloud styling separates the ready-to-dispatch state from the
+        // amber "no build" blocker and the grey Local state.
+        if (b) return { label: '▶ Run → ☁ Cloud · build #' + b.simulator_id, bg: '#e7f6ec', fg: '#1a7f4b',
+          tip: '▶ Run dispatches to the Cloud (GovCloud) against build #' + b.simulator_id +
                (b.commit ? ' (' + String(b.commit).slice(0, 7) + ')' : '') +
-               '. It runs the build’s committed code — local edits not in that build won’t apply.' };
-        return { label: 'Runs: Cloud · no build ⚠', bg: '#fdf0e3', fg: '#a15c12',
+               '. It runs the build’s committed code — local edits not in that build won’t apply. ' +
+               'The dispatch itself takes ~15-25s (sms-api registers the run over the SSM tunnel); the card tracks it robustly once it lands.' };
+        return { label: '☁ Cloud · no build ⚠', bg: '#fdf0e3', fg: '#a15c12',
           tip: 'Cloud is active but no build is selected — a Run is blocked. Pick or build one, or switch to Local.' };
       }
     } catch (e) { /* VivEnv unavailable → fall through to preflight */ }
@@ -699,17 +793,43 @@
       tip: (pf.message || 'This workspace runs locally.') +
         ' Switch the Environment scope to Cloud (with a build selected) to dispatch a Run remotely instead.' };
   }
+  // Per-run local/remote switch: the run-target badge is a CLICKABLE chip when
+  // VivEnv is available (live mode) — clicking flips the Environment scope
+  // Local↔Cloud in place, so you switch where a Run executes without leaving the
+  // card for the Source panel's toggle. Snapshot/static mode (no VivEnv) leaves
+  // the badge as a passive label.
+  function _runTargetClickable() {
+    return !!(window.VivEnv && typeof window.VivEnv.setScope === 'function');
+  }
   function _applyRunTargetBadges(pf) {
     var badges = document.querySelectorAll('.pcard-runtarget[data-role="runtarget"]');
     if (!badges.length) return;
     if (pf !== undefined) window._lastRunTargetPreflight = pf;  // cache for scope-change re-apply
     var t = _computeRunTarget(pf !== undefined ? pf : window._lastRunTargetPreflight);
-    badges.forEach(function (b) { b.textContent = t.label; b.title = t.tip; b.style.background = t.bg; b.style.color = t.fg; });
+    var clickable = _runTargetClickable();
+    badges.forEach(function (b) {
+      b.textContent = t.label;
+      b.title = t.tip + (clickable ? ' — click to switch Local ⇄ Cloud.' : '');
+      b.style.background = t.bg; b.style.color = t.fg;
+      b.style.cursor = clickable ? 'pointer' : '';
+      b.setAttribute('data-clickable', clickable ? '1' : '0');
+    });
   }
   window._applyRunTargetBadges = _applyRunTargetBadges;
   // Re-reflect the badge live when the Environment scope / selected build changes
   // (branch-source.js dispatches viv:envchange) — no re-fetch, re-reads VivEnv.
   window.addEventListener('viv:envchange', function () { _applyRunTargetBadges(); });
+  // One delegated handler for the clickable chip: flip scope to the OTHER target.
+  // Registered once; badges are re-created per render, so delegation (not per-badge
+  // listeners) avoids duplicates/leaks. viv:envchange then re-applies every badge.
+  document.addEventListener('click', function (ev) {
+    var chip = ev.target && ev.target.closest && ev.target.closest('.pcard-runtarget[data-role="runtarget"]');
+    if (!chip || chip.getAttribute('data-clickable') !== '1') return;
+    if (!_runTargetClickable()) return;
+    ev.preventDefault(); ev.stopPropagation();
+    try { window.VivEnv.setScope(window.VivEnv.isCloud() ? 'local' : 'remote'); }
+    catch (e) { /* VivEnv gone → no-op */ }
+  });
 
   var _runTargetScheduled = false;
   function _scheduleRunTargetBadges() {
@@ -777,6 +897,14 @@
               'style="display:inline-block;margin-left:8px;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;' +
               'background:#eef1f4;color:#8a97a4;vertical-align:middle">Runs: …</span>' +
             '<code class="loom-addr">' + _esc(addr) + '</code>' +
+            // Build-error warning chip (PR #1111 degrade). Hidden until a
+            // composite-state fetch reports the shown wiring is stale/degraded
+            // (_loadCompositeBuildWarn fires when the loom mounts). Amber, matching
+            // the workbench's status-pill convention; informational, non-blocking.
+            '<span class="pcard-build-warn" data-role="build-warn" hidden ' +
+              'style="display:none;margin-left:8px;padding:1px 9px;border-radius:10px;' +
+              'font-size:11px;font-weight:600;background:#fef3c7;color:#92400e;border:1px solid #fde68a;' +
+              'vertical-align:middle;max-width:520px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>' +
             '<button class="pcard-hdr-collapse" type="button" onclick="event.stopPropagation();_toggleCardHeader(this)" title="Collapse this bar to maximize the view">⌃</button>' +
             _shareCompositeBtn() +
             _compositeJsonBtn() +
@@ -801,6 +929,13 @@
           '</div>' +
         '</div>' +
         '<div class="pcard-acc">' +
+          // Card-owned Cloud-run status chip. When a Run dispatches to the Cloud
+          // the loom emits explore:remote-dispatching / -dispatched / -failed
+          // messages (see loom-embed.js); the PARENT owns a patient "Dispatching
+          // to Cloud build #N…" → "☁ Cloud run #<simid> · queued → running →
+          // completed" chip here, polling the robust sim-status endpoint the Runs
+          // tab uses — instead of the loom bar's timeout-prone per-run polling.
+          '<div class="pcard-cloud-run" data-role="cloud-run" hidden></div>' +
           // ONE surface: the card body is just the lazily-mounted loom. The
           // full-width "graph" bar is the single control (it replaces the old
           // header Explore/Collapse button AND the duplicated static run/outputs
