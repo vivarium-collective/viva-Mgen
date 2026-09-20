@@ -1,10 +1,64 @@
 <!doctype html><html><head><meta charset="utf-8">
-<title>reproduction-driven — 3D cell</title><style>
-  html,body{margin:0;height:100%;background:#0d1017;font-family:Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;color:#e7ecf3}
-  .bar{padding:8px 14px;font-size:13px;color:#8b98ad;border-bottom:1px solid rgba(139,152,173,0.14)}
-  .bar b{color:#e7ecf3} iframe{border:0;width:100%;height:calc(100% - 37px);display:block}
+<title>reproduction-driven — 3D cell</title>
+<style>
+  html,body{margin:0;background:#0d1017;color:#e7ecf3;font-family:Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif}
+  #bar{padding:9px 12px;font-size:12.5px;color:#8b98ad;display:flex;align-items:center;gap:10px}
+  #bar b{color:#e7ecf3} #bar .grow{flex:1}
+  #pop{color:#e7ecf3;text-decoration:none;border:1px solid rgba(139,152,173,0.14);border-radius:7px;
+    padding:4px 10px;font-size:12px;background:rgba(94,176,255,.12)}
+  #pop:hover{background:rgba(94,176,255,.25)}
+  /* Fixed stage height so the workbench's iframe auto-fit grows the frame tall. */
+  #stage{position:relative;width:100%;height:620px}
+  #c{position:absolute;inset:0;display:block;width:100%;height:100%}
+  #hint{position:absolute;bottom:8px;left:12px;font-size:11px;color:#8b98ad;z-index:5}
 </style></head><body>
-  <div class="bar"><b>Interactive 3D reproduction-driven cell</b> — every molecule placed at true abundance
-  (drag to orbit · scroll to zoom · toggle species in the panel · <b>About</b> for details)</div>
-  <iframe src="/parsimony-viewer/?file=/workspace/studies/s02-reproduction-driven/viz/3d/mgen_reproduction_driven.pack.json" allow="xr-spatial-tracking"></iframe>
-</body></html>
+<div id="bar"><b>3D reproduction-driven cell</b><span class="grow"></span>
+  <a id="pop" href="/parsimony-viewer/?file=/workspace/studies/s02-reproduction-driven/viz/3d/mgen_reproduction_driven.pack.json" target="_blank" rel="noopener">⛶ open full mesh viewer ↗</a></div>
+<div id="stage"><canvas id="c"></canvas>
+<div id="hint">drag to orbit · scroll to zoom · a self-contained view (spheres = molecules, coloured by type)</div>
+</div>
+<script type="importmap">{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+const PACK="3d/mgen_reproduction_driven.pack.json", MAXI=28000;
+const stage=document.getElementById("stage");
+const W=()=>stage.clientWidth||800, H=()=>stage.clientHeight||600;
+const RAD=(id,name)=>{const n=(name||id||"").toLowerCase();
+  if(n.includes("ribosom"))return 95; if(id==="dna_segment")return 11;
+  if(id==="tRNA")return 16; if(n.includes("polymerase")||n.includes("gyrase")||n.includes("groel"))return 60;
+  return 30;};
+const scene=new THREE.Scene(); scene.background=new THREE.Color("#0d1017");
+const cam=new THREE.PerspectiveCamera(45,W()/H(),1,60000);
+const rn=new THREE.WebGLRenderer({canvas:document.getElementById("c"),antialias:true});
+rn.setPixelRatio(Math.min(devicePixelRatio,2)); rn.setSize(W(),H(),false);
+scene.add(new THREE.AmbientLight(0xffffff,.55));
+const dl=new THREE.DirectionalLight(0xffffff,.9); dl.position.set(1,1,1); scene.add(dl);
+const dl2=new THREE.DirectionalLight(0x88aaff,.35); dl2.position.set(-1,-.5,-1); scene.add(dl2);
+const ctr=new OrbitControls(cam,rn.domElement); ctr.enableDamping=true; ctr.autoRotate=true; ctr.autoRotateSpeed=.5;
+new ResizeObserver(()=>{cam.aspect=W()/H();cam.updateProjectionMatrix();rn.setSize(W(),H(),false);}).observe(stage);
+const geo=new THREE.SphereGeometry(1,10,8);
+const M=new THREE.Matrix4(), Q=new THREE.Quaternion(), P=new THREE.Vector3(), S=new THREE.Vector3();
+fetch(PACK).then(r=>r.json()).then(pack=>{
+  const ings=pack.ingredients||[], pls=pack.placements||[];
+  const step=Math.max(1,Math.ceil(pls.length/MAXI));
+  const byIng=new Map();
+  for(let i=0;i<pls.length;i+=step){const pl=pls[i]; const gi=pl.ingredient;
+    (byIng.get(gi)||byIng.set(gi,[]).get(gi)).push(pl);}
+  const box=new THREE.Box3();
+  byIng.forEach((list,gi)=>{const ing=ings[gi]||{}; const col=ing.color||[.6,.6,.6];
+    const r=RAD(ing.id,ing.name);
+    const mat=new THREE.MeshLambertMaterial({color:new THREE.Color(col[0],col[1],col[2])});
+    const im=new THREE.InstancedMesh(geo,mat,list.length);
+    list.forEach((pl,k)=>{const p=pl.position; P.set(p[0],p[1],p[2]); S.setScalar(r);
+      Q.set(0,0,0,1); M.compose(P,Q,S); im.setMatrixAt(k,M); box.expandByPoint(P);});
+    im.instanceMatrix.needsUpdate=true; scene.add(im);});
+  const c=box.getCenter(new THREE.Vector3()), sz=box.getSize(new THREE.Vector3()).length()||4000;
+  ctr.target.copy(c); cam.position.copy(c).add(new THREE.Vector3(0,0,sz*0.9)); cam.updateProjectionMatrix();
+  document.getElementById("hint").textContent=
+    `${pls.length.toLocaleString()} molecules · ${byIng.size} species · showing 1/${step} for speed — pop out for the full mesh cell`;
+}).catch(e=>{document.getElementById("hint").textContent="could not load pack: "+e;});
+(function loop(){requestAnimationFrame(loop); ctr.update(); rn.render(scene,cam);})();
+</script></body></html>
