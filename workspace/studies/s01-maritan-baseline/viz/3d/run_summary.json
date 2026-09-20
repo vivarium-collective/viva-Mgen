@@ -1,7 +1,7 @@
 {
-  "n_placed": 43840,
+  "n_placed": 83225,
   "n_species": 506,
-  "n_surface_membrane": 89,
+  "n_surface_membrane": 92,
   "n_with_structure": 506,
   "protein_occupancy": 0.144,
   "maritan_reference_occupancy": 0.144,

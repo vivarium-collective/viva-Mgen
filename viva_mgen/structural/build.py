@@ -43,9 +43,15 @@ DATA = Path(__file__).resolve().parent / "data"
 MGEN_MARITAN_SPHERE_RADIUS_A = 1444.7   # 144.47 nm, Maritan Table 1 Frame 149 s
 _MGEN_HALF_LEN_A = 150.0                 # small medial length so the packer fills it
 
-# Genome contour -> bead count, following ecoli_3d's GENOME_BEADS convention
-# (34,000 beads for a 4,641,652 bp E. coli genome, i.e. ~135 bp/bead).
-_BP_PER_BEAD = 135.0
+# Genome contour -> bead count. Maritan et al. build the nucleoid with a
+# LatticeNucleoid at 10 bp/bead; we match that resolution (580,070 bp ->
+# ~58,000 beads). Bead spacing is the physical B-DNA rise (3.4 A/bp x 10 bp =
+# 34 A) and bead_radius ~10 A (the dsDNA radius), so the fiber's contour length
+# is the real ~197 um of chromosomal DNA supercoiled into the cell.
+_BP_PER_BEAD = 10.0
+_DNA_RISE_A_PER_BP = 3.4
+_DNA_BEAD_SPACING_A = _BP_PER_BEAD * _DNA_RISE_A_PER_BP   # 34 A
+_DNA_BEAD_RADIUS_A = 10.0
 
 # --- genome-annotation CSV for pbg_parsimony -------------------------------
 # pbg_parsimony's Rust engine (parsimony-core's genome.rs, ``Genome::from_csv``)
@@ -175,14 +181,17 @@ def mgen_chromosome() -> Chromosome:
     dsDNA mesh (RCSB 1BNA, B-DNA) so the fiber actually draws (without it the
     chromosome is defined but invisible), tinted tan and coiled by ``supercoil``.
     ``genome_csv`` seats RNAP at real (abundance-weighted) transcription sites
-    instead of uniformly along the fiber. Bead geometry (spacing 135 A ~= 40 bp,
-    radius 12 A) follows ecoli_3d's convention."""
+    instead of uniformly along the fiber. Bead geometry matches Maritan's
+    LatticeNucleoid resolution: 10 bp/bead at the physical B-DNA rise (34 A
+    spacing, ~10 A radius), so the fiber carries the real chromosomal contour."""
     beads = max(1, round(GENOME_LENGTH_BP / _BP_PER_BEAD))
     return Chromosome(
-        beads=beads, spacing=135.0, bead_radius=12.0, n_chromosomes=1,
+        beads=beads, spacing=_DNA_BEAD_SPACING_A, bead_radius=_DNA_BEAD_RADIUS_A,
+        n_chromosomes=1,
         genome_csv=_pbg_genome_csv(),
         segment=StructureRef("pdb", "1BNA"),
-        supercoil={"radius": 90.0, "pitch": 130.0, "domains": 200},
+        # More supercoil domains fold the real (~197 um) contour into the cell.
+        supercoil={"radius": 90.0, "pitch": 130.0, "domains": 700},
         color=(0.85, 0.75, 0.45),
     )
 

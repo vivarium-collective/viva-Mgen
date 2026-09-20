@@ -35,6 +35,10 @@ _DATA_DIR = _HERE / "data"
 
 _S1_PATH = _SUPP_DIR / "S1_MG_proteins_ingredients.xlsx"
 _S2_PATH = _SUPP_DIR / "S2_MG_genes.xlsx"
+_S3_PATH = _SUPP_DIR / "S3_membrane_protein_assignment.xlsx"
+_S3_DATA_START = 4          # header at row 3 (Monomer Id, Consensus, …)
+_S3_COL_MONOMER = 0
+_S3_COL_CONSENSUS = 1
 
 # S1 column indices (0-based), per the curated header row (row index 3).
 _S1_HEADER_ROW = 3
@@ -149,8 +153,27 @@ def _int_footprint(raw) -> int | None:
         return None
 
 
+def _s3_consensus() -> dict[str, str]:
+    """S3 consensus membrane-compartment assignments (Monomer Id -> c|m|e).
+
+    S3 resolves the ~31 proteins where the cytoplasmic-MG and WC-MG models (and
+    the localization predictors: BUSCA, SignalP, SOSUI, Phobius, PSORTb)
+    disagreed. We use its consensus to refine S1's compartment (it reclassifies
+    a few cytoplasmic proteins as membrane)."""
+    if not _S3_PATH.is_file():
+        return {}
+    out = {}
+    for row in _read_workbook_rows(_S3_PATH)[_S3_DATA_START:]:
+        mid = _cell(row, _S3_COL_MONOMER)
+        cons = (_cell(row, _S3_COL_CONSENSUS) or "").strip().lower()
+        if mid and cons in ("c", "m", "e"):
+            out[mid] = cons
+    return out
+
+
 def parse_proteins() -> list[dict[str, Any]]:
     rows = _read_workbook_rows(_S1_PATH)
+    s3 = _s3_consensus()
     out = []
     for row in rows[_S1_DATA_START:]:
         prot_id = _cell(row, _S1_COL_PROT_ID)
@@ -163,13 +186,14 @@ def parse_proteins() -> list[dict[str, Any]]:
                 seq_length = int(float(seq_length_raw))
             except ValueError:
                 seq_length = None
-        compartment = _cell(row, _S1_COL_COMPARTMENT) or ""
+        compartment = (_cell(row, _S1_COL_COMPARTMENT) or "").lower()
+        compartment = s3.get(prot_id, compartment)   # S3 consensus refines S1
         out.append(
             {
                 "prot_id": prot_id,
                 "name": _cell(row, _S1_COL_NAME) or "",
                 "function": _cell(row, _S1_COL_FUNCTION) or "",
-                "compartment": compartment.lower(),
+                "compartment": compartment,
                 "kind": _normalize_kind(_cell(row, _S1_COL_TYPE)),
                 "pdb_id": _normalize_pdb_id(_cell(row, _S1_COL_STRUCTURAL_MODEL)),
                 "biosynthesis": _cell(row, _S1_COL_BIOSYNTHESIS) or "",
