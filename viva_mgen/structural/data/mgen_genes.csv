@@ -1,0 +1,526 @@
+gene_id,gtype,coord,length,direction,tu,essential,name,uniprot,protein_monomer
+MG471,tRNA,15294,76,Reverse,TU_007,True,tRNA (ALA),,
+MG472,tRNA,15375,77,Reverse,TU_007,True,tRNA (ILE),,
+MG475,tRNA,70393,89,Reverse,TU_037,True,tRNA (SER),,
+MG479,tRNA,240213,74,Reverse,TU_123,True,tRNA (THR),,
+MG483,tRNA,257158,77,Forward,TU_134,True,tRNA (CYS),,
+MG484,tRNA,257269,77,Forward,TU_135,True,tRNA (PRO),,
+MG485,tRNA,257349,77,Forward,TU_136,True,tRNA (MET),,
+MG486,tRNA,257445,77,Forward,TU_137,True,tRNA (ILE),,
+MG487,tRNA,257559,92,Forward,TU_138,True,tRNA (SER),,
+MG488,initiator_tRNA,257664,77,Forward,TU_139,True,tRNA (FMET),,
+MG489,tRNA,257742,74,Forward,TU_140,True,tRNA (ASP),,
+MG490,tRNA,257818,76,Forward,TU_141,True,tRNA (PHE),,
+MG492,tRNA,266423,77,Forward,TU_146,True,tRNA (ARG),,
+MG493,tRNA,304892,74,Reverse,TU_166,True,tRNA (GLY),,
+MG495,tRNA,306617,75,Forward,TU_168,True,tRNA (ARG),,
+MG496,tRNA,306740,74,Forward,TU_168,True,tRNA (TRP),,
+MG497,tRNA,315301,77,Reverse,TU_172,True,tRNA (ARG),,
+MG499,tRNA,343884,74,Reverse,TU_187,True,tRNA (GLY),,
+MG500,tRNA,343965,86,Reverse,TU_187,True,tRNA (LEU),,
+MG501,tRNA,344051,75,Reverse,TU_187,True,tRNA (LYS),,
+MG502,tRNA,344172,75,Reverse,TU_188,True,tRNA (GLN),,
+MG503,tRNA,344251,87,Reverse,TU_189,True,tRNA (TYR),,
+MG504,tRNA,349128,75,Forward,TU_194,True,tRNA (TRP),,
+MG506,tRNA,399868,91,Forward,TU_220,True,tRNA (SER),,
+MG507,tRNA,399960,89,Forward,TU_221,True,tRNA (SER),,
+MG508,tRNA,403134,85,Reverse,TU_223,True,tRNA (LEU),,
+MG509,tRNA,403224,76,Reverse,TU_223,True,tRNA (LYS),,
+MG510,tRNA,403306,76,Reverse,TU_223,True,tRNA (THR),,
+MG511,tRNA,403383,76,Reverse,TU_223,True,tRNA (VAL),,
+MG512,tRNA,403467,75,Reverse,TU_223,True,tRNA (THR),,
+MG513,tRNA,403544,77,Reverse,TU_223,True,tRNA (GLU),,
+MG514,tRNA,403627,75,Reverse,TU_223,True,tRNA (ASN),,
+MG518,tRNA,445078,76,Forward,TU_248,True,tRNA (HIS),,
+MG519,tRNA,446178,88,Reverse,TU_250,True,tRNA (LEU),,
+MG520,tRNA,448783,82,Forward,TU_252,True,tRNA (LEU),,
+MG523,tRNA,480240,76,Reverse,TU_276,True,tRNA (ARG),,
+MGrrnA16S,rRNA,170007,1519,Forward,TU_088,True,16S ribosomal rRNA,,
+MGrrnA23S,rRNA,171728,2734,Forward,TU_088,True,23S ribosomal rRNA,,
+MGrrnA5S,rRNA,174690,104,Forward,TU_088,True,5S ribosomal rRNA,,
+MG_0001,sRNA,325924,83,Reverse,TU_178,True,scRNA; signal recognition particle 4.5S RNA; MCS1,,
+MG_0002,sRNA,331034,182,Reverse,TU_181,True,MG170 RNA,,
+MG_0003,sRNA,406142,378,Reverse,TU_226,True,Rnase P RNA; MCS5; M1 RNA,,
+MG_0004,sRNA,406542,388,Reverse,TU_227,True,transfer-messenger RNA; tmRNA; MCS6; 10Sa RNA,,
+MG_001,mRNA,686,1142,Forward,TU_001,True,DNA polymerase III; beta subunit,P47247,MG_001_MONOMER
+MG_002,mRNA,1828,933,Forward,TU_001,False,DnaJ domain protein,P47248,MG_002_MONOMER
+MG_003,mRNA,2845,1953,Forward,TU_002,True,DNA gyrase; B subunit,P47249,MG_003_MONOMER
+MG_004,mRNA,4812,2511,Forward,TU_002,True,DNA gyrase; A subunit,P47250,MG_004_MONOMER
+MG_005,mRNA,7294,1254,Forward,TU_003,True,seryl-tRNA synthetase,P47251,MG_005_MONOMER
+MG_006,mRNA,8551,633,Forward,TU_003,True,thymidylate kinase,P47252,MG_006_MONOMER
+MG_007,mRNA,9156,762,Forward,TU_003,True,DNA polymerase III delta prime subunit; putative,P47253,MG_007_MONOMER
+MG_008,mRNA,9923,1329,Forward,TU_003,True,tRNA modification GTPase TrmE,P47254,MG_008_MONOMER
+MG_009,mRNA,11251,789,Forward,TU_003,False,deoxyribonuclease,P47255,MG_009_MONOMER
+MG_010,mRNA,12068,657,Forward,TU_004,False,DNA primase-related protein,P47256,MG_010_MONOMER
+MG_011,mRNA,12701,864,Reverse,TU_005,False,alpha-L-glutamate ligase; S6 ribosomal protein modification,P47257,MG_011_MONOMER
+MG_012,mRNA,13569,864,Reverse,TU_005,False,alpha-L-glutamate ligase,P47258,MG_012_MONOMER
+MG_013,mRNA,14395,822,Reverse,TU_006,True,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,P47259,MG_013_MONOMER
+MG_014,mRNA,15555,1872,Forward,TU_008,True,multidrug ABC transporter; ATP-binding/permease protein,P47260,MG_014_MONOMER
+MG_015,mRNA,17473,1770,Forward,TU_008,True,multidrug ABC transporter; ATP-binding/permease protein,P47261,MG_015_MONOMER
+MG_018,mRNA,19252,3096,Forward,TU_009,False,SNF2 family helicase putative,P47264,MG_018_MONOMER
+MG_019,mRNA,22389,1170,Forward,TU_010,True,chaperone protein DnaJ,P47265,MG_019_MONOMER
+MG_020,mRNA,23542,927,Forward,TU_010,True,proline iminopeptidase,P47266,MG_020_MONOMER
+MG_021,mRNA,24468,1539,Forward,TU_010,True,methionyl-tRNA synthetase,P47267,MG_021_MONOMER
+MG_022,mRNA,26036,438,Forward,TU_011,True,DNA-directed RNA polymerase; delta subunit,P47268,MG_022_MONOMER
+MG_023,mRNA,26479,867,Forward,TU_011,True,fructose-1;6-bisphosphate aldolase; class II,P47269,MG_023_MONOMER
+MG_024,mRNA,27346,1104,Forward,TU_011,False,GTP-binding protein YchF,P47270,MG_024_MONOMER
+MG_025,mRNA,28652,897,Forward,TU_012,True,Beta-glycosyl transferase,P47271,MG_025_MONOMER
+MG_026,mRNA,29552,573,Forward,TU_013,True,translation elongation factor P,P47272,MG_026_MONOMER
+MG_027,mRNA,30093,456,Forward,TU_013,True,transcription termination/antitermination protein NusB,P47273,MG_027_MONOMER
+MG_028,mRNA,30548,606,Forward,TU_013,True,,P47274,MG_028_MONOMER
+MG_029,mRNA,31143,561,Reverse,TU_014,True,DJ-1/PfpI family protein,P47275,MG_029_MONOMER
+MG_030,mRNA,31705,621,Reverse,TU_014,True,uracil phosphoribosyltransferase,P47276,MG_030_MONOMER
+MG_031,mRNA,32359,4356,Reverse,TU_014,True,DNA polymerase III; alpha subunit; Gram-positive type,P47277,MG_031_MONOMER
+MG_032,mRNA,36977,2001,Forward,TU_015,False,cell adhesion protein/membrane export protein,P47278,MG_032_MONOMER
+MG_033,mRNA,39127,777,Forward,TU_016,False,glycerol uptake facilitator,P47279,MG_033_MONOMER
+MG_034,mRNA,39872,642,Reverse,TU_017,True,thymidine kinase,P47280,MG_034_MONOMER
+MG_035,mRNA,40542,1245,Forward,TU_018,True,histidyl-tRNA synthetase,P47281,MG_035_MONOMER
+MG_036,mRNA,41776,1653,Forward,TU_019,True,aspartyl-tRNA synthetase,P47282,MG_036_MONOMER
+MG_037,mRNA,43401,1353,Forward,TU_020,True,nicotinate phosphoribosyltransferase,P47283,MG_037_MONOMER
+MG_038,mRNA,44750,1527,Reverse,TU_021,True,glycerol kinase,P47284,MG_038_MONOMER
+MG_039,mRNA,46267,1155,Reverse,TU_022,False,FAD-dependent glycerol-3-phosphate dehydrogenase; putative,P47285,MG_039_MONOMER
+MG_040,mRNA,47580,1776,Forward,TU_023,False,Monosaccharide (riboside/galactoside) ABC transporter; substrate binding protein,P47286,MG_040_MONOMER
+MG_041,mRNA,49376,267,Forward,TU_024,True,PTS system; HPr,P47287,MG_041_MONOMER
+MG_042,mRNA,49840,1680,Forward,TU_025,True,spermidine/putrescine (polyamine) ABC transporter; ATP-binding protein; putative,P47288,MG_042_MONOMER
+MG_043,mRNA,51524,858,Forward,TU_025,True,spermidine/putrescine (polyamine) ABC transporter; permease protein; putative,P47289,MG_043_MONOMER
+MG_044,mRNA,52365,855,Forward,TU_025,True,spermidine/putrescine (polyamine) ABC transporter; permease protein; putative,P47290,MG_044_MONOMER
+MG_045,mRNA,53204,1449,Forward,TU_026,True,spermidine/putrescine (polyamine) ABC transporter; spermidine/putrescine binding protein; putative,P47291,MG_045_MONOMER
+MG_046,mRNA,54657,948,Forward,TU_027,True,metalloendopeptidase,P47292,MG_046_MONOMER
+MG_047,mRNA,55588,1152,Forward,TU_027,True,S-adenosylmethionine synthetase,P47293,MG_047_MONOMER
+MG_048,mRNA,56969,1341,Reverse,TU_028,True,signal recognition particle protein,P47294,MG_048_MONOMER
+MG_049,mRNA,58362,717,Forward,TU_029,False,purine nucleoside phosphorylase,P47295,MG_049_MONOMER
+MG_050,mRNA,59082,672,Forward,TU_029,True,deoxyribose-phosphate aldolase,P47296,MG_050_MONOMER
+MG_051,mRNA,59740,1266,Forward,TU_029,False,pyrimidine-nucleoside phosphorylase,P47297,MG_051_MONOMER
+MG_052,mRNA,61014,393,Forward,TU_030,True,cytidine deaminase,P47298,MG_052_MONOMER
+MG_053,mRNA,61406,1653,Forward,TU_030,True,phosphoglucomutase/phosphomannomutase; putative,P47299,MG_053_MONOMER
+MG_054,mRNA,63035,951,Reverse,TU_031,True,transcription antitermination protein NusG; putative,P47300,MG_054_MONOMER
+MG_055,mRNA,63989,372,Reverse,TU_031,True,preprotein translocase; SecE subunit,P47301,MG_055_MONOMER
+MG_056,mRNA,64897,834,Reverse,TU_032,False,tetrapyrrole (corrin/porphyrin) methylase protein,P47302,MG_056_MONOMER
+MG_057,mRNA,65712,537,Reverse,TU_032,True,small primase-like protein,P47303,MG_057_MONOMER
+MG_058,mRNA,66227,999,Reverse,TU_033,True,ribose-phosphate pyrophosphokinase,P47304,MG_058_MONOMER
+MG_059,mRNA,67206,438,Reverse,TU_034,True,SsrA-binding protein,P47305,MG_059_MONOMER
+MG_060,mRNA,67650,894,Forward,TU_035,True,glycosyl transferase,P47306,MG_060_MONOMER
+MG_061,mRNA,68522,1704,Reverse,TU_036,False,Mycoplasma MFS transporter,P47307,MG_061_MONOMER
+MG_062,mRNA,70530,2043,Forward,TU_038,False,PTS system; fructose-specific IIABC component,P47308,MG_062_MONOMER
+MG_063,mRNA,72523,912,Forward,TU_039,False,1-phosphofructokinase; putative,Q49396,MG_063_MONOMER
+MG_064,mRNA,73690,3996,Forward,TU_040,True,ABC transporter; permease protein; putative,P47310,MG_064_MONOMER
+MG_065,mRNA,77685,1401,Forward,TU_040,True,ABC transporter; ATP-binding protein,P47311,MG_065_MONOMER
+MG_066,mRNA,79089,1947,Forward,TU_041,False,transketolase,P47312,MG_066_MONOMER
+MG_067,mRNA,81046,1551,Forward,TU_042,False,lipoprotein; putative,P47313,MG_067_MONOMER
+MG_068,mRNA,82620,1425,Forward,TU_042,True,lipoprotein; putative,P47314,MG_068_MONOMER
+MG_069,mRNA,88228,2727,Forward,TU_043,True,PTS system; glucose-specific IIABC component,P47315,MG_069_MONOMER
+MG_070,mRNA,91065,855,Forward,TU_044,True,ribosomal protein S2,P47316,MG_070_MONOMER
+MG_071,mRNA,91924,2625,Forward,TU_045,True,ATPase; P-type (transporting); HAD superfamily; subfamily IC,P47317,MG_071_MONOMER
+MG_072,mRNA,94535,2421,Forward,TU_046,True,preprotein translocase; SecA subunit,P47318,MG_072_MONOMER
+MG_073,mRNA,96933,1971,Forward,TU_047,True,excinuclease ABC; B subunit,P47319,MG_073_MONOMER
+MG_074,mRNA,98906,414,Forward,TU_048,True,related to MG075,P47320,MG_074_MONOMER
+MG_075,mRNA,99383,3075,Forward,TU_049,True,116 kDa surface antigen,P47321,MG_075_MONOMER
+MG_076,mRNA,102454,417,Reverse,TU_050,True,,P47322,MG_076_MONOMER
+MG_077,mRNA,103104,1224,Forward,TU_051,True,oligopeptide ABC transporter; permease protein,P47323,MG_077_MONOMER
+MG_078,mRNA,104320,1131,Forward,TU_051,True,oligopeptide ABC transporter; permease protein,P47324,MG_078_MONOMER
+MG_079,mRNA,105452,1209,Forward,TU_051,True,oligopeptide ABC transporter; ATP-binding protein,P47325,MG_079_MONOMER
+MG_080,mRNA,106660,2547,Forward,TU_051,True,oligopeptide ABC transporter; ATP-binding protein,P47326,MG_080_MONOMER
+MG_081,mRNA,109262,414,Forward,TU_052,True,ribosomal protein L11,P47327,MG_081_MONOMER
+MG_082,mRNA,109675,681,Forward,TU_052,True,ribosomal protein L1,P47328,MG_082_MONOMER
+MG_083,mRNA,110355,570,Forward,TU_053,True,peptidyl-tRNA hydrolase,P47329,MG_083_MONOMER
+MG_084,mRNA,110917,873,Forward,TU_054,True,tRNA(Ile)-lysidine synthetase,P47330,MG_084_MONOMER
+MG_085,mRNA,111790,936,Forward,TU_054,True,HPr(Ser) kinase/phosphatase,P47331,MG_085_MONOMER
+MG_086,mRNA,112718,1149,Forward,TU_055,True,prolipoprotein diacylglyceryl transferase,P47332,MG_086_MONOMER
+MG_087,mRNA,113895,420,Forward,TU_055,True,ribosomal protein S12,P47333,MG_087_MONOMER
+MG_088,mRNA,114331,468,Forward,TU_055,True,ribosomal protein S7,P47334,MG_088_MONOMER
+MG_089,mRNA,114808,2067,Forward,TU_055,True,translation elongation factor G,P47335,MG_089_MONOMER
+MG_090,mRNA,116926,627,Forward,TU_056,True,ribosomal protein S6,P47336,MG_090_MONOMER
+MG_091,mRNA,117553,483,Forward,TU_057,True,single-strand binding protein family,P47337,MG_091_MONOMER
+MG_092,mRNA,118025,318,Forward,TU_058,True,ribosomal protein S18,P47338,MG_092_MONOMER
+MG_093,mRNA,118345,453,Forward,TU_059,True,ribosomal protein L9,P47339,MG_093_MONOMER
+MG_094,mRNA,118781,1407,Forward,TU_059,True,replicative DNA helicase,P47340,MG_094_MONOMER
+MG_095,mRNA,120191,1197,Forward,TU_059,True,lipoprotein; putative,P47341,MG_095_MONOMER
+MG_096,mRNA,121571,1953,Forward,TU_060,False,,P47342,MG_096_MONOMER
+MG_097,mRNA,123580,738,Forward,TU_061,True,uracil-DNA glycosylase; putative,P47343,MG_097_MONOMER
+MG_098,mRNA,124417,1434,Forward,TU_062,True,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; C subunit,P47344,MG_098_MONOMER
+MG_099,mRNA,125853,1434,Forward,TU_062,True,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; A subunit,P47345,MG_099_MONOMER
+MG_100,mRNA,127279,1434,Forward,TU_062,True,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; B subunit,P47346,MG_100_MONOMER
+MG_101,mRNA,128687,669,Forward,TU_063,True,Uncharacterized HTH-type transcriptional regulator,P47347,MG_101_MONOMER
+MG_102,mRNA,129348,948,Forward,TU_063,True,thioredoxin-disulfide reductase,P47348,MG_102_MONOMER
+MG_103,mRNA,130285,843,Forward,TU_063,False,transcriptional regulator; putative,P47349,MG_103_MONOMER
+MG_104,mRNA,131385,2178,Forward,TU_065,True,ribonuclease R,P47350,MG_104_MONOMER
+MG_105,mRNA,133570,603,Forward,TU_066,True,putative DNA integrity scanning protein,P47351,MG_105_MONOMER
+MG_106,mRNA,134147,582,Reverse,TU_067,True,peptide deformylase,P47352,MG_106_MONOMER
+MG_107,mRNA,134769,570,Forward,TU_068,True,guanylate kinase,P47353,MG_107_MONOMER
+MG_108,mRNA,135338,783,Forward,TU_068,True,Ser/Thr protein phosphatase 2C; putative,P47354,MG_108_MONOMER
+MG_109,mRNA,136105,1164,Forward,TU_068,True,serine/threonine protein kinase; putative,P47355,MG_109_MONOMER
+MG_110,mRNA,137255,837,Forward,TU_068,False,ribosome small subunit-dependent GTPase A,P47356,MG_110_MONOMER
+MG_111,mRNA,138106,1302,Forward,TU_069,True,glucose-6-phosphate isomerase,P47357,MG_111_MONOMER
+MG_112,mRNA,139397,630,Forward,TU_069,False,ribulose-phosphate 3-epimerase,P47358,MG_112_MONOMER
+MG_113,mRNA,140040,1371,Forward,TU_070,True,asparaginyl-tRNA synthetase,P47359,MG_113_MONOMER
+MG_114,mRNA,141346,711,Forward,TU_071,False,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase,P47360,MG_114_MONOMER
+MG_115,mRNA,142081,474,Forward,TU_072,False,competence/damage-inducible protein CinA domain protein,P47361,MG_115_MONOMER
+MG_116,mRNA,142563,756,Forward,TU_073,False,glycosyl transferase/terpenoid synthesis; putative,P47362,MG_116_MONOMER
+MG_117,mRNA,143311,645,Forward,TU_073,True,transcription factor; putative zinc-finger domain,P47363,MG_117_MONOMER
+MG_118,mRNA,143936,1023,Forward,TU_073,True,UDP-glucose 4-epimerase,P47364,MG_118_MONOMER
+MG_119,mRNA,144973,1695,Forward,TU_074,True,Monosaccharide (riboside/galactoside) ABC transporter; ATP-binding protein,P47365,MG_119_MONOMER
+MG_120,mRNA,146674,1563,Forward,TU_074,True,Monosaccharide (riboside/galactoside) ABC transporter; permease protein,P47366,MG_120_MONOMER
+MG_121,mRNA,148239,921,Forward,TU_074,False,Monosaccharide (riboside/galactoside) ABC transporter; permease protein,P47367,MG_121_MONOMER
+MG_122,mRNA,149199,2130,Forward,TU_074,True,DNA topoisomerase I,P47368,MG_122_MONOMER
+MG_123,mRNA,151306,1416,Forward,TU_075,True,arginine deaminasse,P47369,MG_123_MONOMER
+MG_124,mRNA,152768,309,Forward,TU_076,True,thioredoxin,P47370,MG_124_MONOMER
+MG_125,mRNA,153082,858,Forward,TU_076,True,Cof-like hydrolase; putative,P47371,MG_125_MONOMER
+MG_126,mRNA,153920,1044,Reverse,TU_077,True,tryptophanyl-tRNA synthetase,P47372,MG_126_MONOMER
+MG_127,mRNA,154999,438,Forward,TU_078,True,Spx subfamily protein,P47373,MG_127_MONOMER
+MG_128,mRNA,155444,780,Forward,TU_078,True,inorganic polyphosphate/ATP-NAD kinase; probable,P47374,MG_128_MONOMER
+MG_129,mRNA,156223,354,Forward,TU_079,True,Putative phosphotransferase enzyme glucose-specific IIB component,Q49397,MG_129_MONOMER
+MG_130,mRNA,156566,1455,Forward,TU_080,True,ribonuclease Y; mRNA decay,P47376,MG_130_MONOMER
+MG_131,mRNA,158023,287,Forward,TU_081,False,hypothetical protein,P47377,MG_131_MONOMER
+MG_132,mRNA,158581,426,Reverse,TU_082,True,purine nucleoside phosphoramidase,P47378,MG_132_MONOMER
+MG_133,mRNA,158984,795,Reverse,TU_083,True,membrane protein; putative,P47379,MG_133_MONOMER
+MG_134,mRNA,159798,303,Forward,TU_084,False,DNA-binding protein; nucleoid-associated,P47380,MG_134_MONOMER
+MG_135,mRNA,160072,843,Reverse,TU_085,True,membrane protein; putative,P47381,MG_135_MONOMER
+MG_136,mRNA,160963,1473,Forward,TU_086,True,lysyl-tRNA synthetase,P47382,MG_136_MONOMER
+MG_137,mRNA,162377,1215,Forward,TU_086,True,UDP-galactopyranose mutase,Q49398,MG_137_MONOMER
+MG_138,mRNA,163591,1797,Forward,TU_086,False,Translation elongation factor 4,P47384,MG_138_MONOMER
+MG_139,mRNA,165471,1710,Forward,TU_087,True,ribonuclease J,P47385,MG_139_MONOMER
+MG_140,mRNA,175805,3342,Forward,TU_089,False,putative ATP-dependent helicase,P47386,MG_140_MONOMER
+MG_141,mRNA,179151,1596,Forward,TU_090,True,transcription termination factor NusA,P47387,MG_141_MONOMER
+MG_142,mRNA,181005,1860,Forward,TU_092,True,translation initiation factor IF-2,P47388,MG_142_MONOMER
+MG_143,mRNA,182851,339,Forward,TU_092,True,ribosome-binding factor A,P47389,MG_143_MONOMER
+MG_144,mRNA,183214,840,Forward,TU_092,True,signal recognition particle; locates ribosome to membrane,P47390,MG_144_MONOMER
+MG_145,mRNA,184053,810,Forward,TU_093,True,riboflavin biosynthesis protein RibF,P47391,MG_145_MONOMER
+MG_146,mRNA,184875,1275,Forward,TU_094,True,UPF0053 protein,Q49399,MG_146_MONOMER
+MG_147,mRNA,186136,1128,Forward,TU_095,True,membrane protein; putative,P47393,MG_147_MONOMER
+MG_148,mRNA,187302,1230,Forward,TU_096,True,PF09903 family; widely conserved; structural; putative cell motility; putative cell cycle; putative,P47394,MG_148_MONOMER
+MG_149,mRNA,188607,846,Forward,TU_097,False,lipoprotein; putative,P47395,MG_149_MONOMER
+MG_150,mRNA,190046,321,Forward,TU_099,True,ribosomal protein S10,P47396,MG_150_MONOMER
+MG_151,mRNA,190370,774,Forward,TU_100,True,ribosomal protein L3,P47397,MG_151_MONOMER
+MG_152,mRNA,191143,636,Forward,TU_101,True,ribosomal protein L4/L1 family,P47398,MG_152_MONOMER
+MG_153,mRNA,191782,321,Forward,TU_101,True,ribosomal protein L23,P47399,MG_153_MONOMER
+MG_154,mRNA,192102,858,Forward,TU_102,True,ribosomal protein L2,P47400,MG_154_MONOMER
+MG_155,mRNA,192959,264,Forward,TU_102,True,ribosomal protein S19,P47401,MG_155_MONOMER
+MG_156,mRNA,193225,435,Forward,TU_102,True,ribosomal protein L22,P47402,MG_156_MONOMER
+MG_157,mRNA,193662,807,Forward,TU_102,True,ribosomal protein S3,P47403,MG_157_MONOMER
+MG_158,mRNA,194474,417,Forward,TU_102,True,ribosomal protein L16,P47404,MG_158_MONOMER
+MG_159,mRNA,194890,603,Forward,TU_102,True,ribosomal protein L29,P47405,MG_159_MONOMER
+MG_160,mRNA,195492,258,Forward,TU_102,True,ribosomal protein S17,P47406,MG_160_MONOMER
+MG_161,mRNA,195753,369,Forward,TU_102,True,ribosomal protein L14,P47407,MG_161_MONOMER
+MG_162,mRNA,196121,327,Forward,TU_102,True,ribosomal protein L24,P47408,MG_162_MONOMER
+MG_163,mRNA,196453,543,Forward,TU_102,True,ribosomal protein L5,P47409,MG_163_MONOMER
+MG_164,mRNA,196998,183,Forward,TU_103,True,ribosomal protein S14,P47410,MG_164_MONOMER
+MG_165,mRNA,197177,426,Forward,TU_104,True,ribosomal protein S8,P47411,MG_165_MONOMER
+MG_166,mRNA,197609,555,Forward,TU_104,True,ribosomal protein L6,P47412,MG_166_MONOMER
+MG_167,mRNA,198165,348,Forward,TU_104,True,ribosomal protein L18,P47413,MG_167_MONOMER
+MG_168,mRNA,198517,636,Forward,TU_104,True,ribosomal protein S5,P47414,MG_168_MONOMER
+MG_169,mRNA,199158,453,Forward,TU_104,True,ribosomal protein L15,P47415,MG_169_MONOMER
+MG_170,mRNA,199610,1428,Forward,TU_105,True,preprotein translocase; SecY subunit,P47416,MG_170_MONOMER
+MG_171,mRNA,201031,645,Forward,TU_105,True,adenylate kinase,P47417,MG_171_MONOMER
+MG_172,mRNA,201678,747,Forward,TU_105,True,methionine aminopeptidase; type I,P47418,MG_172_MONOMER
+MG_173,mRNA,202424,213,Forward,TU_105,True,translation initiation factor IF-1,P47419,MG_173_MONOMER
+MG_174,mRNA,202647,114,Forward,TU_106,True,ribosomal protein L36,P47420,MG_174_MONOMER
+MG_175,mRNA,202760,375,Forward,TU_107,True,ribosomal protein S13,P47421,MG_175_MONOMER
+MG_176,mRNA,203134,366,Forward,TU_107,True,ribosome 30S protein S11,P47422,MG_176_MONOMER
+MG_177,mRNA,203515,987,Forward,TU_107,True,DNA-directed RNA polymerase; alpha subunit,P47423,MG_177_MONOMER
+MG_178,mRNA,204514,372,Forward,TU_108,True,ribosomal protein L17,P47424,MG_178_MONOMER
+MG_179,mRNA,204872,825,Forward,TU_109,True,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,P47425,MG_179_MONOMER
+MG_180,mRNA,205681,915,Forward,TU_110,True,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,P47426,MG_180_MONOMER
+MG_181,mRNA,206588,1263,Forward,TU_111,True,metal ion (cobalt) ABC transporter; permease protein,P47427,MG_181_MONOMER
+MG_182,mRNA,207843,735,Forward,TU_112,True,tRNA pseudouridine synthase A,P47428,MG_182_MONOMER
+MG_183,mRNA,208567,1824,Forward,TU_113,False,oligoendopeptidase F,P47429,MG_183_MONOMER
+MG_184,mRNA,210391,954,Forward,TU_113,True,adenine-specific DNA modification methylase,Q49400,MG_184_MONOMER
+MG_185,mRNA,211444,2106,Forward,TU_114,False,lipoprotein; putative,P47431,MG_185_MONOMER
+MG_186,mRNA,216016,753,Forward,TU_115,True,Oligosaccharide or polyol ABC transporter; substrate binding protein,P47432,MG_186_MONOMER
+MG_187,mRNA,216761,1758,Forward,TU_116,True,Oligosaccharide or polyol ABC transporter; ATP-binding protein,P47433,MG_187_MONOMER
+MG_188,mRNA,218521,990,Forward,TU_116,True,Oligosaccharide or polyol ABC transporter; permease protein,P47434,MG_188_MONOMER
+MG_189,mRNA,219482,957,Forward,TU_116,True,Oligosaccharide or polyol ABC transporter; permease protein,P47435,MG_189_MONOMER
+MG_190,mRNA,220607,957,Forward,TU_117,True,phosphoesterase,P22746,MG_190_MONOMER
+MG_191,mRNA,221570,4335,Forward,TU_118,True,MgPa adhesin,P20796,MG_191_MONOMER
+MG_192,mRNA,225906,3162,Forward,TU_118,True,P110 protein,P22747,MG_192_MONOMER
+MG_194,mRNA,232009,1026,Forward,TU_119,True,phenylalanyl-tRNA synthetase; alpha subunit,P47436,MG_194_MONOMER
+MG_195,mRNA,233038,2421,Forward,TU_119,True,phenylalanyl-tRNA synthetase; beta subunit,P47437,MG_195_MONOMER
+MG_196,mRNA,235517,546,Forward,TU_120,True,translation initiation factor IF-3,P47438,MG_196_MONOMER
+MG_197,mRNA,236065,180,Forward,TU_120,True,ribosomal protein L35,P47439,MG_197_MONOMER
+MG_198,mRNA,236247,375,Forward,TU_120,True,ribosomal protein L20,P47440,MG_198_MONOMER
+MG_199,mRNA,236593,708,Reverse,TU_121,True,ribonuclease HIII; putative; frameshift,P47441,MG_199_MONOMER
+MG_200,mRNA,237347,1806,Forward,TU_122,True,DnaJ domain protein,P47442,MG_200_MONOMER
+MG_201,mRNA,239164,654,Forward,TU_122,True,co-chaperone GrpE,P47443,MG_201_MONOMER
+MG_202,mRNA,239827,369,Forward,TU_122,True,acyl-CoA binding protein,P47444,MG_202_MONOMER
+MG_203,mRNA,240323,1902,Forward,TU_124,True,DNA topoisomerase IV; B subunit,P47445,MG_203_MONOMER
+MG_204,mRNA,242224,2346,Forward,TU_124,True,DNA topoisomerase IV; A subunit,P47446,MG_204_MONOMER
+MG_205,mRNA,244566,1032,Reverse,TU_125,True,heat-inducible transcription repressor HrcA; putative,P47447,MG_205_MONOMER
+MG_206,mRNA,245633,1794,Forward,TU_126,True,excinuclease ABC; C subunit,P47448,MG_206_MONOMER
+MG_207,mRNA,247407,504,Forward,TU_127,False,Ser/Thr protein phosphatase 2A,P47449,MG_207_MONOMER
+MG_208,mRNA,247903,591,Reverse,TU_128,True,glycoprotease,P47450,MG_208_MONOMER
+MG_209,mRNA,248477,927,Reverse,TU_128,True,23S rRNA pseudouridine synthase; U955; U2504; U2580,P47451,MG_209_MONOMER
+MG_210,mRNA,249403,546,Reverse,TU_128,False,prolipoprotein signal peptidase; signal peptidase II,Q49401,MG_210_MONOMER
+MG_211,mRNA,250998,444,Forward,TU_131,True,DivIVA domain,P47453,MG_211_MONOMER
+MG_212,mRNA,251781,807,Forward,TU_131,True,1-acyl-sn-glycerol-3-phosphate acyltransferase; putative,Q49402,MG_212_MONOMER
+MG_213,mRNA,252580,1416,Forward,TU_132,False,segregation and condensation protein A,P47455,MG_213_MONOMER
+MG_214,mRNA,253979,624,Forward,TU_132,False,segregation and condensation protein B,P47456,MG_214_MONOMER
+MG_215,mRNA,254621,972,Forward,TU_133,True,6-phosphofructokinase,P47457,MG_215_MONOMER
+MG_216,mRNA,255595,1527,Forward,TU_133,True,pyruvate kinase,P47458,MG_216_MONOMER
+MG_217,mRNA,258041,1119,Forward,TU_142,True,P65 adhesin,P47459,MG_217_MONOMER
+MG_218,mRNA,259177,5418,Forward,TU_143,True,high molecular weight cytadherence accessory protein 2,P47460,MG_218_MONOMER
+MG_219,mRNA,265597,447,Forward,TU_144,True,,P47461,MG_219_MONOMER
+MG_220,mRNA,266075,282,Reverse,TU_145,False,membrane-bound protein,Q49403,MG_220_MONOMER
+MG_221,mRNA,266666,426,Forward,TU_147,True,mraZ protein,P47463,MG_221_MONOMER
+MG_222,mRNA,267081,930,Forward,TU_147,True,S-adenosyl-methyltransferase MraW,P47464,MG_222_MONOMER
+MG_223,mRNA,268012,1236,Forward,TU_147,True,cell division ring formation ,P47465,MG_223_MONOMER
+MG_224,mRNA,269250,1110,Forward,TU_148,True,cell division protein FtsZ,P47466,MG_224_MONOMER
+MG_225,mRNA,270405,1470,Forward,TU_149,False,amino acid-polyamine-organocation (APC) permease,P47467,MG_225_MONOMER
+MG_226,mRNA,271840,1479,Forward,TU_149,False,amino acid-polyamine-organocation (APC) permease,P47468,MG_226_MONOMER
+MG_227,mRNA,273790,864,Forward,TU_150,False,thymidylate synthase,P47469,MG_227_MONOMER
+MG_228,mRNA,274653,483,Forward,TU_151,True,dihydrofolate reductase,P47470,MG_228_MONOMER
+MG_229,mRNA,275141,1023,Forward,TU_151,True,ribonucleoside-diphosphate reductase; beta chain,P47471,MG_229_MONOMER
+MG_230,mRNA,276167,462,Forward,TU_151,True,ribonucleotide reductase stimulatory protein,P47472,MG_230_MONOMER
+MG_231,mRNA,276647,2166,Forward,TU_151,True,ribonucleoside-diphosphate reductase; alpha chain,P47473,MG_231_MONOMER
+MG_232,mRNA,278905,303,Forward,TU_152,True,ribosomal protein L21,P47474,MG_232_MONOMER
+MG_233,mRNA,279200,300,Forward,TU_152,True,widely conserved; ribosomal protein; putative,P47475,MG_233_MONOMER
+MG_234,mRNA,279492,315,Forward,TU_152,True,ribosomal protein L27,P47476,MG_234_MONOMER
+MG_235,mRNA,279799,876,Forward,TU_152,True,apurinic endonuclease,P47477,MG_235_MONOMER
+MG_236,mRNA,280664,423,Forward,TU_152,True,ferric uptake repressor,P47478,MG_236_MONOMER
+MG_237,mRNA,281079,885,Forward,TU_153,False,transcriptional regulator; putative,P47479,MG_237_MONOMER
+MG_238,mRNA,281993,1335,Forward,TU_154,False,trigger factor,P47480,MG_238_MONOMER
+MG_239,mRNA,283396,2388,Forward,TU_155,True,ATP-dependent protease La,P47481,MG_239_MONOMER
+MG_240,mRNA,285780,1053,Reverse,TU_156,True,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,P47482,MG_240_MONOMER
+MG_241,mRNA,286885,1863,Forward,TU_157,True,membrane protein; 241/242 homologs,P47483,MG_241_MONOMER
+MG_242,mRNA,288753,1893,Forward,TU_158,True,membrane protein; 241/242 homologs,P47484,MG_242_MONOMER
+MG_243,mRNA,290648,681,Forward,TU_159,True,conserved hypothetical protein; authentic frameshift,P47485,MG_243_MONOMER
+MG_244,mRNA,291334,2112,Forward,TU_159,False,3-5' helicase,P47486,MG_244_MONOMER
+MG_245,mRNA,293448,498,Forward,TU_160,True,5-formyltetrahydrofolate cyclo-ligase; putative,P47487,MG_245_MONOMER
+MG_246,mRNA,293938,846,Forward,TU_161,True,Ser/Thr protein phosphatase 2A,P47488,MG_246_MONOMER
+MG_247,mRNA,294767,720,Reverse,TU_162,True,membrane protein; putative,P47489,MG_247_MONOMER
+MG_248,mRNA,295473,657,Reverse,TU_163,False,tRNA methyltransferase (m1A22),P47490,MG_248_MONOMER
+MG_249,mRNA,296113,1494,Reverse,TU_163,True,RNA polymerase sigma factor RpoD,P47491,MG_249_MONOMER
+MG_250,mRNA,297651,1824,Reverse,TU_164,True,DNA primase,P47492,MG_250_MONOMER
+MG_251,mRNA,299464,1341,Reverse,TU_164,True,glycyl-tRNA synthetase,P47493,MG_251_MONOMER
+MG_252,mRNA,300824,729,Reverse,TU_165,False,23S rRNA methyltransferase; G2251,P47494,MG_252_MONOMER
+MG_253,mRNA,301555,1287,Reverse,TU_165,True,cysteinyl-tRNA synthetase,P47495,MG_253_MONOMER
+MG_254,mRNA,302846,1980,Reverse,TU_165,True,DNA ligase; NAD-dependent,P47496,MG_254_MONOMER
+MG_255,mRNA,305001,1098,Forward,TU_167,False,cell division protein,P47497,MG_255_MONOMER
+MG_256,mRNA,306821,771,Forward,TU_169,False,MG/MP only,P47498,MG_256_MONOMER
+MG_257,mRNA,307637,294,Forward,TU_170,True,ribosomal protein L31,P47499,MG_257_MONOMER
+MG_258,mRNA,307930,1080,Forward,TU_170,True,peptide chain release factor 1,P47500,MG_258_MONOMER
+MG_259,mRNA,309010,1371,Forward,TU_170,True,modification methylase,Q49404,MG_259_MONOMER
+MG_260,mRNA,310511,2298,Forward,TU_171,False,lipoprotein; putative,P47502,MG_260_MONOMER
+MG_261,mRNA,315701,2625,Forward,TU_173,True,DNA polymerase III; alpha subunit,Q49405,MG_261_MONOMER
+MG_262,mRNA,318332,876,Forward,TU_173,True,polI-like 5'-3' exonuclease; putative,Q49406,MG_262_MONOMER
+MG_263,mRNA,320177,876,Forward,TU_174,True,Cof-like hydrolase,P47505,MG_263_MONOMER
+MG_264,mRNA,321046,597,Forward,TU_175,False,dephospho-CoA kinase,P47506,MG_264_MONOMER
+MG_265,mRNA,321578,837,Reverse,TU_176,True,sugar phosphatase,P47507,MG_265_MONOMER
+MG_266,mRNA,322433,2379,Reverse,TU_176,True,leucyl-tRNA synthetase,P47508,MG_266_MONOMER
+MG_267,mRNA,324812,348,Reverse,TU_176,True,acetyl transferase; putative,P47509,MG_267_MONOMER
+MG_268,mRNA,325193,687,Reverse,TU_177,False,deoxynucleoside kinase; putative,P47510,MG_268_MONOMER
+MG_269,mRNA,326030,1023,Reverse,TU_179,False,,Q49407,MG_269_MONOMER
+MG_270,mRNA,327433,1011,Reverse,TU_180,True,lipoyltransferase/lipoate-protein ligase; putative,P47512,MG_270_MONOMER
+MG_271,mRNA,328454,1374,Reverse,TU_180,False,dihydrolipoamide dehydrogenase,P47513,MG_271_MONOMER
+MG_272,mRNA,329831,1155,Reverse,TU_180,True,dihydrolipoamide acetyltransferase,P47514,MG_272_MONOMER
+MG_273,mRNA,331235,981,Reverse,TU_182,True,pyruvate dehydrogenase component E1; beta subunit,P47515,MG_273_MONOMER
+MG_274,mRNA,332233,1077,Reverse,TU_182,True,pyruvate dehydrogenase component E1; alpha subunit,P47516,MG_274_MONOMER
+MG_275,mRNA,333337,1437,Reverse,TU_182,True,NADH oxidase,Q49408,MG_275_MONOMER
+MG_276,mRNA,334856,543,Reverse,TU_183,True,adenine phosphoribosyltransferase,P47518,MG_276_MONOMER
+MG_277,mRNA,335412,2913,Reverse,TU_184,True,Protein-export membrane protein secDF,Q49409,MG_277_MONOMER
+MG_278,mRNA,338367,2163,Forward,TU_185,True,GTP diphosphokinase,P47520,MG_278_MONOMER
+MG_279,mRNA,340526,657,Reverse,TU_186,False,,P47521,MG_279_MONOMER
+MG_280,mRNA,341175,798,Reverse,TU_186,False,sensory rhodopsin II transducer motif,P47522,MG_280_MONOMER
+MG_281,mRNA,342033,1671,Reverse,TU_186,False,protein M,P47523,MG_281_MONOMER
+MG_282,mRNA,344365,486,Reverse,TU_190,True,transcription elongation factor GreA,P47524,MG_282_MONOMER
+MG_283,mRNA,345182,1452,Forward,TU_191,True,prolyl-tRNA synthetase,P47525,MG_283_MONOMER
+MG_284,mRNA,346854,399,Forward,TU_192,False,,P47526,MG_284_MONOMER
+MG_285,mRNA,347215,1044,Forward,TU_192,False,,P47527,MG_285_MONOMER
+MG_286,mRNA,348261,591,Forward,TU_192,False,,P47528,MG_286_MONOMER
+MG_287,mRNA,348883,255,Forward,TU_193,True,acyl carrier protein,P47529,MG_287_MONOMER
+MG_288,mRNA,351791,1245,Reverse,TU_195,False,protein L,P47530,MG_288_MONOMER
+MG_289,mRNA,354024,1107,Forward,TU_196,False,phosphonate ABC transporter; substrate binding protein (P37); putative,Q49410,MG_289_MONOMER
+MG_290,mRNA,355120,738,Forward,TU_196,False,phosphonate ABC transporter; ATP-binding protein; putative,P47532,MG_290_MONOMER
+MG_291,mRNA,355847,1632,Forward,TU_196,False,phosphonate ABC transporter; permease protein (P69); putative,P47533,MG_291_MONOMER
+MG_292,mRNA,357891,2703,Reverse,TU_198,True,alanyl-tRNA synthetase,P47534,MG_292_MONOMER
+MG_293,mRNA,360651,735,Reverse,TU_198,False,glycerophosphoryl diester phosphodiesterase,P47535,MG_293_MONOMER
+MG_294,mRNA,361378,1425,Reverse,TU_198,False,major facilitator superfamily (MFS) protein,Q49411,MG_294_MONOMER
+MG_295,mRNA,362920,1104,Reverse,TU_199,True,tRNA U34 sulfurtransferase,P47537,MG_295_MONOMER
+MG_296,mRNA,364026,390,Reverse,TU_200,True,cell division/septation,P47538,MG_296_MONOMER
+MG_297,mRNA,364535,1041,Reverse,TU_201,True,signal recognition particle receptor,P47539,MG_297_MONOMER
+MG_298,mRNA,365582,2949,Reverse,TU_202,False,chromosome segregation protein SMC,P47540,MG_298_MONOMER
+MG_299,mRNA,368733,963,Reverse,TU_203,True,phosphate acetyltransferase,P47541,MG_299_MONOMER
+MG_300,mRNA,369713,1236,Reverse,TU_204,True,phosphoglycerate kinase,P47542,MG_300_MONOMER
+MG_301,mRNA,370950,1014,Reverse,TU_204,True,glyceraldehyde-3-phosphate dehydrogenase; type I,P47543,MG_301_MONOMER
+MG_302,mRNA,371994,954,Reverse,TU_205,True,metal ion (cobalt) ABC transporter; permease protein; putative,P47544,MG_302_MONOMER
+MG_303,mRNA,372926,1074,Reverse,TU_206,True,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,P47545,MG_303_MONOMER
+MG_304,mRNA,373981,813,Reverse,TU_207,True,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,P47546,MG_304_MONOMER
+MG_305,mRNA,374919,1788,Reverse,TU_208,True,chaperone,P47547,MG_305_MONOMER
+MG_306,mRNA,376794,1182,Reverse,TU_209,True,membrane protein; putative,P47548,MG_306_MONOMER
+MG_307,mRNA,377975,3534,Reverse,TU_210,True,lipoprotein; putative,P47549,MG_307_MONOMER
+MG_308,mRNA,381493,1233,Reverse,TU_211,True,ATP-dependent RNA helicase,P52271,MG_308_MONOMER
+MG_309,mRNA,382732,3678,Reverse,TU_211,True,lipoprotein; putative,P47551,MG_309_MONOMER
+MG_310,mRNA,386463,807,Forward,TU_212,True,hydrolase; Putative esterase/lipase 1,Q49412,MG_310_MONOMER
+MG_311,mRNA,387276,618,Reverse,TU_213,True,ribosomal protein S4,P47553,MG_311_MONOMER
+MG_312,mRNA,387916,3420,Reverse,TU_214,True,high molecular weight cytadherence accessory protein 1,Q49413,MG_312_MONOMER
+MG_313,mRNA,391395,864,Reverse,TU_215,True,membrane protein; putative,Q49414,MG_313_MONOMER
+MG_314,mRNA,392303,1332,Reverse,TU_215,True,cytadherence ,Q49415,MG_314_MONOMER
+MG_315,mRNA,393658,894,Reverse,TU_215,False,DNA polymerase III; delta subunit; putative,Q49416,MG_315_MONOMER
+MG_316,mRNA,394475,1110,Reverse,TU_216,False,DNA internalization-related competence protein ComEC/Rec2,P47558,MG_316_MONOMER
+MG_317,mRNA,395625,1800,Reverse,TU_217,True,high molecular weight cytadherence accessory protein 3,Q57081,MG_317_MONOMER
+MG_318,mRNA,397439,843,Reverse,TU_217,True,P32 adhesin,Q49417,MG_318_MONOMER
+MG_319,mRNA,398298,537,Reverse,TU_218,True,cytadherence; putative,P47561,MG_319_MONOMER
+MG_320,mRNA,398938,861,Reverse,TU_219,True,membrane protein; putative,P47562,MG_320_MONOMER
+MG_321,mRNA,400119,2805,Reverse,TU_222,True,oligopeptide ABC transporter; substrate binding protein,P47563,MG_321_MONOMER
+MG_322,mRNA,403723,1677,Reverse,TU_224,True,potassium uptake protein,P47564,MG_322_MONOMER
+MG_323,mRNA,405456,684,Forward,TU_225,True,potassium uptake protein,P47565,MG_323_MONOMER
+MG_324,mRNA,407729,1065,Reverse,TU_228,True,aminopeptidase,P47566,MG_324_MONOMER
+MG_325,mRNA,408793,162,Reverse,TU_228,True,ribosomal protein L33,P47567,MG_325_MONOMER
+MG_326,mRNA,408971,888,Reverse,TU_229,True,degV family protein,P47568,MG_326_MONOMER
+MG_327,mRNA,409871,807,Reverse,TU_230,True,hydrolase; Putative esterase/lipase 2,Q49418,MG_327_MONOMER
+MG_328,mRNA,410664,2271,Reverse,TU_231,False,coiled coil putative structural protein involved in cytoskeleton,Q49419,MG_328_MONOMER
+MG_329,mRNA,412973,1347,Reverse,TU_232,True,GTP-binding protein engA,P47571,MG_329_MONOMER
+MG_330,mRNA,414323,654,Reverse,TU_233,True,cytidylate kinase,P47572,MG_330_MONOMER
+MG_331,mRNA,414985,639,Reverse,TU_233,True,predicted dolichyl-diphosphooligosaccharide-protein glycosyltransferase,P47573,MG_331_MONOMER
+MG_332,mRNA,415611,720,Reverse,TU_233,True,glucose-1-phosphate adenylyltransferase; putative,P47574,MG_332_MONOMER
+MG_333,mRNA,416337,594,Reverse,TU_233,True,FMN-dependent NADH-azoreductase; putative,P47575,MG_333_MONOMER
+MG_334,mRNA,416967,2514,Reverse,TU_234,True,valyl-tRNA synthetase,P47576,MG_334_MONOMER
+MG_335,mRNA,419470,576,Reverse,TU_235,True,GTP-binding protein engB; putative,P47577,MG_335_MONOMER
+MG_336,mRNA,421467,1227,Forward,TU_238,True,cysteine desulfurase,Q49420,MG_336_MONOMER
+MG_337,mRNA,422697,417,Forward,TU_239,True,iron-sulfur cluster assembly protein,P47579,MG_337_MONOMER
+MG_338,mRNA,423100,3813,Reverse,TU_240,True,lipoprotein; putative,P47580,MG_338_MONOMER
+MG_339,mRNA,427090,954,Reverse,TU_241,False,recombination protein; strand exchange,P47581,MG_339_MONOMER
+MG_340,mRNA,430580,3879,Reverse,TU_242,True,DNA-directed RNA polymerase; beta subunit,P47582,MG_340_MONOMER
+MG_341,mRNA,434468,4173,Reverse,TU_242,True,DNA-directed RNA polymerase; beta subunit,P47583,MG_341_MONOMER
+MG_342,mRNA,438730,507,Reverse,TU_243,True,NADPH-dependent FMN reductase domain protein,P47584,MG_342_MONOMER
+MG_343,mRNA,439315,1041,Reverse,TU_244,False,MG/MP only,P47585,MG_343_MONOMER
+MG_344,mRNA,440359,822,Reverse,TU_245,True,hydrolase; Putative esterase/lipase 3,Q49421,MG_344_MONOMER
+MG_345,mRNA,441191,2688,Reverse,TU_246,True,isoleucyl-tRNA synthetase,P47587,MG_345_MONOMER
+MG_346,mRNA,443922,501,Forward,TU_247,False,23S rRNA methyltransferase; U2552,P47588,MG_346_MONOMER
+MG_347,mRNA,444413,633,Forward,TU_247,True,tRNA (guanine-N(7)-)-methyltransferase,P47589,MG_347_MONOMER
+MG_348,mRNA,445197,969,Reverse,TU_249,True,lipoprotein; putative,P47590,MG_348_MONOMER
+MG_349,mRNA,446576,1215,Forward,TU_251,True,Replication initiation/membrane attachment protein,P47591,MG_349_MONOMER
+MG_350,mRNA,447790,936,Forward,TU_251,True,transporter; substrate binding,P47592,MG_350_MONOMER
+MG_351,mRNA,449665,555,Forward,TU_254,True,inorganic pyrophosphatase,P47593,MG_351_MONOMER
+MG_352,mRNA,450222,501,Forward,TU_255,False,Holliday junction endonuclease,Q49422,MG_352_MONOMER
+MG_353,mRNA,450719,330,Reverse,TU_256,True,DNA-binding protein HU; putative,P47595,MG_353_MONOMER
+MG_354,mRNA,451197,414,Forward,TU_257,True,,P47596,MG_354_MONOMER
+MG_355,mRNA,451613,2145,Reverse,TU_258,False,ATP-dependent Clp protease; ATPase subunit,P47597,MG_355_MONOMER
+MG_356,mRNA,453911,843,Reverse,TU_259,True,choline/ethanolamine kinase; putative,Q49423,MG_356_MONOMER
+MG_357,mRNA,454766,1182,Reverse,TU_260,True,acetate kinase,P47599,MG_357_MONOMER
+MG_358,mRNA,456755,618,Forward,TU_261,False,Holliday junction DNA helicase,Q49424,MG_358_MONOMER
+MG_359,mRNA,457347,924,Forward,TU_261,False,Holliday junction DNA helicase RuvB,Q49425,MG_359_MONOMER
+MG_360,mRNA,458260,1236,Reverse,TU_262,False,ImpB/MucB/SamB family protein,Q49426,MG_360_MONOMER
+MG_361,mRNA,459615,489,Forward,TU_263,True,ribosomal protein L10,P36263,MG_361_MONOMER
+MG_362,mRNA,460126,369,Forward,TU_263,True,ribosomal protein L7/L12,P36255,MG_362_MONOMER
+MG_363,mRNA,460497,174,Forward,TU_263,True,ribosomal protein L32,P47603,MG_363_MONOMER
+MG_364,mRNA,461015,675,Forward,TU_265,True,Replication initiation/membrane attachment protein,P47604,MG_364_MONOMER
+MG_365,mRNA,461682,936,Forward,TU_266,True,methionyl-tRNA formyltransferase,P47605,MG_365_MONOMER
+MG_366,mRNA,462619,2004,Forward,TU_267,True,phosphomethylpyrimidine kinase; thiamine biosynthesis,P47606,MG_366_MONOMER
+MG_367,mRNA,464646,789,Reverse,TU_268,False,ribonuclease III,P47607,MG_367_MONOMER
+MG_368,mRNA,465424,987,Reverse,TU_268,True,fatty acid/phospholipid synthesis protein PlsX,Q49427,MG_368_MONOMER
+MG_369,mRNA,466410,1674,Reverse,TU_268,True,DAK2 phosphatase domain protein,P47609,MG_369_MONOMER
+MG_370,mRNA,468152,972,Reverse,TU_269,False,23S rRNA pseudouridine synthase; U1911; U1915; U1917,P47610,MG_370_MONOMER
+MG_371,mRNA,469110,975,Reverse,TU_270,True,DHH family protein,Q49428,MG_371_MONOMER
+MG_372,mRNA,470077,1158,Reverse,TU_271,True,thiamine biosynthesis/tRNA modification protein ThiI,P47612,MG_372_MONOMER
+MG_373,mRNA,471221,846,Reverse,TU_271,True,exonuclease/recombinase (viral origin),P47613,MG_373_MONOMER
+MG_374,mRNA,472067,825,Reverse,TU_271,True,haloacid dehalogenase-like hydrolase; sugar phosphatase; putative,P47614,MG_374_MONOMER
+MG_375,mRNA,472884,1695,Reverse,TU_271,True,threonyl-tRNA synthetase,P47615,MG_375_MONOMER
+MG_376,mRNA,474578,315,Reverse,TU_272,True,single-stranded DNA binding,P47616,MG_376_MONOMER
+MG_377,mRNA,474898,582,Reverse,TU_273,True,chaperone/trigger factor; by structural homology,P47617,MG_377_MONOMER
+MG_378,mRNA,475526,1614,Reverse,TU_274,True,arginyl-tRNA synthetase,P47618,MG_378_MONOMER
+MG_379,mRNA,477168,1839,Forward,TU_275,True,tRNA uridine 5-carboxymethylaminomethyl modification enzyme GidA,P47619,MG_379_MONOMER
+MG_380,mRNA,478999,579,Forward,TU_275,False,methyltransferase GidB,P47620,MG_380_MONOMER
+MG_381,mRNA,479570,657,Forward,TU_275,True,,P47621,MG_381_MONOMER
+MG_382,mRNA,480691,642,Forward,TU_277,True,uridine kinase,P47622,MG_382_MONOMER
+MG_383,mRNA,481329,747,Reverse,TU_278,True,NH(3)-dependent NAD+ synthetase; putative,P47623,MG_383_MONOMER
+MG_384,mRNA,482068,1302,Reverse,TU_279,True,GTPase1 Obg,P47624,MG_384_MONOMER
+MG_385,mRNA,483989,711,Reverse,TU_280,False,glycerophosphoryl diester phosphodiesterase family protein,P47625,MG_385_MONOMER
+MG_386,mRNA,484702,4851,Reverse,TU_281,True,P200 protein,Q49429,MG_386_MONOMER
+MG_387,mRNA,489839,873,Reverse,TU_282,True,GTP-binding protein Era,P47627,MG_387_MONOMER
+MG_388,mRNA,490699,465,Reverse,TU_282,True,Putative metalloprotease,P47628,MG_388_MONOMER
+MG_389,mRNA,491147,384,Reverse,TU_283,True,,P47629,MG_389_MONOMER
+MG_390,mRNA,491534,1983,Reverse,TU_284,False,toxin ABC transporter; ATP-binding/permease protein,Q49430,MG_390_MONOMER
+MG_391,mRNA,493624,1344,Reverse,TU_285,True,cytosol aminopeptidase,P47631,MG_391_MONOMER
+MG_392,mRNA,494984,1632,Reverse,TU_285,True,chaperonin,P47632,MG_392_MONOMER
+MG_393,mRNA,496628,333,Reverse,TU_285,True,chaperonin; 10 kDa,P47633,MG_393_MONOMER
+MG_394,mRNA,497086,1221,Reverse,TU_286,True,serine hydroxymethyltransferase,P47634,MG_394_MONOMER
+MG_395,mRNA,498316,1575,Reverse,TU_287,True,lipoprotein; putative,P47635,MG_395_MONOMER
+MG_396,mRNA,500261,459,Reverse,TU_288,True,ribose 5-phosphate isomerase B,P47636,MG_396_MONOMER
+MG_397,mRNA,500720,1701,Reverse,TU_288,False,Cell division inhibitor,P47637,MG_397_MONOMER
+MG_398,mRNA,502422,402,Reverse,TU_289,False,ATP synthase F1; epsilon subunit,P47638,MG_398_MONOMER
+MG_399,mRNA,502828,1431,Reverse,TU_290,True,ATP synthase F1; beta subunit,P47639,MG_399_MONOMER
+MG_400,mRNA,504260,840,Reverse,TU_291,True,ATP synthase F1; gamma subunit,P47640,MG_400_MONOMER
+MG_401,mRNA,505099,1557,Reverse,TU_291,True,ATP synthase F1; alpha subunit,P47641,MG_401_MONOMER
+MG_402,mRNA,506671,531,Reverse,TU_292,True,ATP synthase F1; delta subunit,P47642,MG_402_MONOMER
+MG_403,mRNA,507194,627,Reverse,TU_292,True,ATP synthase F0; B subunit,P47643,MG_403_MONOMER
+MG_404,mRNA,507823,309,Reverse,TU_292,True,ATP synthase F0; C subunit,P47644,MG_404_MONOMER
+MG_405,mRNA,508134,879,Reverse,TU_292,True,ATP synthase F0; A subunit,P47645,MG_405_MONOMER
+MG_406,mRNA,508978,477,Reverse,TU_293,True,,Q49431,MG_406_MONOMER
+MG_407,mRNA,509460,1377,Reverse,TU_294,True,enolase,P47647,MG_407_MONOMER
+MG_408,mRNA,510903,474,Forward,TU_295,False,methionine-S-sulfoxide reductase,P47648,MG_408_MONOMER
+MG_409,mRNA,511373,678,Reverse,TU_296,True,phosphate transport system regulatory protein PhoU; putative,P47649,MG_409_MONOMER
+MG_410,mRNA,512053,990,Reverse,TU_296,False,phosphate ABC transporter; ATP-binding protein,P47650,MG_410_MONOMER
+MG_411,mRNA,513027,1965,Reverse,TU_296,False,phosphate ABC transporter; permease protein PstA,P47651,MG_411_MONOMER
+MG_412,mRNA,514991,1134,Reverse,TU_296,False,phosphate ABC transporter; substrate-binding protein,P47652,MG_412_MONOMER
+MG_414,mRNA,516245,3111,Reverse,TU_297,False,,P47653,MG_414_MONOMER
+MG_417,mRNA,521470,399,Reverse,TU_299,True,ribosomal protein S9,P47656,MG_417_MONOMER
+MG_418,mRNA,521874,441,Reverse,TU_300,True,ribosomal protein L13,P47657,MG_418_MONOMER
+MG_419,mRNA,522352,1794,Reverse,TU_301,True,DNA polymerase III; subunit gamma and tau,P47658,MG_419_MONOMER
+MG_421,mRNA,524151,2865,Reverse,TU_301,True,excinuclease ABC; A subunit,P47660,MG_421_MONOMER
+MG_422,mRNA,526987,2508,Reverse,TU_301,True,,P47661,MG_422_MONOMER
+MG_423,mRNA,529532,1686,Reverse,TU_301,True,metallo-beta-lactamase superfamily protein,P47662,MG_423_MONOMER
+MG_424,mRNA,531220,261,Reverse,TU_302,True,ribosomal protein S15,P47663,MG_424_MONOMER
+MG_425,mRNA,531669,1350,Forward,TU_303,True,ATP-dependent RNA helicase,P47664,MG_425_MONOMER
+MG_426,mRNA,533041,195,Forward,TU_304,True,ribosomal protein L28,P47665,MG_426_MONOMER
+MG_427,mRNA,533271,426,Forward,TU_305,True,osmotically inducible peroxidase,P47666,MG_427_MONOMER
+MG_428,mRNA,533807,516,Forward,TU_306,False,LuxR bacterial regulatory protein; putative,P47667,MG_428_MONOMER
+MG_429,mRNA,534319,1719,Reverse,TU_307,True,PTS system; E1,P47668,MG_429_MONOMER
+MG_430,mRNA,536041,1524,Reverse,TU_307,True,2;3-bisphosphoglycerate-independent phosphoglycerate mutase,P47669,MG_430_MONOMER
+MG_431,mRNA,537557,735,Reverse,TU_307,True,triosephosphate isomerase,P47670,MG_431_MONOMER
+MG_432,mRNA,538351,1197,Reverse,TU_308,True,membrane protein; putative,Q49432,MG_432_MONOMER
+MG_433,mRNA,539633,897,Forward,TU_309,True,translation elongation factor Ts,P47246,MG_433_MONOMER
+MG_434,mRNA,540510,732,Forward,TU_310,True,uridylate kinase,P47672,MG_434_MONOMER
+MG_435,mRNA,541241,552,Forward,TU_311,True,ribosome recycling factor,P47673,MG_435_MONOMER
+MG_437,mRNA,541793,1194,Forward,TU_312,False,phosphatidate cytidylyltransferase,Q49433,MG_437_MONOMER
+MG_438,mRNA,543006,1152,Forward,TU_313,False,type I restriction modification DNA specificity domain protein,Q49434,MG_438_MONOMER
+MG_439,mRNA,544562,819,Reverse,TU_314,True,lipoprotein; putative,P47677,MG_439_MONOMER
+MG_440,mRNA,545380,777,Reverse,TU_315,True,lipoprotein; putative,P47678,MG_440_MONOMER
+MG_441,mRNA,546302,408,Reverse,TU_315,True,,P47679,MG_441_MONOMER
+MG_442,mRNA,546880,813,Reverse,TU_316,True,ribosomal biogenesis GTPase,Q49435,MG_442_MONOMER
+MG_443,mRNA,547664,1188,Reverse,TU_316,True,membrane protein; putative,P47681,MG_443_MONOMER
+MG_444,mRNA,548867,360,Reverse,TU_317,True,ribosomal protein L19,P47682,MG_444_MONOMER
+MG_445,mRNA,549210,696,Reverse,TU_317,True,tRNA (guanine-N1)-methyltransferase,P47683,MG_445_MONOMER
+MG_446,mRNA,549905,288,Reverse,TU_317,True,ribosomal protein S16,P47684,MG_446_MONOMER
+MG_447,mRNA,550803,1644,Reverse,TU_318,False,multidrug efflux pump,P47685,MG_447_MONOMER
+MG_448,mRNA,552447,453,Reverse,TU_319,True,methionine-R-sulfoxide reductase,P47686,MG_448_MONOMER
+MG_449,mRNA,552863,686,Reverse,TU_320,False,conserved hypothetical protein; authentic frameshift,P47687,MG_449_MONOMER
+MG_450,mRNA,553558,873,Reverse,TU_321,True,degV family protein,P47688,MG_450_MONOMER
+MG_451,mRNA,554430,1185,Reverse,TU_321,True,translation elongation factor Tu,P13927,MG_451_MONOMER
+MG_452,mRNA,555667,786,Forward,TU_322,False,membrane protein; putative,P47690,MG_452_MONOMER
+MG_453,mRNA,556437,879,Forward,TU_322,True,UTP-glucose-1-phosphate uridylyltransferase,P47691,MG_453_MONOMER
+MG_454,mRNA,557305,468,Reverse,TU_323,False,thiol-dependent peroxidase,P47692,MG_454_MONOMER
+MG_455,mRNA,557759,1191,Forward,TU_324,True,tyrosyl-tRNA synthetase,P47693,MG_455_MONOMER
+MG_456,mRNA,558939,1005,Reverse,TU_325,False,,P47694,MG_456_MONOMER
+MG_457,mRNA,560496,2109,Reverse,TU_326,True,ATP-dependent metalloprotease FtsH,P47695,MG_457_MONOMER
+MG_458,mRNA,562782,528,Reverse,TU_327,True,hypoxanthine phosphoribosyltransferase,P47696,MG_458_MONOMER
+MG_459,mRNA,563311,510,Reverse,TU_328,True,putative 2-C-methyl-D-erythritol-2;4-cyclodiphosphate synthase,Q49436,MG_459_MONOMER
+MG_460,mRNA,563993,939,Forward,TU_329,False,L-lactate dehydrogenase/malate dehydrogenase,P47698,MG_460_MONOMER
+MG_461,mRNA,564928,1278,Reverse,TU_330,True,HD domain protein,P47699,MG_461_MONOMER
+MG_462,mRNA,566186,1455,Reverse,TU_330,True,glutamyl-tRNA synthetase,P47700,MG_462_MONOMER
+MG_463,mRNA,567627,780,Reverse,TU_331,False,dimethyladenosine transferase,P47701,MG_463_MONOMER
+MG_464,mRNA,568399,1158,Reverse,TU_331,True,inner-membrane protein insertion factor,P47702,MG_464_MONOMER
+MG_465,mRNA,569528,387,Reverse,TU_331,True,ribonuclease P protein component,P47703,MG_465_MONOMER
+MG_466,mRNA,569883,147,Reverse,TU_332,True,ribosomal protein L34,P47704,MG_466_MONOMER
+MG_467,mRNA,570055,936,Reverse,TU_333,True,salivaricin A ABC transporter; ATP-binding protein,P47705,MG_467_MONOMER
+MG_468,mRNA,570994,5352,Reverse,TU_333,True,salivaricin A ABC transporter; permease protein,Q49460,MG_468_MONOMER
+MG_469,mRNA,577268,1314,Reverse,TU_335,True,chromosomal replication initiator protein DnaA,P35888,MG_469_MONOMER
+MG_470,mRNA,579224,810,Reverse,TU_335,True,CobQ/CobB/MinD/ParA nucleotide binding domain,P47706,MG_470_MONOMER
+MG_473,mRNA,64367,147,Reverse,TU_031,True,ribosomal protein L33 type 2,Q9ZB82,MG_473_MONOMER
+MG_474,mRNA,64527,384,Reverse,TU_032,True,protein export/possible structural role,Q9ZB81,MG_474_MONOMER
+MG_476,mRNA,131149,234,Forward,TU_064,True,preprotein translocase; SecG subunit,P58061,MG_476_MONOMER
+MG_477,mRNA,180746,273,Forward,TU_091,True,transcription termination factor,Q2MHT0,MG_477_MONOMER
+MG_478,mRNA,189492,465,Forward,TU_098,False,,Q9ZB80,MG_478_MONOMER
+MG_480,mRNA,250149,660,Forward,TU_129,True,structural; putative Cell cycle; putative,P56723,MG_480_MONOMER
+MG_481,mRNA,250808,189,Forward,TU_130,True,30S ribosomal protein S21,P57085,MG_481_MONOMER
+MG_482,mRNA,251444,345,Forward,TU_131,True,holo-(acyl-carrier-protein) synthase,Q9ZB79,MG_482_MONOMER
+MG_491,mRNA,264597,1041,Forward,TU_143,True,cell adhesion; homology to dksA; RNA polymerase binding; putative,Q9ZB78,MG_491_MONOMER
+MG_494,mRNA,306202,453,Forward,TU_167,False,cell-division inhibitor; putative protease; putative,Q9ZB77,MG_494_MONOMER
+MG_498,mRNA,319207,855,Forward,TU_173,False,formamidopyrimidine-DNA glycosylase,P55825,MG_498_MONOMER
+MG_505,mRNA,357475,417,Reverse,TU_197,True,putative holliday junction resolvase,Q9ZB76,MG_505_MONOMER
+MG_515,mRNA,406975,810,Reverse,TU_228,True,,Q9ZB74,MG_515_MONOMER
+MG_516,mRNA,420053,222,Reverse,TU_236,True,UPF0154,Q49310,MG_516_MONOMER
+MG_517,mRNA,420333,1026,Forward,TU_237,True,glycosyl transferase; group 2 family protein,Q9ZB73,MG_517_MONOMER
+MG_521,mRNA,448943,675,Reverse,TU_253,True,membrane protein; putative,Q9ZB72,MG_521_MONOMER
+MG_522,mRNA,460685,267,Reverse,TU_264,True,ribosomal protein S20,P55750,MG_522_MONOMER
+MG_524,mRNA,483369,450,Reverse,TU_280,True,,Q9ZB71,MG_524_MONOMER
+MG_525,mRNA,519420,1995,Reverse,TU_298,False,,P47655,MG_525_MONOMER
+MG_526,mRNA,576351,855,Reverse,TU_334,True,salivaricin A ABC transporter; ATP-binding protein,Q9ZB70,MG_526_MONOMER

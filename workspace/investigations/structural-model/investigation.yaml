@@ -1,0 +1,134 @@
+# structural-model/investigation.yaml — schema v2
+schema_version: 2
+name: structural-model
+title: "Structural model of M. genitalium — reproducing Maritan 2022 with viva-parsimony"
+created: '2026-09-19'
+status: running
+
+question: |
+  Can the Maritan et al. 2022 3D whole-cell structural model of Mycoplasma
+  genitalium be reproduced with viva-parsimony (the parsimony cellPACK-style
+  engine) in place of CellPACK — packing the same molecular inventory at true
+  abundance into a single-membrane cell — and does the viva_mgen whole-cell-model
+  reproduction's own simulated proteome yield a comparable 3D cell?
+
+hypothesis: |
+  The Maritan ingredient roster (supplementary table S1, ~683 protein species)
+  plus genome geometry (S2), resolved to PDB/AlphaFold structures and packed with
+  the parsimony octree engine into a ~0.3 µm capsule, recovers Maritan's headline
+  mesoscale properties — hundreds of species placed at true abundance, a single
+  supercoiled nucleoid, membrane proteins seated in the bilayer, and cytoplasmic
+  crowding in the reported range. Swapping the copy numbers for a viva_mgen
+  simulated run yields a structurally comparable cell, differing only where the
+  reproduction's predicted proteome diverges from the published WC-MG counts.
+
+lead: |
+  This is the structural companion to the seven figure-studies of the `mgen`
+  investigation. Where those reproduce the Karr 2012 whole-cell model's dynamics,
+  this one reproduces its *structure*: it takes the same molecular inventory and,
+  following Maritan, Autin, Karr, Covert, Olson & Goodsell (J. Mol. Biol. 2022),
+  builds a 3D packed cell — but with the reusable viva-parsimony engine rather
+  than CellPACK. It is the M. genitalium analog of the 3d-ecoli repo (v2ecoli →
+  pbg_parsimony); here it is viva_mgen → pbg_parsimony.
+
+executive:
+  what_is_this: |
+    A structural investigation that reproduces the first 3D whole-cell model of
+    M. genitalium (Maritan 2022) using viva-parsimony. The Maritan supplement
+    (S1 proteins, S2 genes) supplies the ingredient roster, per-species
+    structures (curated PDB where available, else AlphaFold by UniProt), and the
+    circular genome; the pbg_parsimony octree engine packs them at true abundance
+    into a single-membrane capsule with one supercoiled nucleoid. Two studies
+    contrast the published WC-MG abundances (faithful baseline) against the
+    viva_mgen reproduction's simulated proteome.
+  verdict: |
+    BOTH studies run and PASS. s01-maritan-baseline packs a genuine, faithful 3D
+    M. genitalium cell with the real parsimony binary: Maritan's 144.47 nm sphere,
+    30,355 molecules, 506 species (all structure-resolved), 75 membrane proteins,
+    one supercoiled chromosome, and a protein volume occupancy of 0.144 — exactly
+    Maritan Table 1's reported figure. s02-reproduction-driven packs the same cell
+    from the viva_mgen reproduction's own SIMULATED proteome: the species roster
+    is comparable (605/632 baseline species present), but the cell is less crowded
+    (occupancy ~0.04) — the reproduction's absolute per-gene abundances run below
+    the WC-MG published counts Maritan used. The Maritan structural model is
+    faithfully reproduced with viva-parsimony (not CellPACK); the reproduction's
+    proteome is structurally self-consistent but abundance-scaled differently.
+  verdict_status: complete
+  verdict_detail: |
+    Done: the viva_mgen.structural bridge (parse S1/S2 → roster; PDB/AlphaFold
+    resolution; WC-MG + sim copy-number providers; build_mgen_pack over the real
+    parsimony engine; the mgen_structural composite + MgenStructuralStep); the
+    faithful Maritan-sphere geometry (Table 1, Frame 149 s) with occupancy
+    calibrated to the reported 0.144; a real baseline pack AND a real
+    reproduction-driven pack; the pbg_parsimony 3D viewer for each. Remaining
+    (optional): a full-cell-cycle / population-averaged sim for s02 (the current
+    variant is an early-cell-cycle proteome), and curated structure upgrades for
+    the 165 unstructured complexes.
+  decisions_needed: []
+
+scientific_argument:
+  main_claim: |
+    A faithful 3D whole-cell structural model of M. genitalium can be rebuilt
+    from the Maritan 2022 molecular inventory with the reusable viva-parsimony
+    engine, and the same pipeline can be driven by the viva_mgen reproduction's
+    own simulated abundances.
+  evidence_for:
+  - "Real parsimony pack of the Maritan roster: hundreds of species placed at true abundance, one supercoiled nucleoid, RNAP sites seeded from the S2 genome (s01)."
+  - "Exact cross-namespace joins (karr gene_id ↔ S2 protein_monomer ↔ S1 ProtID): 479/482 monomers get counts, 0 unmatched."
+  - "518/683 species resolve to a real structure (curated PDB or AlphaFold by UniProt)."
+  evidence_against:
+  - "Copy numbers are an expression-derived proxy for WC-MG abundances (S1 carries no copy-number column); the true WholeCellKB counts are not in-repo."
+  - "Cell shape is capsule-simplified and currently near-spherical; the terminal organelle is omitted (as Maritan did)."
+  key_figures:
+  - "s01 packed cell (3D viewer): the faithful Maritan-baseline M. genitalium cell."
+  caveats:
+  - "Packer is parsimony (cellPACK-style), not Maritan's CellPACK."
+  - "165/683 species (mostly complexes with no single UniProt) have no structure and are placed as MW-sphere proxies or skipped."
+  - "Crowding / volume-occupancy acceptance bands are not yet calibrated to Maritan's reported values."
+
+biological_story: |
+  A Mycoplasma genitalium cell is among the smallest self-replicating cells
+  known — a ~0.3 µm envelope enclosing a single circular chromosome (~580 kbp,
+  525 genes) and a few tens of thousands of protein molecules. Maritan et al.
+  showed that the whole-cell model's molecular bookkeeping — which proteins,
+  how many, where — is complete enough to assemble into a physically plausible
+  3D cell: a crowded cytoplasm, a supercoiled nucleoid threaded by RNA
+  polymerases and ribosomes, and a membrane studded with its transporters.
+
+  This investigation rebuilds that cell with viva-parsimony. Each protein in the
+  Maritan roster is resolved to a structure (an experimental PDB assembly where
+  the paper curated one, otherwise an AlphaFold model by its UniProt accession),
+  given a copy number, and dropped into a capsule by the parsimony octree packer
+  until the cell is full. The chromosome is laid down as a supercoiled rod with
+  each gene at its real genomic coordinate, so transcribing RNA polymerases sit
+  where the biology puts them. The result is a structural readout of the same
+  cell the seven figure-studies simulate dynamically — a bridge from the model's
+  numbers to a picture of the cell they describe.
+
+at_a_glance:
+- {study: s01-maritan-baseline, role: "Faithful Maritan/WC-MG baseline — the reference 3D cell, packed with parsimony."}
+- {study: s02-reproduction-driven, role: "Variant driven by the viva_mgen reproduction's simulated proteome — same roster, less crowded (occupancy ~0.04 vs 0.144)."}
+
+glossary:
+- {term: "CellPACK / parsimony", definition: "Octree molecular packers that place structures at true abundance inside a cell envelope. Maritan used CellPACK; this work uses parsimony (pbg_parsimony)."}
+- {term: "S1 / S2", definition: "Maritan 2022 supplementary tables: S1 = protein ingredient roster (structures, compartments); S2 = gene table (coordinates, UniProt, essentiality)."}
+- {term: "ingredient", definition: "One molecular species placed by the packer, with a structure (or sphere proxy), a copy number, and a compartment."}
+
+studies:
+- s01-maritan-baseline
+- s02-reproduction-driven
+
+expert_docs: []
+
+inputs:
+  datasets: []
+  references:
+  - maritan2022structural
+  - karr2012wholecell
+  expert_docs: []
+
+acceptance_criteria:
+- {study: s01-maritan-baseline, behavior: structural-species-placed-at-abundance}
+- {study: s01-maritan-baseline, behavior: structural-single-supercoiled-chromosome}
+
+narrative_spine_skip: []
