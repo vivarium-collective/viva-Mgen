@@ -11,6 +11,8 @@ into a list of :class:`pbg_parsimony.Ingredient`, size a spherocylinder cell
 
 from __future__ import annotations
 
+import re
+
 import csv
 import math
 import tempfile
@@ -143,16 +145,39 @@ def _protein_volume_a3(protein) -> float:
     return float(aa) * 110.0 * 1.21
 
 
-def estimate_occupancy(counts, top_n=None) -> dict:
-    """Estimate macromolecular volume occupancy (crowding) of the packed cell:
-    sum of placed monomers' molecular volumes divided by the capsule volume.
+_BIOSYNTHESIS_TERM_RE = re.compile(r"\(([\d.]+)\)\s*'?([A-Za-z0-9_]+)'?")
 
-    Monomers carry a residue count (seq_length) → a volume; complexes are
-    covered through their subunit monomers (counted at their own abundance), so
-    to avoid double counting only monomer ingredients contribute here. Returns
-    ``{occupancy, macromol_volume_a3, cell_volume_a3, monomers_counted}`` — a
-    labeled estimate, not a mesh-exact figure. Typical bacterial cytoplasmic
-    crowding is a volume fraction of ~0.2-0.4."""
+
+def _complex_volume_a3(protein, by_id, _memo=None) -> float:
+    """Molecular volume of a complex = sum over its subunits of
+    (stoichiometry x subunit volume), recursing through sub-complexes. Missing
+    or RNA subunits contribute nothing (proteins-only volume)."""
+    if _memo is None:
+        _memo = {}
+    if protein.prot_id in _memo:
+        return _memo[protein.prot_id]
+    _memo[protein.prot_id] = 0.0  # guard against cycles
+    total = 0.0
+    for st, sub_id in _BIOSYNTHESIS_TERM_RE.findall(protein.biosynthesis or ""):
+        stoich = float(st)
+        sub = by_id.get(sub_id)
+        if sub is None:
+            continue
+        v = _protein_volume_a3(sub) if sub.kind == "monomer" else _complex_volume_a3(sub, by_id, _memo)
+        total += stoich * v
+    _memo[protein.prot_id] = total
+    return total
+
+
+def estimate_occupancy(counts, top_n=None) -> dict:
+    """Estimate protein volume occupancy (crowding) of the packed cell: total
+    placed protein volume / capsule volume.
+
+    Counts free monomers (residue-count -> volume) AND complexes (summed subunit
+    volumes). With subunit-conserving assembly (counts.py) this totals the same
+    conserved protein volume regardless of how it partitions into free monomers
+    vs assembled complexes. Returns ``{occupancy, macromol_volume_a3,
+    cell_volume_a3, species_counted}``; Maritan reports 0.144 (Table 1)."""
     proteins = load_proteins()
     by_id = {p.prot_id: p for p in proteins}
     cell_v = _capsule_volume_a3(mgen_capsule())
@@ -160,17 +185,17 @@ def estimate_occupancy(counts, top_n=None) -> dict:
     counted = 0
     for prot_id, n in counts.items():
         p = by_id.get(prot_id)
-        if p is None or getattr(p, "kind", "") != "monomer":
+        if p is None or n <= 0:
             continue
-        v = _protein_volume_a3(p)
-        if v > 0 and n > 0:
+        v = _protein_volume_a3(p) if p.kind == "monomer" else _complex_volume_a3(p, by_id)
+        if v > 0:
             macromol_v += v * float(n)
             counted += 1
     return {
         "occupancy": (macromol_v / cell_v) if cell_v else 0.0,
         "macromol_volume_a3": macromol_v,
         "cell_volume_a3": cell_v,
-        "monomers_counted": counted,
+        "species_counted": counted,
     }
 
 
