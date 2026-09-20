@@ -1,684 +1,684 @@
-prot_id,name,function,compartment,kind,pdb_id,biosynthesis,seq_length
-DNA_GYRASE,DNA gyrase,DNA replication/maintenance,c,complex,6RKW,(2.0)MG_003_MONOMER'+ '(2.0)MG_004_MONOMER',
-DNA_POLYMERASE_2CORE_BETA_CLAMP_GAMMA_COMPLEX_PRIMASE,DNA polymerase (2) core; beta-clamp; epsilon-complex; and primase,DNA replication/maintenance,c,complex,,(2.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(2.0)MG_001_MONOMER'+ '(1.0)MG_250_MONOMER',
-DNA_POLYMERASE_CORE,DNA-directed DNA polymerase,DNA replication/maintenance,c,complex,5FKW,(1.0)MG_031_MONOMER'+ '(1.0)MG_261_MONOMER',
-DNA_POLYMERASE_CORE_BETA_CLAMP_GAMMA_COMPLEX,DNA polymerase core; beta-clamp; epsilon-complex,DNA replication/maintenance,c,complex,,(1.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(2.0)MG_001_MONOMER',
-DNA_POLYMERASE_CORE_BETA_CLAMP_PRIMASE,DNA polymerase core; beta-clamp; epsilon-complex,DNA replication/maintenance,c,complex,,(1.0)DNA_POLYMERASE_CORE'+ '(2.0)MG_001_MONOMER'+ '(1.0)MG_250_MONOMER',
-DNA_POLYMERASE_GAMMA_COMPLEX,DNA-directed DNA polymerase gamma complex,DNA replication/maintenance,c,complex,,(1.0)MG_007_MONOMER'+ '(1.0)MG_315_MONOMER'+ '(4.0)MG_419_MONOMER',
-DNA_POLYMERASE_HOLOENZYME,DNA-directed DNA polymerase holoenzyme,DNA replication/maintenance,c,complex,,(2.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(2.0)MG_001_MONOMER',
-MG_0001_048,signal recognition particle,protein transport/singaling,c,complex,3DM5,(1.0)MG_0001'+ '(1.0)MG_048_MONOMER',
-MG_0003_465,ribonuclease P,RNA synthesis/maturation,c,complex,6D1R,(1.0)MG_0003'+ '(1.0)MG_465_MONOMER',
-MG_001_DIMER,DNA polymerase III; beta clamp,DNA replication/maintenance,c,complex,,(2.0)MG_001_MONOMER',
-MG_001_MONOMER,DNA polymerase III; beta subunit,DNA replication/maintenance,c,monomer,5FKW,,380
-MG_002_MONOMER,DnaJ domain protein,protein folding/maturation,c,monomer,,,310
-MG_003_MONOMER,DNA gyrase; B subunit,DNA replication/maintenance,c,monomer,6RKW,,650
-MG_004_MONOMER,DNA gyrase; A subunit,DNA replication/maintenance,c,monomer,6RKW,,836
-MG_005_DIMER,seryl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_005_MONOMER',
-MG_005_MONOMER,seryl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,417
-MG_006_DIMER,thymidylate kinase,metabolism,c,complex,,(2.0)MG_006_MONOMER',
-MG_006_MONOMER,thymidylate kinase,metabolism,c,monomer,,,210
-MG_007_MONOMER,DNA polymerase III delta prime subunit; putative,DNA replication/maintenance,c,monomer,1JR3,,254
-MG_008_379_TETRAMER,tRNA uridine 5-carboxymethylaminomethyl modification enzyme,RNA synthesis/maturation,c,complex,,(2.0)MG_008_MONOMER'+ '(2.0)MG_379_MONOMER',
-MG_008_MONOMER,tRNA modification GTPase TrmE,RNA synthesis/maturation,c,monomer,3GEH,,442
-MG_009_MONOMER,deoxyribonuclease,DNA replication/maintenance,c,monomer,,,262
-MG_010_MONOMER,DNA primase-related protein,DNA replication/maintenance,c,monomer,,,218
-MG_011_MONOMER,alpha-L-glutamate ligase; S6 ribosomal protein modification,protein folding/maturation,c,monomer,,,287
-MG_012_MONOMER,alpha-L-glutamate ligase,protein folding/maturation,c,monomer,,,287
-MG_013_DIMER,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,metabolism,c,complex,,(2.0)MG_013_MONOMER',
-MG_013_MONOMER,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,metabolism,c,monomer,,,273
-MG_014_015_DIMER,multidrug ABC transporter,protein transport/singaling,m,complex,4Q4H,(1.0)MG_014_MONOMER'+ '(1.0)MG_015_MONOMER',
-MG_014_MONOMER,multidrug ABC transporter; ATP-binding/permease protein,protein transport/singaling,c,monomer,4Q4H,,623
-MG_015_MONOMER,multidrug ABC transporter; ATP-binding/permease protein,protein transport/singaling,c,monomer,4Q4H,,589
-MG_018_MONOMER,SNF2 family helicase putative,DNA replication/maintenance,c,monomer,,,1031
-MG_019_DIMER,chaperone protein DnaJ,protein folding/maturation,c,complex,,(2.0)MG_019_MONOMER',
-MG_019_MONOMER,chaperone protein DnaJ,protein folding/maturation,c,monomer,,,389
-MG_020_MONOMER,proline iminopeptidase,protein folding/maturation,c,monomer,,,308
-MG_021_DIMER,methionyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_021_MONOMER',
-MG_021_MONOMER,methionyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,512
-MG_022_MONOMER,DNA-directed RNA polymerase; delta subunit,transcription,c,monomer,,,145
-MG_023_DIMER,fructose-1;6-bisphosphate aldolase; class II,metabolism,c,complex,,(2.0)MG_023_MONOMER',
-MG_023_MONOMER,fructose-1;6-bisphosphate aldolase; class II,metabolism,c,monomer,,,288
-MG_024_MONOMER,GTP-binding protein YchF,translation,c,monomer,,,367
-MG_025_MONOMER,Beta-glycosyl transferase,metabolism,c,monomer,,,298
-MG_026_MONOMER,translation elongation factor P,translation,c,monomer,,,190
-MG_027_MONOMER,transcription termination/antitermination protein NusB,transcription,c,monomer,1Q8C,,151
-MG_028_MONOMER,,MG-specific,m,monomer,,,201
-MG_029_DIMER,DJ-1/PfpI family protein,metabolism,c,complex,,(2.0)MG_029_MONOMER',
-MG_029_MONOMER,DJ-1/PfpI family protein,metabolism,c,monomer,,,186
-MG_030_MONOMER,uracil phosphoribosyltransferase,metabolism,c,monomer,,,206
-MG_030_TRIMER,uracil phosphoribosyltransferase,metabolism,c,complex,,(3.0)MG_030_MONOMER',
-MG_031_MONOMER,DNA polymerase III; alpha subunit; Gram-positive type,DNA replication/maintenance,c,monomer,3F2B,,1451
-MG_032_MONOMER,cell adhesion protein/membrane export protein,cytokinesis/motility,e,monomer,,,666
-MG_033_MONOMER,glycerol uptake facilitator,protein transport/singaling,c,monomer,,,258
-MG_033_TETRAMER,glycerol uptake facilitator,protein transport/singaling,m,complex,,(4.0)MG_033_MONOMER',
-MG_034_DIMER,thymidine kinase,metabolism,c,complex,,(2.0)MG_034_MONOMER',
-MG_034_MONOMER,thymidine kinase,metabolism,c,monomer,,,213
-MG_035_DIMER,histidyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_035_MONOMER',
-MG_035_MONOMER,histidyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,414
-MG_036_DIMER,aspartyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_036_MONOMER',
-MG_036_MONOMER,aspartyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,550
-MG_037_MONOMER,nicotinate phosphoribosyltransferase,metabolism,c,monomer,,,450
-MG_038_MONOMER,glycerol kinase,metabolism,c,monomer,,,508
-MG_038_TETRAMER,glycerol kinase,metabolism,c,complex,,(4.0)MG_038_MONOMER',
-MG_039_DIMER,FAD-dependent glycerol-3-phosphate dehydrogenase; putative,metabolism,c,complex,,(2.0)MG_039_MONOMER',
-MG_039_MONOMER,FAD-dependent glycerol-3-phosphate dehydrogenase; putative,metabolism,c,monomer,,,384
-MG_040_119_120_121_PENTAMER,Monosaccharide (riboside/galactoside) ABC transporter,protein transport/singaling,m,complex,4FI3,(1.0)MG_040_MONOMER'+ '(2.0)MG_119_MONOMER'+ '(1.0)MG_120_MONOMER'+ '(1.0)MG_121_MONOMER',
-MG_040_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; substrate binding protein,protein transport/singaling,c,monomer,4FI3,,591
-MG_041_062_429_PENTAMER,PTS system; fructose-specific,metabolism,m,complex,,(1.0)MG_041_MONOMER'+ '(2.0)MG_062_MONOMER'+ '(2.0)MG_429_MONOMER',
-MG_041_069_429_PENTAMER,PTS system; glucose-specific,metabolism,m,complex,,(1.0)MG_041_MONOMER'+ '(2.0)MG_069_MONOMER'+ '(2.0)MG_429_MONOMER',
-MG_041_MONOMER,PTS system; HPr,metabolism,c,monomer,2XDF,,88
-MG_042_043_044_045_PENTAMER,spermidine/putrescine (polyamine) ABC transporter,protein transport/singaling,m,complex,3PUZ,(2.0)MG_042_MONOMER'+ '(1.0)MG_043_MONOMER'+ '(1.0)MG_044_MONOMER'+ '(1.0)MG_045_MONOMER',
-MG_042_MONOMER,spermidine/putrescine (polyamine) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,3PUZ,,559
-MG_043_MONOMER,spermidine/putrescine (polyamine) ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,3PUZ,,285
-MG_044_MONOMER,spermidine/putrescine (polyamine) ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,3PUZ,,284
-MG_045_MONOMER,spermidine/putrescine (polyamine) ABC transporter; spermidine/putrescine binding protein; putative,protein transport/singaling,c,monomer,3PUZ,,483
-MG_046_DIMER,metalloendopeptidase,RNA synthesis/maturation,c,complex,,(2.0)MG_046_MONOMER',
-MG_046_MONOMER,metalloendopeptidase,RNA synthesis/maturation,c,monomer,,,315
-MG_047_MONOMER,S-adenosylmethionine synthetase,metabolism,c,monomer,,,383
-MG_047_TETRAMER,S-adenosylmethionine synthetase,metabolism,c,complex,,(4.0)MG_047_MONOMER',
-MG_048_MONOMER,signal recognition particle protein,protein transport/singaling,c,monomer,3DM5,,446
-MG_049_HEXAMER,purine nucleoside phosphorylase,metabolism,c,complex,,(6.0)MG_049_MONOMER',
-MG_049_MONOMER,purine nucleoside phosphorylase,metabolism,c,monomer,,,238
-MG_050_MONOMER,deoxyribose-phosphate aldolase,metabolism,c,monomer,,,223
-MG_051_DIMER,pyrimidine-nucleoside phosphorylase,metabolism,c,complex,,(2.0)MG_051_MONOMER',
-MG_051_MONOMER,pyrimidine-nucleoside phosphorylase,metabolism,c,monomer,,,421
-MG_052_DIMER,cytidine deaminase,metabolism,c,complex,,(2.0)MG_052_MONOMER',
-MG_052_MONOMER,cytidine deaminase,metabolism,c,monomer,,,130
-MG_053_MONOMER,phosphoglucomutase/phosphomannomutase; putative,metabolism,c,monomer,,,550
-MG_053_TRIMER,phosphoglucomutase/phosphomannomutase; putative,metabolism,c,complex,,(3.0)MG_053_MONOMER',
-MG_054_MONOMER,transcription antitermination protein NusG; putative,transcription,c,monomer,,,316
-MG_055_170_277_464_476_20MER,preprotein translocase,protein transport/singaling,m,complex,5MG3,(4.0)MG_055_MONOMER'+ '(4.0)MG_170_MONOMER'+ '(4.0)MG_277_MONOMER'+ '(4.0)MG_464_MONOMER'+ '(4.0)MG_476_MONOMER',
-MG_055_MONOMER,preprotein translocase; SecE subunit,protein transport/singaling,c,monomer,5MG3,,123
-MG_056_MONOMER,tetrapyrrole (corrin/porphyrin) methylase protein,RNA synthesis/maturation,c,monomer,,,277
-MG_057_MONOMER,small primase-like protein,RNA synthesis/maturation,c,monomer,,,178
-MG_058_HEXAMER,ribose-phosphate pyrophosphokinase,metabolism,c,complex,,(6.0)MG_058_MONOMER',
-MG_058_MONOMER,ribose-phosphate pyrophosphokinase,metabolism,c,monomer,,,332
-MG_059_MONOMER,SsrA-binding protein,translation,c,monomer,,,145
-MG_060_MONOMER,glycosyl transferase,protein folding/maturation,c,monomer,,,297
-MG_061_MONOMER,Mycoplasma MFS transporter,protein transport/singaling,m,monomer,,,567
-MG_062_MONOMER,PTS system; fructose-specific IIABC component,protein transport/singaling,c,monomer,3QNQ,,680
-MG_063_DIMER,1-phosphofructokinase; putative,metabolism,c,complex,,(2.0)MG_063_MONOMER',
-MG_063_MONOMER,1-phosphofructokinase; putative,metabolism,c,monomer,,,303
-MG_064_065_TETRAMER,ABC transporter,protein transport/singaling,m,complex,5XU1,(2.0)MG_064_MONOMER'+ '(2.0)MG_065_MONOMER',
-MG_064_MONOMER,ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,5XU1,,1331
-MG_065_MONOMER,ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,5XU1,,466
-MG_066_DIMER,transketolase,metabolism,c,complex,,(2.0)MG_066_MONOMER',
-MG_066_MONOMER,transketolase,metabolism,c,monomer,,,648
-MG_067_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,1LCY,,516
-MG_068_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,1LCY,,474
-MG_069_MONOMER,PTS system; glucose-specific IIABC component,metabolism,c,monomer,5IWS,,908
-MG_070_MONOMER,ribosomal protein S2,translation,c,monomer,,,284
-MG_071_MONOMER,ATPase; P-type (transporting); HAD superfamily; subfamily IC,protein transport/singaling,m,monomer,,,874
-MG_072_DIMER,preprotein translocase; SecA subunit,protein transport/singaling,c,complex,,(2.0)MG_072_MONOMER',
-MG_072_MONOMER,preprotein translocase; SecA subunit,protein transport/singaling,c,monomer,,,806
-MG_073_206_421_TETRAMER,DNA incision complex,DNA replication/maintenance,c,complex,3UWX,(1.0)MG_073_MONOMER'+ '(1.0)MG_206_MONOMER'+ '(2.0)MG_421_MONOMER',
-MG_073_MONOMER,excinuclease ABC; B subunit,DNA replication/maintenance,c,monomer,3UWX,,656
-MG_074_MONOMER,related to MG075,host cell interaction,e,monomer,,,137
-MG_075_MONOMER,116 kDa surface antigen,host cell interaction,m,monomer,6G04,,1024
-MG_076_MONOMER,,MG-specific,m,monomer,,,138
-MG_077_078_079_080_321_PENTAMER,oligopeptide ABC transporter,protein transport/singaling,m,complex,4TQU,(1.0)MG_077_MONOMER'+ '(1.0)MG_078_MONOMER'+ '(1.0)MG_079_MONOMER'+ '(1.0)MG_080_MONOMER'+ '(1.0)MG_321_MONOMER',
-MG_077_MONOMER,oligopeptide ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,407
-MG_078_MONOMER,oligopeptide ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,376
-MG_079_MONOMER,oligopeptide ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4TQU,,402
-MG_080_MONOMER,oligopeptide ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4TQU,,848
-MG_081_MONOMER,ribosomal protein L11,translation,c,monomer,,,137
-MG_082_MONOMER,ribosomal protein L1,translation,c,monomer,,,226
-MG_083_MONOMER,peptidyl-tRNA hydrolase,RNA synthesis/maturation,c,monomer,,,189
-MG_084_MONOMER,tRNA(Ile)-lysidine synthetase,RNA synthesis/maturation,c,monomer,,,290
-MG_084_TETRAMER,tRNA(Ile)-lysidine synthetase,RNA synthesis/maturation,c,complex,,(4.0)MG_084_MONOMER',
-MG_085_HEXAMER,HPr(Ser) kinase/phosphatase,metabolism,c,complex,,(6.0)MG_085_MONOMER',
-MG_085_MONOMER,HPr(Ser) kinase/phosphatase,metabolism,c,monomer,,,311
-MG_086_MONOMER,prolipoprotein diacylglyceryl transferase,protein folding/maturation,m,monomer,,,382
-MG_087_MONOMER,ribosomal protein S12,translation,c,monomer,,,139
-MG_088_MONOMER,ribosomal protein S7,translation,c,monomer,,,155
-MG_089_DIMER,translation elongation factor G,translation,c,complex,,(2.0)MG_089_MONOMER',
-MG_089_MONOMER,translation elongation factor G,translation,c,monomer,,,688
-MG_090_MONOMER,ribosomal protein S6,translation,c,monomer,,,208
-MG_091_MONOMER,single-strand binding protein family,DNA replication/maintenance,c,monomer,,,160
-MG_091_OCTAMER,single-strand binding protein family; octamer,DNA replication/maintenance,c,complex,,(2.0)MG_091_TETRAMER',
-MG_091_TETRAMER,single-strand binding protein family; tetramer,DNA replication/maintenance,c,complex,,(4.0)MG_091_MONOMER',
-MG_092_MONOMER,ribosomal protein S18,translation,c,monomer,,,105
-MG_093_MONOMER,ribosomal protein L9,translation,c,monomer,,,150
-MG_094_HEXAMER,replicative DNA helicase,DNA replication/maintenance,c,complex,,(6.0)MG_094_MONOMER',
-MG_094_MONOMER,replicative DNA helicase,DNA replication/maintenance,c,monomer,4NMN,,468
-MG_095_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,5CYB,,398
-MG_096_MONOMER,,cytokinesis/motility,e,monomer,,,650
-MG_097_MONOMER,uracil-DNA glycosylase; putative,DNA replication/maintenance,c,monomer,,,245
-MG_098_099_100_TRIMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase,RNA synthesis/maturation,c,complex,3AL0,(1.0)MG_098_MONOMER'+ '(1.0)MG_099_MONOMER'+ '(1.0)MG_100_MONOMER',
-MG_098_MONOMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; C subunit,RNA synthesis/maturation,c,monomer,3AL0,,477
-MG_099_MONOMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; A subunit,RNA synthesis/maturation,c,monomer,3AL0,,477
-MG_100_MONOMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; B subunit,RNA synthesis/maturation,c,monomer,3AL0,,477
-MG_101_MONOMER,Uncharacterized HTH-type transcriptional regulator,transcription,c,monomer,,,222
-MG_102_DIMER,thioredoxin-disulfide reductase,metabolism,c,complex,,(2.0)MG_102_MONOMER',
-MG_102_DIMER_ox,oxidized thioredoxin-disulfide reductase,metabolism,c,complex,,(1.0)MG_102_DIMER'+ '(4.0)H',
-MG_102_MONOMER,thioredoxin-disulfide reductase,metabolism,c,monomer,,,315
-MG_103_MONOMER,transcriptional regulator; putative,transcription,c,monomer,,,280
-MG_104_MONOMER,ribonuclease R,RNA synthesis/maturation,c,monomer,,,725
-MG_105_MONOMER,putative DNA integrity scanning protein,DNA replication/maintenance,c,monomer,,,200
-MG_105_OCTAMER,putative DNA integrity scanning protein,DNA replication/maintenance,c,complex,,(8.0)MG_105_MONOMER',
-MG_106_DIMER,peptide deformylase,protein folding/maturation,c,complex,,(2.0)MG_106_MONOMER',
-MG_106_MONOMER,peptide deformylase,protein folding/maturation,c,monomer,,,193
-MG_107_DIMER,guanylate kinase,metabolism,c,complex,,(2.0)MG_107_MONOMER',
-MG_107_MONOMER,guanylate kinase,metabolism,c,monomer,,,189
-MG_108_MONOMER,Ser/Thr protein phosphatase 2C; putative,protein transport/singaling,c,monomer,,,260
-MG_109_DIMER,serine/threonine protein kinase; putative,protein transport/singaling,m,complex,,(2.0)MG_109_MONOMER',
-MG_109_MONOMER,serine/threonine protein kinase; putative,protein transport/singaling,c,monomer,,,387
-MG_110_MONOMER,ribosome small subunit-dependent GTPase A,protein folding/maturation,c,monomer,,,278
-MG_111_DIMER,glucose-6-phosphate isomerase,metabolism,c,complex,,(2.0)MG_111_MONOMER',
-MG_111_MONOMER,glucose-6-phosphate isomerase,metabolism,c,monomer,,,433
-MG_112_DIMER,ribulose-phosphate 3-epimerase,metabolism,c,complex,,(2.0)MG_112_MONOMER',
-MG_112_MONOMER,ribulose-phosphate 3-epimerase,metabolism,c,monomer,,,209
-MG_113_DIMER,asparaginyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_113_MONOMER',
-MG_113_MONOMER,asparaginyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,456
-MG_114_DIMER,CDP-diacylglycerol–glycerol-3-phosphate 3-phosphatidyltransferase,metabolism,m,complex,,(2.0)MG_114_MONOMER',
-MG_114_MONOMER,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase,metabolism,c,monomer,,,236
-MG_115_MONOMER,competence/damage-inducible protein CinA domain protein,DNA replication/maintenance,c,monomer,,,157
-MG_116_MONOMER,glycosyl transferase/terpenoid synthesis; putative,metabolism,c,monomer,,,251
-MG_117_MONOMER,transcription factor; putative zinc-finger domain,transcription,c,monomer,,,214
-MG_118_DIMER,UDP-glucose 4-epimerase,metabolism,c,complex,,(2.0)MG_118_MONOMER',
-MG_118_MONOMER,UDP-glucose 4-epimerase,metabolism,c,monomer,,,340
-MG_119_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4FI3,,564
-MG_120_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; permease protein,protein transport/singaling,c,monomer,4FI3,,520
-MG_121_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; permease protein,protein transport/singaling,c,monomer,4FI3,,306
-MG_122_MONOMER,DNA topoisomerase I,DNA replication/maintenance,c,monomer,,,709
-MG_123_DIMER,arginine deaminase,RNA synthesis/maturation,m,complex,3TM8,(2.0)MG_123_MONOMER',
-MG_123_MONOMER,arginine deaminasse,RNA synthesis/maturation,c,monomer,3TM8,,471
-MG_124_MONOMER,thioredoxin,metabolism,c,monomer,,,102
-MG_124_MONOMER_ox,oxidized thioredoxin,metabolism,c,complex,,(1.0)MG_124_MONOMER'+ '(2.0)H',
-MG_125_MONOMER,Cof-like hydrolase; putative,metabolism,c,monomer,,,285
-MG_126_DIMER,tryptophanyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_126_MONOMER',
-MG_126_MONOMER,tryptophanyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,347
-MG_127_MONOMER,Spx subfamily protein,transcription,c,monomer,,,145
-MG_127_MONOMER_ox,oxidized Spx subfamily protein,transcription,c,complex,,(1.0)MG_127_MONOMER'+ '(2.0)H',
-MG_128_HEXAMER,inorganic polyphosphate/ATP-NAD kinase; probable,metabolism,c,complex,,(6.0)MG_128_MONOMER',
-MG_128_MONOMER,inorganic polyphosphate/ATP-NAD kinase; probable,metabolism,c,monomer,,,259
-MG_129_MONOMER,Putative phosphotransferase enzyme glucose-specific IIB component,metabolism,e,monomer,,,117
-MG_130_MONOMER,ribonuclease Y; mRNA decay,RNA synthesis/maturation,m,monomer,3HC1,,484
-MG_131_MONOMER,hypothetical protein,uncharacterized,m,monomer,,,74
-MG_132_DIMER,purine nucleoside phosphoramidase,metabolism,c,complex,,(2.0)MG_132_MONOMER',
-MG_132_MONOMER,purine nucleoside phosphoramidase,metabolism,c,monomer,,,141
-MG_133_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,264
-MG_134_MONOMER,DNA-binding protein; nucleoid-associated,DNA replication/maintenance,c,monomer,,,100
-MG_135_MONOMER,membrane protein; putative,metabolism,m,monomer,,,280
-MG_136_DIMER,lysyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_136_MONOMER',
-MG_136_MONOMER,lysyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,490
-MG_137_DIMER,UDP-galactopyranose mutase,metabolism,c,complex,,(2.0)MG_137_MONOMER',
-MG_137_MONOMER,UDP-galactopyranose mutase,metabolism,c,monomer,,,404
-MG_138_MONOMER,Translation elongation factor 4,translation,c,monomer,,,598
-MG_139_DIMER,ribonuclease J,RNA synthesis/maturation,c,complex,,(2.0)MG_139_MONOMER',
-MG_139_MONOMER,ribonuclease J,RNA synthesis/maturation,c,monomer,,,569
-MG_140_MONOMER,putative ATP-dependent helicase,DNA replication/maintenance,c,monomer,,,1113
-MG_141_MONOMER,transcription termination factor NusA,transcription,c,monomer,,,531
-MG_142_MONOMER,translation initiation factor IF-2,translation,c,monomer,,,619
-MG_143_MONOMER,ribosome-binding factor A,protein folding/maturation,c,monomer,,,112
-MG_144_MONOMER,signal recognition particle; locates ribosome to membrane,translation,m,monomer,5TCX,,279
-MG_145_MONOMER,riboflavin biosynthesis protein RibF,metabolism,c,monomer,,,269
-MG_146_MONOMER,UPF0053 protein,protein transport/singaling,e,monomer,,,424
-MG_147_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,375
-MG_148_MONOMER,PF09903 family; widely conserved; structural; putative cell motility; putative cell cycle; putative,uncharacterized,m,monomer,6EL1,,409
-MG_149_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,281
-MG_150_MONOMER,ribosomal protein S10,translation,c,monomer,,,106
-MG_151_MONOMER,ribosomal protein L3,translation,c,monomer,,,257
-MG_152_MONOMER,ribosomal protein L4/L1 family,translation,c,monomer,,,211
-MG_153_MONOMER,ribosomal protein L23,translation,c,monomer,,,106
-MG_154_MONOMER,ribosomal protein L2,translation,c,monomer,,,285
-MG_155_MONOMER,ribosomal protein S19,translation,c,monomer,,,87
-MG_156_MONOMER,ribosomal protein L22,translation,c,monomer,,,144
-MG_157_MONOMER,ribosomal protein S3,translation,c,monomer,,,268
-MG_158_MONOMER,ribosomal protein L16,translation,c,monomer,,,138
-MG_159_MONOMER,ribosomal protein L29,translation,c,monomer,,,200
-MG_160_MONOMER,ribosomal protein S17,translation,c,monomer,,,85
-MG_161_MONOMER,ribosomal protein L14,translation,c,monomer,,,122
-MG_162_MONOMER,ribosomal protein L24,translation,c,monomer,,,108
-MG_163_MONOMER,ribosomal protein L5,translation,c,monomer,,,180
-MG_164_MONOMER,ribosomal protein S14,translation,c,monomer,,,61
-MG_165_MONOMER,ribosomal protein S8,translation,c,monomer,,,141
-MG_166_MONOMER,ribosomal protein L6,translation,c,monomer,,,184
-MG_167_MONOMER,ribosomal protein L18,translation,c,monomer,,,115
-MG_168_MONOMER,ribosomal protein S5,translation,c,monomer,,,211
-MG_169_MONOMER,ribosomal protein L15,translation,c,monomer,,,150
-MG_170_MONOMER,preprotein translocase; SecY subunit,protein transport/singaling,c,monomer,5MG3,,475
-MG_171_MONOMER,adenylate kinase,metabolism,c,monomer,,,214
-MG_172_MONOMER,methionine aminopeptidase; type I,protein folding/maturation,c,monomer,,,248
-MG_173_MONOMER,translation initiation factor IF-1,translation,c,monomer,,,70
-MG_174_MONOMER,ribosomal protein L36,translation,c,monomer,,,37
-MG_175_MONOMER,ribosomal protein S13,translation,c,monomer,,,124
-MG_176_MONOMER,ribosome 30S protein S11,translation,c,monomer,,,121
-MG_177_MONOMER,DNA-directed RNA polymerase; alpha subunit,transcription,c,monomer,,,328
-MG_178_MONOMER,ribosomal protein L17,translation,c,monomer,,,123
-MG_179_180_181_TETRAMER,metal ion (cobalt) ABC transporter,protein transport/singaling,m,complex,5JSZ,(1.0)MG_179_MONOMER'+ '(1.0)MG_180_MONOMER'+ '(2.0)MG_181_MONOMER',
-MG_179_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5JSZ,,274
-MG_180_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5JSZ,,304
-MG_181_MONOMER,metal ion (cobalt) ABC transporter; permease protein,protein transport/singaling,c,monomer,5JSZ,,420
-MG_182_DIMER,Pseudouridylate synthase,RNA synthesis/maturation,c,complex,,(2.0)MG_182_MONOMER',
-MG_182_MONOMER,tRNA pseudouridine synthase A,RNA synthesis/maturation,c,monomer,,,244
-MG_183_MONOMER,oligoendopeptidase F,protein folding/maturation,c,monomer,,,607
-MG_184_DIMER,adenine-specific DNA modification methylase,DNA replication/maintenance,c,complex,2OKC,(2.0)MG_184_MONOMER',
-MG_184_MONOMER,adenine-specific DNA modification methylase,DNA replication/maintenance,c,monomer,2OKC,,317
-MG_185_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,701
-MG_186_187_188_189_PENTAMER,Oligosaccharide or polyol ABC transporter,protein transport/singaling,m,complex,4TQU,(2.0)MG_186_MONOMER'+ '(1.0)MG_187_MONOMER'+ '(1.0)MG_188_MONOMER'+ '(1.0)MG_189_MONOMER',
-MG_186_MONOMER,Oligosaccharide or polyol ABC transporter; substrate binding protein,protein transport/singaling,c,monomer,4TQU,,250
-MG_187_MONOMER,Oligosaccharide or polyol ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4TQU,,585
-MG_188_MONOMER,Oligosaccharide or polyol ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,329
-MG_189_MONOMER,Oligosaccharide or polyol ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,318
-MG_190_MONOMER,phosphoesterase,metabolism,c,monomer,,,318
-MG_191_MONOMER,MgPa adhesin,cytokinesis/motility,m,monomer,6RUT,,1444
-MG_192_MONOMER,P110 protein,cytokinesis/motility,m,monomer,6RUT,,1053
-MG_194_195_TETRAMER,phenylalanyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_194_MONOMER'+ '(2.0)MG_195_MONOMER',
-MG_194_MONOMER,phenylalanyl-tRNA synthetase; alpha subunit,RNA synthesis/maturation,c,monomer,,,341
-MG_195_MONOMER,phenylalanyl-tRNA synthetase; beta subunit,RNA synthesis/maturation,c,monomer,,,806
-MG_196_MONOMER,translation initiation factor IF-3,translation,c,monomer,,,181
-MG_197_MONOMER,ribosomal protein L35,translation,c,monomer,,,59
-MG_198_MONOMER,ribosomal protein L20,translation,c,monomer,,,124
-MG_199_MONOMER,ribonuclease HIII; putative; frameshift,RNA synthesis/maturation,c,monomer,,,235
-MG_200_MONOMER,DnaJ domain protein,protein folding/maturation,c,monomer,,,601
-MG_201_DIMER,co-chaperone GrpE,protein folding/maturation,c,complex,,(2.0)MG_201_MONOMER',
-MG_201_MONOMER,co-chaperone GrpE,protein folding/maturation,c,monomer,,,217
-MG_202_MONOMER,acyl-CoA binding protein,metabolism,c,monomer,,,122
-MG_203_204_TETRAMER,topoisomerase IV,DNA replication/maintenance,c,complex,,(2.0)MG_203_MONOMER'+ '(2.0)MG_204_MONOMER',
-MG_203_MONOMER,DNA topoisomerase IV; B subunit,DNA replication/maintenance,c,monomer,4JUO,,633
-MG_204_MONOMER,DNA topoisomerase IV; A subunit,DNA replication/maintenance,c,monomer,1ZVU,,781
-MG_205_DIMER,heat-inducible transcription repressor HrcA; putative,transcription,c,complex,,(2.0)MG_205_MONOMER',
-MG_205_MONOMER,heat-inducible transcription repressor HrcA; putative,transcription,c,monomer,,,343
-MG_206_MONOMER,excinuclease ABC; C subunit,DNA replication/maintenance,c,monomer,3C65,,597
-MG_207_MONOMER,Ser/Thr protein phosphatase 2A,metabolism,c,monomer,,,167
-MG_208_DIMER,glycoprotease family protein,protein folding/maturation,c,complex,,(2.0)MG_208_MONOMER',
-MG_208_MONOMER,glycoprotease,protein folding/maturation,c,monomer,,,196
-MG_209_MONOMER,23S rRNA pseudouridine synthase; U955; U2504; U2580,RNA synthesis/maturation,c,monomer,,,308
-MG_210_MONOMER,prolipoprotein signal peptidase; signal peptidase II,protein folding/maturation,m,monomer,,,181
-MG_211_MONOMER,DivIVA domain,cytokinesis/motility,c,monomer,,,147
-MG_212_MONOMER,1-acyl-sn-glycerol-3-phosphate acyltransferase; putative,metabolism,m,monomer,,,268
-MG_213_214_298_6MER,chromosome segregation protein SMC,cytokinesis/motility,c,complex,,(2.0)MG_213_MONOMER'+ '(2.0)MG_214_MONOMER'+ '(2.0)MG_298_MONOMER',
-MG_213_214_298_6MER_ADP,Chromosome Segregation Protein SMC with SCP Proteins-ADP,cytokinesis/motility,c,complex,,(1.0)ADP'+ '(1.0)MG_213_214_298_6MER',
-MG_213_MONOMER,segregation and condensation protein A,cytokinesis/motility,c,monomer,,,471
-MG_214_MONOMER,segregation and condensation protein B,cytokinesis/motility,c,monomer,,,207
-MG_215_MONOMER,6-phosphofructokinase,metabolism,c,monomer,,,323
-MG_215_TETRAMER,6-phosphofructokinase,metabolism,c,complex,,(4.0)MG_215_MONOMER',
-MG_216_MONOMER,pyruvate kinase,metabolism,c,monomer,,,508
-MG_216_TETRAMER,pyruvate kinase,metabolism,c,complex,,(4.0)MG_216_MONOMER',
-MG_217_MONOMER,P65 adhesin,cytokinesis/motility,c,monomer,,,372
-MG_218_MONOMER,high molecular weight cytadherence accessory protein 2,cytokinesis/motility,c,monomer,,,1805
-MG_219_MONOMER,,MG-specific,c,monomer,,,148
-MG_220_MONOMER,membrane-bound protein,MG-specific,e,monomer,,,93
-MG_221_MONOMER,mraZ protein,cytokinesis/motility,c,monomer,,,141
-MG_221_OCTAMER,mraZ protein,cytokinesis/motility,c,complex,,(8.0)MG_221_MONOMER',
-MG_222_MONOMER,S-adenosyl-methyltransferase MraW,RNA synthesis/maturation,c,monomer,,,309
-MG_223_MONOMER,cell division ring formation,cytokinesis/motility,c,monomer,,,411
-MG_224_2MER_GTP,cell division protein ftsZ activated 2mer,cytokinesis/motility,c,complex,1W5B,(2.0)MG_224_MONOMER_GTP',
-MG_224_3MER_GTP,cell division protein ftsZ activated 3mer,cytokinesis/motility,c,complex,,(1.0)MG_224_2MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_4MER_GTP,cell division protein ftsZ activated 4mer,cytokinesis/motility,c,complex,,(1.0)MG_224_3MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_5MER_GTP,cell division protein ftsZ activated 5mer,cytokinesis/motility,c,complex,,(1.0)MG_224_4MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_6MER_GTP,cell division protein ftsZ activated 6mer,cytokinesis/motility,c,complex,,(1.0)MG_224_5MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_7MER_GTP,cell division protein ftsZ activated 7mer,cytokinesis/motility,c,complex,,(1.0)MG_224_6MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_8MER_GTP,cell division protein ftsZ activated 8mer,cytokinesis/motility,c,complex,,(1.0)MG_224_7MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_9MER_GDP,cell division protein ftsZ deactivated 9mer,cytokinesis/motility,c,complex,,(9.0)H2O'+ '(1.0)MG_224_9MER_GTP'+ '(9.0)H'+ '(9.0)PI',
-MG_224_9MER_GTP,cell division protein ftsZ activated 9mer,cytokinesis/motility,c,complex,,(1.0)MG_224_8MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',
-MG_224_MONOMER,cell division protein FtsZ,cytokinesis/motility,c,monomer,2VXY,,369
-MG_224_MONOMER_GDP,cell division protein ftsZ hydrolysed,cytokinesis/motility,c,complex,2VXY,(1.0)GDP'+ '(1.0)MG_224_MONOMER',
-MG_224_MONOMER_GTP,cell division protein ftsZ activated,cytokinesis/motility,c,complex,2VXY,(1.0)GTP'+ '(1.0)MG_224_MONOMER',
-MG_225_DIMER,amino acid transporter,protein transport/singaling,m,complex,,(2.0)MG_225_MONOMER',
-MG_225_MONOMER,amino acid-polyamine-organocation (APC) permease,protein transport/singaling,c,monomer,,,489
-MG_226_DIMER,amino acid transporter,protein transport/singaling,m,complex,,(2.0)MG_226_MONOMER',
-MG_226_MONOMER,amino acid-polyamine-organocation (APC) permease,protein transport/singaling,c,monomer,,,492
-MG_227_DIMER,thymidylate synthase,metabolism,c,complex,,(2.0)MG_227_MONOMER',
-MG_227_MONOMER,thymidylate synthase,metabolism,c,monomer,,,287
-MG_228_MONOMER,dihydrofolate reductase,metabolism,c,monomer,,,160
-MG_228_TETRAMER,dihydrofolate reductase,metabolism,c,complex,,(4.0)MG_228_MONOMER',
-MG_229_231_TETRAMER,ribonucleoside-diphosphate reductase,metabolism,c,complex,2BQ1,(2.0)MG_229_MONOMER'+ '(2.0)MG_231_MONOMER',
-MG_229_231_TETRAMER_ox,oxidized ribonucleoside-diphosphate reductase,metabolism,c,complex,2BQ1,(1.0)MG_229_231_TETRAMER'+ '(1.0)O2'+ '(4.0)H',
-MG_229_MONOMER,ribonucleoside-diphosphate reductase; beta chain,metabolism,c,monomer,2BQ1,,340
-MG_230_MONOMER,ribonucleotide reductase stimulatory protein,metabolism,c,monomer,,,153
-MG_231_MONOMER,ribonucleoside-diphosphate reductase; alpha chain,metabolism,c,monomer,2BQ1,,721
-MG_232_MONOMER,ribosomal protein L21,translation,c,monomer,,,100
-MG_233_MONOMER,widely conserved; ribosomal protein; putative,translation,c,monomer,,,99
-MG_234_MONOMER,ribosomal protein L27,translation,c,monomer,,,104
-MG_235_MONOMER,apurinic endonuclease,DNA replication/maintenance,c,monomer,,,291
-MG_236_MONOMER,ferric uptake repressor,transcription,c,monomer,,,140
-MG_237_MONOMER,transcriptional regulator; putative,transcription,c,monomer,,,294
-MG_238_MONOMER,trigger factor,protein folding/maturation,c,monomer,,,444
-MG_239_HEXAMER,ATP-dependent protease La,protein folding/maturation,c,complex,3M6A,(6.0)MG_239_MONOMER',
-MG_239_MONOMER,ATP-dependent protease La,protein folding/maturation,c,monomer,3M6A,,795
-MG_240_HEXAMER,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,metabolism,c,complex,,(6.0)MG_240_MONOMER',
-MG_240_MONOMER,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,metabolism,c,monomer,,,350
-MG_241_MONOMER,membrane protein; 241/242 homologs,protein transport/singaling,m,monomer,2XWU,,620
-MG_242_MONOMER,membrane protein; 241/242 homologs,protein transport/singaling,m,monomer,5XAM,,630
-MG_243_MONOMER,conserved hypothetical protein; authentic frameshift,uncharacterized,m,monomer,,,226
-MG_244_DIMER,3-5' helicase,DNA replication/maintenance,c,complex,4C2T,(2.0)MG_244_MONOMER',
-MG_244_MONOMER,3-5' helicase,DNA replication/maintenance,c,monomer,,,703
-MG_245_MONOMER,5-formyltetrahydrofolate cyclo-ligase; putative,metabolism,c,monomer,,,165
-MG_246_MONOMER,Ser/Thr protein phosphatase 2A,protein transport/singaling,c,monomer,,,281
-MG_247_MONOMER,membrane protein; putative,metabolism,m,monomer,,,239
-MG_248_MONOMER,tRNA methyltransferase (m1A22),RNA synthesis/maturation,c,monomer,,,218
-MG_249_MONOMER,RNA polymerase sigma factor RpoD,transcription,c,monomer,,,497
-MG_250_MONOMER,DNA primase,DNA replication/maintenance,c,monomer,2AU3,,607
-MG_251_DIMER,glycyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_251_MONOMER',
-MG_251_MONOMER,glycyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,446
-MG_252_DIMER,23S rRNA methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_252_MONOMER',
-MG_252_MONOMER,23S rRNA methyltransferase; G2251,RNA synthesis/maturation,c,monomer,,,242
-MG_253_MONOMER,cysteinyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,428
-MG_254_MONOMER,DNA ligase; NAD-dependent,DNA replication/maintenance,c,monomer,,,659
-MG_255_MONOMER,cell division protein,cytokinesis/motility,m,monomer,,,365
-MG_256_MONOMER,MG/MP only,MG-specific,m,monomer,,,256
-MG_257_MONOMER,ribosomal protein L31,translation,c,monomer,,,97
-MG_258_MONOMER,peptide chain release factor 1,translation,c,monomer,,,359
-MG_259_MONOMER,modification methylase,translation,c,monomer,,,456
-MG_259_TETRAMER,modification methylase,translation,c,complex,,(4.0)MG_259_MONOMER',
-MG_260_MONOMER,lipoprotein; putative,protein transport/singaling,m,monomer,,,765
-MG_261_MONOMER,DNA polymerase III; alpha subunit,DNA replication/maintenance,c,monomer,5FKW,,874
-MG_262_MONOMER,polI-like 5'-3' exonuclease; putative,DNA replication/maintenance,c,monomer,,,291
-MG_263_MONOMER,Cof-like hydrolase,metabolism,c,monomer,,,291
-MG_264_MONOMER,dephospho-CoA kinase,metabolism,c,monomer,,,198
-MG_265_DIMER,sugar phosphatase,metabolism,c,complex,,(2.0)MG_265_MONOMER',
-MG_265_MONOMER,sugar phosphatase,metabolism,c,monomer,,,278
-MG_266_MONOMER,leucyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,792
-MG_267_MONOMER,acetyl transferase; putative,MG-specific,m,monomer,,,115
-MG_268_MONOMER,deoxynucleoside kinase; putative,metabolism,c,monomer,,,228
-MG_269_MONOMER,,MG-specific,c,monomer,,,340
-MG_270_MONOMER,lipoyltransferase/lipoate-protein ligase; putative,metabolism,c,monomer,,,336
-MG_271_272_273_274_192MER,pyruvate dehydrogenase,metabolism,c,complex,,(12.0)MG_271_MONOMER'+ '(60.0)MG_272_MONOMER'+ '(60.0)MG_273_MONOMER'+ '(60.0)MG_274_MONOMER',
-MG_271_272_273_274_192MER_ox,oxidized dihydrolipoamide dehydrogenase,metabolism,c,complex,,(1.0)MG_271_272_273_274_192MER'+ '(24.0)H',
-MG_271_MONOMER,dihydrolipoamide dehydrogenase,metabolism,c,monomer,,,457
-MG_272_MONOMER,dihydrolipoamide acetyltransferase,metabolism,c,monomer,,,384
-MG_273_MONOMER,pyruvate dehydrogenase component E1; beta subunit,metabolism,c,monomer,,,326
-MG_274_MONOMER,pyruvate dehydrogenase component E1; alpha subunit,metabolism,c,monomer,,,358
-MG_275_MONOMER,NADH oxidase,metabolism,c,monomer,,,478
-MG_275_TETRAMER,NADH oxidase,metabolism,c,complex,,(4.0)MG_275_MONOMER',
-MG_276_DIMER,adenine phosphoribosyltransferase,metabolism,c,complex,,(2.0)MG_276_MONOMER',
-MG_276_MONOMER,adenine phosphoribosyltransferase,metabolism,c,monomer,,,180
-MG_277_MONOMER,Protein-export membrane protein secDF,protein transport/singaling,c,monomer,5MG3,,970
-MG_278_DIMER,GTP pyrophosphokinase,metabolism,c,complex,,(2.0)MG_278_MONOMER',
-MG_278_MONOMER,GTP diphosphokinase,metabolism,c,monomer,,,720
-MG_279_MONOMER,,uncharacterized,m,monomer,,,218
-MG_280_MONOMER,sensory rhodopsin II transducer motif,uncharacterized,m,monomer,5JEQ,,265
-MG_281_MONOMER,protein M,host cell interaction,m,monomer,4NZR,,556
-MG_282_MONOMER,transcription elongation factor GreA,transcription,c,monomer,,,161
-MG_283_DIMER,prolyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_283_MONOMER',
-MG_283_MONOMER,prolyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,483
-MG_284_MONOMER,,MG-specific,c,monomer,,,132
-MG_285_MONOMER,,MG-specific,c,monomer,,,347
-MG_286_MONOMER,,MG-specific,e,monomer,,,196
-MG_287_MONOMER,acyl carrier protein,metabolism,c,monomer,,,84
-MG_287_MONOMER_ACP,holo acyl carrier protein,metabolism,c,complex,,(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)H'+ '(1.0)PAP',
-MG_287_MONOMER_ddcaACP,Dodecanoyl-ACP (n-C12:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)DDCA'+ '(1.0)MG_287_MONOMER'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_287_MONOMER_hdeACP,cis-hexadec-9-enoyl-[acyl-carrier protein] (n-C16:1),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)HDCEA'+ '(1.0)MG_287_MONOMER'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_287_MONOMER_myrsACP,Myristoyl-ACP (n-C14:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)TTDCA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_287_MONOMER_ocdcaACP,Octadecanoyl-ACP (n-C18:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)OCDCA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_287_MONOMER_octeACP,cis-octadec-11-enoyl-[acyl-carrier protein] (n-C18:1),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)OCDCEA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_287_MONOMER_palmACP,Palmitoyl-ACP (n-C16:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)HDCA'+ '(1.0)MG_287_MONOMER'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_287_MONOMER_tdeACP,cis-tetradec-7-enoyl-[acyl-carrier protein] (n-C14:1),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)TTDCEA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',
-MG_288_MONOMER,protein L,uncharacterized,c,monomer,,,414
-MG_289_290_291_PENTAMER,phosphonate ABC transporter,protein transport/singaling,m,complex,2ONK,(1.0)MG_289_MONOMER'+ '(2.0)MG_290_MONOMER'+ '(2.0)MG_291_MONOMER',
-MG_289_MONOMER,phosphonate ABC transporter; substrate binding protein (P37); putative,protein transport/singaling,c,monomer,3MYU,,368
-MG_290_MONOMER,phosphonate ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,2ONK,,245
-MG_291_MONOMER,phosphonate ABC transporter; permease protein (P69); putative,protein transport/singaling,c,monomer,,,543
-MG_292_MONOMER,alanyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,900
-MG_292_TETRAMER,alanyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(4.0)MG_292_MONOMER',
-MG_293_DIMER,glycerophosphoryl diester phosphodiesterase family protein,metabolism,c,complex,,(2.0)MG_293_MONOMER',
-MG_293_MONOMER,glycerophosphoryl diester phosphodiesterase,metabolism,c,monomer,,,244
-MG_294_MONOMER,major facilitator superfamily (MFS) protein,protein transport/singaling,m,monomer,,,474
-MG_295_MONOMER,tRNA U34 sulfurtransferase,RNA synthesis/maturation,c,monomer,,,367
-MG_295_MONOMER_ox,oxidized tRNA U34 sulfurtransferase,RNA synthesis/maturation,c,complex,,(1.0)MG_295_MONOMER'+ '(2.0)H',
-MG_296_MONOMER,cell division/septation,cytokinesis/motility,c,monomer,,,129
-MG_297_MONOMER,signal recognition particle receptor,cytokinesis/motility,c,monomer,,,346
-MG_298_MONOMER,chromosome segregation protein SMC,DNA replication/maintenance,c,monomer,4AD8,,982
-MG_299_DIMER,phosphate acetyltransferase,metabolism,c,complex,,(2.0)MG_299_MONOMER',
-MG_299_MONOMER,phosphate acetyltransferase,metabolism,c,monomer,,,320
-MG_300_MONOMER,phosphoglycerate kinase,metabolism,c,monomer,,,411
-MG_301_MONOMER,glyceraldehyde-3-phosphate dehydrogenase; type I,metabolism,c,monomer,,,337
-MG_301_TETRAMER,glyceraldehyde-3-phosphate dehydrogenase; type I,metabolism,c,complex,,(4.0)MG_301_MONOMER',
-MG_302_303_304_TETRAMER,metal ion (cobalt) ABC transporter,protein transport/singaling,m,complex,5X3X,(2.0)MG_302_MONOMER'+ '(1.0)MG_303_MONOMER'+ '(1.0)MG_304_MONOMER',
-MG_302_MONOMER,metal ion (cobalt) ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,5X3X,,317
-MG_303_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5X3X,,357
-MG_304_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5X3X,,270
-MG_305_MONOMER,chaperone,protein folding/maturation,c,monomer,5OBU,,595
-MG_306_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,4KPP,,393
-MG_307_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,1177
-MG_308_MONOMER,ATP-dependent RNA helicase,RNA synthesis/maturation,c,monomer,,,410
-MG_309_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,1QGK,,1225
-MG_310_MONOMER,hydrolase; Putative esterase/lipase 1,metabolism,e,monomer,,,268
-MG_311_MONOMER,ribosomal protein S4,translation,c,monomer,,,205
-MG_312_MONOMER,high molecular weight cytadherence accessory protein 1,cytokinesis/motility,c,monomer,,,1139
-MG_313_MONOMER,membrane protein; putative,cytokinesis/motility,m,monomer,,,287
-MG_314_MONOMER,cytadherence,cytokinesis/motility,m,monomer,,,443
-MG_315_MONOMER,DNA polymerase III; delta subunit; putative,DNA replication/maintenance,c,monomer,1JR3,,297
-MG_316_DIMER,DNA internalization-related competence protein ComEC/Rec2,DNA replication/maintenance,m,complex,,(2.0)MG_316_MONOMER',
-MG_316_MONOMER,DNA internalization-related competence protein ComEC/Rec2,DNA replication/maintenance,c,monomer,5AYM,,369
-MG_317_MONOMER,high molecular weight cytadherence accessory protein 3,cytokinesis/motility,c,monomer,,,599
-MG_318_MONOMER,P32 adhesin,cytokinesis/motility,m,monomer,,,280
-MG_319_MONOMER,cytadherence; putative,cytokinesis/motility,m,monomer,5TCX,,178
-MG_320_MONOMER,membrane protein; putative,cytokinesis/motility,m,monomer,,,286
-MG_321_MONOMER,oligopeptide ABC transporter; substrate binding protein,protein transport/singaling,c,monomer,4TQU,,934
-MG_322_323_TETRAMER,potassium uptake protein; TrkH family; putative,protein transport/singaling,m,complex,4J7C,(2.0)MG_322_MONOMER'+ '(2.0)MG_323_MONOMER',
-MG_322_MONOMER,potassium uptake protein,protein transport/singaling,c,monomer,4J7C,,558
-MG_323_MONOMER,potassium uptake protein,protein transport/singaling,c,monomer,4J7C,,227
-MG_324_MONOMER,aminopeptidase,protein folding/maturation,c,monomer,,,354
-MG_325_MONOMER,ribosomal protein L33,translation,c,monomer,,,53
-MG_326_MONOMER,degV family protein,metabolism,c,monomer,,,295
-MG_327_MONOMER,hydrolase; Putative esterase/lipase 2,metabolism,e,monomer,,,268
-MG_328_MONOMER,coiled coil putative structural protein involved in cytoskeleton,cytokinesis/motility,c,monomer,,,756
-MG_329_MONOMER,GTP-binding protein engA,protein folding/maturation,c,monomer,,,448
-MG_330_MONOMER,cytidylate kinase,metabolism,c,monomer,,,217
-MG_331_MONOMER,predicted dolichyl-diphosphooligosaccharide-protein glycosyltransferase,protein folding/maturation,m,monomer,,,212
-MG_332_MONOMER,glucose-1-phosphate adenylyltransferase; putative,metabolism,c,monomer,,,239
-MG_333_DIMER,FMN-dependent NADH-azoreductase; putative,metabolism,c,complex,,(2.0)MG_333_MONOMER',
-MG_333_MONOMER,FMN-dependent NADH-azoreductase; putative,metabolism,c,monomer,,,197
-MG_334_MONOMER,valyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,837
-MG_335_MONOMER,GTP-binding protein engB; putative,protein folding/maturation,c,monomer,,,191
-MG_336_DIMER,cysteine desulfurase,metabolism,c,complex,,(2.0)MG_336_MONOMER',
-MG_336_MONOMER,cysteine desulfurase,metabolism,c,monomer,,,408
-MG_337_MONOMER,iron-sulfur cluster assembly protein,metabolism,c,monomer,,,138
-MG_338_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,4MND,,1270
-MG_339_MONOMER,recombination protein; strand exchange,DNA replication/maintenance,c,monomer,,,317
-MG_340_MONOMER,DNA-directed RNA polymerase; beta subunit,transcription,c,monomer,3IYD,,1292
-MG_341_MONOMER,DNA-directed RNA polymerase; beta subunit,transcription,c,monomer,,,1390
-MG_342_MONOMER,NADPH-dependent FMN reductase domain protein,metabolism,c,monomer,,,168
-MG_343_MONOMER,MG/MP only,MG-specific,c,monomer,,,346
-MG_344_MONOMER,hydrolase; Putative esterase/lipase 3,metabolism,e,monomer,,,273
-MG_345_MONOMER,isoleucyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,895
-MG_346_DIMER,23S rRNA methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_346_MONOMER',
-MG_346_MONOMER,23S rRNA methyltransferase; U2552,RNA synthesis/maturation,c,monomer,,,166
-MG_347_DIMER,tRNA (guanine-N(7)-)-methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_347_MONOMER',
-MG_347_MONOMER,tRNA (guanine-N(7)-)-methyltransferase,RNA synthesis/maturation,c,monomer,,,210
-MG_348_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,322
-MG_349_HEXAMER,Replication initiation/membrane attachment protein,DNA replication/maintenance,c,complex,,(6.0)MG_349_MONOMER',
-MG_349_MONOMER,Replication initiation/membrane attachment protein,DNA replication/maintenance,c,monomer,,,404
-MG_350_MONOMER,transporter; substrate binding,protein transport/singaling,c,monomer,,,311
-MG_351_HEXAMER,inorganic pyrophosphatase,metabolism,c,complex,5LS0,(6.0)MG_351_MONOMER',
-MG_351_MONOMER,inorganic pyrophosphatase,metabolism,c,monomer,5LS0,,184
-MG_352_DIMER,Holliday junction endonuclease,DNA replication/maintenance,c,complex,,(2.0)MG_352_MONOMER',
-MG_352_MONOMER,Holliday junction endonuclease,DNA replication/maintenance,c,monomer,,,166
-MG_353_DIMER,DNA-binding protein HU; putative,DNA replication/maintenance,c,complex,,(2.0)MG_353_MONOMER',
-MG_353_MONOMER,DNA-binding protein HU; putative,DNA replication/maintenance,c,monomer,,,109
-MG_354_MONOMER,,MG-specific,m,monomer,1TM9,,137
-MG_355_HEXAMER,ATP-dependent Clp protease; ATPase subunit,protein folding/maturation,c,complex,,(6.0)MG_355_MONOMER',
-MG_355_MONOMER,ATP-dependent Clp protease; ATPase subunit,protein folding/maturation,c,monomer,,,714
-MG_356_MONOMER,choline/ethanolamine kinase; putative,metabolism,c,monomer,,,280
-MG_357_DIMER,acetate kinase,metabolism,c,complex,,(2.0)MG_357_MONOMER',
-MG_357_MONOMER,acetate kinase,metabolism,c,monomer,,,393
-MG_358_359_10MER,Holliday junction DNA helicase,DNA replication/maintenance,c,complex,,(4.0)MG_358_MONOMER'+ '(6.0)MG_359_MONOMER',
-MG_358_MONOMER,Holliday junction DNA helicase,DNA replication/maintenance,c,monomer,7OA5,,205
-MG_359_MONOMER,Holliday junction DNA helicase RuvB,DNA replication/maintenance,c,monomer,3PFI,,307
-MG_360_MONOMER,ImpB/MucB/SamB family protein,DNA replication/maintenance,c,monomer,,,411
-MG_361_MONOMER,ribosomal protein L10,translation,c,monomer,,,162
-MG_362_MONOMER,ribosomal protein L7/L12,translation,c,monomer,,,122
-MG_363_MONOMER,ribosomal protein L32,translation,c,monomer,,,57
-MG_364_MONOMER,Replication initiation/membrane attachment protein,DNA replication/maintenance,m,monomer,,,224
-MG_365_MONOMER,methionyl-tRNA formyltransferase,RNA synthesis/maturation,c,monomer,,,311
-MG_366_MONOMER,phosphomethylpyrimidine kinase; thiamine biosynthesis,metabolism,c,monomer,,,667
-MG_367_DIMER,ribonuclease III,RNA synthesis/maturation,c,complex,,(2.0)MG_367_MONOMER',
-MG_367_MONOMER,ribonuclease III,RNA synthesis/maturation,c,monomer,,,262
-MG_368_DIMER,fatty acid/phospholipid synthesis protein PlsX,metabolism,c,complex,,(2.0)MG_368_MONOMER',
-MG_368_MONOMER,fatty acid/phospholipid synthesis protein PlsX,metabolism,c,monomer,,,328
-MG_369_DIMER,DAK2 phosphatase domain protein,metabolism,c,complex,1UOE,(2.0)MG_369_MONOMER',
-MG_369_MONOMER,DAK2 phosphatase domain protein,metabolism,c,monomer,3PNL,,557
-MG_370_MONOMER,23S rRNA pseudouridine synthase; U1911; U1915; U1917,RNA synthesis/maturation,c,monomer,,,323
-MG_371_MONOMER,DHH family protein,metabolism,c,monomer,,,324
-MG_372_DIMER,thiamine biosynthesis/tRNA modification protein ThiI,RNA synthesis/maturation,c,complex,,(2.0)MG_372_MONOMER',
-MG_372_MONOMER,thiamine biosynthesis/tRNA modification protein ThiI,RNA synthesis/maturation,c,monomer,,,385
-MG_373_MONOMER,exonuclease/recombinase (viral origin),DNA replication/maintenance,c,monomer,,,281
-MG_374_MONOMER,haloacid dehalogenase-like hydrolase; sugar phosphatase; putative,metabolism,c,monomer,,,274
-MG_375_DIMER,threonyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_375_MONOMER',
-MG_375_MONOMER,threonyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,564
-MG_376_HEXAMER,None,DNA replication/maintenance,c,complex,,(6.0)MG_376_MONOMER',
-MG_376_MONOMER,single-stranded DNA binding,DNA replication/maintenance,c,monomer,,,104
-MG_377_MONOMER,chaperone/trigger factor; by structural homology,protein folding/maturation,c,monomer,,,193
-MG_378_MONOMER,arginyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,537
-MG_379_MONOMER,tRNA uridine 5-carboxymethylaminomethyl modification enzyme GidA,RNA synthesis/maturation,c,monomer,2ZXI,,612
-MG_380_MONOMER,methyltransferase GidB,RNA synthesis/maturation,c,monomer,,,192
-MG_381_MONOMER,,MG-specific,c,monomer,,,218
-MG_382_MONOMER,uridine kinase,metabolism,c,monomer,,,213
-MG_382_TETRAMER,uridine kinase,metabolism,c,complex,,(4.0)MG_382_MONOMER',
-MG_383_DIMER,NH(3)-dependent NAD+ synthetase; putative,metabolism,c,complex,,(2.0)MG_383_MONOMER',
-MG_383_MONOMER,NH(3)-dependent NAD+ synthetase; putative,metabolism,c,monomer,,,248
-MG_384_MONOMER,GTPase1 Obg,protein folding/maturation,c,monomer,,,433
-MG_385_DIMER,glycerophosphoryl diester phosphodiesterase family protein,metabolism,c,complex,,(2.0)MG_385_MONOMER',
-MG_385_MONOMER,glycerophosphoryl diester phosphodiesterase family protein,metabolism,c,monomer,,,236
-MG_386_MONOMER,P200 protein,cytokinesis/motility,c,monomer,,,1616
-MG_387_MONOMER,GTP-binding protein Era,protein folding/maturation,c,monomer,,,290
-MG_388_MONOMER,Putative metalloprotease,RNA synthesis/maturation,c,monomer,,,154
-MG_389_MONOMER,,MG-specific,e,monomer,,,127
-MG_390_DIMER,toxin ABC transporter; ATP-binding/permease protein,protein transport/singaling,m,complex,,(2.0)MG_390_MONOMER',
-MG_390_MONOMER,toxin ABC transporter; ATP-binding/permease protein,protein transport/singaling,c,monomer,,,660
-MG_391_HEXAMER,cytosol aminopeptidase,protein folding/maturation,c,complex,,(6.0)MG_391_MONOMER',
-MG_391_MONOMER,cytosol aminopeptidase,protein folding/maturation,c,monomer,,,447
-MG_392_393_21MER,GroEL-GroES chaperonin complex,protein folding/maturation,c,complex,,(14.0)MG_392_MONOMER'+ '(7.0)MG_393_MONOMER',
-MG_392_MONOMER,chaperonin,protein folding/maturation,c,monomer,,,543
-MG_393_MONOMER,chaperonin; 10 kDa,protein folding/maturation,c,monomer,,,110
-MG_394_MONOMER,serine hydroxymethyltransferase,metabolism,c,monomer,,,406
-MG_394_TETRAMER,serine hydroxymethyltransferase,metabolism,c,complex,,(4.0)MG_394_MONOMER',
-MG_395_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,5ZVJ,,524
-MG_396_DIMER,ribose 5-phosphate isomerase B,metabolism,c,complex,6MU0,(2.0)MG_396_MONOMER',
-MG_396_MONOMER,ribose 5-phosphate isomerase B,metabolism,c,monomer,6MU0,,152
-MG_397_MONOMER,Cell division inhibitor,cytokinesis/motility,e,monomer,,,566
-MG_398_399_400_401_402_403_404_405_22MER,H(+)-transporting two-sector ATPase,metabolism,m,complex,5T4O,(1.0)MG_398_MONOMER'+ '(3.0)MG_399_MONOMER'+ '(1.0)MG_400_MONOMER'+ '(3.0)MG_401_MONOMER'+ '(1.0)MG_402_MONOMER'+ '(2.0)MG_403_MONOMER'+ '(10.0)MG_404_MONOMER'+ '(1.0)MG_405_MONOMER',
-MG_398_MONOMER,ATP synthase F1; epsilon subunit,metabolism,c,monomer,5T4O,,133
-MG_399_MONOMER,ATP synthase F1; beta subunit,metabolism,c,monomer,5T4O,,476
-MG_400_MONOMER,ATP synthase F1; gamma subunit,metabolism,c,monomer,5T4O,,279
-MG_401_MONOMER,ATP synthase F1; alpha subunit,metabolism,c,monomer,5T4O,,518
-MG_402_MONOMER,ATP synthase F1; delta subunit,metabolism,c,monomer,5T4O,,176
-MG_403_MONOMER,ATP synthase F0; B subunit,metabolism,c,monomer,5T4O,,208
-MG_404_MONOMER,ATP synthase F0; C subunit,metabolism,c,monomer,5T4O,,102
-MG_405_MONOMER,ATP synthase F0; A subunit,metabolism,c,monomer,5T4O,,292
-MG_406_MONOMER,,MG-specific,m,monomer,,,158
-MG_407_DIMER,enolase,metabolism,c,complex,,(2.0)MG_407_MONOMER',
-MG_407_MONOMER,enolase,metabolism,c,monomer,,,458
-MG_408_MONOMER,methionine-S-sulfoxide reductase,protein folding/maturation,c,monomer,,,157
-MG_409_DIMER,phosphate transport system regulatory protein PhoU; putative,protein transport/singaling,c,complex,,(2.0)MG_409_MONOMER',
-MG_409_MONOMER,phosphate transport system regulatory protein PhoU; putative,protein transport/singaling,c,monomer,,,225
-MG_410_411_412_PENTAMER,phosphate ABC transporter,protein transport/singaling,m,complex,,(2.0)MG_410_MONOMER'+ '(2.0)MG_411_MONOMER'+ '(1.0)MG_412_MONOMER',
-MG_410_MONOMER,phosphate ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,,,329
-MG_411_MONOMER,phosphate ABC transporter; permease protein PstA,protein transport/singaling,c,monomer,,,654
-MG_412_MONOMER,phosphate ABC transporter; substrate-binding protein,protein transport/singaling,c,monomer,,,377
-MG_414_MONOMER,,MG-specific,e,monomer,,,1036
-MG_417_MONOMER,ribosomal protein S9,translation,c,monomer,,,132
-MG_418_MONOMER,ribosomal protein L13,translation,c,monomer,,,146
-MG_419_MONOMER,DNA polymerase III; subunit gamma and tau,DNA replication/maintenance,c,monomer,1JR3,,597
-MG_421_MONOMER,excinuclease ABC; A subunit,DNA replication/maintenance,c,monomer,3UWX,,954
-MG_422_MONOMER,,MG-specific,c,monomer,,,835
-MG_423_MONOMER,metallo-beta-lactamase superfamily protein,RNA synthesis/maturation,c,monomer,,,561
-MG_424_MONOMER,ribosomal protein S15,translation,c,monomer,,,86
-MG_425_DIMER,ATP-dependent RNA helicase,RNA synthesis/maturation,c,complex,,(2.0)MG_425_MONOMER',
-MG_425_MONOMER,ATP-dependent RNA helicase,RNA synthesis/maturation,c,monomer,,,449
-MG_426_MONOMER,ribosomal protein L28,translation,c,monomer,,,64
-MG_427_DIMER,osmotically inducible peroxidase,host cell interaction,c,complex,,(2.0)MG_427_MONOMER',
-MG_427_DIMER_ox,oxidized osmotically inducible peroxidase,host cell interaction,c,complex,,(1.0)MG_427_DIMER'+ '(4.0)H',
-MG_427_MONOMER,osmotically inducible peroxidase,host cell interaction,c,monomer,,,141
-MG_428_DIMER,LuxR bacterial regulatory protein; putative,transcription,c,complex,,(2.0)MG_428_MONOMER',
-MG_428_MONOMER,LuxR bacterial regulatory protein; putative,transcription,c,monomer,,,171
-MG_429_MONOMER,PTS system; E1,metabolism,c,monomer,2XDF,,572
-MG_430_MONOMER,2;3-bisphosphoglycerate-independent phosphoglycerate mutase,metabolism,c,monomer,,,507
-MG_431_DIMER,triosephosphate isomerase,metabolism,c,complex,,(2.0)MG_431_MONOMER',
-MG_431_MONOMER,triosephosphate isomerase,metabolism,c,monomer,,,244
-MG_432_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,398
-MG_433_DIMER,translation elongation factor Ts,translation,c,complex,,(2.0)MG_433_MONOMER',
-MG_433_MONOMER,translation elongation factor Ts,translation,c,monomer,,,298
-MG_434_HEXAMER,uridylate kinase,metabolism,c,complex,,(6.0)MG_434_MONOMER',
-MG_434_MONOMER,uridylate kinase,metabolism,c,monomer,,,243
-MG_435_MONOMER,ribosome recycling factor,translation,c,monomer,,,183
-MG_437_DIMER,phosphatidate cytidylyltransferase,metabolism,m,complex,,(2.0)MG_437_MONOMER',
-MG_437_MONOMER,phosphatidate cytidylyltransferase,metabolism,c,monomer,,,397
-MG_438_MONOMER,type I restriction modification DNA specificity domain protein,DNA replication/maintenance,c,monomer,1YDX,,383
-MG_439_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,272
-MG_440_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,258
-MG_441_MONOMER,,MG-specific,m,monomer,,,136
-MG_442_MONOMER,ribosomal biogenesis GTPase,protein folding/maturation,c,monomer,,,270
-MG_443_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,4W6V,,395
-MG_444_MONOMER,ribosomal protein L19,translation,c,monomer,,,119
-MG_445_DIMER,tRNA (guanine-N1)-methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_445_MONOMER',
-MG_445_MONOMER,tRNA (guanine-N1)-methyltransferase,RNA synthesis/maturation,c,monomer,,,231
-MG_446_MONOMER,ribosomal protein S16,translation,c,monomer,,,95
-MG_447_MONOMER,multidrug efflux pump,protein transport/singaling,m,monomer,,,547
-MG_448_MONOMER,methionine-R-sulfoxide reductase,protein folding/maturation,c,monomer,,,150
-MG_449_MONOMER,conserved hypothetical protein; authentic frameshift,uncharacterized,c,monomer,,,228
-MG_450_MONOMER,degV family protein,uncharacterized,c,monomer,,,290
-MG_451_DIMER,translation elongation factor Tu,translation,c,complex,,(2.0)MG_451_MONOMER',
-MG_451_MONOMER,translation elongation factor Tu,translation,c,monomer,,,394
-MG_452_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,261
-MG_453_MONOMER,UTP-glucose-1-phosphate uridylyltransferase,metabolism,c,monomer,,,292
-MG_453_TETRAMER,UTP-glucose-1-phosphate uridylyltransferase,metabolism,c,complex,,(4.0)MG_453_MONOMER',
-MG_454_DIMER,thiol-dependent peroxidase,host cell interaction,c,complex,,(2.0)MG_454_MONOMER',
-MG_454_DIMER_ox,oxidized thiol-dependent peroxidase,host cell interaction,c,complex,,(1.0)MG_454_DIMER'+ '(4.0)H',
-MG_454_MONOMER,thiol-dependent peroxidase,host cell interaction,c,monomer,,,155
-MG_455_DIMER,tyrosyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_455_MONOMER',
-MG_455_MONOMER,tyrosyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,396
-MG_456_MONOMER,,MG-specific,m,monomer,6B85,,334
-MG_457_HEXAMER,ATP-dependent metalloprotease FtsH,protein folding/maturation,m,complex,,(6.0)MG_457_MONOMER',
-MG_457_MONOMER,ATP-dependent metalloprotease FtsH,protein folding/maturation,c,monomer,,,702
-MG_458_MONOMER,hypoxanthine phosphoribosyltransferase,metabolism,c,monomer,,,175
-MG_458_TETRAMER,hypoxanthine phosphoribosyltransferase,metabolism,c,complex,,(4.0)MG_458_MONOMER',
-MG_459_MONOMER,putative 2-C-methyl-D-erythritol-2;4-cyclodiphosphate synthase,metabolism,c,monomer,,,169
-MG_460_MONOMER,L-lactate dehydrogenase/malate dehydrogenase,metabolism,c,monomer,,,312
-MG_460_TETRAMER,L-lactate dehydrogenase/malate dehydrogenase,metabolism,c,complex,,(4.0)MG_460_MONOMER',
-MG_461_MONOMER,HD domain protein,metabolism,c,monomer,,,425
-MG_462_MONOMER,glutamyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,484
-MG_463_MONOMER,dimethyladenosine transferase,RNA synthesis/maturation,c,monomer,,,259
-MG_464_MONOMER,inner-membrane protein insertion factor,protein folding/maturation,c,monomer,5MG3,,385
-MG_465_MONOMER,ribonuclease P protein component,RNA synthesis/maturation,c,monomer,6D1R,,128
-MG_466_MONOMER,ribosomal protein L34,translation,c,monomer,,,48
-MG_467_468_526_TETRAMER,salivaricin A ABC transporter,protein transport/singaling,m,complex,5XU1,(1.0)MG_467_MONOMER'+ '(2.0)MG_468_MONOMER'+ '(1.0)MG_526_MONOMER',
-MG_467_MONOMER,salivaricin A ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,5XU1,,311
-MG_468_MONOMER,salivaricin A ABC transporter; permease protein,protein transport/singaling,c,monomer,5XU1,,1783
-MG_469_1MER_ADP,DnaA-ADP,DNA replication/maintenance,c,complex,3R8F,(1.0)ADP'+ '(1.0)MG_469_MONOMER',
-MG_469_1MER_ATP,DnaA-ATP,DNA replication/maintenance,c,complex,3R8F,(1.0)ATP'+ '(1.0)MG_469_MONOMER',
-MG_469_2MER_1ATP_ADP,DnaA 2mer-(1)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_1MER_ATP',
-MG_469_2MER_ATP,DnaA-ATP 2mer,DNA replication/maintenance,c,complex,,(2.0)MG_469_1MER_ATP',
-MG_469_3MER_2ATP_ADP,DnaA 3mer-(2)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_2MER_ATP',
-MG_469_3MER_ATP,DnaA-ATP 3mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_2MER_ATP',
-MG_469_4MER_3ATP_ADP,DnaA 4mer-(3)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_3MER_ATP',
-MG_469_4MER_ATP,DnaA-ATP 4mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_3MER_ATP',
-MG_469_5MER_4ATP_ADP,DnaA 5mer-(4)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_4MER_ATP',
-MG_469_5MER_ATP,DnaA-ATP 5mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_4MER_ATP',
-MG_469_6MER_5ATP_ADP,DnaA 6mer-(5)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_5MER_ATP',
-MG_469_6MER_ATP,DnaA-ATP 6mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_5MER_ATP',
-MG_469_7MER_6ATP_ADP,DnaA 7mer-(6)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_6MER_ATP',
-MG_469_7MER_ATP,DnaA-ATP 7mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_6MER_ATP',
-MG_469_MONOMER,chromosomal replication initiator protein DnaA,DNA replication/maintenance,c,monomer,,,437
-MG_470_MONOMER,CobQ/CobB/MinD/ParA nucleotide binding domain,cytokinesis/motility,c,monomer,,,269
-MG_473_MONOMER,ribosomal protein L33 type 2,translation,c,monomer,,,48
-MG_474_MONOMER,protein export/possible structural role,protein transport/singaling,m,monomer,,,127
-MG_476_MONOMER,preprotein translocase; SecG subunit,protein transport/singaling,c,monomer,5MG3,,77
-MG_477_MONOMER,transcription termination factor,transcription,c,monomer,,,90
-MG_478_MONOMER,,MG-specific,m,monomer,,,154
-MG_480_MONOMER,structural; putative Cell cycle; putative,MG-specific,c,monomer,,,219
-MG_481_MONOMER,30S ribosomal protein S21,translation,c,monomer,,,62
-MG_482_DIMER,holo-(acyl-carrier-protein) synthase,metabolism,c,complex,,(2.0)MG_482_MONOMER',
-MG_482_MONOMER,holo-(acyl-carrier-protein) synthase,metabolism,c,monomer,,,114
-MG_491_MONOMER,cell adhesion; homology to dksA; RNA polymerase binding; putative,cytokinesis/motility,c,monomer,4XNG,,346
-MG_494_MONOMER,cell-division inhibitor; putative protease; putative,cytokinesis/motility,c,monomer,,,150
-MG_498_MONOMER,formamidopyrimidine-DNA glycosylase,DNA replication/maintenance,c,monomer,,,284
-MG_505_MONOMER,putative holliday junction resolvase,DNA replication/maintenance,c,monomer,,,138
-MG_515_MONOMER,,MG-specific,m,monomer,3X29,,269
-MG_516_MONOMER,UPF0154,uncharacterized,c,monomer,,,73
-MG_517_MONOMER,glycosyl transferase; group 2 family protein,metabolism,c,monomer,,,341
-MG_521_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,224
-MG_522_MONOMER,ribosomal protein S20,translation,c,monomer,,,88
-MG_524_MONOMER,,uncharacterized,m,monomer,,,149
-MG_525_MONOMER,,MG-specific,e,monomer,,,664
-MG_526_MONOMER,salivaricin A ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,5XU1,,284
-REPLISOME,Replisome,DNA replication/maintenance,c,complex,,(2.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(4.0)MG_001_MONOMER'+ '(1.0)MG_094_HEXAMER'+ '(1.0)MG_250_MONOMER',
-RIBOSOME_30S,30S ribosomal subunit,translation,c,complex,,(1.0)MGrrnA16S'+ '(1.0)MG_070_MONOMER'+ '(1.0)MG_087_MONOMER'+ '(1.0)MG_088_MONOMER'+ '(1.0)MG_090_MONOMER'+ '(1.0)MG_092_MONOMER'+ '(1.0)MG_150_MONOMER'+ '(1.0)MG_155_MONOMER'+ '(1.0)MG_157_MONOMER'+ '(1.0)MG_160_MONOMER'+ '(1.0)MG_164_MONOMER'+ '(1.0)MG_165_MONOMER'+ '(1.0)MG_168_MONOMER'+ '(1.0)MG_175_MONOMER'+ '(1.0)MG_176_MONOMER'+ '(1.0)MG_311_MONOMER'+ '(1.0)MG_417_MONOMER'+ '(1.0)MG_424_MONOMER'+ '(1.0)MG_446_MONOMER'+ '(1.0)MG_481_MONOMER'+ '(1.0)MG_522_MONOMER',
-RIBOSOME_30S_IF3,30S ribosomal subunit - translation initiation factor IF-3 complex,translation,c,complex,5LMO,(1.0)MG_196_MONOMER'+ '(1.0)RIBOSOME_30S',
-RIBOSOME_50S,50S ribosomal subunit,translation,c,complex,,(1.0)MGrrnA23S'+ '(1.0)MGrrnA5S'+ '(1.0)MG_081_MONOMER'+ '(1.0)MG_082_MONOMER'+ '(1.0)MG_093_MONOMER'+ '(1.0)MG_151_MONOMER'+ '(1.0)MG_152_MONOMER'+ '(1.0)MG_153_MONOMER'+ '(1.0)MG_154_MONOMER'+ '(1.0)MG_156_MONOMER'+ '(1.0)MG_158_MONOMER'+ '(1.0)MG_159_MONOMER'+ '(1.0)MG_161_MONOMER'+ '(1.0)MG_162_MONOMER'+ '(1.0)MG_163_MONOMER'+ '(1.0)MG_166_MONOMER'+ '(1.0)MG_167_MONOMER'+ '(1.0)MG_169_MONOMER'+ '(1.0)MG_174_MONOMER'+ '(1.0)MG_178_MONOMER'+ '(1.0)MG_197_MONOMER'+ '(1.0)MG_198_MONOMER'+ '(1.0)MG_232_MONOMER'+ '(1.0)MG_234_MONOMER'+ '(1.0)MG_257_MONOMER'+ '(1.0)MG_325_MONOMER'+ '(1.0)MG_361_MONOMER'+ '(1.0)MG_362_MONOMER'+ '(1.0)MG_363_MONOMER'+ '(1.0)MG_418_MONOMER'+ '(1.0)MG_426_MONOMER'+ '(1.0)MG_444_MONOMER'+ '(1.0)MG_466_MONOMER'+ '(1.0)MG_473_MONOMER',
-RIBOSOME_70S,70S ribosome,translation,c,complex,,(1.0)RIBOSOME_30S'+ '(1.0)RIBOSOME_50S',
-RNA_POLYMERASE,DNA-directed RNA polymerase,transcription,c,complex,3IYD,(1.0)MG_022_MONOMER'+ '(2.0)MG_177_MONOMER'+ '(1.0)MG_340_MONOMER'+ '(1.0)MG_341_MONOMER',
-RNA_POLYMERASE_HOLOENZYME,DNA-directed RNA polymerase holoenzyme,transcription,c,complex,3IYD,(1.0)MG_249_MONOMER'+ '(1.0)RNA_POLYMERASE',
+prot_id,name,function,compartment,kind,pdb_id,biosynthesis,seq_length,dna_binding,dna_footprint
+DNA_GYRASE,DNA gyrase,DNA replication/maintenance,c,complex,6RKW,(2.0)MG_003_MONOMER'+ '(2.0)MG_004_MONOMER',,dsDNA,140
+DNA_POLYMERASE_2CORE_BETA_CLAMP_GAMMA_COMPLEX_PRIMASE,DNA polymerase (2) core; beta-clamp; epsilon-complex; and primase,DNA replication/maintenance,c,complex,,(2.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(2.0)MG_001_MONOMER'+ '(1.0)MG_250_MONOMER',,ssDNA,49
+DNA_POLYMERASE_CORE,DNA-directed DNA polymerase,DNA replication/maintenance,c,complex,5FKW,(1.0)MG_031_MONOMER'+ '(1.0)MG_261_MONOMER',,ssDNA,24
+DNA_POLYMERASE_CORE_BETA_CLAMP_GAMMA_COMPLEX,DNA polymerase core; beta-clamp; epsilon-complex,DNA replication/maintenance,c,complex,,(1.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(2.0)MG_001_MONOMER',,ssDNA,49
+DNA_POLYMERASE_CORE_BETA_CLAMP_PRIMASE,DNA polymerase core; beta-clamp; epsilon-complex,DNA replication/maintenance,c,complex,,(1.0)DNA_POLYMERASE_CORE'+ '(2.0)MG_001_MONOMER'+ '(1.0)MG_250_MONOMER',,ssDNA,49
+DNA_POLYMERASE_GAMMA_COMPLEX,DNA-directed DNA polymerase gamma complex,DNA replication/maintenance,c,complex,,(1.0)MG_007_MONOMER'+ '(1.0)MG_315_MONOMER'+ '(4.0)MG_419_MONOMER',,ssDNA,26
+DNA_POLYMERASE_HOLOENZYME,DNA-directed DNA polymerase holoenzyme,DNA replication/maintenance,c,complex,,(2.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(2.0)MG_001_MONOMER',,,
+MG_0001_048,signal recognition particle,protein transport/singaling,c,complex,3DM5,(1.0)MG_0001'+ '(1.0)MG_048_MONOMER',,,
+MG_0003_465,ribonuclease P,RNA synthesis/maturation,c,complex,6D1R,(1.0)MG_0003'+ '(1.0)MG_465_MONOMER',,,
+MG_001_DIMER,DNA polymerase III; beta clamp,DNA replication/maintenance,c,complex,,(2.0)MG_001_MONOMER',,ssDNA,25
+MG_001_MONOMER,DNA polymerase III; beta subunit,DNA replication/maintenance,c,monomer,5FKW,,380,ssDNA,25
+MG_002_MONOMER,DnaJ domain protein,protein folding/maturation,c,monomer,,,310,,
+MG_003_MONOMER,DNA gyrase; B subunit,DNA replication/maintenance,c,monomer,6RKW,,650,,
+MG_004_MONOMER,DNA gyrase; A subunit,DNA replication/maintenance,c,monomer,6RKW,,836,,
+MG_005_DIMER,seryl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_005_MONOMER',,,
+MG_005_MONOMER,seryl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,417,,
+MG_006_DIMER,thymidylate kinase,metabolism,c,complex,,(2.0)MG_006_MONOMER',,,
+MG_006_MONOMER,thymidylate kinase,metabolism,c,monomer,,,210,,
+MG_007_MONOMER,DNA polymerase III delta prime subunit; putative,DNA replication/maintenance,c,monomer,1JR3,,254,,
+MG_008_379_TETRAMER,tRNA uridine 5-carboxymethylaminomethyl modification enzyme,RNA synthesis/maturation,c,complex,,(2.0)MG_008_MONOMER'+ '(2.0)MG_379_MONOMER',,,
+MG_008_MONOMER,tRNA modification GTPase TrmE,RNA synthesis/maturation,c,monomer,3GEH,,442,,
+MG_009_MONOMER,deoxyribonuclease,DNA replication/maintenance,c,monomer,,,262,,
+MG_010_MONOMER,DNA primase-related protein,DNA replication/maintenance,c,monomer,,,218,,
+MG_011_MONOMER,alpha-L-glutamate ligase; S6 ribosomal protein modification,protein folding/maturation,c,monomer,,,287,,
+MG_012_MONOMER,alpha-L-glutamate ligase,protein folding/maturation,c,monomer,,,287,,
+MG_013_DIMER,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,metabolism,c,complex,,(2.0)MG_013_MONOMER',,,
+MG_013_MONOMER,methylenetetrahydrofolate dehydrogenase/methylenetetrahydrofolate cyclohydrolase,metabolism,c,monomer,,,273,,
+MG_014_015_DIMER,multidrug ABC transporter,protein transport/singaling,m,complex,4Q4H,(1.0)MG_014_MONOMER'+ '(1.0)MG_015_MONOMER',,,
+MG_014_MONOMER,multidrug ABC transporter; ATP-binding/permease protein,protein transport/singaling,c,monomer,4Q4H,,623,,
+MG_015_MONOMER,multidrug ABC transporter; ATP-binding/permease protein,protein transport/singaling,c,monomer,4Q4H,,589,,
+MG_018_MONOMER,SNF2 family helicase putative,DNA replication/maintenance,c,monomer,,,1031,,
+MG_019_DIMER,chaperone protein DnaJ,protein folding/maturation,c,complex,,(2.0)MG_019_MONOMER',,,
+MG_019_MONOMER,chaperone protein DnaJ,protein folding/maturation,c,monomer,,,389,,
+MG_020_MONOMER,proline iminopeptidase,protein folding/maturation,c,monomer,,,308,,
+MG_021_DIMER,methionyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_021_MONOMER',,,
+MG_021_MONOMER,methionyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,512,,
+MG_022_MONOMER,DNA-directed RNA polymerase; delta subunit,transcription,c,monomer,,,145,,
+MG_023_DIMER,fructose-1;6-bisphosphate aldolase; class II,metabolism,c,complex,,(2.0)MG_023_MONOMER',,,
+MG_023_MONOMER,fructose-1;6-bisphosphate aldolase; class II,metabolism,c,monomer,,,288,,
+MG_024_MONOMER,GTP-binding protein YchF,translation,c,monomer,,,367,,
+MG_025_MONOMER,Beta-glycosyl transferase,metabolism,c,monomer,,,298,,
+MG_026_MONOMER,translation elongation factor P,translation,c,monomer,,,190,,
+MG_027_MONOMER,transcription termination/antitermination protein NusB,transcription,c,monomer,1Q8C,,151,,
+MG_028_MONOMER,,MG-specific,m,monomer,,,201,,
+MG_029_DIMER,DJ-1/PfpI family protein,metabolism,c,complex,,(2.0)MG_029_MONOMER',,,
+MG_029_MONOMER,DJ-1/PfpI family protein,metabolism,c,monomer,,,186,,
+MG_030_MONOMER,uracil phosphoribosyltransferase,metabolism,c,monomer,,,206,,
+MG_030_TRIMER,uracil phosphoribosyltransferase,metabolism,c,complex,,(3.0)MG_030_MONOMER',,,
+MG_031_MONOMER,DNA polymerase III; alpha subunit; Gram-positive type,DNA replication/maintenance,c,monomer,3F2B,,1451,,
+MG_032_MONOMER,cell adhesion protein/membrane export protein,cytokinesis/motility,e,monomer,,,666,,
+MG_033_MONOMER,glycerol uptake facilitator,protein transport/singaling,c,monomer,,,258,,
+MG_033_TETRAMER,glycerol uptake facilitator,protein transport/singaling,m,complex,,(4.0)MG_033_MONOMER',,,
+MG_034_DIMER,thymidine kinase,metabolism,c,complex,,(2.0)MG_034_MONOMER',,,
+MG_034_MONOMER,thymidine kinase,metabolism,c,monomer,,,213,,
+MG_035_DIMER,histidyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_035_MONOMER',,,
+MG_035_MONOMER,histidyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,414,,
+MG_036_DIMER,aspartyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_036_MONOMER',,,
+MG_036_MONOMER,aspartyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,550,,
+MG_037_MONOMER,nicotinate phosphoribosyltransferase,metabolism,c,monomer,,,450,,
+MG_038_MONOMER,glycerol kinase,metabolism,c,monomer,,,508,,
+MG_038_TETRAMER,glycerol kinase,metabolism,c,complex,,(4.0)MG_038_MONOMER',,,
+MG_039_DIMER,FAD-dependent glycerol-3-phosphate dehydrogenase; putative,metabolism,c,complex,,(2.0)MG_039_MONOMER',,,
+MG_039_MONOMER,FAD-dependent glycerol-3-phosphate dehydrogenase; putative,metabolism,c,monomer,,,384,,
+MG_040_119_120_121_PENTAMER,Monosaccharide (riboside/galactoside) ABC transporter,protein transport/singaling,m,complex,4FI3,(1.0)MG_040_MONOMER'+ '(2.0)MG_119_MONOMER'+ '(1.0)MG_120_MONOMER'+ '(1.0)MG_121_MONOMER',,,
+MG_040_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; substrate binding protein,protein transport/singaling,c,monomer,4FI3,,591,,
+MG_041_062_429_PENTAMER,PTS system; fructose-specific,metabolism,m,complex,,(1.0)MG_041_MONOMER'+ '(2.0)MG_062_MONOMER'+ '(2.0)MG_429_MONOMER',,,
+MG_041_069_429_PENTAMER,PTS system; glucose-specific,metabolism,m,complex,,(1.0)MG_041_MONOMER'+ '(2.0)MG_069_MONOMER'+ '(2.0)MG_429_MONOMER',,,
+MG_041_MONOMER,PTS system; HPr,metabolism,c,monomer,2XDF,,88,,
+MG_042_043_044_045_PENTAMER,spermidine/putrescine (polyamine) ABC transporter,protein transport/singaling,m,complex,3PUZ,(2.0)MG_042_MONOMER'+ '(1.0)MG_043_MONOMER'+ '(1.0)MG_044_MONOMER'+ '(1.0)MG_045_MONOMER',,,
+MG_042_MONOMER,spermidine/putrescine (polyamine) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,3PUZ,,559,,
+MG_043_MONOMER,spermidine/putrescine (polyamine) ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,3PUZ,,285,,
+MG_044_MONOMER,spermidine/putrescine (polyamine) ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,3PUZ,,284,,
+MG_045_MONOMER,spermidine/putrescine (polyamine) ABC transporter; spermidine/putrescine binding protein; putative,protein transport/singaling,c,monomer,3PUZ,,483,,
+MG_046_DIMER,metalloendopeptidase,RNA synthesis/maturation,c,complex,,(2.0)MG_046_MONOMER',,,
+MG_046_MONOMER,metalloendopeptidase,RNA synthesis/maturation,c,monomer,,,315,,
+MG_047_MONOMER,S-adenosylmethionine synthetase,metabolism,c,monomer,,,383,,
+MG_047_TETRAMER,S-adenosylmethionine synthetase,metabolism,c,complex,,(4.0)MG_047_MONOMER',,,
+MG_048_MONOMER,signal recognition particle protein,protein transport/singaling,c,monomer,3DM5,,446,,
+MG_049_HEXAMER,purine nucleoside phosphorylase,metabolism,c,complex,,(6.0)MG_049_MONOMER',,,
+MG_049_MONOMER,purine nucleoside phosphorylase,metabolism,c,monomer,,,238,,
+MG_050_MONOMER,deoxyribose-phosphate aldolase,metabolism,c,monomer,,,223,,
+MG_051_DIMER,pyrimidine-nucleoside phosphorylase,metabolism,c,complex,,(2.0)MG_051_MONOMER',,,
+MG_051_MONOMER,pyrimidine-nucleoside phosphorylase,metabolism,c,monomer,,,421,,
+MG_052_DIMER,cytidine deaminase,metabolism,c,complex,,(2.0)MG_052_MONOMER',,,
+MG_052_MONOMER,cytidine deaminase,metabolism,c,monomer,,,130,,
+MG_053_MONOMER,phosphoglucomutase/phosphomannomutase; putative,metabolism,c,monomer,,,550,,
+MG_053_TRIMER,phosphoglucomutase/phosphomannomutase; putative,metabolism,c,complex,,(3.0)MG_053_MONOMER',,,
+MG_054_MONOMER,transcription antitermination protein NusG; putative,transcription,c,monomer,,,316,,
+MG_055_170_277_464_476_20MER,preprotein translocase,protein transport/singaling,m,complex,5MG3,(4.0)MG_055_MONOMER'+ '(4.0)MG_170_MONOMER'+ '(4.0)MG_277_MONOMER'+ '(4.0)MG_464_MONOMER'+ '(4.0)MG_476_MONOMER',,,
+MG_055_MONOMER,preprotein translocase; SecE subunit,protein transport/singaling,c,monomer,5MG3,,123,,
+MG_056_MONOMER,tetrapyrrole (corrin/porphyrin) methylase protein,RNA synthesis/maturation,c,monomer,,,277,,
+MG_057_MONOMER,small primase-like protein,RNA synthesis/maturation,c,monomer,,,178,,
+MG_058_HEXAMER,ribose-phosphate pyrophosphokinase,metabolism,c,complex,,(6.0)MG_058_MONOMER',,,
+MG_058_MONOMER,ribose-phosphate pyrophosphokinase,metabolism,c,monomer,,,332,,
+MG_059_MONOMER,SsrA-binding protein,translation,c,monomer,,,145,,
+MG_060_MONOMER,glycosyl transferase,protein folding/maturation,c,monomer,,,297,,
+MG_061_MONOMER,Mycoplasma MFS transporter,protein transport/singaling,m,monomer,,,567,,
+MG_062_MONOMER,PTS system; fructose-specific IIABC component,protein transport/singaling,c,monomer,3QNQ,,680,,
+MG_063_DIMER,1-phosphofructokinase; putative,metabolism,c,complex,,(2.0)MG_063_MONOMER',,,
+MG_063_MONOMER,1-phosphofructokinase; putative,metabolism,c,monomer,,,303,,
+MG_064_065_TETRAMER,ABC transporter,protein transport/singaling,m,complex,5XU1,(2.0)MG_064_MONOMER'+ '(2.0)MG_065_MONOMER',,,
+MG_064_MONOMER,ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,5XU1,,1331,,
+MG_065_MONOMER,ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,5XU1,,466,,
+MG_066_DIMER,transketolase,metabolism,c,complex,,(2.0)MG_066_MONOMER',,,
+MG_066_MONOMER,transketolase,metabolism,c,monomer,,,648,,
+MG_067_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,1LCY,,516,,
+MG_068_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,1LCY,,474,,
+MG_069_MONOMER,PTS system; glucose-specific IIABC component,metabolism,c,monomer,5IWS,,908,,
+MG_070_MONOMER,ribosomal protein S2,translation,c,monomer,,,284,,
+MG_071_MONOMER,ATPase; P-type (transporting); HAD superfamily; subfamily IC,protein transport/singaling,m,monomer,,,874,,
+MG_072_DIMER,preprotein translocase; SecA subunit,protein transport/singaling,c,complex,,(2.0)MG_072_MONOMER',,,
+MG_072_MONOMER,preprotein translocase; SecA subunit,protein transport/singaling,c,monomer,,,806,,
+MG_073_206_421_TETRAMER,DNA incision complex,DNA replication/maintenance,c,complex,3UWX,(1.0)MG_073_MONOMER'+ '(1.0)MG_206_MONOMER'+ '(2.0)MG_421_MONOMER',,dsDNA,18
+MG_073_MONOMER,excinuclease ABC; B subunit,DNA replication/maintenance,c,monomer,3UWX,,656,,
+MG_074_MONOMER,related to MG075,host cell interaction,e,monomer,,,137,,
+MG_075_MONOMER,116 kDa surface antigen,host cell interaction,m,monomer,6G04,,1024,,
+MG_076_MONOMER,,MG-specific,m,monomer,,,138,,
+MG_077_078_079_080_321_PENTAMER,oligopeptide ABC transporter,protein transport/singaling,m,complex,4TQU,(1.0)MG_077_MONOMER'+ '(1.0)MG_078_MONOMER'+ '(1.0)MG_079_MONOMER'+ '(1.0)MG_080_MONOMER'+ '(1.0)MG_321_MONOMER',,,
+MG_077_MONOMER,oligopeptide ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,407,,
+MG_078_MONOMER,oligopeptide ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,376,,
+MG_079_MONOMER,oligopeptide ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4TQU,,402,,
+MG_080_MONOMER,oligopeptide ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4TQU,,848,,
+MG_081_MONOMER,ribosomal protein L11,translation,c,monomer,,,137,,
+MG_082_MONOMER,ribosomal protein L1,translation,c,monomer,,,226,,
+MG_083_MONOMER,peptidyl-tRNA hydrolase,RNA synthesis/maturation,c,monomer,,,189,,
+MG_084_MONOMER,tRNA(Ile)-lysidine synthetase,RNA synthesis/maturation,c,monomer,,,290,,
+MG_084_TETRAMER,tRNA(Ile)-lysidine synthetase,RNA synthesis/maturation,c,complex,,(4.0)MG_084_MONOMER',,,
+MG_085_HEXAMER,HPr(Ser) kinase/phosphatase,metabolism,c,complex,,(6.0)MG_085_MONOMER',,,
+MG_085_MONOMER,HPr(Ser) kinase/phosphatase,metabolism,c,monomer,,,311,,
+MG_086_MONOMER,prolipoprotein diacylglyceryl transferase,protein folding/maturation,m,monomer,,,382,,
+MG_087_MONOMER,ribosomal protein S12,translation,c,monomer,,,139,,
+MG_088_MONOMER,ribosomal protein S7,translation,c,monomer,,,155,,
+MG_089_DIMER,translation elongation factor G,translation,c,complex,,(2.0)MG_089_MONOMER',,,
+MG_089_MONOMER,translation elongation factor G,translation,c,monomer,,,688,,
+MG_090_MONOMER,ribosomal protein S6,translation,c,monomer,,,208,,
+MG_091_MONOMER,single-strand binding protein family,DNA replication/maintenance,c,monomer,,,160,,
+MG_091_OCTAMER,single-strand binding protein family; octamer,DNA replication/maintenance,c,complex,,(2.0)MG_091_TETRAMER',,ssDNA,145
+MG_091_TETRAMER,single-strand binding protein family; tetramer,DNA replication/maintenance,c,complex,,(4.0)MG_091_MONOMER',,ssDNA,72
+MG_092_MONOMER,ribosomal protein S18,translation,c,monomer,,,105,,
+MG_093_MONOMER,ribosomal protein L9,translation,c,monomer,,,150,,
+MG_094_HEXAMER,replicative DNA helicase,DNA replication/maintenance,c,complex,,(6.0)MG_094_MONOMER',,ssDNA,20
+MG_094_MONOMER,replicative DNA helicase,DNA replication/maintenance,c,monomer,4NMN,,468,,
+MG_095_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,5CYB,,398,,
+MG_096_MONOMER,,cytokinesis/motility,e,monomer,,,650,,
+MG_097_MONOMER,uracil-DNA glycosylase; putative,DNA replication/maintenance,c,monomer,,,245,dsDNA,9
+MG_098_099_100_TRIMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase,RNA synthesis/maturation,c,complex,3AL0,(1.0)MG_098_MONOMER'+ '(1.0)MG_099_MONOMER'+ '(1.0)MG_100_MONOMER',,,
+MG_098_MONOMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; C subunit,RNA synthesis/maturation,c,monomer,3AL0,,477,,
+MG_099_MONOMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; A subunit,RNA synthesis/maturation,c,monomer,3AL0,,477,,
+MG_100_MONOMER,glutamyl-tRNA(Gln) and/or aspartyl-tRNA(Asn) amidotransferase; B subunit,RNA synthesis/maturation,c,monomer,3AL0,,477,,
+MG_101_MONOMER,Uncharacterized HTH-type transcriptional regulator,transcription,c,monomer,,,222,dsDNA,30
+MG_102_DIMER,thioredoxin-disulfide reductase,metabolism,c,complex,,(2.0)MG_102_MONOMER',,,
+MG_102_DIMER_ox,oxidized thioredoxin-disulfide reductase,metabolism,c,complex,,(1.0)MG_102_DIMER'+ '(4.0)H',,,
+MG_102_MONOMER,thioredoxin-disulfide reductase,metabolism,c,monomer,,,315,,
+MG_103_MONOMER,transcriptional regulator; putative,transcription,c,monomer,,,280,,
+MG_104_MONOMER,ribonuclease R,RNA synthesis/maturation,c,monomer,,,725,,
+MG_105_MONOMER,putative DNA integrity scanning protein,DNA replication/maintenance,c,monomer,,,200,,
+MG_105_OCTAMER,putative DNA integrity scanning protein,DNA replication/maintenance,c,complex,,(8.0)MG_105_MONOMER',,ssDNA,35
+MG_106_DIMER,peptide deformylase,protein folding/maturation,c,complex,,(2.0)MG_106_MONOMER',,,
+MG_106_MONOMER,peptide deformylase,protein folding/maturation,c,monomer,,,193,,
+MG_107_DIMER,guanylate kinase,metabolism,c,complex,,(2.0)MG_107_MONOMER',,,
+MG_107_MONOMER,guanylate kinase,metabolism,c,monomer,,,189,,
+MG_108_MONOMER,Ser/Thr protein phosphatase 2C; putative,protein transport/singaling,c,monomer,,,260,,
+MG_109_DIMER,serine/threonine protein kinase; putative,protein transport/singaling,m,complex,,(2.0)MG_109_MONOMER',,,
+MG_109_MONOMER,serine/threonine protein kinase; putative,protein transport/singaling,c,monomer,,,387,,
+MG_110_MONOMER,ribosome small subunit-dependent GTPase A,protein folding/maturation,c,monomer,,,278,,
+MG_111_DIMER,glucose-6-phosphate isomerase,metabolism,c,complex,,(2.0)MG_111_MONOMER',,,
+MG_111_MONOMER,glucose-6-phosphate isomerase,metabolism,c,monomer,,,433,,
+MG_112_DIMER,ribulose-phosphate 3-epimerase,metabolism,c,complex,,(2.0)MG_112_MONOMER',,,
+MG_112_MONOMER,ribulose-phosphate 3-epimerase,metabolism,c,monomer,,,209,,
+MG_113_DIMER,asparaginyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_113_MONOMER',,,
+MG_113_MONOMER,asparaginyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,456,,
+MG_114_DIMER,CDP-diacylglycerol–glycerol-3-phosphate 3-phosphatidyltransferase,metabolism,m,complex,,(2.0)MG_114_MONOMER',,,
+MG_114_MONOMER,CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase,metabolism,c,monomer,,,236,,
+MG_115_MONOMER,competence/damage-inducible protein CinA domain protein,DNA replication/maintenance,c,monomer,,,157,,
+MG_116_MONOMER,glycosyl transferase/terpenoid synthesis; putative,metabolism,c,monomer,,,251,,
+MG_117_MONOMER,transcription factor; putative zinc-finger domain,transcription,c,monomer,,,214,,
+MG_118_DIMER,UDP-glucose 4-epimerase,metabolism,c,complex,,(2.0)MG_118_MONOMER',,,
+MG_118_MONOMER,UDP-glucose 4-epimerase,metabolism,c,monomer,,,340,,
+MG_119_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4FI3,,564,,
+MG_120_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; permease protein,protein transport/singaling,c,monomer,4FI3,,520,,
+MG_121_MONOMER,Monosaccharide (riboside/galactoside) ABC transporter; permease protein,protein transport/singaling,c,monomer,4FI3,,306,,
+MG_122_MONOMER,DNA topoisomerase I,DNA replication/maintenance,c,monomer,,,709,dsDNA,19
+MG_123_DIMER,arginine deaminase,RNA synthesis/maturation,m,complex,3TM8,(2.0)MG_123_MONOMER',,,
+MG_123_MONOMER,arginine deaminasse,RNA synthesis/maturation,c,monomer,3TM8,,471,,
+MG_124_MONOMER,thioredoxin,metabolism,c,monomer,,,102,,
+MG_124_MONOMER_ox,oxidized thioredoxin,metabolism,c,complex,,(1.0)MG_124_MONOMER'+ '(2.0)H',,,
+MG_125_MONOMER,Cof-like hydrolase; putative,metabolism,c,monomer,,,285,,
+MG_126_DIMER,tryptophanyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_126_MONOMER',,,
+MG_126_MONOMER,tryptophanyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,347,,
+MG_127_MONOMER,Spx subfamily protein,transcription,c,monomer,,,145,dsDNA,25
+MG_127_MONOMER_ox,oxidized Spx subfamily protein,transcription,c,complex,,(1.0)MG_127_MONOMER'+ '(2.0)H',,,
+MG_128_HEXAMER,inorganic polyphosphate/ATP-NAD kinase; probable,metabolism,c,complex,,(6.0)MG_128_MONOMER',,,
+MG_128_MONOMER,inorganic polyphosphate/ATP-NAD kinase; probable,metabolism,c,monomer,,,259,,
+MG_129_MONOMER,Putative phosphotransferase enzyme glucose-specific IIB component,metabolism,e,monomer,,,117,,
+MG_130_MONOMER,ribonuclease Y; mRNA decay,RNA synthesis/maturation,m,monomer,3HC1,,484,,
+MG_131_MONOMER,hypothetical protein,uncharacterized,m,monomer,,,74,,
+MG_132_DIMER,purine nucleoside phosphoramidase,metabolism,c,complex,,(2.0)MG_132_MONOMER',,,
+MG_132_MONOMER,purine nucleoside phosphoramidase,metabolism,c,monomer,,,141,,
+MG_133_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,264,,
+MG_134_MONOMER,DNA-binding protein; nucleoid-associated,DNA replication/maintenance,c,monomer,,,100,,
+MG_135_MONOMER,membrane protein; putative,metabolism,m,monomer,,,280,,
+MG_136_DIMER,lysyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_136_MONOMER',,,
+MG_136_MONOMER,lysyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,490,,
+MG_137_DIMER,UDP-galactopyranose mutase,metabolism,c,complex,,(2.0)MG_137_MONOMER',,,
+MG_137_MONOMER,UDP-galactopyranose mutase,metabolism,c,monomer,,,404,,
+MG_138_MONOMER,Translation elongation factor 4,translation,c,monomer,,,598,,
+MG_139_DIMER,ribonuclease J,RNA synthesis/maturation,c,complex,,(2.0)MG_139_MONOMER',,,
+MG_139_MONOMER,ribonuclease J,RNA synthesis/maturation,c,monomer,,,569,,
+MG_140_MONOMER,putative ATP-dependent helicase,DNA replication/maintenance,c,monomer,,,1113,,
+MG_141_MONOMER,transcription termination factor NusA,transcription,c,monomer,,,531,,
+MG_142_MONOMER,translation initiation factor IF-2,translation,c,monomer,,,619,,
+MG_143_MONOMER,ribosome-binding factor A,protein folding/maturation,c,monomer,,,112,,
+MG_144_MONOMER,signal recognition particle; locates ribosome to membrane,translation,m,monomer,5TCX,,279,,
+MG_145_MONOMER,riboflavin biosynthesis protein RibF,metabolism,c,monomer,,,269,,
+MG_146_MONOMER,UPF0053 protein,protein transport/singaling,e,monomer,,,424,,
+MG_147_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,375,,
+MG_148_MONOMER,PF09903 family; widely conserved; structural; putative cell motility; putative cell cycle; putative,uncharacterized,m,monomer,6EL1,,409,,
+MG_149_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,281,,
+MG_150_MONOMER,ribosomal protein S10,translation,c,monomer,,,106,,
+MG_151_MONOMER,ribosomal protein L3,translation,c,monomer,,,257,,
+MG_152_MONOMER,ribosomal protein L4/L1 family,translation,c,monomer,,,211,,
+MG_153_MONOMER,ribosomal protein L23,translation,c,monomer,,,106,,
+MG_154_MONOMER,ribosomal protein L2,translation,c,monomer,,,285,,
+MG_155_MONOMER,ribosomal protein S19,translation,c,monomer,,,87,,
+MG_156_MONOMER,ribosomal protein L22,translation,c,monomer,,,144,,
+MG_157_MONOMER,ribosomal protein S3,translation,c,monomer,,,268,,
+MG_158_MONOMER,ribosomal protein L16,translation,c,monomer,,,138,,
+MG_159_MONOMER,ribosomal protein L29,translation,c,monomer,,,200,,
+MG_160_MONOMER,ribosomal protein S17,translation,c,monomer,,,85,,
+MG_161_MONOMER,ribosomal protein L14,translation,c,monomer,,,122,,
+MG_162_MONOMER,ribosomal protein L24,translation,c,monomer,,,108,,
+MG_163_MONOMER,ribosomal protein L5,translation,c,monomer,,,180,,
+MG_164_MONOMER,ribosomal protein S14,translation,c,monomer,,,61,,
+MG_165_MONOMER,ribosomal protein S8,translation,c,monomer,,,141,,
+MG_166_MONOMER,ribosomal protein L6,translation,c,monomer,,,184,,
+MG_167_MONOMER,ribosomal protein L18,translation,c,monomer,,,115,,
+MG_168_MONOMER,ribosomal protein S5,translation,c,monomer,,,211,,
+MG_169_MONOMER,ribosomal protein L15,translation,c,monomer,,,150,,
+MG_170_MONOMER,preprotein translocase; SecY subunit,protein transport/singaling,c,monomer,5MG3,,475,,
+MG_171_MONOMER,adenylate kinase,metabolism,c,monomer,,,214,,
+MG_172_MONOMER,methionine aminopeptidase; type I,protein folding/maturation,c,monomer,,,248,,
+MG_173_MONOMER,translation initiation factor IF-1,translation,c,monomer,,,70,,
+MG_174_MONOMER,ribosomal protein L36,translation,c,monomer,,,37,,
+MG_175_MONOMER,ribosomal protein S13,translation,c,monomer,,,124,,
+MG_176_MONOMER,ribosome 30S protein S11,translation,c,monomer,,,121,,
+MG_177_MONOMER,DNA-directed RNA polymerase; alpha subunit,transcription,c,monomer,,,328,,
+MG_178_MONOMER,ribosomal protein L17,translation,c,monomer,,,123,,
+MG_179_180_181_TETRAMER,metal ion (cobalt) ABC transporter,protein transport/singaling,m,complex,5JSZ,(1.0)MG_179_MONOMER'+ '(1.0)MG_180_MONOMER'+ '(2.0)MG_181_MONOMER',,,
+MG_179_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5JSZ,,274,,
+MG_180_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5JSZ,,304,,
+MG_181_MONOMER,metal ion (cobalt) ABC transporter; permease protein,protein transport/singaling,c,monomer,5JSZ,,420,,
+MG_182_DIMER,Pseudouridylate synthase,RNA synthesis/maturation,c,complex,,(2.0)MG_182_MONOMER',,,
+MG_182_MONOMER,tRNA pseudouridine synthase A,RNA synthesis/maturation,c,monomer,,,244,,
+MG_183_MONOMER,oligoendopeptidase F,protein folding/maturation,c,monomer,,,607,,
+MG_184_DIMER,adenine-specific DNA modification methylase,DNA replication/maintenance,c,complex,2OKC,(2.0)MG_184_MONOMER',,dsDNA,6
+MG_184_MONOMER,adenine-specific DNA modification methylase,DNA replication/maintenance,c,monomer,2OKC,,317,,
+MG_185_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,701,,
+MG_186_187_188_189_PENTAMER,Oligosaccharide or polyol ABC transporter,protein transport/singaling,m,complex,4TQU,(2.0)MG_186_MONOMER'+ '(1.0)MG_187_MONOMER'+ '(1.0)MG_188_MONOMER'+ '(1.0)MG_189_MONOMER',,,
+MG_186_MONOMER,Oligosaccharide or polyol ABC transporter; substrate binding protein,protein transport/singaling,c,monomer,4TQU,,250,,
+MG_187_MONOMER,Oligosaccharide or polyol ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,4TQU,,585,,
+MG_188_MONOMER,Oligosaccharide or polyol ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,329,,
+MG_189_MONOMER,Oligosaccharide or polyol ABC transporter; permease protein,protein transport/singaling,c,monomer,4TQU,,318,,
+MG_190_MONOMER,phosphoesterase,metabolism,c,monomer,,,318,,
+MG_191_MONOMER,MgPa adhesin,cytokinesis/motility,m,monomer,6RUT,,1444,,
+MG_192_MONOMER,P110 protein,cytokinesis/motility,m,monomer,6RUT,,1053,,
+MG_194_195_TETRAMER,phenylalanyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_194_MONOMER'+ '(2.0)MG_195_MONOMER',,,
+MG_194_MONOMER,phenylalanyl-tRNA synthetase; alpha subunit,RNA synthesis/maturation,c,monomer,,,341,,
+MG_195_MONOMER,phenylalanyl-tRNA synthetase; beta subunit,RNA synthesis/maturation,c,monomer,,,806,,
+MG_196_MONOMER,translation initiation factor IF-3,translation,c,monomer,,,181,,
+MG_197_MONOMER,ribosomal protein L35,translation,c,monomer,,,59,,
+MG_198_MONOMER,ribosomal protein L20,translation,c,monomer,,,124,,
+MG_199_MONOMER,ribonuclease HIII; putative; frameshift,RNA synthesis/maturation,c,monomer,,,235,,
+MG_200_MONOMER,DnaJ domain protein,protein folding/maturation,c,monomer,,,601,,
+MG_201_DIMER,co-chaperone GrpE,protein folding/maturation,c,complex,,(2.0)MG_201_MONOMER',,,
+MG_201_MONOMER,co-chaperone GrpE,protein folding/maturation,c,monomer,,,217,,
+MG_202_MONOMER,acyl-CoA binding protein,metabolism,c,monomer,,,122,,
+MG_203_204_TETRAMER,topoisomerase IV,DNA replication/maintenance,c,complex,,(2.0)MG_203_MONOMER'+ '(2.0)MG_204_MONOMER',,dsDNA,34
+MG_203_MONOMER,DNA topoisomerase IV; B subunit,DNA replication/maintenance,c,monomer,4JUO,,633,,
+MG_204_MONOMER,DNA topoisomerase IV; A subunit,DNA replication/maintenance,c,monomer,1ZVU,,781,,
+MG_205_DIMER,heat-inducible transcription repressor HrcA; putative,transcription,c,complex,,(2.0)MG_205_MONOMER',,dsDNA,33
+MG_205_MONOMER,heat-inducible transcription repressor HrcA; putative,transcription,c,monomer,,,343,,
+MG_206_MONOMER,excinuclease ABC; C subunit,DNA replication/maintenance,c,monomer,3C65,,597,,
+MG_207_MONOMER,Ser/Thr protein phosphatase 2A,metabolism,c,monomer,,,167,,
+MG_208_DIMER,glycoprotease family protein,protein folding/maturation,c,complex,,(2.0)MG_208_MONOMER',,,
+MG_208_MONOMER,glycoprotease,protein folding/maturation,c,monomer,,,196,,
+MG_209_MONOMER,23S rRNA pseudouridine synthase; U955; U2504; U2580,RNA synthesis/maturation,c,monomer,,,308,,
+MG_210_MONOMER,prolipoprotein signal peptidase; signal peptidase II,protein folding/maturation,m,monomer,,,181,,
+MG_211_MONOMER,DivIVA domain,cytokinesis/motility,c,monomer,,,147,,
+MG_212_MONOMER,1-acyl-sn-glycerol-3-phosphate acyltransferase; putative,metabolism,m,monomer,,,268,,
+MG_213_214_298_6MER,chromosome segregation protein SMC,cytokinesis/motility,c,complex,,(2.0)MG_213_MONOMER'+ '(2.0)MG_214_MONOMER'+ '(2.0)MG_298_MONOMER',,dsDNA,630
+MG_213_214_298_6MER_ADP,Chromosome Segregation Protein SMC with SCP Proteins-ADP,cytokinesis/motility,c,complex,,(1.0)ADP'+ '(1.0)MG_213_214_298_6MER',,dsDNA,630
+MG_213_MONOMER,segregation and condensation protein A,cytokinesis/motility,c,monomer,,,471,,
+MG_214_MONOMER,segregation and condensation protein B,cytokinesis/motility,c,monomer,,,207,,
+MG_215_MONOMER,6-phosphofructokinase,metabolism,c,monomer,,,323,,
+MG_215_TETRAMER,6-phosphofructokinase,metabolism,c,complex,,(4.0)MG_215_MONOMER',,,
+MG_216_MONOMER,pyruvate kinase,metabolism,c,monomer,,,508,,
+MG_216_TETRAMER,pyruvate kinase,metabolism,c,complex,,(4.0)MG_216_MONOMER',,,
+MG_217_MONOMER,P65 adhesin,cytokinesis/motility,c,monomer,,,372,,
+MG_218_MONOMER,high molecular weight cytadherence accessory protein 2,cytokinesis/motility,c,monomer,,,1805,,
+MG_219_MONOMER,,MG-specific,c,monomer,,,148,,
+MG_220_MONOMER,membrane-bound protein,MG-specific,e,monomer,,,93,,
+MG_221_MONOMER,mraZ protein,cytokinesis/motility,c,monomer,,,141,,
+MG_221_OCTAMER,mraZ protein,cytokinesis/motility,c,complex,,(8.0)MG_221_MONOMER',,dsDNA,85
+MG_222_MONOMER,S-adenosyl-methyltransferase MraW,RNA synthesis/maturation,c,monomer,,,309,,
+MG_223_MONOMER,cell division ring formation,cytokinesis/motility,c,monomer,,,411,,
+MG_224_2MER_GTP,cell division protein ftsZ activated 2mer,cytokinesis/motility,c,complex,1W5B,(2.0)MG_224_MONOMER_GTP',,,
+MG_224_3MER_GTP,cell division protein ftsZ activated 3mer,cytokinesis/motility,c,complex,,(1.0)MG_224_2MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_4MER_GTP,cell division protein ftsZ activated 4mer,cytokinesis/motility,c,complex,,(1.0)MG_224_3MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_5MER_GTP,cell division protein ftsZ activated 5mer,cytokinesis/motility,c,complex,,(1.0)MG_224_4MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_6MER_GTP,cell division protein ftsZ activated 6mer,cytokinesis/motility,c,complex,,(1.0)MG_224_5MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_7MER_GTP,cell division protein ftsZ activated 7mer,cytokinesis/motility,c,complex,,(1.0)MG_224_6MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_8MER_GTP,cell division protein ftsZ activated 8mer,cytokinesis/motility,c,complex,,(1.0)MG_224_7MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_9MER_GDP,cell division protein ftsZ deactivated 9mer,cytokinesis/motility,c,complex,,(9.0)H2O'+ '(1.0)MG_224_9MER_GTP'+ '(9.0)H'+ '(9.0)PI',,,
+MG_224_9MER_GTP,cell division protein ftsZ activated 9mer,cytokinesis/motility,c,complex,,(1.0)MG_224_8MER_GTP'+ '(1.0)MG_224_MONOMER_GTP',,,
+MG_224_MONOMER,cell division protein FtsZ,cytokinesis/motility,c,monomer,2VXY,,369,,
+MG_224_MONOMER_GDP,cell division protein ftsZ hydrolysed,cytokinesis/motility,c,complex,2VXY,(1.0)GDP'+ '(1.0)MG_224_MONOMER',,,
+MG_224_MONOMER_GTP,cell division protein ftsZ activated,cytokinesis/motility,c,complex,2VXY,(1.0)GTP'+ '(1.0)MG_224_MONOMER',,,
+MG_225_DIMER,amino acid transporter,protein transport/singaling,m,complex,,(2.0)MG_225_MONOMER',,,
+MG_225_MONOMER,amino acid-polyamine-organocation (APC) permease,protein transport/singaling,c,monomer,,,489,,
+MG_226_DIMER,amino acid transporter,protein transport/singaling,m,complex,,(2.0)MG_226_MONOMER',,,
+MG_226_MONOMER,amino acid-polyamine-organocation (APC) permease,protein transport/singaling,c,monomer,,,492,,
+MG_227_DIMER,thymidylate synthase,metabolism,c,complex,,(2.0)MG_227_MONOMER',,,
+MG_227_MONOMER,thymidylate synthase,metabolism,c,monomer,,,287,,
+MG_228_MONOMER,dihydrofolate reductase,metabolism,c,monomer,,,160,,
+MG_228_TETRAMER,dihydrofolate reductase,metabolism,c,complex,,(4.0)MG_228_MONOMER',,,
+MG_229_231_TETRAMER,ribonucleoside-diphosphate reductase,metabolism,c,complex,2BQ1,(2.0)MG_229_MONOMER'+ '(2.0)MG_231_MONOMER',,,
+MG_229_231_TETRAMER_ox,oxidized ribonucleoside-diphosphate reductase,metabolism,c,complex,2BQ1,(1.0)MG_229_231_TETRAMER'+ '(1.0)O2'+ '(4.0)H',,,
+MG_229_MONOMER,ribonucleoside-diphosphate reductase; beta chain,metabolism,c,monomer,2BQ1,,340,,
+MG_230_MONOMER,ribonucleotide reductase stimulatory protein,metabolism,c,monomer,,,153,,
+MG_231_MONOMER,ribonucleoside-diphosphate reductase; alpha chain,metabolism,c,monomer,2BQ1,,721,,
+MG_232_MONOMER,ribosomal protein L21,translation,c,monomer,,,100,,
+MG_233_MONOMER,widely conserved; ribosomal protein; putative,translation,c,monomer,,,99,,
+MG_234_MONOMER,ribosomal protein L27,translation,c,monomer,,,104,,
+MG_235_MONOMER,apurinic endonuclease,DNA replication/maintenance,c,monomer,,,291,dsDNA,7
+MG_236_MONOMER,ferric uptake repressor,transcription,c,monomer,,,140,dsDNA,36
+MG_237_MONOMER,transcriptional regulator; putative,transcription,c,monomer,,,294,,
+MG_238_MONOMER,trigger factor,protein folding/maturation,c,monomer,,,444,,
+MG_239_HEXAMER,ATP-dependent protease La,protein folding/maturation,c,complex,3M6A,(6.0)MG_239_MONOMER',,,
+MG_239_MONOMER,ATP-dependent protease La,protein folding/maturation,c,monomer,3M6A,,795,,
+MG_240_HEXAMER,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,metabolism,c,complex,,(6.0)MG_240_MONOMER',,,
+MG_240_MONOMER,nicotinamide-nucleotide adenylyltransferase/conserved hypothetical protein,metabolism,c,monomer,,,350,,
+MG_241_MONOMER,membrane protein; 241/242 homologs,protein transport/singaling,m,monomer,2XWU,,620,,
+MG_242_MONOMER,membrane protein; 241/242 homologs,protein transport/singaling,m,monomer,5XAM,,630,,
+MG_243_MONOMER,conserved hypothetical protein; authentic frameshift,uncharacterized,m,monomer,,,226,,
+MG_244_DIMER,3-5' helicase,DNA replication/maintenance,c,complex,4C2T,(2.0)MG_244_MONOMER',,dsDNA,15
+MG_244_MONOMER,3-5' helicase,DNA replication/maintenance,c,monomer,,,703,,
+MG_245_MONOMER,5-formyltetrahydrofolate cyclo-ligase; putative,metabolism,c,monomer,,,165,,
+MG_246_MONOMER,Ser/Thr protein phosphatase 2A,protein transport/singaling,c,monomer,,,281,,
+MG_247_MONOMER,membrane protein; putative,metabolism,m,monomer,,,239,,
+MG_248_MONOMER,tRNA methyltransferase (m1A22),RNA synthesis/maturation,c,monomer,,,218,,
+MG_249_MONOMER,RNA polymerase sigma factor RpoD,transcription,c,monomer,,,497,dsDNA,58
+MG_250_MONOMER,DNA primase,DNA replication/maintenance,c,monomer,2AU3,,607,ssDNA,14
+MG_251_DIMER,glycyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_251_MONOMER',,,
+MG_251_MONOMER,glycyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,446,,
+MG_252_DIMER,23S rRNA methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_252_MONOMER',,,
+MG_252_MONOMER,23S rRNA methyltransferase; G2251,RNA synthesis/maturation,c,monomer,,,242,,
+MG_253_MONOMER,cysteinyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,428,,
+MG_254_MONOMER,DNA ligase; NAD-dependent,DNA replication/maintenance,c,monomer,,,659,dsDNA,19
+MG_255_MONOMER,cell division protein,cytokinesis/motility,m,monomer,,,365,,
+MG_256_MONOMER,MG/MP only,MG-specific,m,monomer,,,256,,
+MG_257_MONOMER,ribosomal protein L31,translation,c,monomer,,,97,,
+MG_258_MONOMER,peptide chain release factor 1,translation,c,monomer,,,359,,
+MG_259_MONOMER,modification methylase,translation,c,monomer,,,456,,
+MG_259_TETRAMER,modification methylase,translation,c,complex,,(4.0)MG_259_MONOMER',,,
+MG_260_MONOMER,lipoprotein; putative,protein transport/singaling,m,monomer,,,765,,
+MG_261_MONOMER,DNA polymerase III; alpha subunit,DNA replication/maintenance,c,monomer,5FKW,,874,,
+MG_262_MONOMER,polI-like 5'-3' exonuclease; putative,DNA replication/maintenance,c,monomer,,,291,dsDNA,20
+MG_263_MONOMER,Cof-like hydrolase,metabolism,c,monomer,,,291,,
+MG_264_MONOMER,dephospho-CoA kinase,metabolism,c,monomer,,,198,,
+MG_265_DIMER,sugar phosphatase,metabolism,c,complex,,(2.0)MG_265_MONOMER',,,
+MG_265_MONOMER,sugar phosphatase,metabolism,c,monomer,,,278,,
+MG_266_MONOMER,leucyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,792,,
+MG_267_MONOMER,acetyl transferase; putative,MG-specific,m,monomer,,,115,,
+MG_268_MONOMER,deoxynucleoside kinase; putative,metabolism,c,monomer,,,228,,
+MG_269_MONOMER,,MG-specific,c,monomer,,,340,,
+MG_270_MONOMER,lipoyltransferase/lipoate-protein ligase; putative,metabolism,c,monomer,,,336,,
+MG_271_272_273_274_192MER,pyruvate dehydrogenase,metabolism,c,complex,,(12.0)MG_271_MONOMER'+ '(60.0)MG_272_MONOMER'+ '(60.0)MG_273_MONOMER'+ '(60.0)MG_274_MONOMER',,,
+MG_271_272_273_274_192MER_ox,oxidized dihydrolipoamide dehydrogenase,metabolism,c,complex,,(1.0)MG_271_272_273_274_192MER'+ '(24.0)H',,,
+MG_271_MONOMER,dihydrolipoamide dehydrogenase,metabolism,c,monomer,,,457,,
+MG_272_MONOMER,dihydrolipoamide acetyltransferase,metabolism,c,monomer,,,384,,
+MG_273_MONOMER,pyruvate dehydrogenase component E1; beta subunit,metabolism,c,monomer,,,326,,
+MG_274_MONOMER,pyruvate dehydrogenase component E1; alpha subunit,metabolism,c,monomer,,,358,,
+MG_275_MONOMER,NADH oxidase,metabolism,c,monomer,,,478,,
+MG_275_TETRAMER,NADH oxidase,metabolism,c,complex,,(4.0)MG_275_MONOMER',,,
+MG_276_DIMER,adenine phosphoribosyltransferase,metabolism,c,complex,,(2.0)MG_276_MONOMER',,,
+MG_276_MONOMER,adenine phosphoribosyltransferase,metabolism,c,monomer,,,180,,
+MG_277_MONOMER,Protein-export membrane protein secDF,protein transport/singaling,c,monomer,5MG3,,970,,
+MG_278_DIMER,GTP pyrophosphokinase,metabolism,c,complex,,(2.0)MG_278_MONOMER',,,
+MG_278_MONOMER,GTP diphosphokinase,metabolism,c,monomer,,,720,,
+MG_279_MONOMER,,uncharacterized,m,monomer,,,218,,
+MG_280_MONOMER,sensory rhodopsin II transducer motif,uncharacterized,m,monomer,5JEQ,,265,,
+MG_281_MONOMER,protein M,host cell interaction,m,monomer,4NZR,,556,,
+MG_282_MONOMER,transcription elongation factor GreA,transcription,c,monomer,,,161,,
+MG_283_DIMER,prolyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_283_MONOMER',,,
+MG_283_MONOMER,prolyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,483,,
+MG_284_MONOMER,,MG-specific,c,monomer,,,132,,
+MG_285_MONOMER,,MG-specific,c,monomer,,,347,,
+MG_286_MONOMER,,MG-specific,e,monomer,,,196,,
+MG_287_MONOMER,acyl carrier protein,metabolism,c,monomer,,,84,,
+MG_287_MONOMER_ACP,holo acyl carrier protein,metabolism,c,complex,,(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)H'+ '(1.0)PAP',,,
+MG_287_MONOMER_ddcaACP,Dodecanoyl-ACP (n-C12:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)DDCA'+ '(1.0)MG_287_MONOMER'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_287_MONOMER_hdeACP,cis-hexadec-9-enoyl-[acyl-carrier protein] (n-C16:1),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)HDCEA'+ '(1.0)MG_287_MONOMER'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_287_MONOMER_myrsACP,Myristoyl-ACP (n-C14:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)TTDCA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_287_MONOMER_ocdcaACP,Octadecanoyl-ACP (n-C18:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)OCDCA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_287_MONOMER_octeACP,cis-octadec-11-enoyl-[acyl-carrier protein] (n-C18:1),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)OCDCEA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_287_MONOMER_palmACP,Palmitoyl-ACP (n-C16:0ACP),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)HDCA'+ '(1.0)MG_287_MONOMER'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_287_MONOMER_tdeACP,cis-tetradec-7-enoyl-[acyl-carrier protein] (n-C14:1),metabolism,c,complex,,(1.0)ATP'+ '(1.0)COA'+ '(1.0)MG_287_MONOMER'+ '(1.0)TTDCEA'+ '(1.0)AMP'+ '(1.0)H'+ '(1.0)PAP'+ '(1.0)PPI',,,
+MG_288_MONOMER,protein L,uncharacterized,c,monomer,,,414,,
+MG_289_290_291_PENTAMER,phosphonate ABC transporter,protein transport/singaling,m,complex,2ONK,(1.0)MG_289_MONOMER'+ '(2.0)MG_290_MONOMER'+ '(2.0)MG_291_MONOMER',,,
+MG_289_MONOMER,phosphonate ABC transporter; substrate binding protein (P37); putative,protein transport/singaling,c,monomer,3MYU,,368,,
+MG_290_MONOMER,phosphonate ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,2ONK,,245,,
+MG_291_MONOMER,phosphonate ABC transporter; permease protein (P69); putative,protein transport/singaling,c,monomer,,,543,,
+MG_292_MONOMER,alanyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,900,,
+MG_292_TETRAMER,alanyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(4.0)MG_292_MONOMER',,,
+MG_293_DIMER,glycerophosphoryl diester phosphodiesterase family protein,metabolism,c,complex,,(2.0)MG_293_MONOMER',,,
+MG_293_MONOMER,glycerophosphoryl diester phosphodiesterase,metabolism,c,monomer,,,244,,
+MG_294_MONOMER,major facilitator superfamily (MFS) protein,protein transport/singaling,m,monomer,,,474,,
+MG_295_MONOMER,tRNA U34 sulfurtransferase,RNA synthesis/maturation,c,monomer,,,367,,
+MG_295_MONOMER_ox,oxidized tRNA U34 sulfurtransferase,RNA synthesis/maturation,c,complex,,(1.0)MG_295_MONOMER'+ '(2.0)H',,,
+MG_296_MONOMER,cell division/septation,cytokinesis/motility,c,monomer,,,129,,
+MG_297_MONOMER,signal recognition particle receptor,cytokinesis/motility,c,monomer,,,346,,
+MG_298_MONOMER,chromosome segregation protein SMC,DNA replication/maintenance,c,monomer,4AD8,,982,,
+MG_299_DIMER,phosphate acetyltransferase,metabolism,c,complex,,(2.0)MG_299_MONOMER',,,
+MG_299_MONOMER,phosphate acetyltransferase,metabolism,c,monomer,,,320,,
+MG_300_MONOMER,phosphoglycerate kinase,metabolism,c,monomer,,,411,,
+MG_301_MONOMER,glyceraldehyde-3-phosphate dehydrogenase; type I,metabolism,c,monomer,,,337,,
+MG_301_TETRAMER,glyceraldehyde-3-phosphate dehydrogenase; type I,metabolism,c,complex,,(4.0)MG_301_MONOMER',,,
+MG_302_303_304_TETRAMER,metal ion (cobalt) ABC transporter,protein transport/singaling,m,complex,5X3X,(2.0)MG_302_MONOMER'+ '(1.0)MG_303_MONOMER'+ '(1.0)MG_304_MONOMER',,,
+MG_302_MONOMER,metal ion (cobalt) ABC transporter; permease protein; putative,protein transport/singaling,c,monomer,5X3X,,317,,
+MG_303_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5X3X,,357,,
+MG_304_MONOMER,metal ion (cobalt) ABC transporter; ATP-binding protein; putative,protein transport/singaling,c,monomer,5X3X,,270,,
+MG_305_MONOMER,chaperone,protein folding/maturation,c,monomer,5OBU,,595,,
+MG_306_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,4KPP,,393,,
+MG_307_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,1177,,
+MG_308_MONOMER,ATP-dependent RNA helicase,RNA synthesis/maturation,c,monomer,,,410,,
+MG_309_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,1QGK,,1225,,
+MG_310_MONOMER,hydrolase; Putative esterase/lipase 1,metabolism,e,monomer,,,268,,
+MG_311_MONOMER,ribosomal protein S4,translation,c,monomer,,,205,,
+MG_312_MONOMER,high molecular weight cytadherence accessory protein 1,cytokinesis/motility,c,monomer,,,1139,,
+MG_313_MONOMER,membrane protein; putative,cytokinesis/motility,m,monomer,,,287,,
+MG_314_MONOMER,cytadherence,cytokinesis/motility,m,monomer,,,443,,
+MG_315_MONOMER,DNA polymerase III; delta subunit; putative,DNA replication/maintenance,c,monomer,1JR3,,297,,
+MG_316_DIMER,DNA internalization-related competence protein ComEC/Rec2,DNA replication/maintenance,m,complex,,(2.0)MG_316_MONOMER',,,
+MG_316_MONOMER,DNA internalization-related competence protein ComEC/Rec2,DNA replication/maintenance,c,monomer,5AYM,,369,,
+MG_317_MONOMER,high molecular weight cytadherence accessory protein 3,cytokinesis/motility,c,monomer,,,599,,
+MG_318_MONOMER,P32 adhesin,cytokinesis/motility,m,monomer,,,280,,
+MG_319_MONOMER,cytadherence; putative,cytokinesis/motility,m,monomer,5TCX,,178,,
+MG_320_MONOMER,membrane protein; putative,cytokinesis/motility,m,monomer,,,286,,
+MG_321_MONOMER,oligopeptide ABC transporter; substrate binding protein,protein transport/singaling,c,monomer,4TQU,,934,,
+MG_322_323_TETRAMER,potassium uptake protein; TrkH family; putative,protein transport/singaling,m,complex,4J7C,(2.0)MG_322_MONOMER'+ '(2.0)MG_323_MONOMER',,,
+MG_322_MONOMER,potassium uptake protein,protein transport/singaling,c,monomer,4J7C,,558,,
+MG_323_MONOMER,potassium uptake protein,protein transport/singaling,c,monomer,4J7C,,227,,
+MG_324_MONOMER,aminopeptidase,protein folding/maturation,c,monomer,,,354,,
+MG_325_MONOMER,ribosomal protein L33,translation,c,monomer,,,53,,
+MG_326_MONOMER,degV family protein,metabolism,c,monomer,,,295,,
+MG_327_MONOMER,hydrolase; Putative esterase/lipase 2,metabolism,e,monomer,,,268,,
+MG_328_MONOMER,coiled coil putative structural protein involved in cytoskeleton,cytokinesis/motility,c,monomer,,,756,,
+MG_329_MONOMER,GTP-binding protein engA,protein folding/maturation,c,monomer,,,448,,
+MG_330_MONOMER,cytidylate kinase,metabolism,c,monomer,,,217,,
+MG_331_MONOMER,predicted dolichyl-diphosphooligosaccharide-protein glycosyltransferase,protein folding/maturation,m,monomer,,,212,,
+MG_332_MONOMER,glucose-1-phosphate adenylyltransferase; putative,metabolism,c,monomer,,,239,,
+MG_333_DIMER,FMN-dependent NADH-azoreductase; putative,metabolism,c,complex,,(2.0)MG_333_MONOMER',,,
+MG_333_MONOMER,FMN-dependent NADH-azoreductase; putative,metabolism,c,monomer,,,197,,
+MG_334_MONOMER,valyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,837,,
+MG_335_MONOMER,GTP-binding protein engB; putative,protein folding/maturation,c,monomer,,,191,,
+MG_336_DIMER,cysteine desulfurase,metabolism,c,complex,,(2.0)MG_336_MONOMER',,,
+MG_336_MONOMER,cysteine desulfurase,metabolism,c,monomer,,,408,,
+MG_337_MONOMER,iron-sulfur cluster assembly protein,metabolism,c,monomer,,,138,,
+MG_338_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,4MND,,1270,,
+MG_339_MONOMER,recombination protein; strand exchange,DNA replication/maintenance,c,monomer,,,317,ssDNA,3
+MG_340_MONOMER,DNA-directed RNA polymerase; beta subunit,transcription,c,monomer,3IYD,,1292,,
+MG_341_MONOMER,DNA-directed RNA polymerase; beta subunit,transcription,c,monomer,,,1390,,
+MG_342_MONOMER,NADPH-dependent FMN reductase domain protein,metabolism,c,monomer,,,168,,
+MG_343_MONOMER,MG/MP only,MG-specific,c,monomer,,,346,,
+MG_344_MONOMER,hydrolase; Putative esterase/lipase 3,metabolism,e,monomer,,,273,,
+MG_345_MONOMER,isoleucyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,895,,
+MG_346_DIMER,23S rRNA methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_346_MONOMER',,,
+MG_346_MONOMER,23S rRNA methyltransferase; U2552,RNA synthesis/maturation,c,monomer,,,166,,
+MG_347_DIMER,tRNA (guanine-N(7)-)-methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_347_MONOMER',,,
+MG_347_MONOMER,tRNA (guanine-N(7)-)-methyltransferase,RNA synthesis/maturation,c,monomer,,,210,,
+MG_348_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,322,,
+MG_349_HEXAMER,Replication initiation/membrane attachment protein,DNA replication/maintenance,c,complex,,(6.0)MG_349_MONOMER',,,
+MG_349_MONOMER,Replication initiation/membrane attachment protein,DNA replication/maintenance,c,monomer,,,404,,
+MG_350_MONOMER,transporter; substrate binding,protein transport/singaling,c,monomer,,,311,,
+MG_351_HEXAMER,inorganic pyrophosphatase,metabolism,c,complex,5LS0,(6.0)MG_351_MONOMER',,,
+MG_351_MONOMER,inorganic pyrophosphatase,metabolism,c,monomer,5LS0,,184,,
+MG_352_DIMER,Holliday junction endonuclease,DNA replication/maintenance,c,complex,,(2.0)MG_352_MONOMER',,dsDNA,28
+MG_352_MONOMER,Holliday junction endonuclease,DNA replication/maintenance,c,monomer,,,166,,
+MG_353_DIMER,DNA-binding protein HU; putative,DNA replication/maintenance,c,complex,,(2.0)MG_353_MONOMER',,dsDNA,30
+MG_353_MONOMER,DNA-binding protein HU; putative,DNA replication/maintenance,c,monomer,,,109,,
+MG_354_MONOMER,,MG-specific,m,monomer,1TM9,,137,,
+MG_355_HEXAMER,ATP-dependent Clp protease; ATPase subunit,protein folding/maturation,c,complex,,(6.0)MG_355_MONOMER',,,
+MG_355_MONOMER,ATP-dependent Clp protease; ATPase subunit,protein folding/maturation,c,monomer,,,714,,
+MG_356_MONOMER,choline/ethanolamine kinase; putative,metabolism,c,monomer,,,280,,
+MG_357_DIMER,acetate kinase,metabolism,c,complex,,(2.0)MG_357_MONOMER',,,
+MG_357_MONOMER,acetate kinase,metabolism,c,monomer,,,393,,
+MG_358_359_10MER,Holliday junction DNA helicase,DNA replication/maintenance,c,complex,,(4.0)MG_358_MONOMER'+ '(6.0)MG_359_MONOMER',,dsDNA,52
+MG_358_MONOMER,Holliday junction DNA helicase,DNA replication/maintenance,c,monomer,7OA5,,205,,
+MG_359_MONOMER,Holliday junction DNA helicase RuvB,DNA replication/maintenance,c,monomer,3PFI,,307,,
+MG_360_MONOMER,ImpB/MucB/SamB family protein,DNA replication/maintenance,c,monomer,,,411,,
+MG_361_MONOMER,ribosomal protein L10,translation,c,monomer,,,162,,
+MG_362_MONOMER,ribosomal protein L7/L12,translation,c,monomer,,,122,,
+MG_363_MONOMER,ribosomal protein L32,translation,c,monomer,,,57,,
+MG_364_MONOMER,Replication initiation/membrane attachment protein,DNA replication/maintenance,m,monomer,,,224,,
+MG_365_MONOMER,methionyl-tRNA formyltransferase,RNA synthesis/maturation,c,monomer,,,311,,
+MG_366_MONOMER,phosphomethylpyrimidine kinase; thiamine biosynthesis,metabolism,c,monomer,,,667,,
+MG_367_DIMER,ribonuclease III,RNA synthesis/maturation,c,complex,,(2.0)MG_367_MONOMER',,,
+MG_367_MONOMER,ribonuclease III,RNA synthesis/maturation,c,monomer,,,262,,
+MG_368_DIMER,fatty acid/phospholipid synthesis protein PlsX,metabolism,c,complex,,(2.0)MG_368_MONOMER',,,
+MG_368_MONOMER,fatty acid/phospholipid synthesis protein PlsX,metabolism,c,monomer,,,328,,
+MG_369_DIMER,DAK2 phosphatase domain protein,metabolism,c,complex,1UOE,(2.0)MG_369_MONOMER',,,
+MG_369_MONOMER,DAK2 phosphatase domain protein,metabolism,c,monomer,3PNL,,557,,
+MG_370_MONOMER,23S rRNA pseudouridine synthase; U1911; U1915; U1917,RNA synthesis/maturation,c,monomer,,,323,,
+MG_371_MONOMER,DHH family protein,metabolism,c,monomer,,,324,,
+MG_372_DIMER,thiamine biosynthesis/tRNA modification protein ThiI,RNA synthesis/maturation,c,complex,,(2.0)MG_372_MONOMER',,,
+MG_372_MONOMER,thiamine biosynthesis/tRNA modification protein ThiI,RNA synthesis/maturation,c,monomer,,,385,,
+MG_373_MONOMER,exonuclease/recombinase (viral origin),DNA replication/maintenance,c,monomer,,,281,,
+MG_374_MONOMER,haloacid dehalogenase-like hydrolase; sugar phosphatase; putative,metabolism,c,monomer,,,274,,
+MG_375_DIMER,threonyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_375_MONOMER',,,
+MG_375_MONOMER,threonyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,564,,
+MG_376_HEXAMER,None,DNA replication/maintenance,c,complex,,(6.0)MG_376_MONOMER',,,
+MG_376_MONOMER,single-stranded DNA binding,DNA replication/maintenance,c,monomer,,,104,,
+MG_377_MONOMER,chaperone/trigger factor; by structural homology,protein folding/maturation,c,monomer,,,193,,
+MG_378_MONOMER,arginyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,537,,
+MG_379_MONOMER,tRNA uridine 5-carboxymethylaminomethyl modification enzyme GidA,RNA synthesis/maturation,c,monomer,2ZXI,,612,,
+MG_380_MONOMER,methyltransferase GidB,RNA synthesis/maturation,c,monomer,,,192,,
+MG_381_MONOMER,,MG-specific,c,monomer,,,218,,
+MG_382_MONOMER,uridine kinase,metabolism,c,monomer,,,213,,
+MG_382_TETRAMER,uridine kinase,metabolism,c,complex,,(4.0)MG_382_MONOMER',,,
+MG_383_DIMER,NH(3)-dependent NAD+ synthetase; putative,metabolism,c,complex,,(2.0)MG_383_MONOMER',,,
+MG_383_MONOMER,NH(3)-dependent NAD+ synthetase; putative,metabolism,c,monomer,,,248,,
+MG_384_MONOMER,GTPase1 Obg,protein folding/maturation,c,monomer,,,433,dsDNA,19
+MG_385_DIMER,glycerophosphoryl diester phosphodiesterase family protein,metabolism,c,complex,,(2.0)MG_385_MONOMER',,,
+MG_385_MONOMER,glycerophosphoryl diester phosphodiesterase family protein,metabolism,c,monomer,,,236,,
+MG_386_MONOMER,P200 protein,cytokinesis/motility,c,monomer,,,1616,,
+MG_387_MONOMER,GTP-binding protein Era,protein folding/maturation,c,monomer,,,290,dsDNA,19
+MG_388_MONOMER,Putative metalloprotease,RNA synthesis/maturation,c,monomer,,,154,,
+MG_389_MONOMER,,MG-specific,e,monomer,,,127,,
+MG_390_DIMER,toxin ABC transporter; ATP-binding/permease protein,protein transport/singaling,m,complex,,(2.0)MG_390_MONOMER',,,
+MG_390_MONOMER,toxin ABC transporter; ATP-binding/permease protein,protein transport/singaling,c,monomer,,,660,,
+MG_391_HEXAMER,cytosol aminopeptidase,protein folding/maturation,c,complex,,(6.0)MG_391_MONOMER',,,
+MG_391_MONOMER,cytosol aminopeptidase,protein folding/maturation,c,monomer,,,447,,
+MG_392_393_21MER,GroEL-GroES chaperonin complex,protein folding/maturation,c,complex,,(14.0)MG_392_MONOMER'+ '(7.0)MG_393_MONOMER',,,
+MG_392_MONOMER,chaperonin,protein folding/maturation,c,monomer,,,543,,
+MG_393_MONOMER,chaperonin; 10 kDa,protein folding/maturation,c,monomer,,,110,,
+MG_394_MONOMER,serine hydroxymethyltransferase,metabolism,c,monomer,,,406,,
+MG_394_TETRAMER,serine hydroxymethyltransferase,metabolism,c,complex,,(4.0)MG_394_MONOMER',,,
+MG_395_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,5ZVJ,,524,,
+MG_396_DIMER,ribose 5-phosphate isomerase B,metabolism,c,complex,6MU0,(2.0)MG_396_MONOMER',,,
+MG_396_MONOMER,ribose 5-phosphate isomerase B,metabolism,c,monomer,6MU0,,152,,
+MG_397_MONOMER,Cell division inhibitor,cytokinesis/motility,e,monomer,,,566,,
+MG_398_399_400_401_402_403_404_405_22MER,H(+)-transporting two-sector ATPase,metabolism,m,complex,5T4O,(1.0)MG_398_MONOMER'+ '(3.0)MG_399_MONOMER'+ '(1.0)MG_400_MONOMER'+ '(3.0)MG_401_MONOMER'+ '(1.0)MG_402_MONOMER'+ '(2.0)MG_403_MONOMER'+ '(10.0)MG_404_MONOMER'+ '(1.0)MG_405_MONOMER',,,
+MG_398_MONOMER,ATP synthase F1; epsilon subunit,metabolism,c,monomer,5T4O,,133,,
+MG_399_MONOMER,ATP synthase F1; beta subunit,metabolism,c,monomer,5T4O,,476,,
+MG_400_MONOMER,ATP synthase F1; gamma subunit,metabolism,c,monomer,5T4O,,279,,
+MG_401_MONOMER,ATP synthase F1; alpha subunit,metabolism,c,monomer,5T4O,,518,,
+MG_402_MONOMER,ATP synthase F1; delta subunit,metabolism,c,monomer,5T4O,,176,,
+MG_403_MONOMER,ATP synthase F0; B subunit,metabolism,c,monomer,5T4O,,208,,
+MG_404_MONOMER,ATP synthase F0; C subunit,metabolism,c,monomer,5T4O,,102,,
+MG_405_MONOMER,ATP synthase F0; A subunit,metabolism,c,monomer,5T4O,,292,,
+MG_406_MONOMER,,MG-specific,m,monomer,,,158,,
+MG_407_DIMER,enolase,metabolism,c,complex,,(2.0)MG_407_MONOMER',,,
+MG_407_MONOMER,enolase,metabolism,c,monomer,,,458,,
+MG_408_MONOMER,methionine-S-sulfoxide reductase,protein folding/maturation,c,monomer,,,157,,
+MG_409_DIMER,phosphate transport system regulatory protein PhoU; putative,protein transport/singaling,c,complex,,(2.0)MG_409_MONOMER',,,
+MG_409_MONOMER,phosphate transport system regulatory protein PhoU; putative,protein transport/singaling,c,monomer,,,225,,
+MG_410_411_412_PENTAMER,phosphate ABC transporter,protein transport/singaling,m,complex,,(2.0)MG_410_MONOMER'+ '(2.0)MG_411_MONOMER'+ '(1.0)MG_412_MONOMER',,,
+MG_410_MONOMER,phosphate ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,,,329,,
+MG_411_MONOMER,phosphate ABC transporter; permease protein PstA,protein transport/singaling,c,monomer,,,654,,
+MG_412_MONOMER,phosphate ABC transporter; substrate-binding protein,protein transport/singaling,c,monomer,,,377,,
+MG_414_MONOMER,,MG-specific,e,monomer,,,1036,,
+MG_417_MONOMER,ribosomal protein S9,translation,c,monomer,,,132,,
+MG_418_MONOMER,ribosomal protein L13,translation,c,monomer,,,146,,
+MG_419_MONOMER,DNA polymerase III; subunit gamma and tau,DNA replication/maintenance,c,monomer,1JR3,,597,,
+MG_421_MONOMER,excinuclease ABC; A subunit,DNA replication/maintenance,c,monomer,3UWX,,954,,
+MG_422_MONOMER,,MG-specific,c,monomer,,,835,,
+MG_423_MONOMER,metallo-beta-lactamase superfamily protein,RNA synthesis/maturation,c,monomer,,,561,,
+MG_424_MONOMER,ribosomal protein S15,translation,c,monomer,,,86,,
+MG_425_DIMER,ATP-dependent RNA helicase,RNA synthesis/maturation,c,complex,,(2.0)MG_425_MONOMER',,,
+MG_425_MONOMER,ATP-dependent RNA helicase,RNA synthesis/maturation,c,monomer,,,449,,
+MG_426_MONOMER,ribosomal protein L28,translation,c,monomer,,,64,,
+MG_427_DIMER,osmotically inducible peroxidase,host cell interaction,c,complex,,(2.0)MG_427_MONOMER',,,
+MG_427_DIMER_ox,oxidized osmotically inducible peroxidase,host cell interaction,c,complex,,(1.0)MG_427_DIMER'+ '(4.0)H',,,
+MG_427_MONOMER,osmotically inducible peroxidase,host cell interaction,c,monomer,,,141,,
+MG_428_DIMER,LuxR bacterial regulatory protein; putative,transcription,c,complex,,(2.0)MG_428_MONOMER',,dsDNA,28
+MG_428_MONOMER,LuxR bacterial regulatory protein; putative,transcription,c,monomer,,,171,,
+MG_429_MONOMER,PTS system; E1,metabolism,c,monomer,2XDF,,572,,
+MG_430_MONOMER,2;3-bisphosphoglycerate-independent phosphoglycerate mutase,metabolism,c,monomer,,,507,,
+MG_431_DIMER,triosephosphate isomerase,metabolism,c,complex,,(2.0)MG_431_MONOMER',,,
+MG_431_MONOMER,triosephosphate isomerase,metabolism,c,monomer,,,244,,
+MG_432_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,398,,
+MG_433_DIMER,translation elongation factor Ts,translation,c,complex,,(2.0)MG_433_MONOMER',,,
+MG_433_MONOMER,translation elongation factor Ts,translation,c,monomer,,,298,,
+MG_434_HEXAMER,uridylate kinase,metabolism,c,complex,,(6.0)MG_434_MONOMER',,,
+MG_434_MONOMER,uridylate kinase,metabolism,c,monomer,,,243,,
+MG_435_MONOMER,ribosome recycling factor,translation,c,monomer,,,183,,
+MG_437_DIMER,phosphatidate cytidylyltransferase,metabolism,m,complex,,(2.0)MG_437_MONOMER',,,
+MG_437_MONOMER,phosphatidate cytidylyltransferase,metabolism,c,monomer,,,397,,
+MG_438_MONOMER,type I restriction modification DNA specificity domain protein,DNA replication/maintenance,c,monomer,1YDX,,383,dsDNA,14
+MG_439_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,272,,
+MG_440_MONOMER,lipoprotein; putative,lipoprotein,m,monomer,,,258,,
+MG_441_MONOMER,,MG-specific,m,monomer,,,136,,
+MG_442_MONOMER,ribosomal biogenesis GTPase,protein folding/maturation,c,monomer,,,270,,
+MG_443_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,4W6V,,395,,
+MG_444_MONOMER,ribosomal protein L19,translation,c,monomer,,,119,,
+MG_445_DIMER,tRNA (guanine-N1)-methyltransferase,RNA synthesis/maturation,c,complex,,(2.0)MG_445_MONOMER',,,
+MG_445_MONOMER,tRNA (guanine-N1)-methyltransferase,RNA synthesis/maturation,c,monomer,,,231,,
+MG_446_MONOMER,ribosomal protein S16,translation,c,monomer,,,95,,
+MG_447_MONOMER,multidrug efflux pump,protein transport/singaling,m,monomer,,,547,,
+MG_448_MONOMER,methionine-R-sulfoxide reductase,protein folding/maturation,c,monomer,,,150,,
+MG_449_MONOMER,conserved hypothetical protein; authentic frameshift,uncharacterized,c,monomer,,,228,,
+MG_450_MONOMER,degV family protein,uncharacterized,c,monomer,,,290,,
+MG_451_DIMER,translation elongation factor Tu,translation,c,complex,,(2.0)MG_451_MONOMER',,,
+MG_451_MONOMER,translation elongation factor Tu,translation,c,monomer,,,394,,
+MG_452_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,261,,
+MG_453_MONOMER,UTP-glucose-1-phosphate uridylyltransferase,metabolism,c,monomer,,,292,,
+MG_453_TETRAMER,UTP-glucose-1-phosphate uridylyltransferase,metabolism,c,complex,,(4.0)MG_453_MONOMER',,,
+MG_454_DIMER,thiol-dependent peroxidase,host cell interaction,c,complex,,(2.0)MG_454_MONOMER',,,
+MG_454_DIMER_ox,oxidized thiol-dependent peroxidase,host cell interaction,c,complex,,(1.0)MG_454_DIMER'+ '(4.0)H',,,
+MG_454_MONOMER,thiol-dependent peroxidase,host cell interaction,c,monomer,,,155,,
+MG_455_DIMER,tyrosyl-tRNA synthetase,RNA synthesis/maturation,c,complex,,(2.0)MG_455_MONOMER',,,
+MG_455_MONOMER,tyrosyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,396,,
+MG_456_MONOMER,,MG-specific,m,monomer,6B85,,334,,
+MG_457_HEXAMER,ATP-dependent metalloprotease FtsH,protein folding/maturation,m,complex,,(6.0)MG_457_MONOMER',,,
+MG_457_MONOMER,ATP-dependent metalloprotease FtsH,protein folding/maturation,c,monomer,,,702,,
+MG_458_MONOMER,hypoxanthine phosphoribosyltransferase,metabolism,c,monomer,,,175,,
+MG_458_TETRAMER,hypoxanthine phosphoribosyltransferase,metabolism,c,complex,,(4.0)MG_458_MONOMER',,,
+MG_459_MONOMER,putative 2-C-methyl-D-erythritol-2;4-cyclodiphosphate synthase,metabolism,c,monomer,,,169,,
+MG_460_MONOMER,L-lactate dehydrogenase/malate dehydrogenase,metabolism,c,monomer,,,312,,
+MG_460_TETRAMER,L-lactate dehydrogenase/malate dehydrogenase,metabolism,c,complex,,(4.0)MG_460_MONOMER',,,
+MG_461_MONOMER,HD domain protein,metabolism,c,monomer,,,425,,
+MG_462_MONOMER,glutamyl-tRNA synthetase,RNA synthesis/maturation,c,monomer,,,484,,
+MG_463_MONOMER,dimethyladenosine transferase,RNA synthesis/maturation,c,monomer,,,259,,
+MG_464_MONOMER,inner-membrane protein insertion factor,protein folding/maturation,c,monomer,5MG3,,385,,
+MG_465_MONOMER,ribonuclease P protein component,RNA synthesis/maturation,c,monomer,6D1R,,128,,
+MG_466_MONOMER,ribosomal protein L34,translation,c,monomer,,,48,,
+MG_467_468_526_TETRAMER,salivaricin A ABC transporter,protein transport/singaling,m,complex,5XU1,(1.0)MG_467_MONOMER'+ '(2.0)MG_468_MONOMER'+ '(1.0)MG_526_MONOMER',,,
+MG_467_MONOMER,salivaricin A ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,5XU1,,311,,
+MG_468_MONOMER,salivaricin A ABC transporter; permease protein,protein transport/singaling,c,monomer,5XU1,,1783,,
+MG_469_1MER_ADP,DnaA-ADP,DNA replication/maintenance,c,complex,3R8F,(1.0)ADP'+ '(1.0)MG_469_MONOMER',,dsDNA,11
+MG_469_1MER_ATP,DnaA-ATP,DNA replication/maintenance,c,complex,3R8F,(1.0)ATP'+ '(1.0)MG_469_MONOMER',,dsDNA,11
+MG_469_2MER_1ATP_ADP,DnaA 2mer-(1)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_1MER_ATP',,dsDNA,11
+MG_469_2MER_ATP,DnaA-ATP 2mer,DNA replication/maintenance,c,complex,,(2.0)MG_469_1MER_ATP',,dsDNA,11
+MG_469_3MER_2ATP_ADP,DnaA 3mer-(2)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_2MER_ATP',,dsDNA,11
+MG_469_3MER_ATP,DnaA-ATP 3mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_2MER_ATP',,dsDNA,11
+MG_469_4MER_3ATP_ADP,DnaA 4mer-(3)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_3MER_ATP',,dsDNA,11
+MG_469_4MER_ATP,DnaA-ATP 4mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_3MER_ATP',,dsDNA,11
+MG_469_5MER_4ATP_ADP,DnaA 5mer-(4)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_4MER_ATP',,dsDNA,11
+MG_469_5MER_ATP,DnaA-ATP 5mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_4MER_ATP',,dsDNA,11
+MG_469_6MER_5ATP_ADP,DnaA 6mer-(5)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_5MER_ATP',,dsDNA,11
+MG_469_6MER_ATP,DnaA-ATP 6mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_5MER_ATP',,dsDNA,11
+MG_469_7MER_6ATP_ADP,DnaA 7mer-(6)ATP-(1)ADP,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ADP'+ '(1.0)MG_469_6MER_ATP',,dsDNA,11
+MG_469_7MER_ATP,DnaA-ATP 7mer,DNA replication/maintenance,c,complex,,(1.0)MG_469_1MER_ATP'+ '(1.0)MG_469_6MER_ATP',,dsDNA,11
+MG_469_MONOMER,chromosomal replication initiator protein DnaA,DNA replication/maintenance,c,monomer,,,437,,
+MG_470_MONOMER,CobQ/CobB/MinD/ParA nucleotide binding domain,cytokinesis/motility,c,monomer,,,269,dsDNA,20
+MG_473_MONOMER,ribosomal protein L33 type 2,translation,c,monomer,,,48,,
+MG_474_MONOMER,protein export/possible structural role,protein transport/singaling,m,monomer,,,127,,
+MG_476_MONOMER,preprotein translocase; SecG subunit,protein transport/singaling,c,monomer,5MG3,,77,,
+MG_477_MONOMER,transcription termination factor,transcription,c,monomer,,,90,,
+MG_478_MONOMER,,MG-specific,m,monomer,,,154,,
+MG_480_MONOMER,structural; putative Cell cycle; putative,MG-specific,c,monomer,,,219,,
+MG_481_MONOMER,30S ribosomal protein S21,translation,c,monomer,,,62,,
+MG_482_DIMER,holo-(acyl-carrier-protein) synthase,metabolism,c,complex,,(2.0)MG_482_MONOMER',,,
+MG_482_MONOMER,holo-(acyl-carrier-protein) synthase,metabolism,c,monomer,,,114,,
+MG_491_MONOMER,cell adhesion; homology to dksA; RNA polymerase binding; putative,cytokinesis/motility,c,monomer,4XNG,,346,,
+MG_494_MONOMER,cell-division inhibitor; putative protease; putative,cytokinesis/motility,c,monomer,,,150,,
+MG_498_MONOMER,formamidopyrimidine-DNA glycosylase,DNA replication/maintenance,c,monomer,,,284,dsDNA,9
+MG_505_MONOMER,putative holliday junction resolvase,DNA replication/maintenance,c,monomer,,,138,,
+MG_515_MONOMER,,MG-specific,m,monomer,3X29,,269,,
+MG_516_MONOMER,UPF0154,uncharacterized,c,monomer,,,73,,
+MG_517_MONOMER,glycosyl transferase; group 2 family protein,metabolism,c,monomer,,,341,,
+MG_521_MONOMER,membrane protein; putative,protein transport/singaling,m,monomer,,,224,,
+MG_522_MONOMER,ribosomal protein S20,translation,c,monomer,,,88,,
+MG_524_MONOMER,,uncharacterized,m,monomer,,,149,,
+MG_525_MONOMER,,MG-specific,e,monomer,,,664,,
+MG_526_MONOMER,salivaricin A ABC transporter; ATP-binding protein,protein transport/singaling,c,monomer,5XU1,,284,,
+REPLISOME,Replisome,DNA replication/maintenance,c,complex,,(2.0)DNA_POLYMERASE_CORE'+ '(1.0)DNA_POLYMERASE_GAMMA_COMPLEX'+ '(4.0)MG_001_MONOMER'+ '(1.0)MG_094_HEXAMER'+ '(1.0)MG_250_MONOMER',,ssDNA,
+RIBOSOME_30S,30S ribosomal subunit,translation,c,complex,,(1.0)MGrrnA16S'+ '(1.0)MG_070_MONOMER'+ '(1.0)MG_087_MONOMER'+ '(1.0)MG_088_MONOMER'+ '(1.0)MG_090_MONOMER'+ '(1.0)MG_092_MONOMER'+ '(1.0)MG_150_MONOMER'+ '(1.0)MG_155_MONOMER'+ '(1.0)MG_157_MONOMER'+ '(1.0)MG_160_MONOMER'+ '(1.0)MG_164_MONOMER'+ '(1.0)MG_165_MONOMER'+ '(1.0)MG_168_MONOMER'+ '(1.0)MG_175_MONOMER'+ '(1.0)MG_176_MONOMER'+ '(1.0)MG_311_MONOMER'+ '(1.0)MG_417_MONOMER'+ '(1.0)MG_424_MONOMER'+ '(1.0)MG_446_MONOMER'+ '(1.0)MG_481_MONOMER'+ '(1.0)MG_522_MONOMER',,,
+RIBOSOME_30S_IF3,30S ribosomal subunit - translation initiation factor IF-3 complex,translation,c,complex,5LMO,(1.0)MG_196_MONOMER'+ '(1.0)RIBOSOME_30S',,,
+RIBOSOME_50S,50S ribosomal subunit,translation,c,complex,,(1.0)MGrrnA23S'+ '(1.0)MGrrnA5S'+ '(1.0)MG_081_MONOMER'+ '(1.0)MG_082_MONOMER'+ '(1.0)MG_093_MONOMER'+ '(1.0)MG_151_MONOMER'+ '(1.0)MG_152_MONOMER'+ '(1.0)MG_153_MONOMER'+ '(1.0)MG_154_MONOMER'+ '(1.0)MG_156_MONOMER'+ '(1.0)MG_158_MONOMER'+ '(1.0)MG_159_MONOMER'+ '(1.0)MG_161_MONOMER'+ '(1.0)MG_162_MONOMER'+ '(1.0)MG_163_MONOMER'+ '(1.0)MG_166_MONOMER'+ '(1.0)MG_167_MONOMER'+ '(1.0)MG_169_MONOMER'+ '(1.0)MG_174_MONOMER'+ '(1.0)MG_178_MONOMER'+ '(1.0)MG_197_MONOMER'+ '(1.0)MG_198_MONOMER'+ '(1.0)MG_232_MONOMER'+ '(1.0)MG_234_MONOMER'+ '(1.0)MG_257_MONOMER'+ '(1.0)MG_325_MONOMER'+ '(1.0)MG_361_MONOMER'+ '(1.0)MG_362_MONOMER'+ '(1.0)MG_363_MONOMER'+ '(1.0)MG_418_MONOMER'+ '(1.0)MG_426_MONOMER'+ '(1.0)MG_444_MONOMER'+ '(1.0)MG_466_MONOMER'+ '(1.0)MG_473_MONOMER',,,
+RIBOSOME_70S,70S ribosome,translation,c,complex,,(1.0)RIBOSOME_30S'+ '(1.0)RIBOSOME_50S',,,
+RNA_POLYMERASE,DNA-directed RNA polymerase,transcription,c,complex,3IYD,(1.0)MG_022_MONOMER'+ '(2.0)MG_177_MONOMER'+ '(1.0)MG_340_MONOMER'+ '(1.0)MG_341_MONOMER',,ssDNA,75
+RNA_POLYMERASE_HOLOENZYME,DNA-directed RNA polymerase holoenzyme,transcription,c,complex,3IYD,(1.0)MG_249_MONOMER'+ '(1.0)RNA_POLYMERASE',,ssDNA,75

@@ -1,10 +1,10 @@
 {
-  "n_placed": 23919,
+  "n_placed": 24028,
   "n_species": 493,
   "sim_species_with_counts": 605,
   "baseline_species_with_counts": 632,
   "protein_occupancy": 0.04,
-  "pack_path": "/Users/eranagmon/code/viva-mGen--structural-model/workspace/studies/s02-reproduction-driven/viz/3d/mgen_reproduction_driven.pack.json",
+  "pack_path": "/Users/eranagmon/code/viva-mGen--positional/workspace/studies/s02-reproduction-driven/viz/3d/mgen_reproduction_driven.pack.json",
   "checks": {
     "structural-sim-cell-comparable-to-baseline": true
   }

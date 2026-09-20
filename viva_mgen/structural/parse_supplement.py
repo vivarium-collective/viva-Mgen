@@ -46,6 +46,8 @@ _S1_COL_COMPARTMENT = 3
 _S1_COL_TYPE = 4
 _S1_COL_SEQ_LENGTH = 6
 _S1_COL_BIOSYNTHESIS = 8
+_S1_COL_DNA_FOOTPRINT = 9   # bp footprint of a DNA-binding protein (positional)
+_S1_COL_DNA_BINDING = 10    # "dsDNA" | "ssDNA" — marks nucleoid-bound proteins
 _S1_COL_STRUCTURAL_MODEL = 11  # curated "Structural Model" (first occurrence)
 
 # S2 column indices (0-based), per the header row (row index 2).
@@ -137,6 +139,16 @@ def _normalize_pdb_id(raw: str | None) -> str | None:
     return None
 
 
+def _int_footprint(raw) -> int | None:
+    """DNA footprint (bp) as an int, or None when absent/unparseable."""
+    if raw in (None, ""):
+        return None
+    try:
+        return int(float(raw))
+    except (TypeError, ValueError):
+        return None
+
+
 def parse_proteins() -> list[dict[str, Any]]:
     rows = _read_workbook_rows(_S1_PATH)
     out = []
@@ -162,6 +174,8 @@ def parse_proteins() -> list[dict[str, Any]]:
                 "pdb_id": _normalize_pdb_id(_cell(row, _S1_COL_STRUCTURAL_MODEL)),
                 "biosynthesis": _cell(row, _S1_COL_BIOSYNTHESIS) or "",
                 "seq_length": seq_length,
+                "dna_binding": (_cell(row, _S1_COL_DNA_BINDING) or "").strip(),
+                "dna_footprint": _int_footprint(_cell(row, _S1_COL_DNA_FOOTPRINT)),
             }
         )
     return out
@@ -203,6 +217,8 @@ _PROTEIN_FIELDS = [
     "pdb_id",
     "biosynthesis",
     "seq_length",
+    "dna_binding",
+    "dna_footprint",
 ]
 
 _GENE_FIELDS = [

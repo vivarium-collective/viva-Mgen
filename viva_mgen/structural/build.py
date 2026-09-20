@@ -241,17 +241,42 @@ def _to_ingredient(protein: ProteinRow, count: int, uniprot_by_prot: dict) -> In
         if not protein.seq_length:
             return None  # no PDB/UniProt and no MW basis -> skip (brief policy)
         sphere_radius = _sphere_radius_angstrom(protein.seq_length)
+    region, principal_vector = _placement(protein)
     return Ingredient(
         id=protein.prot_id,
         count=count,
         structure=structure,
         sphere_radius=sphere_radius,
         color=_color_for(protein.function),
-        region="surface" if protein.compartment == "m" else "interior",
+        region=region,
         compartment="cytoplasm",
         display_name=protein.name,
         category=protein.function,
+        principal_vector=principal_vector,
     )
+
+
+def _placement(protein: ProteinRow) -> tuple[str, tuple | None]:
+    """Positional class + orientation for a protein, following Maritan's spatial
+    model (their Table 1: cytoplasm / DNA-bound / membrane / extracellular):
+
+    * DNA-binding proteins (S1 ``dna_binding`` = dsDNA/ssDNA) -> ``region="fiber"``
+      so the packer seats them ON the supercoiled nucleoid at binding sites,
+      not free in the bulk (Maritan's "NAP" class).
+    * Membrane (compartment ``m``) -> ``region="surface"`` with a
+      ``principal_vector`` so the packer orients them to the membrane normal.
+    * Extracellular (compartment ``e``) -> ``region="surface"`` (unoriented): the
+      single-membrane capsule has no true exterior, so surface-seat them (mostly
+      surface adhesins) rather than mis-placing them in the cytoplasm.
+    * Everything else (cytoplasm ``c``) -> ``region="interior"``.
+    """
+    if protein.dna_binding:
+        return "fiber", None
+    if protein.compartment == "m":
+        return "surface", (0.0, 0.0, 1.0)   # orient TM axis to the membrane normal
+    if protein.compartment == "e":
+        return "surface", None
+    return "interior", None
 
 
 def mgen_ingredients(counts: dict, top_n: int | None = None) -> list:
