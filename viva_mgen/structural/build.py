@@ -16,7 +16,7 @@ import math
 import tempfile
 from pathlib import Path
 
-from pbg_parsimony import Capsule, Chromosome, Ingredient, build_pack
+from pbg_parsimony import Capsule, Chromosome, Ingredient, StructureRef, build_pack
 
 from viva_mgen.constants import GENOME_LENGTH_BP
 from viva_mgen.structural.maritan_tables import ProteinRow, load_genes, load_proteins
@@ -169,11 +169,22 @@ def estimate_occupancy(counts, top_n=None) -> dict:
 
 
 def mgen_chromosome() -> Chromosome:
-    """Single circular chromosome; bead count sized to GENOME_LENGTH_BP, with
-    a genome-annotation CSV so the pack seats RNAP at real (abundance-
-    weighted) transcription sites instead of uniformly along the fiber."""
+    """Single circular supercoiled chromosome, RENDERED as a visible nucleoid.
+
+    Bead count is sized to GENOME_LENGTH_BP; ``segment`` gives each bead a real
+    dsDNA mesh (RCSB 1BNA, B-DNA) so the fiber actually draws (without it the
+    chromosome is defined but invisible), tinted tan and coiled by ``supercoil``.
+    ``genome_csv`` seats RNAP at real (abundance-weighted) transcription sites
+    instead of uniformly along the fiber. Bead geometry (spacing 135 A ~= 40 bp,
+    radius 12 A) follows ecoli_3d's convention."""
     beads = max(1, round(GENOME_LENGTH_BP / _BP_PER_BEAD))
-    return Chromosome(beads=beads, n_chromosomes=1, genome_csv=_pbg_genome_csv())
+    return Chromosome(
+        beads=beads, spacing=135.0, bead_radius=12.0, n_chromosomes=1,
+        genome_csv=_pbg_genome_csv(),
+        segment=StructureRef("pdb", "1BNA"),
+        supercoil={"radius": 90.0, "pitch": 130.0, "domains": 200},
+        color=(0.85, 0.75, 0.45),
+    )
 
 
 # --- molecular-weight sphere-radius proxy ------------------------------------
