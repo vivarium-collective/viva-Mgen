@@ -101,78 +101,33 @@ _EMBED_TEMPLATE = r"""<!doctype html><html><head><meta charset="utf-8">
 <title>__LABEL__ — 3D cell</title>
 <style>
   html,body{margin:0;background:__BG__;color:__INK__;font-family:__FONT__}
-  #bar{padding:9px 12px;font-size:12.5px;color:__DIM__;display:flex;align-items:center;gap:10px}
+  #bar{padding:9px 12px;font-size:12.5px;color:__DIM__;display:flex;align-items:center;gap:8px}
   #bar b{color:__INK__} #bar .grow{flex:1}
   #pop{color:__INK__;text-decoration:none;border:1px solid __GRID__;border-radius:7px;
     padding:4px 10px;font-size:12px;background:rgba(94,176,255,.12)}
   #pop:hover{background:rgba(94,176,255,.25)}
   /* Fixed stage height so the workbench's iframe auto-fit grows the frame tall. */
-  #stage{position:relative;width:100%;height:__H__px}
-  #c{position:absolute;inset:0;display:block;width:100%;height:100%}
-  #hint{position:absolute;bottom:8px;left:12px;font-size:11px;color:__DIM__;z-index:5}
+  #frame{display:block;width:100%;height:__H__px;border:0}
 </style></head><body>
-<div id="bar"><b>3D __LABEL__ cell</b><span class="grow"></span>
-  <a id="pop" href="__POPURL__" target="_blank" rel="noopener">⛶ open full mesh viewer ↗</a></div>
-<div id="stage"><canvas id="c"></canvas>
-<div id="hint">drag to orbit · scroll to zoom · a self-contained view (spheres = molecules, coloured by type)</div>
-</div>
-<script type="importmap">{"imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module">
-import * as THREE from "three";
-import {OrbitControls} from "three/addons/controls/OrbitControls.js";
-const PACK="__PACKREL__", MAXI=28000;
-const stage=document.getElementById("stage");
-const W=()=>stage.clientWidth||800, H=()=>stage.clientHeight||600;
-const RAD=(id,name)=>{const n=(name||id||"").toLowerCase();
-  if(n.includes("ribosom"))return 95; if(id==="dna_segment")return 11;
-  if(id==="tRNA")return 16; if(n.includes("polymerase")||n.includes("gyrase")||n.includes("groel"))return 60;
-  return 30;};
-const scene=new THREE.Scene(); scene.background=new THREE.Color("__BG__");
-const cam=new THREE.PerspectiveCamera(45,W()/H(),1,60000);
-const rn=new THREE.WebGLRenderer({canvas:document.getElementById("c"),antialias:true});
-rn.setPixelRatio(Math.min(devicePixelRatio,2)); rn.setSize(W(),H(),false);
-scene.add(new THREE.AmbientLight(0xffffff,.55));
-const dl=new THREE.DirectionalLight(0xffffff,.9); dl.position.set(1,1,1); scene.add(dl);
-const dl2=new THREE.DirectionalLight(0x88aaff,.35); dl2.position.set(-1,-.5,-1); scene.add(dl2);
-const ctr=new OrbitControls(cam,rn.domElement); ctr.enableDamping=true; ctr.autoRotate=true; ctr.autoRotateSpeed=.5;
-new ResizeObserver(()=>{cam.aspect=W()/H();cam.updateProjectionMatrix();rn.setSize(W(),H(),false);}).observe(stage);
-const geo=new THREE.SphereGeometry(1,10,8);
-const M=new THREE.Matrix4(), Q=new THREE.Quaternion(), P=new THREE.Vector3(), S=new THREE.Vector3();
-fetch(PACK).then(r=>r.json()).then(pack=>{
-  const ings=pack.ingredients||[], pls=pack.placements||[];
-  const step=Math.max(1,Math.ceil(pls.length/MAXI));
-  const byIng=new Map();
-  for(let i=0;i<pls.length;i+=step){const pl=pls[i]; const gi=pl.ingredient;
-    (byIng.get(gi)||byIng.set(gi,[]).get(gi)).push(pl);}
-  const box=new THREE.Box3();
-  byIng.forEach((list,gi)=>{const ing=ings[gi]||{}; const col=ing.color||[.6,.6,.6];
-    const r=RAD(ing.id,ing.name);
-    const mat=new THREE.MeshLambertMaterial({color:new THREE.Color(col[0],col[1],col[2])});
-    const im=new THREE.InstancedMesh(geo,mat,list.length);
-    list.forEach((pl,k)=>{const p=pl.position; P.set(p[0],p[1],p[2]); S.setScalar(r);
-      Q.set(0,0,0,1); M.compose(P,Q,S); im.setMatrixAt(k,M); box.expandByPoint(P);});
-    im.instanceMatrix.needsUpdate=true; scene.add(im);});
-  const c=box.getCenter(new THREE.Vector3()), sz=box.getSize(new THREE.Vector3()).length()||4000;
-  ctr.target.copy(c); cam.position.copy(c).add(new THREE.Vector3(0,0,sz*0.9)); cam.updateProjectionMatrix();
-  document.getElementById("hint").textContent=
-    `${pls.length.toLocaleString()} molecules · ${byIng.size} species · showing 1/${step} for speed — pop out for the full mesh cell`;
-}).catch(e=>{document.getElementById("hint").textContent="could not load pack: "+e;});
-(function loop(){requestAnimationFrame(loop); ctr.update(); rn.render(scene,cam);})();
-</script></body></html>"""
+<div id="bar"><b>3D __LABEL__ cell</b>
+  <span>— real molecular meshes · open the <b>panel</b> and use <b>section</b> (plane + position) to slice into the cell</span>
+  <span class="grow"></span>
+  <a id="pop" href="__VIEWERURL__" target="_blank" rel="noopener">⛶ full-window ↗</a></div>
+<iframe id="frame" src="__VIEWERURL__" allow="xr-spatial-tracking"></iframe>
+</body></html>"""
 
 
 def write_3d_embed(slug, pack_rel, out: Path, label):
-    # Self-contained three.js sphere view: loads the pack by a RELATIVE path so it
-    # renders in the live workbench AND the published static report (no server
-    # route needed). A pop-out links to the full mesh viewer where it's available.
-    popurl = f"/parsimony-viewer/?file=/workspace/studies/{slug}/viz/3d/{pack_rel}"
+    # Embed the full parsimony viewer (real VdW molecular meshes + its built-in
+    # SECTION slice control) inline at a tall fixed height so the workbench's
+    # iframe auto-fit grows the frame; the pop-out opens it full-window. Uses the
+    # live /parsimony-viewer/ route (the published report bundles that viewer +
+    # the packs, so the same embed carries over).
+    viewer_url = f"/parsimony-viewer/?file=/workspace/studies/{slug}/viz/3d/{pack_rel}"
     html = (_EMBED_TEMPLATE
-            .replace("__LABEL__", label).replace("__PACKREL__", f"3d/{pack_rel}")
-            .replace("__POPURL__", popurl).replace("__BG__", BG).replace("__INK__", INK)
-            .replace("__DIM__", DIM).replace("__GRID__", GRID).replace("__FONT__", FONT)
-            .replace("__H__", "620"))
+            .replace("__LABEL__", label).replace("__VIEWERURL__", viewer_url)
+            .replace("__BG__", BG).replace("__INK__", INK).replace("__DIM__", DIM)
+            .replace("__GRID__", GRID).replace("__FONT__", FONT).replace("__H__", "640"))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html)
 
