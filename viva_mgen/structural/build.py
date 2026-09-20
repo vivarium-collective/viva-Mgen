@@ -340,6 +340,26 @@ def mgen_ingredients(counts: dict, top_n: int | None = None) -> list:
     return ingredients
 
 
+# Non-protein RNA species (S1 is proteins-only). rRNA is already inside the 70S
+# ribosome structure; tRNAs are the dominant free RNA — Maritan Table 1 (Frame
+# 149 s) places 1653. Modelled as one tRNA species (RCSB 1EHZ, yeast tRNA-Phe).
+MGEN_TRNA_COUNT = 1653
+
+
+def mgen_rna_ingredients() -> list:
+    """RNA ingredients absent from the protein-only S1 roster. Currently the
+    free tRNA pool (Maritan's most abundant RNA species); rRNA rides inside the
+    70S ribosome mesh and mRNA/nascent transcripts are deferred."""
+    return [
+        Ingredient(
+            id="tRNA", count=MGEN_TRNA_COUNT,
+            structure=StructureRef("pdb", "1EHZ"),
+            region="interior", compartment="cytoplasm",
+            display_name="tRNA", category="RNA", color=(0.90, 0.55, 0.20),
+        ),
+    ]
+
+
 def build_mgen_pack(counts: dict, *, out_dir, top_n: int | None = None, name: str = "mgen") -> dict:
     """Assemble ingredients + geometry and pack the cell via ``pbg_parsimony``.
 
@@ -347,6 +367,8 @@ def build_mgen_pack(counts: dict, *, out_dir, top_n: int | None = None, name: st
     ``envelope=`` (the ``build_pack`` default, ``None``).
     """
     ingredients = mgen_ingredients(counts, top_n=top_n)
+    if top_n is None:                      # full cell -> include the RNA species
+        ingredients += mgen_rna_ingredients()
     capsule = mgen_capsule()
     chromosome = mgen_chromosome()
     return build_pack(ingredients, capsule, chromosome, out_dir=out_dir, name=name, envelope=None)
