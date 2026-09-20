@@ -55,3 +55,26 @@ def test_small_end_to_end_pack(tmp_path):
     res = build_mgen_pack(_counts(), out_dir=tmp_path, top_n=8, name="mgen_test")
     assert res["n_placed"] > 0
     assert (tmp_path).exists()
+
+
+def test_positional_placement():
+    # Positional-fidelity pass (Maritan spatial classes).
+    from viva_mgen.structural.build import _placement
+    from viva_mgen.structural.maritan_tables import ProteinRow
+    dna = ProteinRow("X", "x", "f", "c", "monomer", None, "", 100,
+                     dna_binding="dsDNA", dna_footprint=40)
+    assert _placement(dna) == ("fiber", None)                 # NAP seated on nucleoid
+    mem = ProteinRow("Y", "y", "f", "m", "monomer", None, "", 100)
+    r, pv = _placement(mem)
+    assert r == "surface" and pv is not None                  # membrane, oriented
+    ext = ProteinRow("Z", "z", "f", "e", "monomer", None, "", 100)
+    assert _placement(ext) == ("surface", None)               # extracellular at surface, not cytoplasm
+    cyt = ProteinRow("W", "w", "f", "c", "monomer", None, "", 100)
+    assert _placement(cyt) == ("interior", None)
+
+
+def test_dna_binding_parsed():
+    from viva_mgen.structural.maritan_tables import load_proteins
+    nap = [p for p in load_proteins() if p.dna_binding]
+    assert len(nap) > 40                                      # 57 in S1 (41 dsDNA + 16 ssDNA)
+    assert all(p.dna_binding in ("dsDNA", "ssDNA") for p in nap)

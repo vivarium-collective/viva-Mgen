@@ -26,6 +26,8 @@ class ProteinRow:
     pdb_id: str | None
     biosynthesis: str
     seq_length: int | None
+    dna_binding: str | None = None    # "dsDNA" | "ssDNA" — a nucleoid-bound protein
+    dna_footprint: int | None = None  # bp footprint on the DNA (positional)
 
 
 @dataclass(frozen=True)
@@ -63,6 +65,8 @@ def load_proteins() -> list[ProteinRow]:
                 pdb_id=_str_or_none(row["pdb_id"]),
                 biosynthesis=row["biosynthesis"],
                 seq_length=_int_or_none(row["seq_length"]),
+                dna_binding=_str_or_none(row.get("dna_binding", "")),
+                dna_footprint=_int_or_none(row.get("dna_footprint", "")),
             )
             for row in reader
         ]
