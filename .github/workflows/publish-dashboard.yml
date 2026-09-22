@@ -55,6 +55,10 @@ jobs:
         run: |
           uv venv
           uv pip install "vivarium-workbench @ git+https://github.com/vivarium-collective/vivarium-workbench.git@main"
+          # pbg-parsimony is feature-detected by publish.py's saved-visualizations
+          # export: without it the parsimony viewer assets + api/saved-visualizations.json
+          # are omitted and the 3D cell viewers never appear on the read-only site.
+          uv pip install "pbg-parsimony @ git+https://github.com/vivarium-collective/viva-parsimony.git@main" || echo "pbg-parsimony unavailable; 3D saved-viz gallery will be omitted"
           uv pip install -e . --no-deps || echo "workspace has no installable build; composites render from spec only"
 
       - name: Build dashboard snapshot
