@@ -77,6 +77,18 @@ dashboard:
     label: M. genitalium parameters & knowledge base
     provider: viva_mgen.data_sources:list_sources
 
+# Read-only workbench: the 3D cell viewers are too heavy for gh-pages (meshes
+# ~350MB/study), so the packs + meshes + the parsimony viewer app are hosted on
+# Cloudflare R2 and streamed. Each key is a saved-viz pack name (the *.pack.json
+# basename); the value is the external viewer URL that overrides the bundled
+# gh-pages viewer for that pack. Only the small *.pack.json + *.meta.json are
+# committed (they seed the gallery entry + power the LOCAL viewer). Mirrors the
+# ecoli-3d pattern (v2ecoli workspace.yaml ui.viz_viewer_urls).
+ui:
+  viz_viewer_urls:
+    mgen_maritan_baseline: "https://pub-eb913fbbdc584bd7add047c823570b13.r2.dev/mgen-3d/viewer/index.html?file=https://pub-eb913fbbdc584bd7add047c823570b13.r2.dev/mgen-3d/s01-maritan-baseline/viz/3d/mgen_maritan_baseline.pack.json"
+    mgen_reproduction_driven: "https://pub-eb913fbbdc584bd7add047c823570b13.r2.dev/mgen-3d/viewer/index.html?file=https://pub-eb913fbbdc584bd7add047c823570b13.r2.dev/mgen-3d/s02-reproduction-driven/viz/3d/mgen_reproduction_driven.pack.json"
+
 references_bib: workspace/references/papers.bib
 server:
   enabled: false

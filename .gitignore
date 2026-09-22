@@ -29,4 +29,10 @@ workspace/reports/assets/*
 .parsimony/
 workspace/studies/*/pack/
 workspace/studies/*/viz/viewer/
-workspace/studies/*/viz/3d/
+# Ignore the heavy 3D contents (meshes ~350MB/study, structures/) but COMMIT the
+# small pack + meta sidecar: they seed the read-only workbench's saved-viz gallery
+# entry and power the local viewer. On the read-only site the meshes are streamed
+# from Cloudflare R2 instead (see ui.viz_viewer_urls in workspace.yaml).
+workspace/studies/*/viz/3d/*
+!workspace/studies/*/viz/3d/*.pack.json
+!workspace/studies/*/viz/3d/*.meta.json
