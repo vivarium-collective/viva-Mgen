@@ -69,6 +69,11 @@
         "composite_view": {
           "enum": ["loom-explore", "bigraph-viz"],
           "description": "Which renderer the dashboard uses for composite wiring. Default 'loom-explore' (interactive React Flow). Set to 'bigraph-viz' to fall back to the legacy static SVG render."
+        },
+        "viz_viewer_urls": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Map of saved-viz pack name -> externally hosted viewer URL (e.g. a Cloudflare R2-hosted parsimony 3D viewer). Overrides the bundled gh-pages viewer for that pack on the read-only workbench."
         }
       }
     },
