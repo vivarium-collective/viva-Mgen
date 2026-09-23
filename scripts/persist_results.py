@@ -45,13 +45,13 @@ SPEC_ID = "viva_mgen.composites.mgen.mycoplasma_genitalium"
 
 def _persist_one(core, slug, params, readouts, sim_time, interval):
     from process_bigraph import Composite
-    import pbg_emitters
+    import viva_emitters
     from vivarium_workbench.lib.emitters import _xarray_emitter_config, _flush_step_emitters
     from viva_emitters.xarray_emitter.view import view_from_emit_paths
     from viva_mgen.composites import build_mgen
 
     from viva_mgen.composites.mgen import _store_path
-    core.register_link("XArrayEmitter", pbg_emitters.XArrayEmitter)
+    core.register_link("XArrayEmitter", viva_emitters.XArrayEmitter)
     run_id = f"{slug}-baseline"  # stable id == zarr experiment_id, referenced by study.yaml runs[]
     results_dir = WS / "workspace" / "studies" / slug / "results"
     results_dir.mkdir(parents=True, exist_ok=True)
